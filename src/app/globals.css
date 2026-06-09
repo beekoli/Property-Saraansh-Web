@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand Colors from Logo */
+  --color-primary-dark: #06282B; /* Dark Teal Background */
+  --color-primary-light: #1A3E42; /* Lighter Teal for Cards/Hover */
+  --color-accent: #E5C099; /* Gold / Champagne */
+  --color-accent-hover: #D0A780;
+  
+  /* Text Colors */
+  --text-main: #FFFFFF;
+  --text-muted: #A0B2B4;
+  
+  /* Next.js Defaults Mapped to Brand */
+  --background: var(--color-primary-dark);
+  --foreground: var(--text-main);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  /* Custom Tailwind Colors */
+  --color-brand-dark: var(--color-primary-dark);
+  --color-brand-light: var(--color-primary-light);
+  --color-brand-accent: var(--color-accent);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Global Button Styles */
+.btn-primary {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent-hover);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+/* Base Link Styles */
+a {
+  color: var(--text-main);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
