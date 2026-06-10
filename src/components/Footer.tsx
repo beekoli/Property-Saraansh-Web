@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer() {
@@ -6,14 +7,14 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="text-[#E5C099] font-serif text-3xl font-bold tracking-wider">
-                PS
-              </div>
-              <div className="flex flex-col text-white font-serif">
-                <span className="text-lg leading-tight font-semibold">Property</span>
-                <span className="text-sm leading-tight text-[#E5C099]">Saraansh</span>
-              </div>
+            <Link href="/" className="flex items-center mb-4">
+              <Image 
+                src="/logo.png" 
+                alt="Property Saraansh Logo" 
+                width={150} 
+                height={60} 
+                className="h-12 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm">
               Your trusted YouTube-based real estate consultancy in Noida. We provide expert property advisory and investment guidance.

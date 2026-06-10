@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -19,15 +20,15 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center gap-2" onClick={closeMobileMenu}>
-              {/* Placeholder for Logo - In a real app we'd use next/image */}
-              <div className="text-[#E5C099] font-serif text-3xl font-bold tracking-wider">
-                PS
-              </div>
-              <div className="flex flex-col text-white font-serif">
-                <span className="text-lg leading-tight font-semibold">Property</span>
-                <span className="text-sm leading-tight text-[#E5C099]">Saraansh</span>
-              </div>
+            <Link href="/" className="flex items-center" onClick={closeMobileMenu}>
+              <Image 
+                src="/logo.png" 
+                alt="Property Saraansh Logo" 
+                width={200} 
+                height={80} 
+                className="h-16 w-auto object-contain"
+                priority
+              />
             </Link>
           </div>
           
