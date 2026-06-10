@@ -1,16 +1,38 @@
 import Link from 'next/link';
 import VideoPlayer from '@/components/VideoPlayer';
 import PropertyCard from '@/components/PropertyCard';
-import { getLatestBlogs, getProperties, getFeaturedImage, stripHtml } from '@/lib/wordpress';
+import { getLatestBlogs, getProperties, getFeaturedImage, stripHtml, getPageBySlug } from '@/lib/wordpress';
+import { Metadata } from 'next';
 
 export const revalidate = 60; // Revalidate every minute
 
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageBySlug('home');
+  if (!page || !page.yoast_head_json) return { title: 'Property Saraansh | Real Estate Consultancy' };
+
+  return {
+    title: page.yoast_head_json.title || 'Property Saraansh | Real Estate Consultancy',
+    description: page.yoast_head_json.description || 'Expert advisory, comprehensive YouTube reviews, and exclusive property deals in commercial and residential sectors.',
+    openGraph: {
+      title: page.yoast_head_json.og_title,
+      description: page.yoast_head_json.og_description,
+      images: page.yoast_head_json.og_image?.map(img => img.url) || [],
+    }
+  };
+}
+
 export default async function Home() {
   // Fetch data in parallel
-  const [blogs, properties] = await Promise.all([
+  const [blogs, properties, homePage] = await Promise.all([
     getLatestBlogs(3),
-    getProperties(3)
+    getProperties(3),
+    getPageBySlug('home')
   ]);
+
+  // Fallback defaults if WordPress is not yet configured
+  const hero_title_part1 = homePage?.acf?.hero_title_part1 || "Noida's Premier";
+  const hero_title_part2 = homePage?.acf?.hero_title_part2 || "Real Estate Consultancy";
+  const hero_subtitle = homePage?.acf?.hero_subtitle || "Expert advisory, comprehensive YouTube reviews, and exclusive property deals in commercial and residential sectors.";
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -21,11 +43,11 @@ export default async function Home() {
         </div>
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center text-center">
           <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">
-            Noida&apos;s Premier <br/>
-            <span className="text-[#E5C099]">Real Estate Consultancy</span>
+            {hero_title_part1} <br/>
+            <span className="text-[#E5C099]">{hero_title_part2}</span>
           </h1>
           <p className="text-xl md:text-2xl text-[#A0B2B4] mb-10 max-w-3xl">
-            Expert advisory, comprehensive YouTube reviews, and exclusive property deals in commercial and residential sectors.
+            {hero_subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/our-videos" className="btn-primary text-lg">

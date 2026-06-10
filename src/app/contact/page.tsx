@@ -1,19 +1,49 @@
-export default function Contact() {
+import { Metadata } from 'next';
+import { getPageBySlug } from '@/lib/wordpress';
+
+export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageBySlug('contact');
+  if (!page || !page.yoast_head_json) return { title: 'Contact Us | Property Saraansh' };
+
+  return {
+    title: page.yoast_head_json.title || 'Contact Us | Property Saraansh',
+    description: page.yoast_head_json.description || 'Get in touch with our experts today.',
+    openGraph: {
+      title: page.yoast_head_json.og_title,
+      description: page.yoast_head_json.og_description,
+      images: page.yoast_head_json.og_image?.map(img => img.url) || [],
+    }
+  };
+}
+
+export default async function Contact() {
+  const page = await getPageBySlug('contact');
+
+  // Fallback defaults if WordPress is not yet configured
+  const title = page?.acf?.hero_title || 'Contact Us';
+  const subtitle = page?.acf?.subtitle || "Ready to find your dream property? Get in touch with our experts today.";
+  const form_title = page?.acf?.form_title || "Send us a message";
+  const info_title = page?.acf?.info_title || "Contact Information";
+  
+  const address = page?.acf?.address || "Noida, Uttar Pradesh<br/>India";
+  const phone = page?.acf?.phone || "+91 XXXXX XXXXX";
+  const email = page?.acf?.email || "info@propertysaraansh.com";
+
   return (
     <div className="bg-[#0A1A1C] min-h-screen pt-20 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-serif text-[#E5C099] mb-4">Contact Us</h1>
-          <p className="text-[#A0B2B4] max-w-2xl mx-auto">
-            Ready to find your dream property? Get in touch with our experts today.
-          </p>
+          <h1 className="text-5xl font-serif text-[#E5C099] mb-4">{title}</h1>
+          <p className="text-[#A0B2B4] max-w-2xl mx-auto">{subtitle}</p>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-[#06282B] rounded-xl overflow-hidden border border-[#1A3E42] shadow-2xl">
           
           {/* Contact Form */}
           <div className="p-8 md:p-12">
-            <h2 className="text-2xl font-serif text-white mb-6">Send us a message</h2>
+            <h2 className="text-2xl font-serif text-white mb-6">{form_title}</h2>
             <form className="space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-[#A0B2B4] mb-1">Full Name</label>
@@ -39,7 +69,7 @@ export default function Contact() {
           
           {/* Contact Info */}
           <div className="bg-[#1A3E42] p-8 md:p-12 flex flex-col justify-center">
-            <h2 className="text-2xl font-serif text-white mb-8">Contact Information</h2>
+            <h2 className="text-2xl font-serif text-white mb-8">{info_title}</h2>
             
             <div className="space-y-6">
               <div className="flex items-start">
@@ -51,7 +81,7 @@ export default function Contact() {
                 </div>
                 <div className="ml-4 text-[#A0B2B4]">
                   <h3 className="text-white font-medium">Office Address</h3>
-                  <p className="mt-1">Noida, Uttar Pradesh<br/>India</p>
+                  <p className="mt-1" dangerouslySetInnerHTML={{ __html: address }}></p>
                 </div>
               </div>
               
@@ -63,7 +93,7 @@ export default function Contact() {
                 </div>
                 <div className="ml-4 text-[#A0B2B4]">
                   <h3 className="text-white font-medium">Phone</h3>
-                  <p className="mt-1">+91 XXXXX XXXXX</p>
+                  <p className="mt-1">{phone}</p>
                 </div>
               </div>
               
@@ -75,7 +105,7 @@ export default function Contact() {
                 </div>
                 <div className="ml-4 text-[#A0B2B4]">
                   <h3 className="text-white font-medium">Email</h3>
-                  <p className="mt-1">info@propertysaraansh.com</p>
+                  <p className="mt-1">{email}</p>
                 </div>
               </div>
             </div>
@@ -96,3 +126,4 @@ export default function Contact() {
     </div>
   );
 }
+

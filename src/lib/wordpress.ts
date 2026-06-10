@@ -23,6 +23,26 @@ export interface WPPost {
   };
 }
 
+export interface WPPage {
+  id: number;
+  slug: string;
+  title: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+  };
+  acf?: Record<string, string>; // Advanced Custom Fields payload
+  yoast_head?: string; // Yoast SEO injected HTML head tags
+  yoast_head_json?: {
+    title?: string;
+    description?: string;
+    og_title?: string;
+    og_description?: string;
+    og_image?: Array<{ url: string }>;
+  };
+}
+
 export interface WPProperty {
   id: number;
   slug: string;
@@ -117,4 +137,13 @@ export function getFeaturedImage(post: WPPost | WPProperty): string {
  */
 export function stripHtml(html: string) {
   return html.replace(/<[^>]*>?/gm, '');
+}
+
+/**
+ * Fetch a single page by slug (for ACF and SEO)
+ */
+export async function getPageBySlug(slug: string): Promise<WPPage | null> {
+  // We use `acf_format=standard` if using ACF to REST API plugin, though often it's just included
+  const data = await fetchAPI(`/pages?slug=${slug}&_embed`);
+  return data && data.length > 0 ? data[0] : null;
 }
