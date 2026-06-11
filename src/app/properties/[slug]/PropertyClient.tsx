@@ -6,6 +6,54 @@ import { WPProperty, getFeaturedImage, MOCK_PROPERTIES } from '@/lib/wordpress';
 import VideoPlayer from '@/components/VideoPlayer';
 import { MapPin, Phone, MessageSquare, ShieldCheck, Download, CheckCircle, ChevronRight, X } from 'lucide-react';
 
+const DEVELOPER_BIOS: Record<string, { description: string; established: string; projects: string }> = {
+  "Eldeco Group": {
+    established: "1985",
+    projects: "150+",
+    description: "Eldeco Group has been at the forefront of Real Estate development in North India since 1985. The group is synonymous with timely delivery, high-quality construction, and customer-centric design in residential, commercial, and township sectors."
+  },
+  "Godrej Properties": {
+    established: "1990",
+    projects: "120+",
+    description: "Godrej Properties brings the Godrej Group philosophy of innovation, sustainability, and excellence to the real estate industry. Each Godrej development combines a legacy of trust with cutting-edge design and technology."
+  },
+  "M3M Group": {
+    established: "2010",
+    projects: "45+",
+    description: "M3M (Magnificence in the Trinity of Men, Materials & Money) Group is one of India's fastest-growing luxury real estate developers. M3M is known for its iconic sky condominiums, high-street retail, and world-class commercial developments."
+  },
+  "County Group": {
+    established: "2007",
+    projects: "15+",
+    description: "County Group is a premium luxury developer in Noida, famous for creating landmark projects like Cleo County, Orange County, and County 107. They focus on bringing unique lifestyle concepts, elevated skywalks, and high-end landscaping."
+  },
+  "ATS Group": {
+    established: "1998",
+    projects: "50+",
+    description: "ATS Infrastructure is an established real estate leader in NCR, known for high quality construction, lush green landscapes, and beautiful Mediterranean architecture. ATS projects command a premium for their structural longevity."
+  },
+  "Max Estates": {
+    established: "2016",
+    projects: "10+",
+    description: "Max Estates, the real estate arm of the Max Group, aims to bring the Group's values of Sevabhav, Excellence, and Credibility to Indian real estate. They specialize in design-led, wellness-centered residential and commercial hubs."
+  }
+};
+
+const getDeveloperBio = (devName: string) => {
+  const cleanName = devName.toLowerCase();
+  for (const [key, bio] of Object.entries(DEVELOPER_BIOS)) {
+    if (cleanName.includes(key.toLowerCase()) || key.toLowerCase().includes(cleanName)) {
+      return { name: key, ...bio };
+    }
+  }
+  return {
+    name: devName,
+    established: "N/A",
+    projects: "Multiple",
+    description: `${devName} is a prominent developer committed to delivering premium architectural designs and structural quality in the Noida and Delhi NCR real estate markets.`
+  };
+};
+
 interface Props {
   property: WPProperty;
 }
@@ -13,6 +61,7 @@ interface Props {
 export default function PropertyClient({ property }: Props) {
   const acf = property.acf || {};
   const featuredImage = getFeaturedImage(property);
+  const developerBio = getDeveloperBio(acf.developer || "Eldeco Group");
 
   // States
   const [activeFloorPlan, setActiveFloorPlan] = useState<number>(1);
@@ -201,6 +250,7 @@ export default function PropertyClient({ property }: Props) {
           <button onClick={() => scrollNav('location')} className="hover:text-brand-accent transition-colors">Location</button>
           <button onClick={() => scrollNav('gallery')} className="hover:text-brand-accent transition-colors">Gallery</button>
           <button onClick={() => scrollNav('possession')} className="hover:text-brand-accent transition-colors">Possession</button>
+          <button onClick={() => scrollNav('builder')} className="hover:text-brand-accent transition-colors">About Builder</button>
         </div>
       </div>
 
@@ -508,6 +558,40 @@ export default function PropertyClient({ property }: Props) {
                 <div className="bg-brand-pale/50 border border-brand-light/20 p-4 rounded-xl mt-12 flex justify-between items-center text-xs">
                   <span className="font-semibold text-brand-ink">Timeline Phase:</span>
                   <span className="font-bold text-brand-primary uppercase tracking-widest">New Launch - Booking Open</span>
+                </div>
+              </div>
+            </div>
+
+            {/* About Builder Section */}
+            <div id="builder" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+              <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
+                <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                About the Developer
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                {/* Bio Description */}
+                <div className="md:col-span-2 space-y-4">
+                  <h3 className="text-lg font-bold text-brand-dark font-sans">{developerBio.name}</h3>
+                  <p className="text-sm font-light text-brand-ink/80 leading-relaxed">
+                    {developerBio.description}
+                  </p>
+                </div>
+                
+                {/* Stats Box */}
+                <div className="bg-brand-pale/40 border border-brand-light/10 rounded-2xl p-5 space-y-4">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block">Established</span>
+                    <span className="text-base font-bold text-brand-dark">{developerBio.established}</span>
+                  </div>
+                  <div className="border-t border-brand-light/10 pt-3">
+                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block">Total Projects</span>
+                    <span className="text-base font-bold text-brand-dark">{developerBio.projects}</span>
+                  </div>
+                  <div className="border-t border-brand-light/10 pt-3">
+                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block">Core Domain</span>
+                    <span className="text-base font-bold text-brand-dark">Residential & Commercial</span>
+                  </div>
                 </div>
               </div>
             </div>
