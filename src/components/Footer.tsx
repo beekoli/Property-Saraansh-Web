@@ -10,14 +10,12 @@ export default async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Column 1: Logo and Tagline */}
           <div className="col-span-1">
-            <Link href="/" className="flex items-center gap-3 mb-6 group">
-              <div className="w-10 h-10 rounded-full bg-brand-primary border border-brand-accent flex items-center justify-center shadow-md group-hover:border-brand-accent-light transition-colors">
-                <span className="heading-playfair text-brand-accent font-bold text-lg tracking-wider">PS</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="heading-playfair font-bold text-white text-base tracking-wide leading-tight">Property Saraansh</span>
-                <span className="text-[10px] text-brand-accent uppercase tracking-widest leading-none font-semibold">Real Estate Consultancy</span>
-              </div>
+            <Link href="/" className="flex items-center mb-6 group">
+              <img 
+                src="/logo.png" 
+                alt="Property Saraansh Logo" 
+                className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+              />
             </Link>
             <p className="text-sm leading-relaxed mb-6 font-light">
               Your trusted YouTube-based real estate consultancy in Noida. We provide expert property reviews, market insights & investment guidance — all on YouTube.

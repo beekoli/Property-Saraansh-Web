@@ -44,15 +44,12 @@ export default function Navbar() {
           
           {/* Logo / Monogram */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center gap-3 group" onClick={closeMobileMenu}>
-              {/* Monogram Monogram: deep teal background, sand gold letters */}
-              <div className="w-10 h-10 rounded-full bg-brand-dark border border-brand-accent flex items-center justify-center shadow-md group-hover:border-brand-accent-light transition-colors">
-                <span className="heading-playfair text-brand-accent font-bold text-lg tracking-wider group-hover:text-brand-accent-light">PS</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="heading-playfair font-bold text-white text-base tracking-wide group-hover:text-brand-accent transition-colors leading-tight">Property Saraansh</span>
-                <span className="text-[10px] text-brand-accent uppercase tracking-widest leading-none font-semibold">Real Estate Consultancy</span>
-              </div>
+            <Link href="/" className="flex items-center group" onClick={closeMobileMenu}>
+              <img 
+                src="/logo.png" 
+                alt="Property Saraansh Logo" 
+                className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+              />
             </Link>
           </div>
           
