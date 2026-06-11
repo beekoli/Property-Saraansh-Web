@@ -83,7 +83,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             prose-headings:heading-playfair prose-headings:text-brand-dark prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4
             prose-h2:text-2xl prose-h2:md:text-3xl
             prose-p:mb-6 prose-p:leading-relaxed
-            prose-blockquote:border-l-[3px] prose-blockquote:border-[#D4A96A] prose-blockquote:pl-6 prose-blockquote:text-brand-primary prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg prose-blockquote:my-8 prose-blockquote:bg-white/40 prose-blockquote:py-4 prose-blockquote:pr-4 prose-blockquote:rounded-r-xl
+            prose-blockquote:border-l-[3px] prose-blockquote:border-brand-accent prose-blockquote:pl-6 prose-blockquote:text-brand-primary prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg prose-blockquote:my-8 prose-blockquote:bg-white/40 prose-blockquote:py-4 prose-blockquote:pr-4 prose-blockquote:rounded-r-xl
             prose-a:text-brand-primary prose-a:underline hover:prose-a:text-brand-accent transition-colors
           " 
           dangerouslySetInnerHTML={{ __html: blog.content.rendered }} 
@@ -95,7 +95,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <span className="w-1 h-5 bg-brand-accent"></span>
             Related Video Guide
           </h3>
-          <div className="bg-[#0F3D34] p-2 rounded-xl shadow-lg border border-brand-primary/20 overflow-hidden w-full">
+          <div className="bg-brand-dark p-2 rounded-xl shadow-lg border border-brand-primary/20 overflow-hidden w-full">
             <VideoPlayer videoId={relatedVideoId} title="Noida Real Estate Analysis Video" />
           </div>
         </div>
@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </p>
             
             <a 
-              href="https://youtube.com" 
+              href="https://www.youtube.com/@PropertySaraansh" 
               target="_blank" 
               rel="noreferrer" 
               className="inline-flex bg-[#FF0000] text-white font-bold px-6 py-2 rounded text-xs hover:bg-red-700 transition-colors shadow-md items-center gap-2 uppercase tracking-wider"

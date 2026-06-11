@@ -20,9 +20,9 @@ export default async function Contact() {
   const page = await getPageBySlug('contact');
 
   // Fallback defaults
-  const address = page?.acf?.address || "Office No. 402, 4th Floor,<br/>Sikka House, Sector 63, Noida,<br/>Uttar Pradesh - 201301";
-  const phone = page?.acf?.phone || "+91 99999 99999";
-  const email = page?.acf?.email || "consult@propertysaraansh.com";
+  const address = page?.acf?.address || "Office no 1604, Tower-A,<br/>ATS BOUQUET, Block B, Sector 132,<br/>Noida, Uttar Pradesh 201301";
+  const phone = page?.acf?.phone || "+91 80761 78189";
+  const email = page?.acf?.email || "info@propertysaraansh.com";
 
   return <ContactClient address={address} phone={phone} email={email} />;
 }

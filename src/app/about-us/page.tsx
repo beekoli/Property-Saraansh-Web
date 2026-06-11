@@ -61,7 +61,7 @@ export default async function AboutUs() {
                 </div>
               </div>
               <a 
-                href="https://youtube.com" 
+                href="https://www.youtube.com/@PropertySaraansh" 
                 target="_blank" 
                 rel="noreferrer" 
                 className="mt-8 inline-block w-full bg-[#FF0000] text-white font-bold py-3.5 rounded-lg hover:bg-red-700 transition-all text-sm uppercase tracking-wider shadow-md hover:shadow-red-500/20"
@@ -91,7 +91,7 @@ export default async function AboutUs() {
             </div>
 
             {/* Mission Statement Pull Quote */}
-            <blockquote className="border-l-4 border-[#D4A96A] pl-8 py-4 my-12 bg-white rounded-r-2xl border-y border-r border-brand-light/10 shadow-sm">
+            <blockquote className="border-l-4 border-brand-accent pl-8 py-4 my-12 bg-white rounded-r-2xl border-y border-r border-brand-light/10 shadow-sm">
               <p className="heading-playfair text-xl md:text-2xl text-brand-primary italic leading-relaxed font-bold">
                 &ldquo;Our mission is to create a transparent real estate ecosystem where every buyer makes a confident, data-backed decision without the fear of misrepresentation.&rdquo;
               </p>

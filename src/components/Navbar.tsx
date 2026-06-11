@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
@@ -14,11 +16,28 @@ export default function Navbar() {
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      
+      // Color change condition
+      setIsScrolled(currentScrollY > 20);
+
+      // Fade & Hide/Show condition
+      if (currentScrollY > 80) {
+        if (currentScrollY > lastScrollY) {
+          setIsVisible(false); // Scrolling down -> fade & hide navbar
+        } else {
+          setIsVisible(true); // Scrolling up -> fade & show navbar
+        }
+      } else {
+        setIsVisible(true); // Near top -> show navbar
+      }
+
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => {
@@ -35,7 +54,9 @@ export default function Navbar() {
 
   return (
     <nav 
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-50 transition-all duration-500 transform ${
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
+      } ${
         (isScrolled || isLightPage) ? 'bg-brand-dark border-b border-brand-light/20 shadow-lg py-2' : 'bg-transparent py-4'
       }`}
     >
@@ -58,6 +79,7 @@ export default function Navbar() {
             <Link href="/" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Home</Link>
             <Link href="/about-us" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">About</Link>
             <Link href="/our-videos" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Our Videos</Link>
+            <Link href="/our-shorts" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Shorts</Link>
             
             {/* Projects Dropdown */}
             <div 
@@ -123,6 +145,7 @@ export default function Navbar() {
             <Link href="/" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Home</Link>
             <Link href="/about-us" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">About</Link>
             <Link href="/our-videos" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Our Videos</Link>
+            <Link href="/our-shorts" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Shorts</Link>
             
             <div className="pl-2 border-l border-brand-light/30 space-y-1">
               <Link href="/properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">All Projects</Link>

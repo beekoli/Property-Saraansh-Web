@@ -2,18 +2,18 @@
 
 :root {
   /* Brand Colors from Logo */
-  --color-primary: #1B5E52; /* Primary teal */
-  --color-dark: #0F3D34; /* Dark teal (backgrounds, navbars) */
-  --color-light: #2A7A6A; /* Light teal (hover states, borders) */
-  --color-pale: #E8F5F2; /* Teal pale (light section backgrounds) */
-  --color-accent: #D4A96A; /* Sand gold (accent, CTAs, headings) */
-  --color-accent-light: #EDD9AA; /* Sand light (hover on sand, dividers) */
-  --color-ink: #0D2921; /* Ink (body text on light) */
+  --color-primary: #124C57; /* Slate-teal-blue matching logo top */
+  --color-dark: #0B3038; /* Deep slate-teal matching logo's prominent background color */
+  --color-light: #1C6C7B; /* Brighter slate-teal for borders/hovers */
+  --color-pale: #EAF4F6; /* Soft pale blue-teal for light backgrounds */
+  --color-accent: #D5B37C; /* Soft premium gold from logo monogram */
+  --color-accent-light: #E3C9A1; /* Lighter gold for hover highlights */
+  --color-ink: #082126; /* Deep blue-teal ink for text */
   
   /* Text Colors */
   --text-main: #FFFFFF;
-  --text-muted: #E8F5F2; /* teal pale as muted */
-  --text-ink: #0D2921;
+  --text-muted: #EAF4F6; /* pale blue-teal as muted */
+  --text-ink: #082126;
   
   /* Next.js Defaults Mapped to Brand */
   --background: var(--color-dark);
@@ -54,37 +54,56 @@ section[id] {
 
 /* Global Button Styles */
 .btn-primary {
-  background-color: var(--color-accent);
+  background: linear-gradient(135deg, #FCE8C4 0%, #D5B37C 50%, #B18E50 100%);
   color: var(--color-dark);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.25rem;
-  font-weight: 600;
-  border: none;
+  padding: 0.85rem 2rem;
+  border-radius: 0.5rem; /* Rounded-lg matching mockup */
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 1px solid rgba(252, 232, 196, 0.2);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-sans);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-accent-light);
-  transform: translateY(-2px);
+  background: #0B3038;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active {
+  transform: scale(0.98) translateY(0);
 }
 
 .btn-outline {
   background-color: transparent;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.25rem;
-  font-weight: 600;
+  color: #FFFFFF;
+  border: 1.5px solid var(--color-light); /* Matching mockup brand-light border */
+  padding: 0.85rem 2rem;
+  border-radius: 0.5rem; /* Rounded-lg matching primary button */
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: var(--font-sans);
 }
 
 .btn-outline:hover {
-  background-color: var(--color-primary);
-  color: var(--text-main);
+  background-color: var(--color-light);
+  border-color: transparent;
+  color: #FFFFFF;
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 8px 20px rgba(28, 108, 123, 0.3);
+}
+
+.btn-outline:active {
+  transform: scale(0.98) translateY(0);
 }
 
 .heading-playfair {
@@ -104,10 +123,28 @@ a:hover {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fade-in {
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Premium Gold Glossy Text Utility */
+.gold-glossy-text {
+  background: linear-gradient(
+    135deg,
+    #FCE8C4 0%,   /* Soft bright reflection */
+    #D5B37C 35%,  /* Signature brand gold */
+    #B18E50 65%,  /* Rich warm gold shadow */
+    #FCE8C4 100%  /* Bottom reflection */
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+}
+

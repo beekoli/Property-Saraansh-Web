@@ -183,10 +183,10 @@ export default function PropertyClient({ property }: Props) {
     }));
 
   return (
-    <div className="bg-[#E8F5F2] text-[#0D2921] min-h-screen flex flex-col font-sans pb-20 md:pb-0">
+    <div className="bg-brand-pale text-brand-ink min-h-screen flex flex-col font-sans pb-20 md:pb-0">
       
       {/* 1. Header Info Banner (Dark Teal) */}
-      <section className="bg-[#0F3D34] text-white pt-28 pb-10 px-4 sm:px-6 lg:px-8 border-b border-brand-light/20 relative">
+      <section className="bg-brand-dark text-white pt-28 pb-10 px-4 sm:px-6 lg:px-8 border-b border-brand-light/20 relative">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumbs */}
           <div className="flex items-center text-brand-pale/60 text-xs mb-4 uppercase tracking-widest font-bold">
@@ -219,14 +219,14 @@ export default function PropertyClient({ property }: Props) {
             </div>
 
             <div className="flex flex-col items-end gap-4 w-full lg:w-auto">
-              <div className="bg-[#D4A96A] text-[#0F3D34] px-6 py-3 rounded-lg font-bold text-2xl shadow-xl tracking-tight leading-none text-center border border-amber-400 w-full lg:w-auto">
+              <div className="bg-brand-accent text-brand-dark px-6 py-3 rounded-lg font-bold text-2xl shadow-xl tracking-tight leading-none text-center border border-amber-400 w-full lg:w-auto">
                 {acf.price || "₹ 2.35 Cr - 4.65 Cr"}
               </div>
               <div className="flex gap-2 w-full lg:w-auto justify-end">
                 <button onClick={() => scrollNav('contact-form')} className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0">
                   Request Callback
                 </button>
-                <button onClick={() => scrollNav('saraansh-review')} className="bg-[#D4A96A] text-[#0F3D34] hover:bg-[#EDD9AA] px-4 py-2 text-xs rounded font-bold transition-all shadow-md flex-grow lg:flex-grow-0">
+                <button onClick={() => scrollNav('saraansh-review')} className="bg-brand-accent text-brand-dark hover:bg-brand-accent-light px-4 py-2 text-xs rounded font-bold transition-all shadow-md flex-grow lg:flex-grow-0">
                   Watch Full Review
                 </button>
                 <button onClick={() => scrollNav('contact-form')} className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0">
@@ -239,7 +239,7 @@ export default function PropertyClient({ property }: Props) {
       </section>
 
       {/* 2. Sticky Sub-Navigation Bar */}
-      <div className="sticky top-[80px] z-40 bg-[#0F3D34] text-brand-pale border-y border-brand-light/20 shadow-md hidden md:block">
+      <div className="sticky top-[80px] z-40 bg-brand-dark text-brand-pale border-y border-brand-light/20 shadow-md hidden md:block">
         <div className="max-w-7xl mx-auto px-4 flex justify-start gap-8 py-4 text-xs font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap">
           <button onClick={() => scrollNav('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
           <button onClick={() => scrollNav('saraansh-review')} className="hover:text-brand-accent transition-colors">Saraansh&apos;s Review</button>
@@ -309,7 +309,7 @@ export default function PropertyClient({ property }: Props) {
             </div>
 
             {/* saraansh interactive review */}
-            <div id="saraansh-review" className="bg-[#0F3D34] text-white rounded-2xl p-6 md:p-8 shadow-md border border-brand-primary">
+            <div id="saraansh-review" className="bg-brand-dark text-white rounded-2xl p-6 md:p-8 shadow-md border border-brand-primary">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-accent border-b border-brand-light/20 pb-3 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
                 Saraansh Seth&apos;s Interactive
@@ -322,7 +322,7 @@ export default function PropertyClient({ property }: Props) {
                 </div>
                 
                 {/* Video description callout underneath */}
-                <div className="bg-[#1B5E52]/40 border-l-4 border-[#D4A96A] p-5 rounded-r-xl">
+                <div className="bg-brand-primary/40 border-l-4 border-brand-accent p-5 rounded-r-xl">
                   <p className="text-brand-pale text-sm md:text-base font-light italic leading-relaxed">
                     &ldquo;{acf.video_review_text || "A low density project with only 4 units per floor — check how the developer justified the price point. Watch the full video before you choose."}&rdquo;
                   </p>
@@ -512,7 +512,7 @@ export default function PropertyClient({ property }: Props) {
                 {/* +9 More Card */}
                 {gallery.length > 5 && (
                   <div 
-                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer shadow-sm group bg-[#0F3D34] flex flex-col items-center justify-center border border-brand-light/30"
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer shadow-sm group bg-brand-dark flex flex-col items-center justify-center border border-brand-light/30"
                     onClick={() => { setLightboxIndex(5); setLightboxOpen(true); }}
                   >
                     <img src={gallery[5]} alt="Gallery extra" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-500" />
@@ -602,7 +602,7 @@ export default function PropertyClient({ property }: Props) {
           <div className="w-full lg:w-4/12 lg:sticky lg:top-[140px] space-y-6">
             
             {/* 1. Consultation Form Card */}
-            <div id="contact-form" className="bg-[#0F3D34] text-white rounded-2xl p-6 shadow-xl border border-brand-primary relative overflow-hidden">
+            <div id="contact-form" className="bg-brand-dark text-white rounded-2xl p-6 shadow-xl border border-brand-primary relative overflow-hidden">
               <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
               <div className="relative z-10">
                 <h3 className="heading-playfair text-lg font-bold text-brand-accent uppercase tracking-wider mb-5 pb-2 border-b border-brand-light/20 text-center">
@@ -624,7 +624,7 @@ export default function PropertyClient({ property }: Props) {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full bg-[#1B5E52]/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white placeholder-brand-pale/50 focus:outline-none focus:border-brand-accent font-semibold transition-colors"
+                        className="w-full bg-brand-primary/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white placeholder-brand-pale/50 focus:outline-none focus:border-brand-accent font-semibold transition-colors"
                       />
                     </div>
                     <div>
@@ -634,7 +634,7 @@ export default function PropertyClient({ property }: Props) {
                         required
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full bg-[#1B5E52]/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white placeholder-brand-pale/50 focus:outline-none focus:border-brand-accent font-semibold transition-colors"
+                        className="w-full bg-brand-primary/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white placeholder-brand-pale/50 focus:outline-none focus:border-brand-accent font-semibold transition-colors"
                       />
                     </div>
                     <div>
@@ -643,24 +643,24 @@ export default function PropertyClient({ property }: Props) {
                         placeholder="Budget (e.g. ₹2-3 Cr)" 
                         value={formData.budget}
                         onChange={(e) => setFormData({...formData, budget: e.target.value})}
-                        className="w-full bg-[#1B5E52]/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white placeholder-brand-pale/50 focus:outline-none focus:border-brand-accent font-semibold transition-colors"
+                        className="w-full bg-brand-primary/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white placeholder-brand-pale/50 focus:outline-none focus:border-brand-accent font-semibold transition-colors"
                       />
                     </div>
                     <div>
                       <select 
                         value={formData.type}
                         onChange={(e) => setFormData({...formData, type: e.target.value})}
-                        className="w-full bg-[#1B5E52]/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-accent font-semibold transition-colors"
+                        className="w-full bg-brand-primary/40 border border-brand-light/30 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-accent font-semibold transition-colors"
                       >
-                        <option value="3BHK" className="bg-[#0F3D34]">Interested in 3 BHK</option>
-                        <option value="4BHK" className="bg-[#0F3D34]">Interested in 4 BHK</option>
-                        <option value="Duplex" className="bg-[#0F3D34]">Interested in Duplex</option>
+                        <option value="3BHK" className="bg-brand-dark">Interested in 3 BHK</option>
+                        <option value="4BHK" className="bg-brand-dark">Interested in 4 BHK</option>
+                        <option value="Duplex" className="bg-brand-dark">Interested in Duplex</option>
                       </select>
                     </div>
 
                     <button 
                       type="submit" 
-                      className="w-full bg-[#D4A96A] text-[#0F3D34] hover:bg-[#EDD9AA] font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
+                      className="w-full bg-brand-accent text-brand-dark hover:bg-brand-accent-light font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
                     >
                       Get Price Breakdown
                     </button>
@@ -670,17 +670,17 @@ export default function PropertyClient({ property }: Props) {
                 {/* Secondary Call Actions */}
                 <div className="grid grid-cols-2 gap-3 mt-4">
                   <a 
-                    href={`https://wa.me/919999999999?text=Hi%20Saraansh,%20I'm%20interested%20in%20${encodeURIComponent(property.title.rendered)}.`}
+                    href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20interested%20in%20${encodeURIComponent(property.title.rendered)}.`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-[#1B5E52]/30 hover:bg-[#25D366] hover:text-white hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale"
+                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-brand-primary/30 hover:bg-[#25D366] hover:text-white hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale"
                   >
                     <MessageSquare size={14} />
                     WhatsApp
                   </a>
                   <a 
-                    href="tel:+919999999999" 
-                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-[#1B5E52]/30 hover:bg-[#D4A96A] hover:text-[#0F3D34] hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale"
+                    href="tel:+918076178189" 
+                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-brand-primary/30 hover:bg-brand-accent hover:text-brand-dark hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale"
                   >
                     <Phone size={14} />
                     Call Now
@@ -702,7 +702,7 @@ export default function PropertyClient({ property }: Props) {
                 </div>
                 <div className="py-2.5 flex justify-between">
                   <span className="text-brand-light font-medium">Starting</span>
-                  <span className="font-bold text-[#D4A96A]">{acf.price?.split(' - ')[0] || "₹2.35 Cr"}</span>
+                  <span className="font-bold text-brand-accent">{acf.price?.split(' - ')[0] || "₹2.35 Cr"}</span>
                 </div>
                 <div className="py-2.5 flex justify-between">
                   <span className="text-brand-light font-medium">Possession</span>
@@ -716,19 +716,19 @@ export default function PropertyClient({ property }: Props) {
             </div>
 
             {/* 3. RERA Badge */}
-            <div className="bg-brand-pale border border-[#1B5E52]/20 rounded-2xl p-5 shadow-sm text-center">
+            <div className="bg-brand-pale border border-brand-primary/20 rounded-2xl p-5 shadow-sm text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <ShieldCheck className="text-brand-primary" size={24} />
                 <span className="text-xs uppercase font-bold tracking-wider text-brand-primary">UP-RERA Registered</span>
               </div>
-              <div className="bg-[#1B5E52] text-brand-accent px-4 py-2 rounded-lg text-sm font-bold border border-brand-accent/20 tracking-wider shadow-inner">
+              <div className="bg-brand-primary text-brand-accent px-4 py-2 rounded-lg text-sm font-bold border border-brand-accent/20 tracking-wider shadow-inner">
                 {acf.rera_number || "UPRERAPRJ108729"}
               </div>
             </div>
 
             {/* 4. Download Brochure Button */}
             <a 
-              href="https://wa.me/919999999999?text=Hi%20Saraansh,%20please%20send%20me%20the%20Eldeco%207%20Peaks%20Residences%20brochure."
+              href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20please%20send%20me%20the%20${encodeURIComponent(property.title.rendered)}%20brochure.`}
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-center gap-2 w-full border border-brand-primary text-brand-primary bg-white hover:bg-brand-primary hover:text-white rounded-xl py-3.5 text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:shadow-md"
@@ -738,7 +738,7 @@ export default function PropertyClient({ property }: Props) {
             </a>
 
             {/* 5. More Project Videos */}
-            <div className="bg-[#0F3D34] text-white rounded-2xl p-5 shadow-sm border border-brand-primary">
+            <div className="bg-brand-dark text-white rounded-2xl p-5 shadow-sm border border-brand-primary">
               <h4 className="text-brand-accent text-xs font-bold uppercase tracking-wider mb-4 pb-2 border-b border-brand-light/20 flex items-center gap-1.5">
                 <span className="w-1.5 h-3.5 bg-brand-accent rounded-full"></span>
                 More project videos
@@ -832,7 +832,7 @@ export default function PropertyClient({ property }: Props) {
       {/* Mobile Sticky bottom CTA bar (Call & WhatsApp) - property page details only */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-brand-dark/95 backdrop-blur-md border-t border-brand-light/20 p-4 shadow-2xl flex gap-3 md:hidden">
         <a 
-          href={`https://wa.me/919999999999?text=Hi%20Saraansh,%20I'm%20interested%20in%20${encodeURIComponent(property.title.rendered)}.`}
+          href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20interested%20in%20${encodeURIComponent(property.title.rendered)}.`}
           target="_blank"
           rel="noreferrer"
           className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
@@ -841,8 +841,8 @@ export default function PropertyClient({ property }: Props) {
           WhatsApp
         </a>
         <a 
-          href="tel:+919999999999" 
-          className="flex-1 flex items-center justify-center gap-2 bg-[#D4A96A] text-[#0F3D34] rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
+          href="tel:+918076178189" 
+          className="flex-1 flex items-center justify-center gap-2 bg-brand-accent text-brand-dark rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
         >
           <Phone size={16} />
           Call Now

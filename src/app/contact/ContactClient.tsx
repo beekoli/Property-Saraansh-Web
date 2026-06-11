@@ -160,7 +160,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                 
                 <button 
                   type="submit" 
-                  className="w-full bg-[#D4A96A] text-[#0F3D34] hover:bg-[#EDD9AA] font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
+                  className="w-full bg-brand-accent text-brand-dark hover:bg-brand-accent-light font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
                 >
                   Send Enquiry
                 </button>
@@ -169,7 +169,7 @@ export default function ContactClient({ address, phone, email }: Props) {
           </div>
           
           {/* Right Column: Contact Details & Map (Dark Teal Bg) */}
-          <div className="bg-[#0F3D34] text-white p-8 md:p-12 flex flex-col justify-between border-l border-brand-light/20 relative">
+          <div className="bg-brand-dark text-white p-8 md:p-12 flex flex-col justify-between border-l border-brand-light/20 relative">
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '15px 15px' }}></div>
             
             <div className="relative z-10 space-y-8">
@@ -213,7 +213,7 @@ export default function ContactClient({ address, phone, email }: Props) {
               {/* Dynamic Google Maps embed */}
               <div className="w-full aspect-[2/1] rounded-xl overflow-hidden shadow-inner border border-brand-light/10">
                 <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14013.910344569588!2d77.34863895!3d28.58543825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce456b3b55555%3A0x89e0ff5b3f2cc22!2sSector%2043%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+                  src={process.env.NEXT_PUBLIC_GOOGLE_MAP_EMBED_URL || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.743126002166!2d77.36836487532392!3d28.549265275685794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceb9148d89a7f%3A0x6e76839352e89694!2sATS%20Bouquet%2C%20Block%20A%2C%20Sector%20132%2C%20Noida%2C%20Uttar%20Pradesh%20201304!5e0!3m2!1sen!2sin!4v1718127600000!5m2!1sen!2sin"} 
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
@@ -228,7 +228,7 @@ export default function ContactClient({ address, phone, email }: Props) {
               <div>
                 <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">WhatsApp Directly</h3>
                 <a 
-                  href="https://wa.me/919999999999?text=Hi%20Saraansh,%20I'm%20looking%20for%20a%20property%20consultation." 
+                  href="https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20looking%20for%20a%20property%20consultation." 
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-2.5 rounded-lg text-xs hover:bg-[#1ebd59] transition-all shadow-md"
@@ -240,10 +240,12 @@ export default function ContactClient({ address, phone, email }: Props) {
               
               <div>
                 <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">Follow Us</h3>
-                <div className="flex gap-4 text-brand-accent">
-                  <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">YouTube</a>
+                <div className="flex flex-wrap gap-4 text-brand-accent">
+                  <a href="https://www.youtube.com/@PropertySaraansh" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">YouTube</a>
                   <a href="https://instagram.com/propertysaraansh" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">Instagram</a>
-                  <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">Facebook</a>
+                  <a href="https://www.facebook.com/PropertySaraansh" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">Facebook</a>
+                  <a href="https://www.linkedin.com/company/propertysaraansh/" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">LinkedIn</a>
+                  <a href="https://x.com/propsaraansh" target="_blank" rel="noreferrer" className="hover:text-brand-accent-light transition-colors text-xs font-bold uppercase tracking-wider">X</a>
                 </div>
               </div>
             </div>

@@ -2,24 +2,26 @@ import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
+import { getChannelStats } from '@/lib/youtube';
 import { getProperties, getLatestBlogs } from '@/lib/wordpress';
-import { getLatestYouTubeVideos, getChannelStats } from '@/lib/youtube';
+import { videos } from '@/lib/videos';
 
 export const revalidate = 60; // Revalidate every minute
 
 export default async function Home() {
   // Concurrent fetching of server-side data
-  const [properties, latestBlogs, latestVideos, channelStats] = await Promise.all([
+  const [properties, latestBlogs, channelStats] = await Promise.all([
     getProperties(3),
     getLatestBlogs(3),
-    getLatestYouTubeVideos(1),
     getChannelStats()
   ]);
 
-  const featuredVideo = latestVideos[0] || {
-    id: "dQw4w9WgXcQ",
-    title: "Noida Real Estate Market Update 2026: What to Expect?",
-    description: "Join Saraansh as he breaks down the latest trends in the Noida and Greater Noida real estate market. Discover top investment hotspots and upcoming infrastructure projects that will drive property values."
+  const longVideos = videos.filter((v) => v.category !== 'Shorts');
+  const featuredVideo = longVideos[0] || {
+    slug: "yamuna-expressway-investment-2030-who-should-buy-who-should-avoid-future-price-p",
+    youtubeId: "qWAgkIW6Mj0",
+    title: "Yamuna Expressway Noida Investment 2030: Should You Buy Property Near Jewar Airport?",
+    description: "Watch the latest video update for Yamuna Expressway Noida Investment 2030."
   };
 
   return (
@@ -38,8 +40,8 @@ export default async function Home() {
           }}
         ></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 className="heading-playfair text-4xl md:text-5xl lg:text-6xl text-brand-accent mb-6 font-bold tracking-tight">
-            Your Trusted Guide to Noida Real Estate
+          <h1 className="heading-playfair text-4xl md:text-5xl lg:text-6xl mb-6 font-bold tracking-tight">
+            <span className="gold-glossy-text pb-1">India&apos;s Finest Real Estate Portfolio Management Company</span>
           </h1>
           <p className="text-brand-pale text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
             Expert property reviews, market insights & investment guidance — all on YouTube.
@@ -47,18 +49,18 @@ export default async function Home() {
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
             <Link 
               href="/properties" 
-              className="btn-primary text-brand-dark w-full sm:w-auto text-lg px-8 py-3 bg-brand-accent hover:bg-brand-accent-light shadow-lg hover:shadow-xl font-bold rounded"
+              className="btn-primary w-full sm:w-auto text-center"
             >
-              Explore Projects
+              Explore Noida Projects
             </Link>
             <a 
-              href={featuredVideo.id.startsWith('video') ? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' : `https://www.youtube.com/watch?v=${featuredVideo.id}`}
+              href="https://www.youtube.com/@PropertySaraansh"
               target="_blank"
               rel="noreferrer"
-              className="btn-outline w-full sm:w-auto text-lg px-8 py-3 flex items-center justify-center gap-2 border-brand-light text-brand-pale hover:bg-brand-light hover:text-white rounded"
+              className="btn-outline w-full sm:w-auto flex items-center justify-center gap-2"
             >
-              <svg className="w-5 h-5 text-red-500 fill-current" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              <svg className="w-3 h-3 fill-brand-accent" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
               </svg>
               Watch Latest Video
             </a>
@@ -96,21 +98,31 @@ export default async function Home() {
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="w-full lg:w-3/5">
               <div className="bg-brand-dark p-3 rounded-2xl shadow-2xl border border-brand-primary">
-                <VideoPlayer videoId={featuredVideo.id} title={featuredVideo.title} />
+                <VideoPlayer videoId={featuredVideo.youtubeId} title={featuredVideo.title} />
               </div>
             </div>
             <div className="w-full lg:w-2/5 text-brand-ink">
               <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Featured Review</span>
-              <h2 className="heading-playfair text-3xl font-bold mb-4 leading-tight">{featuredVideo.title}</h2>
-              <p className="text-brand-dark/70 mb-6 leading-relaxed text-sm font-light">
+              <Link href={`/our-videos/${featuredVideo.slug}`} className="text-black hover:text-brand-primary transition-colors group block">
+                <h2 className="heading-playfair text-3xl font-bold mb-4 leading-tight text-black group-hover:text-brand-primary transition-colors cursor-pointer">
+                  {featuredVideo.title}
+                </h2>
+              </Link>
+              <p className="text-zinc-600 mb-6 leading-relaxed text-sm font-light">
                 {featuredVideo.description}
               </p>
-              <Link href="/our-videos" className="text-brand-accent font-bold hover:text-brand-primary transition-colors flex items-center gap-2 group text-base">
-                View all videos 
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                </svg>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <Link href={`/our-videos/${featuredVideo.slug}`} className="text-brand-primary font-bold hover:text-brand-accent transition-colors flex items-center gap-2 group text-base">
+                  Read review details 
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                  </svg>
+                </Link>
+                <span className="hidden sm:inline text-brand-light/30">|</span>
+                <Link href="/our-videos" className="text-brand-primary hover:text-brand-accent transition-colors text-sm font-medium">
+                  Browse all videos
+                </Link>
+              </div>
             </div>
           </div>
         </div>
