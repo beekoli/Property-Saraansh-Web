@@ -1,49 +1,102 @@
 "use client";
 
-import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  useEffect(() => {
+    setMounted(true);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+    setIsDropdownOpen(false);
   };
 
+  const isLightPage = mounted && (
+    pathname === '/contact' || 
+    pathname === '/commercial-properties' || 
+    pathname === '/residential-properties' || 
+    (pathname && pathname.startsWith('/blog/') && pathname !== '/blog')
+  );
+
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[#06282B] border-b border-[#1A3E42] shadow-lg">
+    <nav 
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        (isScrolled || isLightPage) ? 'bg-brand-dark border-b border-brand-light/20 shadow-lg py-2' : 'bg-transparent py-4'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-16">
+          
+          {/* Logo / Monogram */}
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center" onClick={closeMobileMenu}>
-              <Image 
-                src="/logo.png" 
-                alt="Property Saraansh Logo" 
-                width={200} 
-                height={80} 
-                className="h-16 w-auto object-contain"
-                priority
-              />
+            <Link href="/" className="flex items-center gap-3 group" onClick={closeMobileMenu}>
+              {/* Monogram Monogram: deep teal background, sand gold letters */}
+              <div className="w-10 h-10 rounded-full bg-brand-dark border border-brand-accent flex items-center justify-center shadow-md group-hover:border-brand-accent-light transition-colors">
+                <span className="heading-playfair text-brand-accent font-bold text-lg tracking-wider group-hover:text-brand-accent-light">PS</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="heading-playfair font-bold text-white text-base tracking-wide group-hover:text-brand-accent transition-colors leading-tight">Property Saraansh</span>
+                <span className="text-[10px] text-brand-accent uppercase tracking-widest leading-none font-semibold">Real Estate Consultancy</span>
+              </div>
             </Link>
           </div>
           
-          <div className="hidden md:flex space-x-8">
-            <Link href="/" className="text-white hover:text-[#E5C099] transition-colors font-medium text-sm uppercase tracking-wider">Home</Link>
-            <Link href="/about-us" className="text-white hover:text-[#E5C099] transition-colors font-medium text-sm uppercase tracking-wider">About Us</Link>
-            <Link href="/our-videos" className="text-white hover:text-[#E5C099] transition-colors font-medium text-sm uppercase tracking-wider">Our Videos</Link>
-            <Link href="/commercial-properties" className="text-white hover:text-[#E5C099] transition-colors font-medium text-sm uppercase tracking-wider">Commercial</Link>
-            <Link href="/residential-properties" className="text-white hover:text-[#E5C099] transition-colors font-medium text-sm uppercase tracking-wider">Residential</Link>
-            <Link href="/blog" className="text-white hover:text-[#E5C099] transition-colors font-medium text-sm uppercase tracking-wider">Blogs</Link>
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex space-x-6 items-center">
+            <Link href="/" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Home</Link>
+            <Link href="/about-us" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">About</Link>
+            <Link href="/our-videos" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Our Videos</Link>
+            
+            {/* Projects Dropdown */}
+            <div 
+              className="relative group py-2"
+              onMouseEnter={() => setIsDropdownOpen(true)}
+              onMouseLeave={() => setIsDropdownOpen(false)}
+            >
+              <button 
+                className="text-white hover:text-brand-accent transition-colors font-medium text-sm flex items-center gap-1 focus:outline-none"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                Projects
+                <svg className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              <div 
+                className={`absolute left-0 mt-2 w-48 bg-brand-dark border border-brand-light/30 rounded-lg shadow-xl py-2 z-50 transition-all duration-200 origin-top-left ${
+                  isDropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                }`}
+              >
+                <Link href="/properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">All Projects</Link>
+                <Link href="/commercial-properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Commercial</Link>
+                <Link href="/residential-properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Residential</Link>
+              </div>
+            </div>
+            
+            <Link href="/blog" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Blog</Link>
+            <Link href="/contact" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Contact</Link>
           </div>
 
+          {/* Consultation CTA */}
           <div className="hidden md:flex">
-             <Link href="/contact" className="btn-primary">
-              Enquire Now
+             <Link href="/contact" className="bg-brand-accent text-brand-dark px-6 py-2.5 rounded font-bold hover:bg-brand-accent-light transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 text-sm">
+              Free Consultation
             </Link>
           </div>
           
@@ -51,7 +104,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button 
               onClick={toggleMobileMenu}
-              className="text-white hover:text-[#E5C099] focus:outline-none"
+              className="text-white hover:text-brand-accent focus:outline-none"
               aria-label="Toggle mobile menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,15 +121,21 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#06282B] border-t border-[#1A3E42]">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-            <Link href="/" onClick={closeMobileMenu} className="text-white hover:text-[#E5C099] block px-3 py-2 rounded-md text-base font-medium">Home</Link>
-            <Link href="/about-us" onClick={closeMobileMenu} className="text-white hover:text-[#E5C099] block px-3 py-2 rounded-md text-base font-medium">About Us</Link>
-            <Link href="/our-videos" onClick={closeMobileMenu} className="text-white hover:text-[#E5C099] block px-3 py-2 rounded-md text-base font-medium">Our Videos</Link>
-            <Link href="/commercial-properties" onClick={closeMobileMenu} className="text-white hover:text-[#E5C099] block px-3 py-2 rounded-md text-base font-medium">Commercial</Link>
-            <Link href="/residential-properties" onClick={closeMobileMenu} className="text-white hover:text-[#E5C099] block px-3 py-2 rounded-md text-base font-medium">Residential</Link>
-            <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-[#E5C099] block px-3 py-2 rounded-md text-base font-medium">Blogs</Link>
-            <Link href="/contact" onClick={closeMobileMenu} className="text-[#E5C099] font-bold block px-3 py-2 rounded-md text-base mt-4">Enquire Now</Link>
+        <div className="md:hidden bg-brand-dark border-t border-brand-light/20 shadow-xl absolute w-full left-0">
+          <div className="px-4 pt-2 pb-6 space-y-1 flex flex-col">
+            <Link href="/" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Home</Link>
+            <Link href="/about-us" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">About</Link>
+            <Link href="/our-videos" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Our Videos</Link>
+            
+            <div className="pl-2 border-l border-brand-light/30 space-y-1">
+              <Link href="/properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">All Projects</Link>
+              <Link href="/commercial-properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Commercial Projects</Link>
+              <Link href="/residential-properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Residential Projects</Link>
+            </div>
+
+            <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Blog</Link>
+            <Link href="/contact" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Contact</Link>
+            <Link href="/contact" onClick={closeMobileMenu} className="bg-brand-accent text-brand-dark block text-center py-3 rounded font-bold mt-4 shadow-md">Free Consultation</Link>
           </div>
         </div>
       )}

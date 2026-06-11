@@ -1,6 +1,6 @@
 export default function VideoPlayer({ videoId, title }: { videoId: string; title?: string }) {
   return (
-    <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl border border-[#1A3E42]">
+    <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl border border-brand-light/30">
       <iframe
         className="w-full h-full"
         src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`}

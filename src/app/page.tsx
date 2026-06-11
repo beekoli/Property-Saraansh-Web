@@ -1,180 +1,281 @@
 import Link from 'next/link';
-import VideoPlayer from '@/components/VideoPlayer';
 import PropertyCard from '@/components/PropertyCard';
-import { getLatestBlogs, getProperties, getFeaturedImage, stripHtml, getPageBySlug } from '@/lib/wordpress';
-import { Metadata } from 'next';
+import VideoPlayer from '@/components/VideoPlayer';
+import BlogCard from '@/components/BlogCard';
+import { getProperties, getLatestBlogs } from '@/lib/wordpress';
+import { getLatestYouTubeVideos, getChannelStats } from '@/lib/youtube';
 
 export const revalidate = 60; // Revalidate every minute
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPageBySlug('home');
-  if (!page || !page.yoast_head_json) return { title: 'Property Saraansh | Real Estate Consultancy' };
-
-  return {
-    title: page.yoast_head_json.title || 'Property Saraansh | Real Estate Consultancy',
-    description: page.yoast_head_json.description || 'Expert advisory, comprehensive YouTube reviews, and exclusive property deals in commercial and residential sectors.',
-    openGraph: {
-      title: page.yoast_head_json.og_title,
-      description: page.yoast_head_json.og_description,
-      images: page.yoast_head_json.og_image?.map(img => img.url) || [],
-    }
-  };
-}
-
 export default async function Home() {
-  // Fetch data in parallel
-  const [blogs, properties, homePage] = await Promise.all([
-    getLatestBlogs(3),
+  // Concurrent fetching of server-side data
+  const [properties, latestBlogs, latestVideos, channelStats] = await Promise.all([
     getProperties(3),
-    getPageBySlug('home')
+    getLatestBlogs(3),
+    getLatestYouTubeVideos(1),
+    getChannelStats()
   ]);
 
-  // Fallback defaults if WordPress is not yet configured
-  const hero_title_part1 = homePage?.acf?.hero_title_part1 || "Noida's Premier";
-  const hero_title_part2 = homePage?.acf?.hero_title_part2 || "Real Estate Consultancy";
-  const hero_subtitle = homePage?.acf?.hero_subtitle || "Expert advisory, comprehensive YouTube reviews, and exclusive property deals in commercial and residential sectors.";
+  const featuredVideo = latestVideos[0] || {
+    id: "dQw4w9WgXcQ",
+    title: "Noida Real Estate Market Update 2026: What to Expect?",
+    description: "Join Saraansh as he breaks down the latest trends in the Noida and Greater Noida real estate market. Discover top investment hotspots and upcoming infrastructure projects that will drive property values."
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-[#06282B] text-white py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#06282B] to-transparent"></div>
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center text-center">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">
-            {hero_title_part1} <br/>
-            <span className="text-[#E5C099]">{hero_title_part2}</span>
+    <>
+      {/* 1. Hero Section */}
+      <section className="relative bg-brand-dark pt-32 pb-24 overflow-hidden">
+        {/* Subtle architectural wireframe at 6% opacity */}
+        <div 
+          className="absolute inset-0 opacity-[0.06]" 
+          style={{ 
+            backgroundImage: `
+              linear-gradient(rgba(212, 169, 106, 0.15) 1px, transparent 1px), 
+              linear-gradient(90deg, rgba(212, 169, 106, 0.15) 1px, transparent 1px)
+            `, 
+            backgroundSize: '40px 40px' 
+          }}
+        ></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <h1 className="heading-playfair text-4xl md:text-5xl lg:text-6xl text-brand-accent mb-6 font-bold tracking-tight">
+            Your Trusted Guide to Noida Real Estate
           </h1>
-          <p className="text-xl md:text-2xl text-[#A0B2B4] mb-10 max-w-3xl">
-            {hero_subtitle}
+          <p className="text-brand-pale text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+            Expert property reviews, market insights & investment guidance — all on YouTube.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/our-videos" className="btn-primary text-lg">
-              Watch Market Updates
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link 
+              href="/properties" 
+              className="btn-primary text-brand-dark w-full sm:w-auto text-lg px-8 py-3 bg-brand-accent hover:bg-brand-accent-light shadow-lg hover:shadow-xl font-bold rounded"
+            >
+              Explore Projects
             </Link>
-            <Link href="/commercial-properties" className="btn-outline text-lg">
-              Explore Properties
-            </Link>
+            <a 
+              href={featuredVideo.id.startsWith('video') ? 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' : `https://www.youtube.com/watch?v=${featuredVideo.id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-outline w-full sm:w-auto text-lg px-8 py-3 flex items-center justify-center gap-2 border-brand-light text-brand-pale hover:bg-brand-light hover:text-white rounded"
+            >
+              <svg className="w-5 h-5 text-red-500 fill-current" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              Watch Latest Video
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Featured Video Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0A1A1C]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif text-white mb-4">Latest Insights on YouTube</h2>
-            <div className="w-24 h-1 bg-[#E5C099] mx-auto rounded"></div>
+      {/* 2. Stats Bar */}
+      <section className="bg-brand-pale py-10 border-y border-brand-light/20 shadow-inner">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-brand-light/30">
+            <div className="px-4">
+              <div className="text-[32px] font-bold text-brand-accent font-sans">{channelStats.subscriberCount}</div>
+              <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">YouTube Subscribers</div>
+            </div>
+            <div className="px-4">
+              <div className="text-[32px] font-bold text-brand-accent font-sans">{channelStats.videoCount}</div>
+              <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">Total Videos</div>
+            </div>
+            <div className="px-4">
+              <div className="text-[32px] font-bold text-brand-accent font-sans">120+</div>
+              <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">Projects Listed</div>
+            </div>
+            <div className="px-4">
+              <div className="text-[32px] font-bold text-brand-accent font-sans">4</div>
+              <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">Cities Covered</div>
+            </div>
           </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <VideoPlayer videoId="dQw4w9WgXcQ" title="Noida Real Estate Market Update" />
-            <div className="mt-8 text-center">
-              <Link href="/our-videos" className="text-[#E5C099] hover:text-white font-semibold transition-colors">
-                View All Videos →
+        </div>
+      </section>
+
+      {/* 3. Featured Video */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <div className="w-full lg:w-3/5">
+              <div className="bg-brand-dark p-3 rounded-2xl shadow-2xl border border-brand-primary">
+                <VideoPlayer videoId={featuredVideo.id} title={featuredVideo.title} />
+              </div>
+            </div>
+            <div className="w-full lg:w-2/5 text-brand-ink">
+              <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Featured Review</span>
+              <h2 className="heading-playfair text-3xl font-bold mb-4 leading-tight">{featuredVideo.title}</h2>
+              <p className="text-brand-dark/70 mb-6 leading-relaxed text-sm font-light">
+                {featuredVideo.description}
+              </p>
+              <Link href="/our-videos" className="text-brand-accent font-bold hover:text-brand-primary transition-colors flex items-center gap-2 group text-base">
+                View all videos 
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Properties Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#06282B]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-12 border-b border-[#1A3E42] pb-6">
-            <div>
-              <h2 className="text-4xl font-serif text-white mb-2">Featured Properties</h2>
-              <p className="text-[#A0B2B4]">Handpicked premium listings in Noida</p>
-            </div>
-            <Link href="/commercial-properties" className="hidden md:block text-[#E5C099] hover:text-white font-semibold transition-colors">
-              View All →
-            </Link>
+      {/* 4. Featured Projects */}
+      <section className="py-20 bg-brand-pale">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold">
+              Explore Our Projects
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
+            </h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.length > 0 ? (
-              properties.map((prop) => (
-                <PropertyCard 
-                  key={prop.id}
-                  id={prop.slug}
-                  title={prop.title.rendered}
-                  location={prop.acf?.location || 'Noida'}
-                  price={prop.acf?.price || 'Price on Request'}
-                  type={prop.acf?.property_type || 'Property'}
-                  imageUrl={getFeaturedImage(prop)}
-                />
-              ))
-            ) : (
-              // Fallback placeholders if API fails or is empty
-              <>
-                <PropertyCard 
-                  id="ace-estate" title="ACE Estate" location="Sector 150, Noida" price="₹ 2.5 Cr*" type="Premium Residential" imageUrl="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"
-                />
-                <PropertyCard 
-                  id="spectrum-metro" title="Spectrum Metro" location="Sector 75, Noida" price="₹ 1.2 Cr*" type="Commercial Retail" imageUrl="https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=800&q=80"
-                />
-                <PropertyCard 
-                  id="m3m-the-cullinan" title="M3M The Cullinan" location="Sector 94, Noida" price="₹ 6.5 Cr*" type="Ultra Luxury" imageUrl="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80"
-                />
-              </>
-            )}
+            {properties.map((project) => (
+              <PropertyCard 
+                key={project.id}
+                id={project.slug}
+                title={project.title.rendered}
+                developer={project.acf?.developer || "Eldeco Group"}
+                location={project.acf?.location || "Noida"}
+                price={project.acf?.price || "Price on Request"}
+                type={project.acf?.property_type || "Residential"}
+                imageUrl={project.acf?.gallery_image_1 || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800"}
+                bhk={project.acf?.configuration ? project.acf.configuration.split(', ') : ["3 BHK", "4 BHK"]}
+              />
+            ))}
           </div>
-          
-          <div className="mt-8 text-center md:hidden">
-            <Link href="/commercial-properties" className="text-[#E5C099] hover:text-white font-semibold transition-colors">
-              View All Properties →
+          <div className="text-center mt-12">
+            <Link href="/properties" className="btn-outline border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-3 rounded">
+              View All Projects
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Latest Insights / Blog Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0A1A1C]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-serif text-white mb-4">Real Estate Insights</h2>
-            <div className="w-24 h-1 bg-[#E5C099] mx-auto rounded"></div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.length > 0 ? (
-              blogs.map((blog) => (
-                <div key={blog.id} className="bg-[#06282B] rounded-xl p-6 border border-[#1A3E42] hover:border-[#E5C099] transition-colors flex flex-col h-full">
-                  <div className="flex justify-between items-start mb-3">
-                    <span className="text-[#E5C099] text-xs font-bold uppercase tracking-wider bg-[#0A1A1C] px-2 py-1 rounded">Insight</span>
-                    <span className="text-[#A0B2B4] text-xs">{new Date(blog.date).toLocaleDateString()}</span>
-                  </div>
-                  <h3 className="text-xl font-serif text-white mb-3" dangerouslySetInnerHTML={{ __html: blog.title.rendered }}></h3>
-                  <p className="text-[#A0B2B4] mb-4 line-clamp-3" dangerouslySetInnerHTML={{ __html: stripHtml(blog.excerpt.rendered) }}></p>
-                  <Link href={`/blog/${blog.slug}`} className="text-[#E5C099] hover:text-white text-sm font-semibold flex items-center transition-colors mt-auto">
-                    Read More
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </Link>
-                </div>
-              ))
-            ) : (
-              // Fallback placeholders
-              [1, 2, 3].map((i) => (
-                <div key={i} className="bg-[#06282B] rounded-xl p-6 border border-[#1A3E42] hover:border-[#E5C099] transition-colors">
-                  <div className="text-[#E5C099] text-sm font-bold mb-3 uppercase tracking-wider">Market Analysis</div>
-                  <h3 className="text-xl font-serif text-white mb-3">Why Noida is the best investment destination in 2026?</h3>
-                  <p className="text-[#A0B2B4] mb-4 line-clamp-3">Discover the key infrastructure developments and market trends that make Noida a hotspot for real estate investors...</p>
-                  <Link href="/blog" className="text-[#E5C099] hover:text-white text-sm font-semibold flex items-center transition-colors mt-auto">
-                    Read More
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </Link>
-                </div>
-              ))
-            )}
+      {/* 5. Why Us */}
+      <section className="py-20 bg-brand-pale border-t border-brand-light/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+              <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-brand-ink font-bold text-base">YouTube-Verified Reviews</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Honest, unedited ground updates from Sector 150 to expressway.</p>
+            </div>
+            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+              <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                </svg>
+              </div>
+              <h3 className="text-brand-ink font-bold text-base">Free Consultation</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">1-on-1 strategy sessions with property analytics data.</p>
+            </div>
+            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+              <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                </svg>
+              </div>
+              <h3 className="text-brand-ink font-bold text-base">Noida Market Expert</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Deep micro-market pricing trends and location mapping.</p>
+            </div>
+            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+              <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 className="text-brand-ink font-bold text-base">End-to-End Support</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Complete assistance from site visits to RERA documentation.</p>
+            </div>
           </div>
         </div>
       </section>
-    </div>
+
+      {/* 6. About Saraansh */}
+      <section className="py-20 bg-brand-dark relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-primary opacity-15 transform skew-x-12 translate-x-32"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="flex flex-col md:flex-row items-center gap-16">
+            <div className="w-full md:w-5/12">
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
+                <img 
+                  src="/saraansh_seth.png" 
+                  alt="Saraansh Seth" 
+                  className="w-full h-full object-cover" 
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div className="w-full md:w-7/12 text-white">
+              <span className="text-brand-accent uppercase tracking-widest text-xs font-bold block mb-2">Founder & Consultant</span>
+              <h2 className="heading-playfair text-4xl text-brand-accent mb-6 font-bold">Who is Saraansh Seth?</h2>
+              <p className="text-brand-pale text-lg mb-8 leading-relaxed font-light">
+                With a passion for real estate transparency, I founded Property Saraansh to guide property buyers through the complex micro-markets of Noida. My YouTube reviews show the actual ground reality, helping thousands make safe and secure investment choices.
+              </p>
+              
+              <div className="flex gap-8 mb-10 border-l-2 border-brand-accent pl-6">
+                <div>
+                  <div className="text-3xl font-bold text-white">{channelStats.subscriberCount}</div>
+                  <div className="text-sm text-brand-accent/80 uppercase tracking-widest mt-1">Subscribers</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-white">{channelStats.videoCount}</div>
+                  <div className="text-sm text-brand-accent/80 uppercase tracking-widest mt-1">Videos</div>
+                </div>
+              </div>
+              
+              <Link href="/about-us" className="btn-primary bg-brand-accent text-brand-dark px-8 py-3 rounded font-bold hover:bg-brand-accent-light shadow-md inline-block">
+                Know More
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Latest Blogs */}
+      <section className="py-20 bg-brand-pale border-t border-brand-light/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-end mb-12">
+            <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold">
+              Latest Insights
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
+            </h2>
+            <Link href="/blog" className="hidden md:flex text-brand-primary font-bold hover:text-brand-accent transition-colors items-center gap-1 group">
+              Read all articles
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 md:mb-0">
+            {latestBlogs.map((blog) => (
+              <BlogCard 
+                key={blog.id}
+                id={blog.slug}
+                title={blog.title.rendered}
+                excerpt={blog.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
+                category="Market Insights"
+                author="Saraansh Seth"
+                date={blog.date}
+                readTime="6 min read"
+                thumbnail={blog._embedded?.['wp:featuredmedia']?.[0]?.source_url || "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800"}
+              />
+            ))}
+          </div>
+          
+          <div className="md:hidden text-center mt-8">
+             <Link href="/blog" className="text-brand-primary font-bold hover:text-brand-accent transition-colors flex items-center justify-center gap-1 group">
+              Read all articles
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
-
