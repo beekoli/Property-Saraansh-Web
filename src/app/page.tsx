@@ -189,8 +189,8 @@ export default async function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                 </svg>
               </div>
-              <h3 className="text-brand-ink font-bold text-base">Free Consultation</h3>
-              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">1-on-1 strategy sessions with property analytics data.</p>
+              <h3 className="text-brand-ink font-bold text-base">Customer-Centric Approach</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Personalized guidance to match every client’s unique needs.</p>
             </div>
             <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
@@ -198,8 +198,8 @@ export default async function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
               </div>
-              <h3 className="text-brand-ink font-bold text-base">Noida Market Expert</h3>
-              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Deep micro-market pricing trends and location mapping.</p>
+              <h3 className="text-brand-ink font-bold text-base">In-Depth Market Analysis</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Data-driven insights to identify the best opportunities.</p>
             </div>
             <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
