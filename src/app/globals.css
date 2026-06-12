@@ -148,3 +148,12 @@ a:hover {
   filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
 }
 
+/* Hide scrollbars but allow scrolling */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

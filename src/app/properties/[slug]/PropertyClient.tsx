@@ -264,8 +264,8 @@ export default function PropertyClient({ property }: Props) {
       </section>
 
       {/* 2. Sticky Sub-Navigation Bar */}
-      <div className="sticky top-[80px] z-40 bg-brand-dark text-brand-pale border-y border-brand-light/20 shadow-md hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 flex justify-start gap-8 py-4 text-xs font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap">
+      <div className="sticky top-[72px] md:top-[80px] z-40 bg-brand-dark text-brand-pale border-y border-brand-light/20 shadow-md block">
+        <div className="max-w-7xl mx-auto px-4 flex justify-start gap-6 md:gap-8 py-3.5 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap scrollbar-none">
           <button onClick={() => scrollNav('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
           <button onClick={() => scrollNav('saraansh-review')} className="hover:text-brand-accent transition-colors">Saraansh&apos;s Review</button>
           <button onClick={() => scrollNav('highlights')} className="hover:text-brand-accent transition-colors">Highlights</button>
