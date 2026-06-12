@@ -164,6 +164,15 @@ export default async function Home() {
       {/* 5. Why Us */}
       <section className="py-20 bg-brand-pale border-t border-brand-light/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold mb-8">
+              Why Property Saraansh?
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-4"></span>
+            </h2>
+            <p className="text-brand-dark/80 text-lg max-w-4xl mx-auto font-light leading-relaxed text-justify md:text-center">
+              Experience the art of Property Portfolio Management, where exclusivity meets precision. We curate premium real estate assets tailored to your lifestyle and investment goals, ensuring unmatched growth and prestige. With our bespoke strategies, your portfolio becomes more than an investment—it becomes a legacy of luxury and lasting value.
+            </p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
@@ -171,8 +180,8 @@ export default async function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h3 className="text-brand-ink font-bold text-base">YouTube-Verified Reviews</h3>
-              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Honest, unedited ground updates from Sector 150 to expressway.</p>
+              <h3 className="text-brand-ink font-bold text-base">Strong & Experienced Team</h3>
+              <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">A trusted team of real estate professionals with years of proven expertise.</p>
             </div>
             <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
