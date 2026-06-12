@@ -102,9 +102,9 @@ export default async function Home() {
               </div>
             </div>
             <div className="w-full lg:w-2/5 text-brand-ink">
-              <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Featured Review</span>
+              <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Our Latest Video</span>
               <Link href={`/our-videos/${featuredVideo.slug}`} className="text-black hover:text-brand-primary transition-colors group block">
-                <h2 className="heading-playfair text-3xl font-bold mb-4 leading-tight text-black group-hover:text-brand-primary transition-colors cursor-pointer">
+                <h2 className="heading-playfair text-3xl font-bold mb-4 leading-tight text-justify text-black group-hover:text-brand-primary transition-colors cursor-pointer">
                   {featuredVideo.title}
                 </h2>
               </Link>
