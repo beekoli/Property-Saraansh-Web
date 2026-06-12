@@ -334,6 +334,86 @@ export const MOCK_YOUTUBE_VIDEOS: YTVideo[] = [
       "views": "15K views"
     },
     {
+      "id": "RiwupPz-wmQ",
+      "title": "Ace Groups New Residential Plots at Yamuna Expressway Noida",
+      "description": "Residential Ace estate plots at Yamuna Expressway Noida  #aceestate #aceplots #aceacreville #aceyamunaexpressway #acegroup #plotsonyamunaexpressway #yamunapl...",
+      "thumbnail": "https://i.ytimg.com/vi/RiwupPz-wmQ/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "6:33",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "Dfba98En7rk",
+      "title": "Godrej Riverine – A Luxury Apartment Option Near Delhi",
+      "description": "Godrej Riverine Sector 44 Noida: Redefining Premium Living  For those seeking a blend of luxury, comfort, and modern living in the thriving city of Noida, Go...",
+      "thumbnail": "https://i.ytimg.com/vi/Dfba98En7rk/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "6:23",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "NAb2cM4Q-1I",
+      "title": "Prestige City Ghaziabad Launch: Everything You Need to Know Now",
+      "description": "Prestige City Indirapuram Ghaziabad – Everything You Need to Know NowWhen it comes to premium residential living, Prestige City Ghaziabad sets a new benchmar...",
+      "thumbnail": "https://i.ytimg.com/vi/NAb2cM4Q-1I/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "9:40",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "_YKDglIq2Fg",
+      "title": "Top 3 Studio Apartments in Noida for High ROI",
+      "description": "Explore the top 3 studio apartments in Noida—#dasnacarc  #orion132 #FairfoxEON —that promise excellent rental returns and investment opportunities.Top 3 Stud...",
+      "thumbnail": "https://i.ytimg.com/vi/_YKDglIq2Fg/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "7:41",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "jFlFfLNOKx0",
+      "title": "Legacy by Gaurs Launches Dream Homes at Unbeatable Prices",
+      "description": "Legacy by Gaurs ultra luxury apartments in Jaypee greens noida#legacybygaur #gaurlegacy #gaurlegacy #gaurparichok #gaurisland #gaurnoida #gaurgreaternoidaLeg...",
+      "thumbnail": "https://i.ytimg.com/vi/jFlFfLNOKx0/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "8:32",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "NQf0pS1cjPE",
+      "title": "What Makes ACE Hanei the MOST Desired 3 and 4 BHK in Noida",
+      "description": "ACE Hanei Noida Extension Sector-12 New Project Luxurious 3 &amp; 4 BHK#Acehanei #Acehaneisector12 #AceHaneiGreaterNoida #acegroup #noidarealty #noidaproperties ...",
+      "thumbnail": "https://i.ytimg.com/vi/NQf0pS1cjPE/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "9:22",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "WTMe76bD6-I",
+      "title": "Taj Skyscape Noida | Why HNIs Are Choosing Hotel-Managed Residences Over Luxury Apartments",
+      "description": "Taj Hotel Branded Residences Coming to Noida Expressway Collab with Gulshan Group | The G by Gulshan group 5 Star Presidential Apartment Suites in Noida |Big...",
+      "thumbnail": "https://i.ytimg.com/vi/WTMe76bD6-I/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "5:40",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "d89gA6WupxM",
+      "title": "M3M Cullinan and Max estate 128 on Noida Expressway are The MOST Luxurious Apartments",
+      "description": "Ultra Luxury Apartments Options on Noida Expressway M3M The Cullinan Noida and max estate 128#m3mnoida #maxestatenoida #m3mcullinan #m3mproperties #maxestate...",
+      "thumbnail": "https://i.ytimg.com/vi/d89gA6WupxM/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "6:43",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
       "id": "fslL0ubv2O4",
       "title": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",
       "description": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",
