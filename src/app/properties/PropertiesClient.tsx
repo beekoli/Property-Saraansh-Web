@@ -260,13 +260,13 @@ export default function PropertiesClient({ properties }: Props) {
                       <div className="flex gap-4 border-t border-brand-pale pt-4">
                         <Link 
                           href={`/properties/${project.slug}?video=1`} 
-                          className="flex-1 btn-outline text-center text-xs py-2.5 border border-brand-light text-brand-primary hover:bg-brand-light hover:text-white rounded font-bold"
+                          className="flex-1 bg-brand-primary text-white text-center text-xs py-2.5 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
                         >
                           Watch Review ▶
                         </Link>
                         <Link 
                           href={`/properties/${project.slug}`} 
-                          className="flex-1 btn-primary text-center text-xs py-2.5 rounded font-bold"
+                          className="flex-1 bg-brand-dark text-white text-center text-xs py-2.5 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
                         >
                           Get Details
                         </Link>

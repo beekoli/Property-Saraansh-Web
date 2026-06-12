@@ -53,13 +53,13 @@ export default function PropertyCard({ id, title, developer = "Eldeco Group", lo
           <div className="flex gap-2">
             <Link 
               href={`/properties/${id}?video=1`} 
-              className="flex-1 btn-outline text-center text-xs py-2 px-0 flex items-center justify-center gap-1 group/btn border border-brand-light text-brand-primary hover:bg-brand-light hover:text-white rounded font-bold"
+              className="flex-1 bg-brand-primary text-white text-center text-xs py-2 px-0 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
             >
               Watch Review ▶
             </Link>
             <Link 
               href={`/properties/${id}`} 
-              className="flex-1 btn-primary text-center text-xs py-2 px-0 rounded font-bold"
+              className="flex-1 bg-brand-dark text-white text-center text-xs py-2 px-0 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
             >
               Get Details
             </Link>
