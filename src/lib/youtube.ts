@@ -324,6 +324,16 @@ export const MOCK_YOUTUBE_VIDEOS: YTVideo[] = [
       "views": "12K views views"
     },
     {
+      "id": "PbyXvIrful0",
+      "title": "SKA estate Luxury Apartments in Greater Noida at Realistic Prices",
+      "description": "Watch the full review of SKA estate Luxury Apartments in Greater Noida at Realistic Prices by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
+      "thumbnail": "https://i.ytimg.com/vi/PbyXvIrful0/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "15:41",
+      "category": "Real Estate",
+      "views": "15K views"
+    },
+    {
       "id": "fslL0ubv2O4",
       "title": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",
       "description": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",

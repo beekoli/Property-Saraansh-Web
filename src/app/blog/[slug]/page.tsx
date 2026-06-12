@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
+import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
@@ -8,6 +9,20 @@ export const revalidate = 60; // Revalidate every minute
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+function convertDurationToIso(duration: string): string {
+  if (!duration) return 'PT10M0S';
+  if (duration.startsWith('PT')) return duration;
+  const parts = duration.split(':').map(Number);
+  if (parts.length === 3) {
+    const [h, m, s] = parts;
+    return `PT${h}H${m}M${s}S`;
+  } else if (parts.length === 2) {
+    const [m, s] = parts;
+    return `PT${m}M${s}S`;
+  }
+  return 'PT10M0S';
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -46,8 +61,27 @@ export default async function BlogPostPage({ params }: PageProps) {
     relatedVideoId = "e-WJp9zY7o8"; // Eldeco 7 Peaks
   }
 
+  const video = await getVideoById(relatedVideoId);
+  const videoSchema = video ? {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": video.title,
+    "description": video.description || `Watch real estate guide video review related to ${blog.title.rendered}.`,
+    "thumbnailUrl": [video.thumbnail],
+    "uploadDate": video.publishedAt ? new Date(video.publishedAt).toISOString().split('T')[0] : "2026-06-11",
+    "duration": convertDurationToIso(video.duration),
+    "embedUrl": `https://www.youtube.com/embed/${video.id}`
+  } : null;
+
   return (
-    <div className="bg-[#E8F5F2] min-h-screen pt-24 pb-20">
+    <>
+      {videoSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
+        />
+      )}
+      <div className="bg-[#E8F5F2] min-h-screen pt-24 pb-20">
       
       {/* Blog Hero Heading */}
       <header className="max-w-4xl mx-auto px-4 text-center mt-8 mb-12 text-[#0D2921]">
@@ -151,8 +185,8 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </section>
       )}
-
     </div>
+    </>
   );
 }
 

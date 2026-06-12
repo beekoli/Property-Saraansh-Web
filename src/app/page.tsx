@@ -26,6 +26,24 @@ export default async function Home() {
 
   return (
     <>
+      {/* Homepage Featured Video Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            "name": featuredVideo.title,
+            "description": featuredVideo.description,
+            "thumbnailUrl": [
+              featuredVideo.thumbnail || `https://img.youtube.com/vi/${featuredVideo.youtubeId}/maxresdefault.jpg`
+            ],
+            "uploadDate": featuredVideo.publishedAt || "2026-06-11",
+            "duration": featuredVideo.duration || "PT19M35S",
+            "embedUrl": `https://www.youtube.com/embed/${featuredVideo.youtubeId}`
+          })
+        }}
+      />
       {/* 1. Hero Section */}
       <section className="relative bg-brand-dark pt-32 pb-24 overflow-hidden">
         {/* Subtle architectural wireframe at 6% opacity */}
