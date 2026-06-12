@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { WPProperty, getFeaturedImage, MOCK_PROPERTIES } from '@/lib/wordpress';
@@ -71,6 +71,30 @@ export default function PropertyClient({ property }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', budget: '', type: '3BHK' });
+
+  // Scroll visibility tracker for sticky subnav offset
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 80) {
+        if (currentScrollY > lastScrollY) {
+          setIsNavbarVisible(false); // Scroll Down -> hide main navbar, subnav moves to top-0
+        } else {
+          setIsNavbarVisible(true); // Scroll Up -> show main navbar, subnav moves to top-[80px]
+        }
+      } else {
+        setIsNavbarVisible(true); // Near top -> show main navbar
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   // Handle Form Submission
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -264,7 +288,7 @@ export default function PropertyClient({ property }: Props) {
       </section>
 
       {/* 2. Sticky Sub-Navigation Bar */}
-      <div className="sticky top-[72px] md:top-[80px] z-40 bg-brand-dark text-brand-pale border-y border-brand-light/20 shadow-md block">
+      <div className={`sticky ${isNavbarVisible ? 'top-[80px]' : 'top-0'} z-40 bg-brand-dark/90 backdrop-blur-md text-brand-pale border-y border-brand-accent/20 shadow-lg transition-all duration-300 block`}>
         <div className="max-w-7xl mx-auto px-4 flex justify-start gap-6 md:gap-8 py-3.5 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap scrollbar-none">
           <button onClick={() => scrollNav('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
           <button onClick={() => scrollNav('saraansh-review')} className="hover:text-brand-accent transition-colors">Saraansh&apos;s Review</button>
