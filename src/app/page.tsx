@@ -154,7 +154,7 @@ export default async function Home() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link href="/properties" className="btn-outline border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-3 rounded">
+            <Link href="/properties" className="btn-primary px-8 py-3 rounded shadow-md inline-block">
               View All Projects
             </Link>
           </div>
