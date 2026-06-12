@@ -122,7 +122,7 @@ export default async function Home() {
             <div className="w-full lg:w-2/5 text-brand-ink">
               <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Our Latest Video</span>
               <Link href={`/our-videos/${featuredVideo.slug}`} className="text-black hover:text-brand-primary transition-colors group block">
-                <h2 className="heading-playfair text-3xl font-bold mb-4 leading-tight text-justify text-black group-hover:text-brand-primary transition-colors cursor-pointer">
+                <h2 className="heading-playfair text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight text-justify text-black group-hover:text-brand-primary transition-colors cursor-pointer">
                   {featuredVideo.title}
                 </h2>
               </Link>
@@ -249,7 +249,7 @@ export default async function Home() {
             </div>
             <div className="w-full md:w-7/12 text-white">
               <span className="text-brand-accent uppercase tracking-widest text-xs font-bold block mb-2">Founder & Consultant</span>
-              <h2 className="heading-playfair text-4xl text-brand-accent mb-6 font-bold">Who is Saraansh Seth ?</h2>
+              <h2 className="heading-playfair text-3xl md:text-4xl text-brand-accent mb-6 font-bold">Who is Saraansh Seth ?</h2>
               <p className="text-brand-pale text-lg mb-8 leading-relaxed font-light">
                 Founded by Mr. Saraansh Seth, Property Saraansh is your trusted guide to smart real estate investments. With practical insights and project reviews, we help you buy the right property at the right price.
               </p>
