@@ -139,7 +139,7 @@ export default function ShortsClient({ initialVideos, stats }: Props) {
           <div className="text-center mt-16">
             <button 
               onClick={() => setVisibleCount(prev => prev + 12)}
-              className="btn-outline border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white px-8 py-3 bg-white rounded font-bold transition-all shadow-sm hover:shadow-md cursor-pointer"
+              className="btn-primary inline-block font-bold transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
               Load More Shorts
             </button>
