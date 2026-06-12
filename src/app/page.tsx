@@ -108,7 +108,7 @@ export default async function Home() {
                   {featuredVideo.title}
                 </h2>
               </Link>
-              <p className="text-zinc-600 mb-6 leading-relaxed text-sm font-light">
+              <p className="text-zinc-600 text-justify mb-6 leading-relaxed text-sm font-light">
                 {featuredVideo.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
