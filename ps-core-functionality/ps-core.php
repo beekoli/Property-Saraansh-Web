@@ -74,10 +74,17 @@ function ps_register_acf_fields() {
             array('key' => 'field_prop_total_floors', 'label' => 'Total Floors', 'name' => 'total_floors', 'type' => 'text', 'show_in_rest' => true),
             array('key' => 'field_prop_units_per_floor', 'label' => 'Units Per Floor', 'name' => 'units_per_floor', 'type' => 'text', 'show_in_rest' => true),
             array('key' => 'field_prop_lifts_per_floor', 'label' => 'Lifts Per Floor', 'name' => 'lifts_per_floor', 'type' => 'text', 'show_in_rest' => true),
+            array('key' => 'field_prop_base_price', 'label' => 'Base Price (e.g. ₹ 12,000 / sq.ft)', 'name' => 'base_price', 'type' => 'text', 'show_in_rest' => true),
             
-            // --- Extra Info ---
+            // --- Interactive Video Review ---
+            array('key' => 'field_prop_video_id', 'label' => 'YouTube Video ID', 'name' => 'video_id', 'type' => 'text', 'show_in_rest' => true),
+            array('key' => 'field_prop_video_review_text', 'label' => 'Video Review Quote/Text', 'name' => 'video_review_text', 'type' => 'textarea', 'show_in_rest' => true),
+            
+            // --- Extra Info & Media ---
             array('key' => 'field_prop_price_desc', 'label' => 'Price List Description', 'name' => 'price_list_desc', 'type' => 'wysiwyg', 'show_in_rest' => true),
+            array('key' => 'field_prop_highlights', 'label' => 'Highlights (separated by semicolons \';\')', 'name' => 'highlights', 'type' => 'textarea', 'show_in_rest' => true),
             array('key' => 'field_prop_loc_adv', 'label' => 'Location Advantages', 'name' => 'location_advantages', 'type' => 'wysiwyg', 'show_in_rest' => true),
+            array('key' => 'field_prop_map_embed', 'label' => 'Google Map Embed URL / IFrame Source', 'name' => 'google_map_embed', 'type' => 'textarea', 'show_in_rest' => true),
         );
 
         // --- Amenities (1 to 12 slots) ---
