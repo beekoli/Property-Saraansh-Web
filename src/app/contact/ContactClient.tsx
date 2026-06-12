@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { MapPin, Phone, Mail, MessageSquare, CheckCircle } from 'lucide-react';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function ContactClient({ address, phone, email }: Props) {
+  const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -45,15 +47,9 @@ export default function ContactClient({ address, phone, email }: Props) {
       console.error('Failed to forward lead to API:', apiError);
     }
 
-    // Construct WhatsApp message URL
-    const waText = encodeURIComponent(
-      `Hi Saraansh, I am contacting you from the website regarding a ${formData.propertyType} property enquiry.\n\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nMessage: ${formData.message || 'Not specified'}`
-    );
-    const waUrl = `https://wa.me/918076178189?text=${waText}`;
-
-    // Redirect to WhatsApp after a short delay
+    // Redirect to Thank You page after a short delay
     setTimeout(() => {
-      window.open(waUrl, '_blank');
+      router.push('/thank-you');
     }, 800);
   };
 

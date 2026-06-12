@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { WPProperty, getFeaturedImage, MOCK_PROPERTIES } from '@/lib/wordpress';
 import VideoPlayer from '@/components/VideoPlayer';
@@ -59,6 +60,7 @@ interface Props {
 }
 
 export default function PropertyClient({ property }: Props) {
+  const router = useRouter();
   const acf = property.acf || {};
   const featuredImage = getFeaturedImage(property);
   const developerBio = getDeveloperBio(acf.developer || "Eldeco Group");
@@ -95,15 +97,9 @@ export default function PropertyClient({ property }: Props) {
       console.error('Failed to forward lead to API:', apiError);
     }
 
-    // Construct WhatsApp message URL
-    const waText = encodeURIComponent(
-      `Hi Saraansh, I am interested in getting the details for "${property.title.rendered}".\n\nName: ${formData.name}\nPhone: ${formData.phone}\nBudget: ${formData.budget || 'Not specified'}\nInterest: ${formData.type}`
-    );
-    const waUrl = `https://wa.me/918076178189?text=${waText}`;
-
-    // Redirect to WhatsApp after a short delay
+    // Redirect to Thank You page after a short delay
     setTimeout(() => {
-      window.open(waUrl, '_blank');
+      router.push('/thank-you');
     }, 800);
   };
 
