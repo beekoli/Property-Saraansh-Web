@@ -220,7 +220,7 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-5/12">
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
+              <div className="relative aspect-[3/2] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
                 <img 
                   src="/saraansh_seth.png" 
                   alt="Saraansh Seth" 
@@ -231,9 +231,9 @@ export default async function Home() {
             </div>
             <div className="w-full md:w-7/12 text-white">
               <span className="text-brand-accent uppercase tracking-widest text-xs font-bold block mb-2">Founder & Consultant</span>
-              <h2 className="heading-playfair text-4xl text-brand-accent mb-6 font-bold">Who is Saraansh Seth?</h2>
+              <h2 className="heading-playfair text-4xl text-brand-accent mb-6 font-bold">Who is Saraansh Seth ?</h2>
               <p className="text-brand-pale text-lg mb-8 leading-relaxed font-light">
-                With a passion for real estate transparency, I founded Property Saraansh to guide property buyers through the complex micro-markets of Noida. My YouTube reviews show the actual ground reality, helping thousands make safe and secure investment choices.
+                Founded by Mr. Saraansh Seth, Property Saraansh is your trusted guide to smart real estate investments. With practical insights and project reviews, we help you buy the right property at the right price.
               </p>
               
               <div className="flex gap-8 mb-10 border-l-2 border-brand-accent pl-6">
