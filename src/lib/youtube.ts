@@ -414,6 +414,136 @@ export const MOCK_YOUTUBE_VIDEOS: YTVideo[] = [
       "views": "10K+ views"
     },
     {
+      "id": "ux80FKaXqdg",
+      "title": "Further Clarity on Prestige City Ghaziabad Payment Plan | Exit Plan | Better than Gaur NYC?",
+      "description": "Prestige City Ghaziabad - Further clarification #prestigesiddharthvihar #prestigeproperty #prestigecity #prestigeindrapuram #prestigeghaziabad Are you curious ...",
+      "thumbnail": "https://i.ytimg.com/vi/ux80FKaXqdg/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "6:45",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "vhbwRsbIO5c",
+      "title": "Comparing Top Noida Studio Projects - EON vs Orion vs M3M Vs Golden Palm",
+      "description": "Studio Apartment - Brand New Pre-Launch option/EON Vs Orion/Dasnac Vs M3M/Zest Vs Golden Palm #dasnacarc #fairfoxeon #fairfoxnoida #M3Mtheline #m3mstudio #m3m...",
+      "thumbnail": "https://i.ytimg.com/vi/vhbwRsbIO5c/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "7:25",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "qeOagu8B3Kc",
+      "title": "Prestige City Ghaziabad - A Practical Review by Property Saraansh",
+      "description": "OAKWOOD in the Prestige City Ghaziabad - A Practical Review by Property Saraansh #prestigesiddharthvihar #prestigeghaziabad #prestigecity #prestigeoakwood",
+      "thumbnail": "https://i.ytimg.com/vi/qeOagu8B3Kc/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "8:54",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "WPmnUl3ru9U",
+      "title": "Want to buy an Apartment in Noida? Things you should consider!",
+      "description": "Investing in an apartment in Noida can be an excellent decision, but it's crucial to consider several factors before making a purchase. As a rapidly developing...",
+      "thumbnail": "https://i.ytimg.com/vi/WPmnUl3ru9U/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "8:33",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "rbgRjoP2KIU",
+      "title": "I Compared Dasnac ARC and M3M The Line for Rental Income Here's What I Found",
+      "description": "I Compared Dasnac ARC and M3M The Line for Rental Income Here's What I Found #m3mline #dasnacarc #m3mstudio #m3mtheline #dasnacyuva #dasnac124 #studioapartment...",
+      "thumbnail": "https://i.ytimg.com/vi/rbgRjoP2KIU/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "7:05",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "s6V6M2zApmI",
+      "title": "Is Samridhi Daksh Avenue Really BETTER Than Prateek Canary For Investment",
+      "description": "Sector 150 Noida Luxury Projects Samridhi Dakhsh Avenue Vs. Prateek Canary Discover the ultimate luxury living experience at Sector 150 Noida. Samridhi Dakhsh...",
+      "thumbnail": "https://i.ytimg.com/vi/s6V6M2zApmI/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "8:57",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "fvggntit8Dg",
+      "title": "Plots in Noida Top Factors to be considered",
+      "description": "Investing in a plot in Noida can be a lucrative opportunity, but it's crucial to consider several factors before making a purchase. In this video explained all...",
+      "thumbnail": "https://i.ytimg.com/vi/fvggntit8Dg/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "9:06",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "DidX6OywjW0",
+      "title": "Studio Apartments in Noida-Best Small investment on Noida Expressway",
+      "description": "Studio Apartments in Noida-Best Small investment on Noida Expressway #eonstudio #orionstudio #orion132 #dasnacarc #dasnacyuva #dasnac124 Investing in a studio...",
+      "thumbnail": "https://i.ytimg.com/vi/DidX6OywjW0/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "7:47",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "1JFYaapc3eA",
+      "title": "Is Sector 150 Noida's Hidden Real Estate Gem?",
+      "description": "Which is the best place to buy a home in Noida? Is Sector 150 Noida's Hidden Real Estate Gem? #sector150noida #noidaexpressway #propertyinvestor #sportscityno...",
+      "thumbnail": "https://i.ytimg.com/vi/1JFYaapc3eA/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "4:51",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "0crM1LCI8dk",
+      "title": "Gulshan Dynasty Sample flat tour ready to move in 4 BHK Ultra Luxury Apartments",
+      "description": "Gulshan Dynasty in Noida: 4 BHK Ultra Luxury Apartments on Noida Expressway #gulshandynasty #gulshangroup #ultraluxuryliving #propertyreview #realestateinves...",
+      "thumbnail": "https://i.ytimg.com/vi/0crM1LCI8dk/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "3:04",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "LLYIqQZ9Qr8",
+      "title": "Top 5 Residential Projects on Noida Expressway",
+      "description": "Top 5 Residential Projects on Noida Expressway: Looking for the best place to call home along the Noida Expressway? Check out this video showcasing the top 5 ...",
+      "thumbnail": "https://i.ytimg.com/vi/LLYIqQZ9Qr8/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "5:42",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "Hd7cHcVrBWE",
+      "title": "Best Commercial Property on Noida Expressway for Investment",
+      "description": "Best Commercial Property on Noida Expressway for Investment Noida Expressway has emerged as one of the most lucrative hubs for commercial real estate in Ind...",
+      "thumbnail": "https://i.ytimg.com/vi/Hd7cHcVrBWE/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "4:59",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
+      "id": "P0qDqzgMcho",
+      "title": "Max Estates 128 and Max Estates 360: Your Gateway to Luxury Living",
+      "description": "Max Estates 128 and Max Estates 360: Your Gateway to Luxury Living Are you looking for a home that combines luxury, comfort, and holistic living? Max Estates ...",
+      "thumbnail": "https://i.ytimg.com/vi/P0qDqzgMcho/hqdefault.jpg",
+      "publishedAt": "1 year ago",
+      "duration": "4:32",
+      "category": "Real Estate",
+      "views": "10K+ views"
+    },
+    {
       "id": "fslL0ubv2O4",
       "title": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",
       "description": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",
