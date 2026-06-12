@@ -106,7 +106,7 @@ export default function PropertiesClient({ properties }: Props) {
       </section>
 
       {/* Filter Bar */}
-      <section className="bg-brand-dark border-y border-brand-light/20 py-8 px-4 sm:px-6 lg:px-8 shadow-lg z-10 relative -mt-6 mx-4 md:mx-8 rounded-2xl max-w-7xl lg:mx-auto lg:w-[calc(100%-4rem)] w-auto">
+      <section className="hidden md:block bg-brand-dark border-y border-brand-light/20 py-8 px-4 sm:px-6 lg:px-8 shadow-lg z-10 relative -mt-6 mx-4 md:mx-8 rounded-2xl max-w-7xl lg:mx-auto lg:w-[calc(100%-4rem)] w-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
           {/* Location */}
           <div>
