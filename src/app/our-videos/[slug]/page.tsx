@@ -205,7 +205,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                 <span className="inline-block bg-brand-accent/20 border border-brand-accent/30 text-brand-accent text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
                   RERA Compliant Advisory
                 </span>
-                <p className="text-[11px] text-brand-pale/95 font-light leading-relaxed">
+                <p className="text-[11px] text-brand-ink/80 font-light leading-relaxed">
                   We verify all projects on the UP RERA portal before filing video reviews. Always consult our advisors to verify registrations, pricing sheets, and payment plans.
                 </p>
               </div>
