@@ -176,7 +176,7 @@ export default function PropertiesClient({ properties }: Props) {
 
           {/* Search CTA */}
           <div>
-            <button className="w-full bg-brand-accent text-brand-dark font-bold rounded-lg p-3 hover:bg-brand-accent-light transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider">
+            <button className="w-full btn-primary font-bold rounded-lg p-3 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider">
               Search Projects
             </button>
           </div>
@@ -266,7 +266,7 @@ export default function PropertiesClient({ properties }: Props) {
                         </Link>
                         <Link 
                           href={`/properties/${project.slug}`} 
-                          className="flex-1 btn-primary text-center text-xs py-2.5 bg-brand-accent text-brand-dark hover:bg-brand-accent-light rounded font-bold"
+                          className="flex-1 btn-primary text-center text-xs py-2.5 rounded font-bold"
                         >
                           Get Details
                         </Link>

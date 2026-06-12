@@ -59,7 +59,7 @@ export default function PropertyCard({ id, title, developer = "Eldeco Group", lo
             </Link>
             <Link 
               href={`/properties/${id}`} 
-              className="flex-1 btn-primary text-center text-xs py-2 px-0 bg-brand-accent text-brand-dark hover:bg-brand-accent-light rounded font-bold"
+              className="flex-1 btn-primary text-center text-xs py-2 px-0 rounded font-bold"
             >
               Get Details
             </Link>

@@ -114,7 +114,7 @@ export default function Navbar() {
 
           {/* Consultation CTA */}
           <div className="hidden md:flex">
-             <Link href="/contact" className="bg-brand-accent text-brand-dark px-6 py-2.5 rounded font-bold hover:bg-brand-accent-light transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 text-sm">
+             <Link href="/contact" className="btn-primary px-6 py-2.5 rounded font-bold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 text-sm">
               Free Consultation
             </Link>
           </div>
@@ -155,7 +155,7 @@ export default function Navbar() {
 
             <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Blog</Link>
             <Link href="/contact" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Contact</Link>
-            <Link href="/contact" onClick={closeMobileMenu} className="bg-brand-accent text-brand-dark block text-center py-3 rounded font-bold mt-4 shadow-md">Free Consultation</Link>
+            <Link href="/contact" onClick={closeMobileMenu} className="btn-primary block text-center py-3 rounded font-bold mt-4 shadow-md">Free Consultation</Link>
           </div>
         </div>
       )}

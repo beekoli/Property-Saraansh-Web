@@ -238,7 +238,7 @@ export default async function Home() {
                 </div>
               </div>
               
-              <Link href="/about-us" className="btn-primary bg-brand-accent text-brand-dark px-8 py-3 rounded font-bold hover:bg-brand-accent-light shadow-md inline-block">
+              <Link href="/about-us" className="btn-primary px-8 py-3 rounded font-bold shadow-md inline-block">
                 Know More
               </Link>
             </div>

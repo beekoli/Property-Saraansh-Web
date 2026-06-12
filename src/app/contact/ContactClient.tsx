@@ -160,7 +160,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                 
                 <button 
                   type="submit" 
-                  className="w-full bg-brand-accent text-brand-dark hover:bg-brand-accent-light font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
+                  className="w-full btn-primary font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
                 >
                   Send Enquiry
                 </button>

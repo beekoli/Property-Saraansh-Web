@@ -226,7 +226,7 @@ export default function PropertyClient({ property }: Props) {
                 <button onClick={() => scrollNav('contact-form')} className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0">
                   Request Callback
                 </button>
-                <button onClick={() => scrollNav('saraansh-review')} className="bg-brand-accent text-brand-dark hover:bg-brand-accent-light px-4 py-2 text-xs rounded font-bold transition-all shadow-md flex-grow lg:flex-grow-0">
+                <button onClick={() => scrollNav('saraansh-review')} className="btn-primary px-4 py-2 text-xs rounded font-bold transition-all shadow-md flex-grow lg:flex-grow-0">
                   Watch Full Review
                 </button>
                 <button onClick={() => scrollNav('contact-form')} className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0">
@@ -660,7 +660,7 @@ export default function PropertyClient({ property }: Props) {
 
                     <button 
                       type="submit" 
-                      className="w-full bg-brand-accent text-brand-dark hover:bg-brand-accent-light font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
+                      className="w-full btn-primary font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
                     >
                       Get Price Breakdown
                     </button>
@@ -842,7 +842,7 @@ export default function PropertyClient({ property }: Props) {
         </a>
         <a 
           href="tel:+918076178189" 
-          className="flex-1 flex items-center justify-center gap-2 bg-brand-accent text-brand-dark rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
+          className="flex-1 flex items-center justify-center gap-2 btn-primary rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
         >
           <Phone size={16} />
           Call Now

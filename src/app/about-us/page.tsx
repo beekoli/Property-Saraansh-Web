@@ -102,7 +102,7 @@ export default async function AboutUs() {
                 <h4 className="text-brand-dark font-bold text-lg mb-2">Ready to start your journey?</h4>
                 <p className="text-brand-dark/70 text-xs font-light">Book a free 1-on-1 consultation call with me.</p>
               </div>
-              <Link href="/contact" className="w-full sm:w-auto btn-primary bg-brand-accent hover:bg-brand-accent-light text-brand-dark whitespace-nowrap px-8 py-3 rounded shadow-md font-bold text-center">
+              <Link href="/contact" className="w-full sm:w-auto btn-primary whitespace-nowrap px-8 py-3 rounded shadow-md font-bold text-center">
                 Book Free Call
               </Link>
             </div>

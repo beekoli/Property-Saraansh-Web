@@ -105,7 +105,7 @@ export default function BlogClient({ initialBlogs }: Props) {
                   </div>
                   <Link 
                     href={`/blog/${featuredPost.slug}`} 
-                    className="btn-primary text-xs px-6 py-3 bg-brand-accent hover:bg-brand-accent-light text-brand-dark rounded font-bold shadow-md"
+                    className="btn-primary text-xs px-6 py-3 rounded font-bold shadow-md"
                   >
                     Read Article
                   </Link>
