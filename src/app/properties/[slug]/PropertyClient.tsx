@@ -71,11 +71,40 @@ export default function PropertyClient({ property }: Props) {
   const [formData, setFormData] = useState({ name: '', phone: '', budget: '', type: '3BHK' });
 
   // Handle Form Submission
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
     setFormSubmitted(true);
-    console.log("Consultation Enquiry Submitted:", { project: property.title.rendered, ...formData });
+    
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: 'Property Details Page Sidebar',
+          name: formData.name,
+          phone: formData.phone,
+          budget: formData.budget,
+          type: formData.type,
+          project: property.title.rendered,
+        }),
+      });
+    } catch (apiError) {
+      console.error('Failed to forward lead to API:', apiError);
+    }
+
+    // Construct WhatsApp message URL
+    const waText = encodeURIComponent(
+      `Hi Saraansh, I am interested in getting the details for "${property.title.rendered}".\n\nName: ${formData.name}\nPhone: ${formData.phone}\nBudget: ${formData.budget || 'Not specified'}\nInterest: ${formData.type}`
+    );
+    const waUrl = `https://wa.me/918076178189?text=${waText}`;
+
+    // Redirect to WhatsApp after a short delay
+    setTimeout(() => {
+      window.open(waUrl, '_blank');
+    }, 800);
   };
 
   // Scroll Helper

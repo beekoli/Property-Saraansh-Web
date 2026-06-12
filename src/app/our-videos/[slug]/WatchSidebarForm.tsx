@@ -12,11 +12,29 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone) return;
 
     setSubmitted(true);
+
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: 'YouTube Video Watch Page',
+          name,
+          phone,
+          message,
+          videoTitle,
+        }),
+      });
+    } catch (apiError) {
+      console.error('Failed to forward lead to API:', apiError);
+    }
     
     // Construct WhatsApp message URL
     const waText = encodeURIComponent(

@@ -21,11 +21,40 @@ export default function ContactClient({ address, phone, email }: Props) {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.email) return;
     setFormSubmitted(true);
-    console.log("Contact Form Lead Generated:", formData);
+    
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: 'Contact Page Form',
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          type: formData.propertyType,
+          message: formData.message,
+        }),
+      });
+    } catch (apiError) {
+      console.error('Failed to forward lead to API:', apiError);
+    }
+
+    // Construct WhatsApp message URL
+    const waText = encodeURIComponent(
+      `Hi Saraansh, I am contacting you from the website regarding a ${formData.propertyType} property enquiry.\n\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nMessage: ${formData.message || 'Not specified'}`
+    );
+    const waUrl = `https://wa.me/918076178189?text=${waText}`;
+
+    // Redirect to WhatsApp after a short delay
+    setTimeout(() => {
+      window.open(waUrl, '_blank');
+    }, 800);
   };
 
   return (
