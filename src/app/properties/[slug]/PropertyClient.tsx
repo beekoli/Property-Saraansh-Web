@@ -237,14 +237,16 @@ export default function PropertyClient({ property }: Props) {
       {/* 1. Header Info Banner (Dark Teal) */}
       <section className="bg-brand-dark text-white pt-28 pb-10 px-4 sm:px-6 lg:px-8 border-b border-brand-light/20 relative">
         <div className="max-w-7xl mx-auto">
-          {/* Breadcrumbs */}
-          <div className="flex items-center text-brand-pale/60 text-xs mb-4 uppercase tracking-widest font-bold">
-            <Link href="/" className="hover:text-brand-accent">Home</Link>
-            <ChevronRight size={12} className="mx-2" />
-            <Link href="/properties" className="hover:text-brand-accent">Projects</Link>
-            <ChevronRight size={12} className="mx-2" />
-            <span className="text-brand-accent">{property.title.rendered}</span>
-          </div>
+          {/* Project Logo (provisioned top area) */}
+          {acf.project_logo && (
+            <div className="mb-5 flex items-center justify-start">
+              <img 
+                src={acf.project_logo} 
+                alt={`${property.title.rendered} Logo`} 
+                className="h-10 md:h-12 w-auto object-contain bg-white/5 backdrop-blur-sm px-3.5 py-1.5 rounded-lg border border-white/10 shadow-md" 
+              />
+            </div>
+          )}
 
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
             <div>

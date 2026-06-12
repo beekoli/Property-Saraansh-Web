@@ -76,6 +76,7 @@ export interface WPProperty {
     video_review_text?: string;
     highlights?: string; // Semicolon-separated list of highlights
     google_map_embed?: string;
+    project_logo?: string;
     [key: `amenity_${number}_icon`]: string | false;
     [key: `amenity_${number}_name`]: string;
     [key: `floor_plan_${number}_title`]: string;
@@ -172,6 +173,7 @@ export const MOCK_PROPERTIES: WPProperty[] = [
     title: { rendered: "Eldeco 7 Peaks Residences" },
     content: { rendered: "<p>Eldeco 7 Peaks Residences in Sector 150, Noida is a premium low-density residential community. Designed for optimal ventilation and privacy, it features spacious standalone towers with only four apartments per floor. Residents will enjoy extensive open spaces, wraparound corner balconies, and premium features including swimming pools, kid's pools, a luxury clubhouse, and physical courts. Its strategic location offers seamless access to the Noida-Greater Noida Expressway, Sector 148 Metro Station, and the upcoming Jewar International Airport.</p>" },
     acf: {
+      project_logo: "https://img.logoipsum.com/296.svg",
       price: "₹ 2.35 Cr - 4.65 Cr",
       location: "Sector 150, Noida",
       property_type: "Residential",

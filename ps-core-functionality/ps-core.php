@@ -63,6 +63,7 @@ function ps_register_acf_fields() {
             array('key' => 'field_prop_location', 'label' => 'Location', 'name' => 'location', 'type' => 'text', 'show_in_rest' => true),
             array('key' => 'field_prop_type', 'label' => 'Property Type', 'name' => 'property_type', 'type' => 'select', 'choices' => array('Commercial' => 'Commercial', 'Residential' => 'Residential', 'Ultra Luxury' => 'Ultra Luxury'), 'show_in_rest' => true),
             array('key' => 'field_prop_developer', 'label' => 'Developer', 'name' => 'developer', 'type' => 'text', 'show_in_rest' => true),
+            array('key' => 'field_prop_project_logo', 'label' => 'Project Logo', 'name' => 'project_logo', 'type' => 'image', 'return_format' => 'url', 'show_in_rest' => true),
             
             // --- Overview Section ---
             array('key' => 'field_prop_total_land', 'label' => 'Total Land', 'name' => 'total_land', 'type' => 'text', 'show_in_rest' => true),
