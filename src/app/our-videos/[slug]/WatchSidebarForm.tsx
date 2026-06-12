@@ -93,7 +93,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           
           <button
             type="submit"
-            className="w-full btn-primary text-center py-3 rounded-lg text-xs uppercase tracking-wider font-bold font-sans flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full bg-brand-dark hover:bg-brand-primary text-white border border-brand-accent text-center py-3 rounded-lg text-xs uppercase tracking-wider font-bold font-sans flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-md"
           >
             <span>Request Details</span>
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,13 +109,13 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi Saraansh, I am interested in your review for "${videoTitle}". Let's chat.`)}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-1.5 py-2.5 border border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300"
+          className="flex items-center justify-center gap-1.5 py-2.5 bg-[#25D366] hover:bg-[#1ebd59] text-white rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
         >
           WhatsApp
         </a>
         <a
           href="tel:+918076178189"
-          className="flex items-center justify-center gap-1.5 py-2.5 border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300"
+          className="flex items-center justify-center gap-1.5 py-2.5 bg-brand-dark hover:bg-brand-primary text-white border border-brand-accent rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
         >
           Call Now
         </a>
