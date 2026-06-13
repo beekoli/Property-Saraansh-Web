@@ -46,6 +46,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/experion-saatori-sector-151-noida-honest-review-investment-analysis',
         permanent: true,
       },
+      {
+        source: '/our-videos/jacob-co-noida-first-branded-residence',
+        destination: '/our-videos/jacob-co-noida-indias-first-branded-residence-in-noida-m3m-x-jacob-co-ultra-luxu',
+        permanent: true,
+      },
     ];
   },
 };
