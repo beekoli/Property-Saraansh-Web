@@ -6,6 +6,7 @@ import { videos, getVideoBySlug } from '@/lib/videos';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
+import { FRONTEND_URL } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${video.title} | Watch Review | Property Saraansh`,
     description: video.description || `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`,
     alternates: {
-      canonical: `https://www.propertysaraansh.in/our-videos/${video.slug}`,
+      canonical: `${FRONTEND_URL}/our-videos/${video.slug}`,
     },
     openGraph: {
       title: `${video.title} | Property Saraansh`,
@@ -91,7 +92,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
       "name": "Property Saraansh",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.propertysaraansh.in/logo.png"
+        "url": `${FRONTEND_URL}/logo.png`
       }
     }
   };

@@ -71,7 +71,7 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
     "@type": "RealEstateListing",
     "name": props.name,
     "description": props.description,
-    "url": `https://propertysaraansh.com/properties/${props.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+    "url": `${FRONTEND_URL}/properties/${props.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
     "image": props.image,
     "about": {
       "@type": "SingleFamilyResidence",
@@ -95,7 +95,7 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
   return JSON.stringify(schema);
 }
 
-const FRONTEND_URL = 'https://www.propertysaraansh.in';
+export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.in';
 
 export function getWPBaseUrl() {
   const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || '';

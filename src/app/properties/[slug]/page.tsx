@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, getRewrittenSchema } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL } from '@/lib/seo';
 import { getPropertyBySlug, getProperties, getFeaturedImage, stripHtml } from '@/lib/wordpress';
 import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
@@ -62,7 +62,7 @@ export default async function PropertyPage({ params }: PageProps) {
     "@type": "RealEstateListing",
     "name": property.title.rendered,
     "description": stripHtml(property.excerpt?.rendered || property.content.rendered).substring(0, 200).trim() + "...",
-    "url": `https://www.propertysaraansh.in/properties/${property.slug}`,
+    "url": `${FRONTEND_URL}/properties/${property.slug}`,
     "image": getFeaturedImage(property),
     "about": {
       "@type": "SingleFamilyResidence",
@@ -101,7 +101,7 @@ export default async function PropertyPage({ params }: PageProps) {
       "offerCount": 1,
       "priceValidUntil": "2027-12-31",
       "availability": "https://schema.org/InStock",
-      "url": `https://www.propertysaraansh.in/properties/${property.slug}`
+      "url": `${FRONTEND_URL}/properties/${property.slug}`
     }
   };
 
