@@ -17,6 +17,32 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'propertysaraansh.in',
+          },
+        ],
+        destination: 'https://www.propertysaraansh.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.propertysaraansh.in',
+          },
+        ],
+        destination: 'https://www.propertysaraansh.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
