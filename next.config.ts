@@ -41,6 +41,11 @@ const nextConfig: NextConfig = {
         destination: 'https://www.propertysaraansh.com/:path*',
         permanent: true,
       },
+      {
+        source: '/our-videos/experion-saatori-sector-151-noida-premium-3-4-bhk-review',
+        destination: '/our-videos/experion-saatori-sector-151-noida-honest-review-investment-analysis',
+        permanent: true,
+      },
     ];
   },
 };
