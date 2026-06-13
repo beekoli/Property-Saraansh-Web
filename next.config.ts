@@ -51,6 +51,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/jacob-co-noida-indias-first-branded-residence-in-noida-m3m-x-jacob-co-ultra-luxu',
         permanent: true,
       },
+      {
+        source: '/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
+        destination: '/blog/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
+        permanent: true,
+      },
     ];
   },
 };
