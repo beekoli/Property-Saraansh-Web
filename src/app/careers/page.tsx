@@ -142,7 +142,7 @@ export default function Careers() {
           </StaggerContainer>
           
           <div className="mt-16 text-center text-brand-dark/70 font-light text-sm">
-            <p>Don&apos;t see a role that fits? We are always on the lookout for talent. <br/> Send your resume to <a href="mailto:careers@propertysaraansh.in" className="text-brand-primary font-semibold hover:underline">careers@propertysaraansh.in</a></p>
+            <p>Don&apos;t see a role that fits? We are always on the lookout for talent. <br/> Send your resume to <a href="mailto:careers@propertysaraansh.com" className="text-brand-primary font-semibold hover:underline">careers@propertysaraansh.com</a></p>
           </div>
         </div>
       </section>

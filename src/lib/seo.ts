@@ -95,7 +95,7 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
   return JSON.stringify(schema);
 }
 
-export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.in';
+export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
 
 export function getWPBaseUrl() {
   const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || '';

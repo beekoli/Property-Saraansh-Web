@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
 
             <h2>5. Contact Us</h2>
             <p>
-              If you have any questions about this Privacy Policy or our privacy practices, please contact us by visiting our <Link href="/contact">Contact Page</Link> or emailing us directly at <a href="mailto:info@propertysaraansh.in">info@propertysaraansh.in</a>.
+              If you have any questions about this Privacy Policy or our privacy practices, please contact us by visiting our <Link href="/contact">Contact Page</Link> or emailing us directly at <a href="mailto:info@propertysaraansh.com">info@propertysaraansh.com</a>.
             </p>
           </div>
         </div>

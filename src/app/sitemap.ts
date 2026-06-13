@@ -5,7 +5,7 @@ import { videos } from '@/lib/videos';
 export const revalidate = 3600; // Revalidate sitemap every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.in';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
 
   // 1. Static Routes
   const staticRoutes: MetadataRoute.Sitemap = [
