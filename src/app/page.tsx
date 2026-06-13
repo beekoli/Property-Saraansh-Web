@@ -3,8 +3,13 @@ import PropertyCard from '@/components/PropertyCard';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
 import { getChannelStats } from '@/lib/youtube';
-import { getProperties, getLatestBlogs } from '@/lib/wordpress';
+import { getProperties, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
 import { videos } from '@/lib/videos';
+import SlideUp from '@/components/animations/SlideUp';
+import FadeIn from '@/components/animations/FadeIn';
+import StaggerContainer from '@/components/animations/StaggerContainer';
+import StaggerItem from '@/components/animations/StaggerItem';
+
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -57,69 +62,75 @@ export default async function Home() {
             backgroundSize: '40px 40px' 
           }}
         ></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h1 className="heading-playfair text-4xl md:text-5xl lg:text-6xl mb-6 font-bold tracking-tight">
-            <span className="gold-glossy-text pb-1">India&apos;s Finest Real Estate Portfolio Management Company</span>
-          </h1>
-          <p className="text-brand-pale text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-            Expert property reviews, market insights & investment guidance — all on YouTube.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Link 
-              href="/properties" 
-              className="btn-primary w-full sm:w-auto text-center"
-            >
-              Explore Noida Projects
-            </Link>
-            <a 
-              href="https://www.youtube.com/@PropertySaraansh"
-              target="_blank"
-              rel="noreferrer"
-              className="btn-outline w-full sm:w-auto flex items-center justify-center gap-2"
-            >
-              <svg className="w-3 h-3 fill-brand-accent" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-              Watch Latest Video
-            </a>
-          </div>
-        </div>
+        <StaggerContainer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" delayChildren={0.2} staggerChildren={0.15}>
+          <StaggerItem>
+            <h1 className="heading-playfair text-4xl md:text-5xl lg:text-6xl mb-6 font-bold tracking-tight">
+              <span className="gold-glossy-text pb-1">India&apos;s Finest Real Estate Portfolio Management Company</span>
+            </h1>
+          </StaggerItem>
+          <StaggerItem>
+            <p className="text-brand-pale text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+              Expert property reviews, market insights & investment guidance — all on YouTube.
+            </p>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+              <Link 
+                href="/properties" 
+                className="btn-primary w-full sm:w-auto text-center"
+              >
+                Explore Noida Projects
+              </Link>
+              <a 
+                href="https://www.youtube.com/@PropertySaraansh"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-outline w-full sm:w-auto flex items-center justify-center gap-2"
+              >
+                <svg className="w-3 h-3 fill-brand-accent" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+                Watch Latest Video
+              </a>
+            </div>
+          </StaggerItem>
+        </StaggerContainer>
       </section>
 
       {/* 2. Stats Bar */}
       <section className="bg-brand-pale py-10 border-y border-brand-light/20 shadow-inner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-brand-light/30">
-            <div className="px-4">
+          <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-brand-light/30">
+            <StaggerItem className="px-4">
               <div className="text-[32px] font-bold text-brand-accent font-sans">{channelStats.subscriberCount}</div>
               <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">YouTube Subscribers</div>
-            </div>
-            <div className="px-4">
+            </StaggerItem>
+            <StaggerItem className="px-4">
               <div className="text-[32px] font-bold text-brand-accent font-sans">{channelStats.videoCount}</div>
               <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">Total Videos</div>
-            </div>
-            <div className="px-4">
+            </StaggerItem>
+            <StaggerItem className="px-4">
               <div className="text-[32px] font-bold text-brand-accent font-sans">120+</div>
               <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">Projects Listed</div>
-            </div>
-            <div className="px-4">
+            </StaggerItem>
+            <StaggerItem className="px-4">
               <div className="text-[32px] font-bold text-brand-accent font-sans">4</div>
               <div className="text-[13px] text-brand-primary uppercase tracking-wider font-semibold mt-1">Cities Covered</div>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* 3. Featured Video */}
-      <section className="py-20 bg-white">
+      <section className="py-12 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            <div className="w-full lg:w-3/5">
+          <StaggerContainer className="flex flex-col lg:flex-row items-center gap-12" staggerChildren={0.2}>
+            <StaggerItem className="w-full lg:w-3/5" yOffset={30}>
               <div className="bg-brand-dark p-3 rounded-2xl shadow-2xl border border-brand-primary">
                 <VideoPlayer videoId={featuredVideo.youtubeId} title={featuredVideo.title} />
               </div>
-            </div>
-            <div className="w-full lg:w-2/5 text-brand-ink">
+            </StaggerItem>
+            <StaggerItem className="w-full lg:w-2/5 text-brand-ink" yOffset={20}>
               <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Our Latest Video</span>
               <Link href={`/our-videos/${featuredVideo.slug}`} className="text-black hover:text-brand-primary transition-colors group block">
                 <h2 className="heading-playfair text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight text-justify text-black group-hover:text-brand-primary transition-colors cursor-pointer">
@@ -141,48 +152,50 @@ export default async function Home() {
                   Browse all videos
                 </Link>
               </div>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* 4. Featured Projects */}
-      <section className="py-20 bg-brand-pale">
+      <section className="py-12 md:py-20 bg-brand-pale">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <SlideUp className="text-center mb-12">
             <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold">
               Explore Our Projects
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
             </h2>
-          </div>
+          </SlideUp>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((project) => (
-              <PropertyCard 
-                key={project.id}
-                id={project.slug}
-                title={project.title.rendered}
-                developer={project.acf?.developer || "Eldeco Group"}
-                location={project.acf?.location || "Noida"}
-                price={project.acf?.price || "Price on Request"}
-                type={project.acf?.property_type || "Residential"}
-                imageUrl={project.acf?.gallery_image_1 || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800"}
-                bhk={project.acf?.configuration ? project.acf.configuration.split(', ') : ["3 BHK", "4 BHK"]}
-              />
+              <StaggerItem key={project.id}>
+                <PropertyCard 
+                  id={project.slug}
+                  title={project.title.rendered}
+                  developer={project.acf?.developer || "Eldeco Group"}
+                  location={project.acf?.location || "Noida"}
+                  price={project.acf?.price || "Price on Request"}
+                  type={project.acf?.property_type || "Residential"}
+                  imageUrl={getFeaturedImage(project)}
+                  bhk={project.acf?.configuration ? project.acf.configuration.split(', ') : ["3 BHK", "4 BHK"]}
+                  videoId={project.acf?.video_id}
+                />
+              </StaggerItem>
             ))}
-          </div>
-          <div className="text-center mt-12">
+          </StaggerContainer>
+          <SlideUp className="text-center mt-12" delay={0.2}>
             <Link href="/properties" className="btn-primary px-8 py-3 rounded shadow-md inline-block">
               View All Projects
             </Link>
-          </div>
+          </SlideUp>
         </div>
       </section>
 
       {/* 5. Why Us */}
-      <section className="py-20 bg-brand-pale border-t border-brand-light/20">
+      <section className="py-12 md:py-20 bg-brand-pale border-t border-brand-light/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <SlideUp className="text-center mb-16">
             <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold mb-8">
               Why Property Saraansh?
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-4"></span>
@@ -190,9 +203,9 @@ export default async function Home() {
             <p className="text-brand-dark/80 text-lg max-w-4xl mx-auto font-light leading-relaxed text-justify md:text-center">
               Experience the art of Property Portfolio Management, where exclusivity meets precision. We curate premium real estate assets tailored to your lifestyle and investment goals, ensuring unmatched growth and prestige. With our bespoke strategies, your portfolio becomes more than an investment—it becomes a legacy of luxury and lasting value.
             </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+          </SlideUp>
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <StaggerItem className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -200,8 +213,8 @@ export default async function Home() {
               </div>
               <h3 className="text-brand-ink font-bold text-base">Strong & Experienced Team</h3>
               <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">A trusted team of real estate professionals with years of proven expertise.</p>
-            </div>
-            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+            </StaggerItem>
+            <StaggerItem className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
@@ -209,8 +222,8 @@ export default async function Home() {
               </div>
               <h3 className="text-brand-ink font-bold text-base">Customer-Centric Approach</h3>
               <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Personalized guidance to match every client’s unique needs.</p>
-            </div>
-            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+            </StaggerItem>
+            <StaggerItem className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
@@ -218,8 +231,8 @@ export default async function Home() {
               </div>
               <h3 className="text-brand-ink font-bold text-base">In-Depth Market Analysis</h3>
               <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Data-driven insights to identify the best opportunities.</p>
-            </div>
-            <div className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
+            </StaggerItem>
+            <StaggerItem className="text-center flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-brand-light/10">
               <div className="w-16 h-16 rounded-full bg-brand-primary flex items-center justify-center text-brand-accent mb-4 shadow-md">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -227,17 +240,17 @@ export default async function Home() {
               </div>
               <h3 className="text-brand-ink font-bold text-base">End-to-End Support</h3>
               <p className="text-brand-dark/60 text-xs mt-2 leading-relaxed">Complete assistance from site visits to RERA documentation.</p>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* 6. About Saraansh */}
-      <section className="py-20 bg-brand-dark relative overflow-hidden">
+      <section className="py-12 md:py-20 bg-brand-dark relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-primary opacity-15 transform skew-x-12 translate-x-32"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col md:flex-row items-center gap-16">
-            <div className="w-full md:w-5/12">
+          <StaggerContainer className="flex flex-col md:flex-row items-center gap-16" staggerChildren={0.2}>
+            <StaggerItem className="w-full md:w-5/12" yOffset={30}>
               <div className="relative aspect-[3/2] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
                 <img 
                   src="/saraansh_seth.png" 
@@ -246,8 +259,8 @@ export default async function Home() {
                   loading="lazy"
                 />
               </div>
-            </div>
-            <div className="w-full md:w-7/12 text-white">
+            </StaggerItem>
+            <StaggerItem className="w-full md:w-7/12 text-white" yOffset={20}>
               <span className="text-brand-accent uppercase tracking-widest text-xs font-bold block mb-2">Founder & Consultant</span>
               <h2 className="heading-playfair text-3xl md:text-4xl text-brand-accent mb-6 font-bold">Who is Saraansh Seth ?</h2>
               <p className="text-brand-pale text-lg mb-8 leading-relaxed font-light">
@@ -268,15 +281,15 @@ export default async function Home() {
               <Link href="/about-us" className="btn-primary px-8 py-3 rounded font-bold shadow-md inline-block">
                 Know More
               </Link>
-            </div>
-          </div>
+            </StaggerItem>
+          </StaggerContainer>
         </div>
       </section>
 
-      {/* 7. Latest Blogs */}
-      <section className="py-20 bg-brand-pale border-t border-brand-light/20">
+      {/* 7. Latest Insights */}
+      <section className="py-12 md:py-20 bg-brand-pale border-t border-brand-light/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
+          <SlideUp className="flex justify-between items-end mb-12">
             <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold">
               Latest Insights
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
@@ -287,32 +300,33 @@ export default async function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
               </svg>
             </Link>
-          </div>
+          </SlideUp>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 md:mb-0">
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 md:mb-0">
             {latestBlogs.map((blog) => (
-              <BlogCard 
-                key={blog.id}
-                id={blog.slug}
-                title={blog.title.rendered}
-                excerpt={blog.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
-                category="Market Insights"
-                author="Saraansh Seth"
-                date={blog.date}
-                readTime="6 min read"
-                thumbnail={blog._embedded?.['wp:featuredmedia']?.[0]?.source_url || "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800"}
-              />
+              <StaggerItem key={blog.id}>
+                <BlogCard 
+                  id={blog.slug}
+                  title={blog.title.rendered}
+                  excerpt={blog.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
+                  category="Market Insights"
+                  author="Saraansh Seth"
+                  date={blog.date}
+                  readTime="6 min read"
+                  thumbnail={blog._embedded?.['wp:featuredmedia']?.[0]?.source_url || "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800"}
+                />
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
           
-          <div className="md:hidden text-center mt-8">
+          <SlideUp className="md:hidden text-center mt-8">
              <Link href="/blog" className="text-brand-primary font-bold hover:text-brand-accent transition-colors flex items-center justify-center gap-1 group">
               Read all articles
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
               </svg>
             </Link>
-          </div>
+          </SlideUp>
         </div>
       </section>
     </>

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { WPProperty, getFeaturedImage, MOCK_PROPERTIES } from '@/lib/wordpress';
 import VideoPlayer from '@/components/VideoPlayer';
-import { MapPin, Phone, MessageSquare, ShieldCheck, Download, CheckCircle, ChevronRight, X } from 'lucide-react';
+import PropertyCard from '@/components/PropertyCard';
+import { MapPin, Phone, MessageSquare, ShieldCheck, Download, CheckCircle, ChevronRight, X, Waves, Dumbbell, Car, Leaf, TreePine, Home, Trophy, Baby, Footprints, Zap, Droplets, Video, Wifi, ArrowUpDown, ShoppingBag, PartyPopper, Flame, Bike } from 'lucide-react';
 
 const DEVELOPER_BIOS: Record<string, { description: string; established: string; projects: string }> = {
   "Eldeco Group": {
@@ -18,6 +20,153 @@ const DEVELOPER_BIOS: Record<string, { description: string; established: string;
     projects: "120+",
     description: "Godrej Properties brings the Godrej Group philosophy of innovation, sustainability, and excellence to the real estate industry. Each Godrej development combines a legacy of trust with cutting-edge design and technology."
   },
+};
+
+const getAmenityIcon = (name: string) => {
+  const n = name.toLowerCase();
+  
+  // Swimming & Water
+  if (n.includes('pool') || n.includes('swim') || n.includes('water') || n.includes('pond') || n.includes('stream')) {
+    return <Waves className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Gym & Fitness
+  if (n.includes('gym') || n.includes('fitness') || n.includes('yoga') || n.includes('meditation') || n.includes('aerobic') || n.includes('health')) {
+    return <Dumbbell className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Security & Safety
+  if (n.includes('secur') || n.includes('guard') || n.includes('cctv') || n.includes('camera') || n.includes('surveillance') || n.includes('gated')) {
+    return <ShieldCheck className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Parks & Nature
+  if (n.includes('park') && !n.includes('parking') && !n.includes('play')) {
+    return <TreePine className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Gardens & Flora
+  if (n.includes('garden') || n.includes('landscape') || n.includes('lawn') || n.includes('green') || n.includes('flora') || n.includes('tree')) {
+    return <Leaf className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Parking & Vehicles
+  if (n.includes('parking') || n.includes('car') || n.includes('garage') || n.includes('vehicle')) {
+    return <Car className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Sports Courts & Games
+  if (n.includes('court') || n.includes('sport') || n.includes('game') || n.includes('tennis') || n.includes('badminton') || n.includes('basketball') || n.includes('squash') || n.includes('table') || n.includes('skat') || n.includes('golf')) {
+    return <Trophy className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Kids & Children
+  if (n.includes('kid') || n.includes('child') || n.includes('toddler') || n.includes('play') || n.includes('creche')) {
+    return <Baby className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Running, Walking & Cycling Tracks
+  if (n.includes('track') || n.includes('walk') || n.includes('jog') || n.includes('run') || n.includes('path') || n.includes('reflexology')) {
+    return <Footprints className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  if (n.includes('cycl') || n.includes('bicycle')) {
+    return <Bike className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Club, Lounge & Community
+  if (n.includes('club') || n.includes('lounge') || n.includes('hall') || n.includes('comm') || n.includes('hub') || n.includes('amphithea') || n.includes('gathering')) {
+    return <Home className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Power & Electricity
+  if (n.includes('power') || n.includes('backup') || n.includes('generator') || n.includes('electr')) {
+    return <Zap className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Water Supply / Water Softener
+  if (n.includes('water supply') || n.includes('ro water') || n.includes('rainwater') || n.includes('softener')) {
+    return <Droplets className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Lift & Escalator
+  if (n.includes('lift') || n.includes('elevator')) {
+    return <ArrowUpDown className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Shops & Market
+  if (n.includes('shop') || n.includes('market') || n.includes('store') || n.includes('grocer') || n.includes('retail')) {
+    return <ShoppingBag className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Banquet / Party
+  if (n.includes('banquet') || n.includes('party') || n.includes('celebration')) {
+    return <PartyPopper className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+  
+  // Fire Fighting
+  if (n.includes('fire') || n.includes('extinguish')) {
+    return <Flame className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+  }
+
+  // Default Fallback
+  return <CheckCircle className="w-10 h-10 mb-3 text-brand-accent" strokeWidth={1.5} />;
+};
+
+const parseLocationAdvantages = (htmlOrText: string): string[] => {
+  if (!htmlOrText) return [];
+
+  // Decode basic HTML entities
+  const decodeHtml = (str: string) => {
+    return str
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&nbsp;/g, ' ');
+  };
+
+  // If it contains <li> tags, extract text from them first
+  if (htmlOrText.includes('<li')) {
+    const items: string[] = [];
+    const regex = /<li[^>]*>([\s\S]*?)<\/li>/gi;
+    let match;
+    while ((match = regex.exec(htmlOrText)) !== null) {
+      const cleanText = match[1].replace(/<[^>]*>/g, '').trim();
+      if (cleanText) {
+        items.push(decodeHtml(cleanText));
+      }
+    }
+    if (items.length > 0) return items;
+  }
+
+  // If no <li> tags, convert block tags to newlines, then strip remaining tags
+  let text = htmlOrText
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]*>/g, '');
+
+  text = decodeHtml(text);
+
+  // Split by semicolons or newlines
+  const rawItems = text.split(/[;\n]/);
+  return rawItems
+    .map(item => item.trim())
+    .filter(item => item.length > 3);
+};
+
+const extractMapUrl = (embedString: string): string => {
+  if (!embedString) return "";
+  if (embedString.includes('<iframe')) {
+    const match = embedString.match(/src="([^"]+)"/);
+    return match ? match[1] : "";
+  }
+  return embedString;
+};
+
+const DEVELOPER_BIOS_EXTENDED: Record<string, { description: string; established: string; projects: string }> = {
+  ...DEVELOPER_BIOS,
   "M3M Group": {
     established: "2010",
     projects: "45+",
@@ -57,13 +206,24 @@ const getDeveloperBio = (devName: string) => {
 
 interface Props {
   property: WPProperty;
+  allProperties?: WPProperty[];
 }
 
-export default function PropertyClient({ property }: Props) {
+export default function PropertyClient({ property, allProperties = [] }: Props) {
   const router = useRouter();
   const acf = property.acf || {};
   const featuredImage = getFeaturedImage(property);
   const developerBio = getDeveloperBio(acf.developer || "Eldeco Group");
+
+  // Parse video ID in case user pastes full YouTube URL instead of just the ID
+  let parsedVideoId = acf.video_id || "";
+  if (parsedVideoId.includes('youtube.com/watch?v=')) {
+    parsedVideoId = parsedVideoId.split('v=')[1].split('&')[0];
+  } else if (parsedVideoId.includes('youtu.be/')) {
+    parsedVideoId = parsedVideoId.split('youtu.be/')[1].split('?')[0];
+  } else if (parsedVideoId.includes('youtube.com/embed/')) {
+    parsedVideoId = parsedVideoId.split('embed/')[1].split('?')[0];
+  }
 
   // States
   const [activeFloorPlan, setActiveFloorPlan] = useState<number>(1);
@@ -71,6 +231,60 @@ export default function PropertyClient({ property }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', budget: '', type: '3BHK' });
+  const [activeFaqIndex, setActiveFaqIndex] = useState<number | null>(0);
+
+  // Floor Plan Lead Capture States
+  const [isFloorPlanModalOpen, setIsFloorPlanModalOpen] = useState(false);
+  const [floorPlanForm, setFloorPlanForm] = useState({ name: '', phone: '' });
+  const [floorPlanModalTitle, setFloorPlanModalTitle] = useState('');
+  const [floorPlanSubmitError, setFloorPlanSubmitError] = useState('');
+  const [isFloorPlanSubmitting, setIsFloorPlanSubmitting] = useState(false);
+
+  // Floor Plan Footer Text Collapsible States
+  const floorPlanTextRef = useRef<HTMLParagraphElement>(null);
+  const [showFloorPlanReadMore, setShowFloorPlanReadMore] = useState(false);
+  const [isFloorPlanTextExpanded, setIsFloorPlanTextExpanded] = useState(false);
+
+  useEffect(() => {
+    if (isFloorPlanTextExpanded) return;
+
+    const checkOverflow = () => {
+      if (floorPlanTextRef.current) {
+        const hasOverflow = floorPlanTextRef.current.scrollHeight > floorPlanTextRef.current.clientHeight;
+        setShowFloorPlanReadMore(hasOverflow);
+      }
+    };
+
+    const timer = setTimeout(checkOverflow, 100);
+    window.addEventListener('resize', checkOverflow);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, [acf.floor_plan_footer_text, isFloorPlanTextExpanded]);
+
+  // Price List Footer Text Collapsible States
+  const priceListTextRef = useRef<HTMLDivElement>(null);
+  const [showPriceListReadMore, setShowPriceListReadMore] = useState(false);
+  const [isPriceListTextExpanded, setIsPriceListTextExpanded] = useState(false);
+
+  useEffect(() => {
+    if (isPriceListTextExpanded) return;
+
+    const checkOverflow = () => {
+      if (priceListTextRef.current) {
+        const hasOverflow = priceListTextRef.current.scrollHeight > priceListTextRef.current.clientHeight;
+        setShowPriceListReadMore(hasOverflow);
+      }
+    };
+
+    const timer = setTimeout(checkOverflow, 100);
+    window.addEventListener('resize', checkOverflow);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkOverflow);
+    };
+  }, [acf.price_list_desc, isPriceListTextExpanded]);
 
   // Scroll visibility tracker for sticky subnav offset
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
@@ -95,6 +309,65 @@ export default function PropertyClient({ property }: Props) {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  // Handle scrolling to URL hash on initial page load
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      let userScrolled = false;
+      const onUserScroll = () => {
+        userScrolled = true;
+        window.removeEventListener('wheel', onUserScroll);
+        window.removeEventListener('touchmove', onUserScroll);
+        window.removeEventListener('keydown', onUserScroll);
+      };
+      
+      window.addEventListener('wheel', onUserScroll, { passive: true });
+      window.addEventListener('touchmove', onUserScroll, { passive: true });
+      window.addEventListener('keydown', onUserScroll, { passive: true });
+
+      const performScroll = (attempt: number) => {
+        if (userScrolled) return;
+        
+        const hash = window.location.hash;
+        if (!hash) return;
+        
+        const id = hash.replace('#', '');
+        const el = document.getElementById(id);
+        if (el) {
+          const targetTop = el.getBoundingClientRect().top + window.scrollY;
+          // Determine target offset based on location. Deep section hashes scroll with compact header offset,
+          // sections near top (or first section) scroll with larger navbar offset.
+          const offset = targetTop > 150 ? 60 : 140;
+          
+          window.scrollTo({
+            top: targetTop - offset,
+            behavior: attempt === 1 ? 'auto' : 'smooth'
+          });
+        }
+      };
+
+      // Staggered attempts to account for layout shifts as images, iframes, and dynamic content load
+      const timers = [100, 400, 1000, 2000].map((delay, index) => 
+        setTimeout(() => performScroll(index + 1), delay)
+      );
+
+      // Also listen for window load event to trigger scrolling once ready
+      const handleLoad = () => performScroll(2);
+      if (document.readyState === 'complete') {
+        performScroll(1);
+      } else {
+        window.addEventListener('load', handleLoad);
+      }
+
+      return () => {
+        timers.forEach(clearTimeout);
+        window.removeEventListener('load', handleLoad);
+        window.removeEventListener('wheel', onUserScroll);
+        window.removeEventListener('touchmove', onUserScroll);
+        window.removeEventListener('keydown', onUserScroll);
+      };
+    }
+  }, []);
 
   // Handle Form Submission
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -127,14 +400,61 @@ export default function PropertyClient({ property }: Props) {
     }, 800);
   };
 
+  // Handle Floor Plan Download Form Submission
+  const handleFloorPlanSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!floorPlanForm.name || !floorPlanForm.phone) return;
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(floorPlanForm.phone)) {
+      setFloorPlanSubmitError("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    setIsFloorPlanSubmitting(true);
+    setFloorPlanSubmitError('');
+
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: `Floor Plan Download (${floorPlanModalTitle})`,
+          name: floorPlanForm.name,
+          phone: floorPlanForm.phone,
+          project: property.title.rendered,
+          type: 'floorplan',
+        }),
+      });
+      setIsFloorPlanModalOpen(false);
+      router.push('/thank-you');
+    } catch (apiError) {
+      console.error('Failed to forward floor plan lead to API:', apiError);
+      setFloorPlanSubmitError('Failed to submit. Please try again.');
+      setIsFloorPlanSubmitting(false);
+    }
+  };
+
   // Scroll Helper
   const scrollNav = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
+      const targetTop = el.getBoundingClientRect().top + window.scrollY;
+      const isScrollingDown = targetTop > window.scrollY;
+      // If scrolling down, the main navbar hides, so sub-nav sticks at top-0 (offset = 60px)
+      // If scrolling up (or staying at top), main navbar shows, so sub-nav sticks at top-[80px] (offset = 140px)
+      const offset = isScrollingDown ? 60 : 140;
+
       window.scrollTo({
-        top: el.offsetTop - 130, // Account for sticky headers
+        top: targetTop - offset,
         behavior: 'smooth'
       });
+      // Update URL hash without causing a page jump
+      if (typeof window !== 'undefined' && window.history.pushState) {
+        window.history.pushState(null, '', `#${id}`);
+      }
     }
   };
 
@@ -154,7 +474,7 @@ export default function PropertyClient({ property }: Props) {
 
   // Extract Location Advantages
   const locationAdvantagesList = acf.location_advantages
-    ? acf.location_advantages.split(';')
+    ? parseLocationAdvantages(acf.location_advantages)
     : [
         "Seamless access to Noida Expressway, Yamuna Expressway & FNG Expressway",
         "Close proximity to Noida International Airport",
@@ -164,16 +484,28 @@ export default function PropertyClient({ property }: Props) {
       ];
 
   // Extract Gallery
-  const gallery = property.property_gallery && property.property_gallery.length > 0 
-    ? property.property_gallery 
-    : [
-        featuredImage,
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80"
-      ];
+  let gallery: string[] = [];
+  if (featuredImage) {
+    gallery.push(featuredImage);
+  }
+  for (let i = 1; i <= 10; i++) {
+    const imgUrl = acf[`gallery_image_${i}` as keyof typeof acf];
+    if (imgUrl && typeof imgUrl === 'string' && imgUrl.trim() !== '') {
+      if (!gallery.includes(imgUrl)) {
+        gallery.push(imgUrl);
+      }
+    }
+  }
+  if (property.property_gallery && property.property_gallery.length > 0) {
+    property.property_gallery.forEach(imgUrl => {
+      if (imgUrl && typeof imgUrl === 'string' && imgUrl.trim() !== '' && !gallery.includes(imgUrl)) {
+        gallery.push(imgUrl);
+      }
+    });
+  }
+  if (gallery.length === 0) {
+    gallery = ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"];
+  }
 
   // Extract Floor Plans
   const floorPlans = [
@@ -202,13 +534,55 @@ export default function PropertyClient({ property }: Props) {
 
   // Extract Amenities
   let amenities = [];
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 12; i++) {
     const name = acf[`amenity_${i}_name` as keyof typeof acf];
     const icon = acf[`amenity_${i}_icon` as keyof typeof acf];
-    if (name && icon) {
-      amenities.push({ id: i, name, icon });
+    if (name) {
+      amenities.push({ id: i, name, icon: icon || "" });
     }
   }
+
+  // Extract Price List Rows (1 to 4)
+  const priceList = [];
+  for (let i = 1; i <= 4; i++) {
+    const type = acf[`price_list_row_${i}_type` as keyof typeof acf];
+    const size = acf[`price_list_row_${i}_size` as keyof typeof acf];
+    const base = acf[`price_list_row_${i}_base` as keyof typeof acf];
+    const total = acf[`price_list_row_${i}_total` as keyof typeof acf];
+    
+    if (type) {
+      priceList.push({
+        id: i,
+        type,
+        size: size || "",
+        base: base || "",
+        total: total || ""
+      });
+    }
+  }
+
+  // Extract FAQs (1 to 5 slots)
+  const faqs = [];
+  for (let i = 1; i <= 5; i++) {
+    const question = acf[`faq_${i}_question` as keyof typeof acf];
+    const answer = acf[`faq_${i}_answer` as keyof typeof acf];
+    
+    if (question && typeof question === 'string' && question.trim() &&
+        answer && typeof answer === 'string' && answer.trim()) {
+      faqs.push({
+        id: i,
+        question: question.trim(),
+        answer: answer.trim()
+      });
+    }
+  }
+
+  // Extract Site Plan Image
+  const sitePlanImage = acf.site_plan_image && typeof acf.site_plan_image === 'string' && acf.site_plan_image.trim() !== '' 
+    ? acf.site_plan_image.trim() 
+    : null;
+
+  // No fallback to hardcoded defaults so that rows are 100% WordPress-driven
   if (amenities.length === 0) {
     amenities = [
       { id: 1, name: "Pickleball Court", icon: "https://cdn-icons-png.flaticon.com/512/8145/8145100.png" },
@@ -223,7 +597,7 @@ export default function PropertyClient({ property }: Props) {
   }
 
   // Related Videos
-  const relatedVideos = MOCK_PROPERTIES
+  const relatedVideos = allProperties
     .filter(p => p.slug !== property.slug)
     .slice(0, 2)
     .map(p => ({
@@ -231,11 +605,55 @@ export default function PropertyClient({ property }: Props) {
       slug: p.slug
     }));
 
+  const relatedProperties = allProperties
+    .filter(p => p.slug !== property.slug)
+    .slice(0, 3);
+
   return (
     <div className="bg-brand-pale text-brand-ink min-h-screen flex flex-col font-sans pb-20 md:pb-0">
       
+      {/* 0. Top Featured Image Area */}
+      <div className="bg-brand-dark w-full pt-24 md:pt-28 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="w-full h-[300px] md:h-[450px] lg:h-[500px] rounded-2xl overflow-hidden relative shadow-2xl border border-brand-light/10 bg-brand-pale">
+            <Image 
+              src={featuredImage} 
+              alt={property.title.rendered} 
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
+              className="object-cover" 
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Sticky Sub-Navigation Bar */}
+      <div className={`sticky ${isNavbarVisible ? 'top-[80px]' : 'top-0'} z-40 bg-brand-dark/90 backdrop-blur-md text-brand-pale border-y border-brand-accent/20 shadow-lg transition-all duration-300 block`}>
+        <div className="max-w-7xl mx-auto px-4 flex justify-start gap-6 md:gap-8 py-3.5 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap scrollbar-none">
+          <button onClick={() => scrollNav('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
+          <button onClick={() => scrollNav('saraansh-review')} className="hover:text-brand-accent transition-colors">Saraansh&apos;s Review</button>
+          <button onClick={() => scrollNav('highlights')} className="hover:text-brand-accent transition-colors">Highlights</button>
+          {sitePlanImage && (
+            <button onClick={() => scrollNav('siteplan')} className="hover:text-brand-accent transition-colors">Site Plan</button>
+          )}
+          <button onClick={() => scrollNav('floorplan')} className="hover:text-brand-accent transition-colors">Floor Plan</button>
+          <button onClick={() => scrollNav('amenities')} className="hover:text-brand-accent transition-colors">Amenities</button>
+          {priceList.length > 0 && (
+            <button onClick={() => scrollNav('price')} className="hover:text-brand-accent transition-colors">Price List</button>
+          )}
+          <button onClick={() => scrollNav('location')} className="hover:text-brand-accent transition-colors">Location</button>
+          <button onClick={() => scrollNav('gallery')} className="hover:text-brand-accent transition-colors">Gallery</button>
+          <button onClick={() => scrollNav('possession')} className="hover:text-brand-accent transition-colors">Possession</button>
+          {faqs.length > 0 && (
+            <button onClick={() => scrollNav('faq')} className="hover:text-brand-accent transition-colors">FAQs</button>
+          )}
+          <button onClick={() => scrollNav('builder')} className="hover:text-brand-accent transition-colors">About Builder</button>
+        </div>
+      </div>
+
       {/* 1. Header Info Banner (Dark Teal) */}
-      <section className="bg-brand-dark text-white pt-28 pb-10 px-4 sm:px-6 lg:px-8 border-b border-brand-light/20 relative">
+      <section className="bg-brand-dark text-white pt-8 pb-10 px-4 sm:px-6 lg:px-8 border-b border-brand-light/20 relative">
         <div className="max-w-7xl mx-auto">
           {/* Project Logo (provisioned top area) */}
           {acf.project_logo && (
@@ -266,6 +684,10 @@ export default function PropertyClient({ property }: Props) {
                 <span className="bg-brand-primary/40 text-brand-pale border border-brand-light/30 text-xs px-3 py-1 rounded font-bold uppercase tracking-wider">
                   {acf.property_type || "Residential"}
                 </span>
+                <span className="bg-[#1B5E52]/60 text-brand-accent border border-brand-accent/30 text-xs px-3 py-1 rounded font-bold uppercase tracking-wider flex items-center gap-1">
+                  <ShieldCheck size={14} className="text-brand-accent" />
+                  RERA: {acf.rera_number || "UPRERAPRJ108729"}
+                </span>
               </div>
             </div>
 
@@ -274,13 +696,16 @@ export default function PropertyClient({ property }: Props) {
                 {acf.price || "₹ 2.35 Cr - 4.65 Cr"}
               </div>
               <div className="flex gap-2 w-full lg:w-auto justify-end">
-                <button onClick={() => scrollNav('contact-form')} className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0">
+                <a href="tel:+918076178189" className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0 text-center flex items-center justify-center">
                   Request Callback
-                </button>
-                <button onClick={() => scrollNav('saraansh-review')} className="btn-primary px-4 py-2 text-xs rounded font-bold transition-all shadow-md flex-grow lg:flex-grow-0">
-                  Watch Full Review
-                </button>
-                <button onClick={() => scrollNav('contact-form')} className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0">
+                </a>
+                <button 
+                  onClick={() => {
+                    setFloorPlanModalTitle("Brochure");
+                    setIsFloorPlanModalOpen(true);
+                  }} 
+                  className="btn-outline border-brand-light text-brand-pale hover:bg-brand-light hover:text-white px-4 py-2 text-xs rounded font-bold transition-all flex-grow lg:flex-grow-0"
+                >
                   Get Brochure
                 </button>
               </div>
@@ -289,70 +714,69 @@ export default function PropertyClient({ property }: Props) {
         </div>
       </section>
 
-      {/* 2. Sticky Sub-Navigation Bar */}
-      <div className={`sticky ${isNavbarVisible ? 'top-[80px]' : 'top-0'} z-40 bg-brand-dark/90 backdrop-blur-md text-brand-pale border-y border-brand-accent/20 shadow-lg transition-all duration-300 block`}>
-        <div className="max-w-7xl mx-auto px-4 flex justify-start gap-6 md:gap-8 py-3.5 md:py-4 text-[10px] md:text-xs font-bold uppercase tracking-widest overflow-x-auto whitespace-nowrap scrollbar-none">
-          <button onClick={() => scrollNav('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
-          <button onClick={() => scrollNav('saraansh-review')} className="hover:text-brand-accent transition-colors">Saraansh&apos;s Review</button>
-          <button onClick={() => scrollNav('highlights')} className="hover:text-brand-accent transition-colors">Highlights</button>
-          <button onClick={() => scrollNav('floorplan')} className="hover:text-brand-accent transition-colors">Floor Plan</button>
-          <button onClick={() => scrollNav('amenities')} className="hover:text-brand-accent transition-colors">Amenities</button>
-          <button onClick={() => scrollNav('price')} className="hover:text-brand-accent transition-colors">Price List</button>
-          <button onClick={() => scrollNav('location')} className="hover:text-brand-accent transition-colors">Location</button>
-          <button onClick={() => scrollNav('gallery')} className="hover:text-brand-accent transition-colors">Gallery</button>
-          <button onClick={() => scrollNav('possession')} className="hover:text-brand-accent transition-colors">Possession</button>
-          <button onClick={() => scrollNav('builder')} className="hover:text-brand-accent transition-colors">About Builder</button>
-        </div>
-      </div>
-
       {/* 3. Main Split Layout */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+      <div id="overview" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
         <div className="flex flex-col lg:flex-row gap-8 items-start relative">
           
           {/* LEFT COLUMN: 70% Width */}
           <div className="w-full lg:w-8/12 space-y-10">
             
             {/* overview section */}
-            <div id="overview" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+            <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
                 Project Overview
               </h2>
+
+              {acf.project_overview ? (
+                <p className="text-brand-ink/80 text-sm leading-relaxed mb-6 font-medium text-justify whitespace-pre-line">
+                  {acf.project_overview}
+                </p>
+              ) : property.content?.rendered ? (
+                <div 
+                  className="prose prose-sm max-w-none text-brand-ink/80 leading-relaxed mb-6 font-medium text-justify"
+                  dangerouslySetInnerHTML={{ __html: property.content.rendered }}
+                />
+              ) : (
+                <p className="text-brand-ink/80 text-sm leading-relaxed mb-6 font-medium text-justify">
+                  Welcome to {property.title.rendered || "this premium property"}. This exceptional project offers high-end residential spaces designed for modern living. Strategically located with excellent connectivity, it features world-class amenities, premium structural quality, and meticulously planned layouts to ensure comfortable, luxury living for your family.
+                </p>
+              )}
               
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-brand-ink">
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Total Land</span>
                   <span className="text-base font-bold text-brand-dark">{acf.total_land || "7.5 Acres"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Configuration</span>
                   <span className="text-base font-bold text-brand-dark">{acf.configuration || "3BHK, 4BHK, Duplex"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Total Units</span>
                   <span className="text-base font-bold text-brand-dark">{acf.total_units || "350"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Total Floors</span>
                   <span className="text-base font-bold text-brand-dark">{acf.total_floors || "G + 30"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Units Per Floor</span>
                   <span className="text-base font-bold text-brand-dark">{acf.units_per_floor || "4"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Possession</span>
                   <span className="text-base font-bold text-brand-dark">{acf.possession_date || "July 2030"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Launch Date</span>
                   <span className="text-base font-bold text-brand-dark">{acf.launch_date || "Oct 2025"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Lifts Per Floor</span>
                   <span className="text-base font-bold text-brand-dark">{acf.lifts_per_floor || "3"}</span>
                 </div>
-                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5">
+                <div className="p-4 bg-brand-pale/30 rounded-xl border border-brand-light/5 text-center">
                   <span className="text-[10px] uppercase tracking-wider text-brand-primary font-bold block mb-1">Base Price</span>
                   <span className="text-base font-bold text-brand-dark">{acf.base_price || "₹ 12,000 / sq.ft"}</span>
                 </div>
@@ -363,7 +787,7 @@ export default function PropertyClient({ property }: Props) {
             <div id="saraansh-review" className="bg-brand-dark text-white rounded-2xl p-6 md:p-8 shadow-md border border-brand-primary">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-accent border-b border-brand-light/20 pb-3 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
-                Saraansh Seth&apos;s Interactive
+                {property.title.rendered} - Property Saraansh Review
               </h2>
               
               <div className="space-y-6">
@@ -398,6 +822,46 @@ export default function PropertyClient({ property }: Props) {
               </div>
             </div>
 
+            {/* site plan section */}
+            {sitePlanImage && (
+              <div id="siteplan" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+                <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                  Site Plan
+                </h2>
+                
+                <div className="space-y-6">
+                  {/* Dynamic Site Plan Image Container */}
+                  <div 
+                    className="max-w-2xl mx-auto bg-brand-pale rounded-xl border border-brand-light/20 relative overflow-hidden group cursor-zoom-in shadow-inner"
+                    onClick={() => { 
+                      setLightboxIndex(999); 
+                      setLightboxOpen(true); 
+                    }}
+                  >
+                    <div className="relative aspect-[16/10] w-full">
+                      <Image 
+                        src={sitePlanImage} 
+                        alt={`${property.title.rendered} Site Plan / Master Layout`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 800px"
+                        className="object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500" 
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors flex items-center justify-center">
+                      <span className="bg-brand-dark/80 text-white text-xs px-4 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transition-opacity">Click to Expand Layout</span>
+                    </div>
+                  </div>
+
+                  <div className="max-w-md mx-auto text-center">
+                    <p className="text-xs text-brand-light font-light leading-relaxed">
+                      Master Layout and Site Plan for {property.title.rendered}. Click on the layout plan image to view in high resolution.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* floor plans section */}
             <div id="floorplan" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
@@ -428,20 +892,51 @@ export default function PropertyClient({ property }: Props) {
                 return (
                   <div key={plan.id} className="space-y-6 animate-fade-in">
                     <div className="aspect-[4/3] max-w-lg mx-auto bg-brand-pale rounded-xl border border-brand-light/20 relative overflow-hidden group cursor-zoom-in" onClick={() => { setLightboxIndex(plan.id + 5); setLightboxOpen(true); }}>
-                      <img src={plan.image} alt={plan.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image 
+                        src={plan.image} 
+                        alt={plan.title} 
+                        fill
+                        sizes="(max-width: 768px) 100vw, 512px"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
                       <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors flex items-center justify-center">
                         <span className="bg-brand-dark/80 text-white text-xs px-4 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transition-opacity">Click to Expand</span>
                       </div>
                     </div>
                     
-                    <div className="flex flex-wrap gap-2.5 justify-center">
-                      <span className="bg-brand-accent/25 border border-brand-accent/40 text-brand-dark text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider">{plan.size}</span>
-                      <span className="bg-brand-pale text-brand-primary text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-wider">Premium Specs</span>
+                    <div className="flex justify-center mt-4">
+                      <button
+                        onClick={() => {
+                          setFloorPlanModalTitle(plan.title);
+                          setFloorPlanForm({ name: '', phone: '' });
+                          setFloorPlanSubmitError('');
+                          setIsFloorPlanModalOpen(true);
+                        }}
+                        className="bg-brand-accent hover:bg-brand-accent/90 text-brand-dark font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mx-auto"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download Floor Plan
+                      </button>
                     </div>
 
-                    <p className="text-center text-xs text-brand-light font-light leading-relaxed">
-                      Floor plan images loaded from your WordPress media library. Click any to expand.
-                    </p>
+                    <div className="max-w-md mx-auto mt-4 text-center">
+                      <p
+                        ref={floorPlanTextRef}
+                        className={`text-xs text-brand-light font-light leading-relaxed transition-all duration-300 ${
+                          isFloorPlanTextExpanded ? '' : 'line-clamp-2'
+                        }`}
+                      >
+                        {acf.floor_plan_footer_text || "Floor plan images loaded from your WordPress media library. Click any to expand."}
+                      </p>
+                      {showFloorPlanReadMore && (
+                        <button
+                          onClick={() => setIsFloorPlanTextExpanded(!isFloorPlanTextExpanded)}
+                          className="text-brand-primary hover:text-brand-accent text-[11px] font-bold uppercase tracking-wider mt-1.5 transition-colors focus:outline-none"
+                        >
+                          {isFloorPlanTextExpanded ? 'Read Less' : 'Read More'}
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -457,7 +952,11 @@ export default function PropertyClient({ property }: Props) {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-brand-ink">
                 {amenities.map((amenity) => (
                   <div key={amenity.id} className="flex flex-col items-center justify-center p-5 border border-brand-pale rounded-xl bg-white hover:shadow-md hover:-translate-y-0.5 transition-all text-center">
-                    <img src={amenity.icon} alt={amenity.name} className="w-12 h-12 mb-3 object-contain" />
+                    {amenity.icon ? (
+                      <img src={amenity.icon} alt={amenity.name} className="w-12 h-12 mb-3 object-contain" />
+                    ) : (
+                      getAmenityIcon(amenity.name)
+                    )}
                     <span className="text-xs font-bold uppercase tracking-wider text-brand-primary">{amenity.name}</span>
                   </div>
                 ))}
@@ -465,49 +964,72 @@ export default function PropertyClient({ property }: Props) {
             </div>
 
             {/* price list section */}
-            <div id="price" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
-              <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
-                Price List
-              </h2>
-              
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm border-collapse">
-                  <thead>
-                    <tr className="border-b-2 border-brand-pale bg-brand-pale/40 text-brand-primary font-bold uppercase text-xs tracking-wider">
-                      <th className="py-3.5 px-4 rounded-tl-lg">Type</th>
-                      <th className="py-3.5 px-4">Size</th>
-                      <th className="py-3.5 px-4">Base Price</th>
-                      <th className="py-3.5 px-4 rounded-tr-lg">Total Price</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-brand-ink divide-y divide-brand-pale font-medium">
-                    <tr className="hover:bg-brand-pale/10">
-                      <td className="py-4 px-4 font-bold text-brand-dark">3 BHK</td>
-                      <td className="py-4 px-4">1825 – 2100 sq.ft</td>
-                      <td className="py-4 px-4">₹12,000/sq.ft</td>
-                      <td className="py-4 px-4 text-brand-accent font-bold">₹2.35 Cr*</td>
-                    </tr>
-                    <tr className="hover:bg-brand-pale/10">
-                      <td className="py-4 px-4 font-bold text-brand-dark">4 BHK</td>
-                      <td className="py-4 px-4">2850 sq.ft</td>
-                      <td className="py-4 px-4">₹12,000/sq.ft</td>
-                      <td className="py-4 px-4 text-brand-accent font-bold">₹3.55 Cr*</td>
-                    </tr>
-                    <tr className="hover:bg-brand-pale/10">
-                      <td className="py-4 px-4 font-bold text-brand-dark">Duplex</td>
-                      <td className="py-4 px-4">3400 sq.ft</td>
-                      <td className="py-4 px-4">₹12,000/sq.ft</td>
-                      <td className="py-4 px-4 text-brand-accent font-bold">₹4.65 Cr*</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            {priceList.length > 0 && (
+              <div id="price" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+                <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                  Price List
+                </h2>
+                
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b-2 border-brand-pale bg-brand-pale/40 text-brand-primary font-bold uppercase text-xs tracking-wider">
+                        <th className="py-3.5 px-4 rounded-tl-lg">Type</th>
+                        <th className="py-3.5 px-4">Size</th>
+                        <th className="py-3.5 px-4">Base Price</th>
+                        <th className="py-3.5 px-4 rounded-tr-lg">Total Price</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-brand-ink divide-y divide-brand-pale font-medium">
+                      {priceList.map((row) => (
+                        <tr key={row.id} className="hover:bg-brand-pale/10">
+                          <td className="py-4 px-4 font-bold text-brand-dark">{row.type}</td>
+                          <td className="py-4 px-4">{row.size}</td>
+                          <td className="py-4 px-4">{row.base}</td>
+                          <td className="py-4 px-4 text-brand-accent font-bold">{row.total}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
 
-              <div className="mt-4 text-[11px] text-brand-light leading-relaxed font-light italic">
-                *PLCs + GST applicable. BSP of ₹12,000/sq.ft includes central air-conditioning, 10% discount on booking first 50 units.
+                <div className="max-w-none text-center">
+                  <div className="flex justify-center mt-6 mb-5">
+                    <button
+                      onClick={() => {
+                        setFloorPlanModalTitle("Price List");
+                        setFloorPlanForm({ name: '', phone: '' });
+                        setFloorPlanSubmitError('');
+                        setIsFloorPlanModalOpen(true);
+                      }}
+                      className="bg-brand-accent hover:bg-brand-accent/90 text-brand-dark font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 mx-auto"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download Price List
+                    </button>
+                  </div>
+
+                  <div 
+                    ref={priceListTextRef}
+                    className={`mt-4 text-[11px] text-brand-light leading-relaxed font-light italic [&_p]:text-[11px] [&_p]:text-brand-light [&_p]:leading-relaxed [&_p]:font-light [&_p]:italic transition-all duration-300 ${
+                      isPriceListTextExpanded ? '' : 'line-clamp-2'
+                    }`}
+                    dangerouslySetInnerHTML={{ 
+                      __html: acf.price_list_desc || "*PLCs + GST applicable. BSP of ₹12,000/sq.ft includes central air-conditioning, 10% discount on booking first 50 units." 
+                    }}
+                  />
+                  {showPriceListReadMore && (
+                    <button
+                      onClick={() => setIsPriceListTextExpanded(!isPriceListTextExpanded)}
+                      className="text-brand-primary hover:text-brand-accent text-[11px] font-bold uppercase tracking-wider mt-1.5 transition-colors focus:outline-none"
+                    >
+                      {isPriceListTextExpanded ? 'Read Less' : 'Read More'}
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* location advantages & map section */}
             <div id="location" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
@@ -529,7 +1051,7 @@ export default function PropertyClient({ property }: Props) {
                 {/* Google Map frame */}
                 <div className="w-full aspect-[21/9] bg-brand-pale rounded-xl overflow-hidden border border-brand-light/20 relative shadow-inner">
                   <iframe 
-                    src={acf.google_map_embed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14041.517377561848!2d77.46535694999999!3d28.3776652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cc0272b144ab9%3A0x6b63f53835e5d16c!2sSector%20150%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"} 
+                    src={extractMapUrl(acf.google_map_embed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14041.517377561848!2d77.46535694999999!3d28.3776652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cc0272b144ab9%3A0x6b63f53835e5d16c!2sSector%20150%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin")} 
                     width="100%" 
                     height="100%" 
                     style={{ border: 0 }} 
@@ -613,6 +1135,56 @@ export default function PropertyClient({ property }: Props) {
               </div>
             </div>
 
+            {/* FAQ Section */}
+            {faqs.length > 0 && (
+              <div id="faq" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+                <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                  Frequently Asked Questions
+                </h2>
+                
+                <div className="space-y-4">
+                  {faqs.map((faq, idx) => {
+                    const isOpen = activeFaqIndex === idx;
+                    return (
+                      <div 
+                        key={faq.id} 
+                        className="border border-brand-pale rounded-xl overflow-hidden transition-all duration-300"
+                      >
+                        <button
+                          onClick={() => setActiveFaqIndex(isOpen ? null : idx)}
+                          className="w-full flex justify-between items-center p-4 text-left font-bold text-sm md:text-base text-brand-dark hover:bg-brand-pale/20 transition-colors focus:outline-none"
+                        >
+                          <span>{faq.question}</span>
+                          <span className="text-brand-primary shrink-0 ml-4">
+                            {isOpen ? (
+                              <svg className="w-5 h-5 transition-transform duration-300 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-5 h-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            )}
+                          </span>
+                        </button>
+                        
+                        <div 
+                          className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                            isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                          }`}
+                        >
+                          <div className="p-4 pt-0 text-brand-ink/80 text-sm leading-relaxed border-t border-brand-pale/50 whitespace-pre-line font-medium text-justify">
+                            {faq.answer}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* About Builder Section */}
             <div id="builder" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
@@ -620,28 +1192,34 @@ export default function PropertyClient({ property }: Props) {
                 About the Developer
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+              <div className="space-y-6">
                 {/* Bio Description */}
-                <div className="md:col-span-2 space-y-4">
+                <div className="space-y-4">
                   <h3 className="text-lg font-bold text-brand-dark font-sans">{developerBio.name}</h3>
                   <p className="text-sm font-light text-brand-ink/80 leading-relaxed">
-                    {developerBio.description}
+                    {acf.developer_description || developerBio.description}
                   </p>
                 </div>
                 
-                {/* Stats Box */}
-                <div className="bg-brand-pale/40 border border-brand-light/10 rounded-2xl p-5 space-y-4">
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block">Established</span>
-                    <span className="text-base font-bold text-brand-dark">{developerBio.established}</span>
+                {/* Stats Box - Horizontal Layout below Description */}
+                <div className="grid grid-cols-3 gap-4 bg-brand-pale/40 border border-brand-light/10 rounded-2xl p-5 text-center">
+                  <div className="px-2">
+                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block mb-1">Experience</span>
+                    <span className="text-base font-bold text-brand-dark">
+                      {acf.developer_experience || (developerBio.established ? `${new Date().getFullYear() - parseInt(developerBio.established)} Years` : "15+ Years")}
+                    </span>
                   </div>
-                  <div className="border-t border-brand-light/10 pt-3">
-                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block">Total Projects</span>
-                    <span className="text-base font-bold text-brand-dark">{developerBio.projects}</span>
+                  <div className="border-l border-brand-light/10 px-2">
+                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block mb-1">Delivered Projects</span>
+                    <span className="text-base font-bold text-brand-dark">
+                      {acf.developer_delivered_projects || developerBio.projects || "50+"}
+                    </span>
                   </div>
-                  <div className="border-t border-brand-light/10 pt-3">
-                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block">Core Domain</span>
-                    <span className="text-base font-bold text-brand-dark">Residential & Commercial</span>
+                  <div className="border-l border-brand-light/10 px-2">
+                    <span className="text-[10px] uppercase font-bold text-brand-primary tracking-wider block mb-1">Ongoing Projects</span>
+                    <span className="text-base font-bold text-brand-dark">
+                      {acf.developer_ongoing_projects || "10+"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -650,7 +1228,7 @@ export default function PropertyClient({ property }: Props) {
           </div>
 
           {/* RIGHT COLUMN: 30% Width (Sticky Sidebar) */}
-          <div className="w-full lg:w-4/12 lg:sticky lg:top-[140px] space-y-6">
+          <div className={`w-full lg:w-4/12 lg:sticky transition-all duration-300 ${isNavbarVisible ? 'lg:top-[140px]' : 'lg:top-[60px]'} space-y-6`}>
             
             {/* 1. Consultation Form Card */}
             <div id="contact-form" className="bg-brand-dark text-white rounded-2xl p-6 shadow-xl border border-brand-primary relative overflow-hidden">
@@ -724,100 +1302,50 @@ export default function PropertyClient({ property }: Props) {
                     href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20interested%20in%20${encodeURIComponent(property.title.rendered)}.`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-brand-primary/30 hover:bg-[#25D366] hover:text-white hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale"
+                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-brand-primary/30 hover:bg-[#25D366] hover:text-white hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale group"
                   >
-                    <MessageSquare size={14} />
-                    WhatsApp
+                    <MessageSquare size={14} className="group-hover:text-white" />
+                    <span className="group-hover:text-white">WhatsApp</span>
                   </a>
                   <a 
                     href="tel:+918076178189" 
-                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-brand-primary/30 hover:bg-brand-accent hover:text-brand-dark hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale"
+                    className="flex items-center justify-center gap-1.5 border border-brand-light/30 bg-brand-primary/30 hover:bg-brand-accent hover:border-transparent rounded-lg py-2.5 text-xs font-bold transition-all text-brand-pale group"
                   >
-                    <Phone size={14} />
-                    Call Now
+                    <Phone size={14} className="group-hover:text-brand-dark" />
+                    <span className="group-hover:text-brand-dark">Call Now</span>
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* 2. Fact Sheet Table */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-brand-light/10 text-xs">
-              <div className="divide-y divide-brand-pale">
-                <div className="py-2.5 flex justify-between">
-                  <span className="text-brand-light font-medium">Location</span>
-                  <span className="font-bold text-brand-dark">{acf.location || "Sector 150, Noida"}</span>
-                </div>
-                <div className="py-2.5 flex justify-between">
-                  <span className="text-brand-light font-medium">Type</span>
-                  <span className="font-bold text-brand-dark">{acf.property_type || "Residential"}</span>
-                </div>
-                <div className="py-2.5 flex justify-between">
-                  <span className="text-brand-light font-medium">Starting</span>
-                  <span className="font-bold text-brand-accent">{acf.price?.split(' - ')[0] || "₹2.35 Cr"}</span>
-                </div>
-                <div className="py-2.5 flex justify-between">
-                  <span className="text-brand-light font-medium">Possession</span>
-                  <span className="font-bold text-brand-dark">{acf.possession_date || "July 2030"}</span>
-                </div>
-                <div className="py-2.5 flex justify-between">
-                  <span className="text-brand-light font-medium">Developer</span>
-                  <span className="font-bold text-brand-dark">{acf.developer || "Eldeco Group"}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. RERA Badge */}
-            <div className="bg-brand-pale border border-brand-primary/20 rounded-2xl p-5 shadow-sm text-center">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <ShieldCheck className="text-brand-primary" size={24} />
-                <span className="text-xs uppercase font-bold tracking-wider text-brand-primary">UP-RERA Registered</span>
-              </div>
-              <div className="bg-brand-primary text-brand-accent px-4 py-2 rounded-lg text-sm font-bold border border-brand-accent/20 tracking-wider shadow-inner">
-                {acf.rera_number || "UPRERAPRJ108729"}
-              </div>
-            </div>
-
-            {/* 4. Download Brochure Button */}
-            <a 
-              href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20please%20send%20me%20the%20${encodeURIComponent(property.title.rendered)}%20brochure.`}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full border border-brand-primary text-brand-primary bg-white hover:bg-brand-primary hover:text-white rounded-xl py-3.5 text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:shadow-md"
-            >
-              <Download size={16} />
-              Download Brochure (WhatsApp)
-            </a>
-
-            {/* 5. More Project Videos */}
-            <div className="bg-brand-dark text-white rounded-2xl p-5 shadow-sm border border-brand-primary">
-              <h4 className="text-brand-accent text-xs font-bold uppercase tracking-wider mb-4 pb-2 border-b border-brand-light/20 flex items-center gap-1.5">
-                <span className="w-1.5 h-3.5 bg-brand-accent rounded-full"></span>
-                More project videos
-              </h4>
-              <div className="space-y-3">
-                {relatedVideos.map((video, idx) => (
-                  <Link 
-                    key={idx} 
-                    href={`/properties/${video.slug}`}
-                    className="flex gap-3 items-center group"
-                  >
-                    <div className="w-16 h-10 bg-brand-light/35 rounded overflow-hidden relative flex-shrink-0 border border-brand-light/10">
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/0 transition-colors">
-                        <svg className="w-4 h-4 text-brand-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-[11px] font-bold text-brand-pale group-hover:text-brand-accent transition-colors line-clamp-2 leading-snug">
-                        {video.title}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
 
           </div>
 
+        </div>
+      </div>
+
+      {/* 4. Related Projects Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-brand-light/20 w-full mb-12">
+        <h2 className="heading-playfair text-2xl md:text-3xl font-bold mb-10 text-brand-dark text-center flex items-center justify-center gap-3">
+          <span className="w-8 h-[1px] bg-brand-accent"></span>
+          Related Projects
+          <span className="w-8 h-[1px] bg-brand-accent"></span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {relatedProperties.map((prop) => (
+            <PropertyCard 
+              key={prop.slug}
+              id={prop.slug}
+              title={prop.title.rendered}
+              developer={prop.acf.developer}
+              location={prop.acf.location || "Noida"}
+              price={prop.acf.price || "Contact for Price"}
+              type={prop.acf.property_type || "Residential"}
+              imageUrl={getFeaturedImage(prop)}
+              bhk={(prop.acf.configuration || "3 BHK").split(',').map(s => s.trim())}
+              videoId={prop.acf.video_id}
+            />
+          ))}
         </div>
       </div>
 
@@ -832,7 +1360,14 @@ export default function PropertyClient({ property }: Props) {
           </button>
           
           <div className="max-w-4xl max-h-[80vh] px-4 flex flex-col items-center justify-center">
-            {lightboxIndex >= 6 ? (
+            {lightboxIndex === 999 ? (
+              // Site Plan index
+              <img 
+                src={sitePlanImage || ""} 
+                alt="Site Plan Layout" 
+                className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl" 
+              />
+            ) : lightboxIndex >= 6 ? (
               // Floor plan index
               <img 
                 src={floorPlans[lightboxIndex - 6].image} 
@@ -850,7 +1385,12 @@ export default function PropertyClient({ property }: Props) {
             
             {/* Lightbox Info */}
             <div className="mt-6 text-center text-white text-sm">
-              {lightboxIndex >= 6 ? (
+              {lightboxIndex === 999 ? (
+                <>
+                  <span className="font-bold block text-brand-accent text-lg">Site Plan Layout</span>
+                  <span className="text-xs text-brand-pale/80 font-light">Master Layout / Site Plan for {property.title.rendered}</span>
+                </>
+              ) : lightboxIndex >= 6 ? (
                 <>
                   <span className="font-bold block text-brand-accent text-lg">{floorPlans[lightboxIndex - 6].title} Layout</span>
                   <span className="text-xs text-brand-pale/80 font-light">{floorPlans[lightboxIndex - 6].desc}</span>
@@ -880,13 +1420,118 @@ export default function PropertyClient({ property }: Props) {
         </div>
       )}
 
+      {/* FLOOR PLAN DOWNLOAD LEAD POPUP */}
+      {isFloorPlanModalOpen && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+          {/* Backdrop closer */}
+          <div className="absolute inset-0 cursor-default" onClick={() => setIsFloorPlanModalOpen(false)} />
+          
+          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-brand-light/10 transform scale-100 transition-transform duration-300 z-10 animate-scale-up">
+            {/* Top Bar / Brand header */}
+            <div className="relative bg-brand-primary p-6 text-white text-center">
+              <button 
+                onClick={() => setIsFloorPlanModalOpen(false)}
+                className="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/10 p-1.5 rounded-full transition-colors"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+              
+              <h3 className="heading-playfair text-xl font-bold mb-1">
+                {floorPlanModalTitle.toLowerCase().includes('price') 
+                  ? 'Download Price List' 
+                  : floorPlanModalTitle.toLowerCase().includes('brochure')
+                    ? 'Download Brochure'
+                    : 'Download Floor Plan'}
+              </h3>
+              <p className="text-xs text-brand-pale/90 font-light">
+                {floorPlanModalTitle.toLowerCase().includes('price') 
+                  ? `Please enter your details to receive the price list for ${property.title.rendered}.` 
+                  : floorPlanModalTitle.toLowerCase().includes('brochure')
+                    ? `Please enter your details to receive the brochure for ${property.title.rendered}.`
+                    : `Please enter your details to receive the ${floorPlanModalTitle} layout.`}
+              </p>
+            </div>
+            
+            {/* Form */}
+            <form onSubmit={handleFloorPlanSubmit} className="p-6 space-y-4">
+              <div>
+                <label htmlFor="modal-name" className="block text-xs font-bold uppercase tracking-wider text-brand-primary mb-1">
+                  Full Name
+                </label>
+                <input
+                  id="modal-name"
+                  type="text"
+                  required
+                  placeholder="Enter your name"
+                  value={floorPlanForm.name}
+                  onChange={(e) => setFloorPlanForm({ ...floorPlanForm, name: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl border border-brand-pale focus:outline-none focus:border-brand-primary text-sm font-light text-brand-dark transition-colors"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="modal-phone" className="block text-xs font-bold uppercase tracking-wider text-brand-primary mb-1">
+                  Mobile Number
+                </label>
+                <div className="relative flex">
+                  <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-brand-pale bg-brand-pale text-brand-light text-sm font-semibold select-none">
+                    +91
+                  </span>
+                  <input
+                    id="modal-phone"
+                    type="tel"
+                    required
+                    maxLength={10}
+                    placeholder="10-digit number"
+                    value={floorPlanForm.phone}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, ''); // Keep only digits
+                      setFloorPlanForm({ ...floorPlanForm, phone: val });
+                    }}
+                    className="w-full px-4 py-2.5 rounded-r-xl border border-brand-pale focus:outline-none focus:border-brand-primary text-sm font-light text-brand-dark transition-colors"
+                  />
+                </div>
+              </div>
+
+              {floorPlanSubmitError && (
+                <p className="text-red-500 text-xs text-center font-medium mt-2">
+                  {floorPlanSubmitError}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={isFloorPlanSubmitting}
+                className="w-full bg-brand-accent hover:bg-brand-accent/90 text-brand-dark font-bold text-xs uppercase tracking-wider py-3.5 rounded-xl shadow hover:shadow-md transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isFloorPlanSubmitting ? (
+                  <span>Submitting...</span>
+                ) : (
+                  <>
+                    <Download size={14} />
+                    <span>
+                      {floorPlanModalTitle.toLowerCase().includes('price') 
+                        ? 'Download Price List PDF' 
+                        : floorPlanModalTitle.toLowerCase().includes('brochure')
+                          ? 'Download Brochure PDF'
+                          : 'Download Layout PDF'}
+                    </span>
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Sticky bottom CTA bar (Call & WhatsApp) - property page details only */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-brand-dark/95 backdrop-blur-md border-t border-brand-light/20 p-4 shadow-2xl flex gap-3 md:hidden">
         <a 
           href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20interested%20in%20${encodeURIComponent(property.title.rendered)}.`}
           target="_blank"
           rel="noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
+          className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white hover:!text-white rounded-xl py-3 text-sm font-bold transition-all shadow-md active:scale-95"
         >
           <MessageSquare size={16} />
           WhatsApp

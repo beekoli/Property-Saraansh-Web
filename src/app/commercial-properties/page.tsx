@@ -45,6 +45,7 @@ export default async function CommercialProperties() {
                   type={acf.property_type || 'Commercial'}
                   imageUrl={getFeaturedImage(prop)}
                   bhk={bhks}
+                  videoId={acf.video_id}
                 />
               );
             })}

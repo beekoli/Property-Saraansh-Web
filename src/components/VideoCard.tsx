@@ -12,7 +12,7 @@ interface VideoCardProps {
 
 export default function VideoCard({ id, title, thumbnail, category, date, duration }: VideoCardProps) {
   return (
-    <Link href={`/our-videos/${getVideoSlug({ id, title })}`} className="group block bg-white rounded-xl overflow-hidden border border-brand-pale hover:shadow-xl transition-all duration-300">
+    <Link href={`/our-videos/${getVideoSlug({ id, title })}`} className="group block bg-white rounded-xl overflow-hidden border border-brand-pale hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
       <div className="relative aspect-video overflow-hidden bg-brand-dark">
         {/* Real image integration placeholder */}
         <div 

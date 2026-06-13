@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import PropertyCard from '@/components/PropertyCard';
-import { WPProperty } from '@/lib/wordpress';
+import { WPProperty, getFeaturedImage } from '@/lib/wordpress';
 import Link from 'next/link';
+import StaggerContainer from '@/components/animations/StaggerContainer';
+import StaggerItem from '@/components/animations/StaggerItem';
+
 
 interface Props {
   properties: WPProperty[];
@@ -95,14 +98,18 @@ export default function PropertiesClient({ properties }: Props) {
             backgroundSize: '40px 40px' 
           }}
         ></div>
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <h1 className="heading-playfair text-4xl md:text-5xl text-brand-accent mb-4 font-bold">
-            Discover Premium Projects
-          </h1>
-          <p className="text-brand-pale/80 text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
-            Handpicked residential and commercial properties in Noida with high ROI potential, verified reviews, and premium layouts.
-          </p>
-        </div>
+        <StaggerContainer className="relative z-10 max-w-4xl mx-auto" delayChildren={0.1} staggerChildren={0.15}>
+          <StaggerItem>
+            <h1 className="heading-playfair text-4xl md:text-5xl text-brand-accent mb-4 font-bold">
+              Discover Premium Projects
+            </h1>
+          </StaggerItem>
+          <StaggerItem>
+            <p className="text-brand-pale/80 text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+              Handpicked residential and commercial properties in Noida with high ROI potential, verified reviews, and premium layouts.
+            </p>
+          </StaggerItem>
+        </StaggerContainer>
       </section>
 
       {/* Filter Bar */}
@@ -209,88 +216,95 @@ export default function PropertiesClient({ properties }: Props) {
 
         {/* Projects Render */}
         {filteredProjects.length > 0 ? (
-          <div className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
+          <StaggerContainer 
+            key={`${location}-${type}-${status}-${maxBudget}-${viewMode}-${filteredProjects.length}`}
+            className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
+          >
             {filteredProjects.map((project) => {
               const acf = project.acf || {};
               const bhks = acf.configuration ? acf.configuration.split(', ') : ["3 BHK", "4 BHK"];
-              const imgUrl = acf.gallery_image_1 || "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800";
+              const imgUrl = getFeaturedImage(project);
               
               if (viewMode === 'list') {
                 return (
-                  <div key={project.id} className="flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-sm border border-brand-pale hover:shadow-xl transition-all">
-                    {/* Left: Image (16:9 equivalent) */}
-                    <div className="md:w-1/3 relative h-56 md:h-auto overflow-hidden bg-brand-pale">
-                      <img 
-                        src={imgUrl} 
-                        alt={project.title.rendered} 
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
-                      />
-                      <div className="absolute top-4 left-4 bg-brand-accent text-brand-dark px-3 py-1 rounded text-xs font-bold tracking-wide shadow-md">
-                        {acf.property_type || 'Residential'}
+                  <StaggerItem key={project.id} yOffset={20}>
+                    <div className="flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-sm border border-brand-pale hover:shadow-xl transition-all">
+                      {/* Left: Image (16:9 equivalent) */}
+                      <div className="md:w-1/3 relative h-56 md:h-auto overflow-hidden bg-brand-pale">
+                        <img 
+                          src={imgUrl} 
+                          alt={project.title.rendered} 
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+                        />
+                        <div className="absolute top-4 left-4 bg-brand-accent text-brand-dark px-3 py-1 rounded text-xs font-bold tracking-wide shadow-md">
+                          {acf.property_type || 'Residential'}
+                        </div>
                       </div>
-                    </div>
-                    {/* Right: Info */}
-                    <div className="md:w-2/3 p-6 flex flex-col justify-between">
-                      <div>
-                        <div className="flex justify-between items-start mb-2 gap-4">
-                          <div>
-                            <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{acf.developer || 'Eldeco Group'}</p>
-                            <h3 className="text-xl font-bold heading-playfair text-brand-ink">{project.title.rendered}</h3>
+                      {/* Right: Info */}
+                      <div className="md:w-2/3 p-6 flex flex-col justify-between">
+                        <div>
+                          <div className="flex justify-between items-start mb-2 gap-4">
+                            <div>
+                              <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{acf.developer || 'Eldeco Group'}</p>
+                              <h3 className="text-xl font-bold heading-playfair text-brand-ink">{project.title.rendered}</h3>
+                            </div>
+                            <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{acf.price || 'Price on Request'}</div>
                           </div>
-                          <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{acf.price || 'Price on Request'}</div>
+                          
+                          <div className="flex items-center text-brand-dark/70 mb-4 text-xs font-light">
+                            <svg className="w-4 h-4 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {acf.location}
+                          </div>
+
+                          <div className="flex flex-wrap gap-1.5 mb-6">
+                            {bhks.map((item, index) => (
+                              <span key={index} className="bg-brand-pale text-brand-primary text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
+                                {item}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                         
-                        <div className="flex items-center text-brand-dark/70 mb-4 text-xs font-light">
-                          <svg className="w-4 h-4 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                          {acf.location}
+                        <div className="flex gap-4 border-t border-brand-pale pt-4">
+                          <Link 
+                            href={`/properties/${project.slug}?video=1`} 
+                            className="flex-1 bg-brand-primary text-white text-center text-xs py-2.5 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
+                          >
+                            Watch Review ▶
+                          </Link>
+                          <Link 
+                            href={`/properties/${project.slug}`} 
+                            className="flex-1 bg-brand-dark text-white text-center text-xs py-2.5 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
+                          >
+                            Get Details
+                          </Link>
                         </div>
-
-                        <div className="flex flex-wrap gap-1.5 mb-6">
-                          {bhks.map((item, index) => (
-                            <span key={index} className="bg-brand-pale text-brand-primary text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-4 border-t border-brand-pale pt-4">
-                        <Link 
-                          href={`/properties/${project.slug}?video=1`} 
-                          className="flex-1 bg-brand-primary text-white text-center text-xs py-2.5 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
-                        >
-                          Watch Review ▶
-                        </Link>
-                        <Link 
-                          href={`/properties/${project.slug}`} 
-                          className="flex-1 bg-brand-dark text-white text-center text-xs py-2.5 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
-                        >
-                          Get Details
-                        </Link>
                       </div>
                     </div>
-                  </div>
+                  </StaggerItem>
                 );
               }
 
               return (
-                <PropertyCard 
-                  key={project.id}
-                  id={project.slug}
-                  title={project.title.rendered}
-                  developer={acf.developer}
-                  location={acf.location || "Noida"}
-                  price={acf.price || "Price on Request"}
-                  type={acf.property_type || "Residential"}
-                  imageUrl={imgUrl}
-                  bhk={bhks}
-                />
+                <StaggerItem key={project.id} yOffset={20}>
+                  <PropertyCard 
+                    id={project.slug}
+                    title={project.title.rendered}
+                    developer={acf.developer}
+                    location={acf.location || "Noida"}
+                    price={acf.price || "Price on Request"}
+                    type={acf.property_type || "Residential"}
+                    imageUrl={imgUrl}
+                    bhk={bhks}
+                    videoId={acf.video_id}
+                  />
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerContainer>
         ) : (
           <div className="text-center py-20 text-brand-ink/60">
             <p className="text-lg">No projects match your search criteria. Please adjust filters and try again.</p>

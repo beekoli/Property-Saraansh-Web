@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     // 1. Forward lead data to the Google Sheets Apps Script
-    const sheetUrl = "https://script.google.com/macros/s/AKfycbzv0yRaBRDN4hcspVwk_-_mEz43xnU8fr7zhhI5MKfVOOJgePMFAga2C0EWje11nPKj/exec";
+    const sheetUrl = process.env.LEADS_GOOGLE_SHEET_URL || "https://script.google.com/macros/s/AKfycbzv0yRaBRDN4hcspVwk_-_mEz43xnU8fr7zhhI5MKfVOOJgePMFAga2C0EWje11nPKj/exec";
     let sheetSuccess = false;
     
     try {

@@ -123,13 +123,13 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi Saraansh, I am interested in your review for "${videoTitle}". Let's chat.`)}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center gap-1.5 py-2.5 bg-[#25D366] hover:bg-[#1ebd59] text-white rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
+          className="flex items-center justify-center gap-1.5 py-2.5 bg-[#25D366] hover:bg-[#1ebd59] text-white hover:!text-white rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
         >
           WhatsApp
         </a>
         <a
           href="tel:+918076178189"
-          className="flex items-center justify-center gap-1.5 py-2.5 bg-brand-dark hover:bg-brand-primary text-white border border-brand-accent rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
+          className="flex items-center justify-center gap-1.5 py-2.5 bg-brand-dark hover:bg-brand-primary text-white hover:!text-white border border-brand-accent rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
         >
           Call Now
         </a>

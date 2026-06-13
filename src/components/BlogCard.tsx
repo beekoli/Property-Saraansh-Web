@@ -13,7 +13,7 @@ interface BlogCardProps {
 
 export default function BlogCard({ id, title, excerpt, category, author, date, readTime, thumbnail }: BlogCardProps) {
   return (
-    <div className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-brand-pale flex flex-col h-full">
+    <div className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 border border-brand-pale flex flex-col h-full">
       <Link href={`/blog/${id}`} className="relative h-48 overflow-hidden block">
         <div 
           className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"

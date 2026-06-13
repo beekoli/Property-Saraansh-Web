@@ -76,6 +76,7 @@ export default function Footer() {
               <ul className="space-y-3 text-sm font-light">
                 <li><Link href="/" className="hover:text-brand-accent transition-colors">Home</Link></li>
                 <li><Link href="/about-us" className="hover:text-brand-accent transition-colors">About Us</Link></li>
+                <li><Link href="/our-team" className="hover:text-brand-accent transition-colors">Our Team</Link></li>
                 <li><Link href="/our-videos" className="hover:text-brand-accent transition-colors">Our Videos</Link></li>
                 <li><Link href="/blog" className="hover:text-brand-accent transition-colors">Blogs</Link></li>
               </ul>
@@ -83,6 +84,7 @@ export default function Footer() {
                 <li><Link href="/properties" className="hover:text-brand-accent transition-colors">All Projects</Link></li>
                 <li><Link href="/commercial-properties" className="hover:text-brand-accent transition-colors">Commercial</Link></li>
                 <li><Link href="/residential-properties" className="hover:text-brand-accent transition-colors">Residential</Link></li>
+                <li><Link href="/careers" className="hover:text-brand-accent transition-colors">Careers</Link></li>
                 <li><Link href="/contact" className="hover:text-brand-accent transition-colors">Contact</Link></li>
               </ul>
             </div>
@@ -123,7 +125,7 @@ export default function Footer() {
         <div className="mt-16 pt-8 border-t border-brand-light/20 text-sm flex flex-col md:flex-row justify-between items-center text-brand-pale/50 font-light">
           <p>&copy; {new Date().getFullYear()} Property Saraansh. All rights reserved.</p>
           <div className="mt-4 md:mt-0 space-x-6 flex">
-            <Link href="#" className="hover:text-brand-accent transition-colors">Privacy Policy</Link>
+            <Link href="/privacy-policy" className="hover:text-brand-accent transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-brand-accent transition-colors">Terms of Service</Link>
           </div>
         </div>

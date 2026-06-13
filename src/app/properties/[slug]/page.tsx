@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+import { generateRankMathMetadata, getRewrittenSchema } from '@/lib/seo';
 import { getPropertyBySlug, getProperties, getFeaturedImage, stripHtml } from '@/lib/wordpress';
 import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
@@ -30,6 +32,8 @@ export default async function PropertyPage({ params }: PageProps) {
   if (!property) {
     notFound();
   }
+
+  const allProperties = await getProperties(100);
 
   // Parse prices from string like "₹1.45 Cr - ₹3.10 Cr"
   const priceStr = property.acf?.price || "";
@@ -79,6 +83,28 @@ export default async function PropertyPage({ params }: PageProps) {
     }
   };
 
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": property.title.rendered,
+    "image": getFeaturedImage(property),
+    "description": stripHtml(property.excerpt?.rendered || property.content.rendered).substring(0, 200).trim() + "...",
+    "brand": {
+      "@type": "Brand",
+      "name": property.acf?.developer || "Property Saraansh"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "INR",
+      "lowPrice": priceMin,
+      "highPrice": priceMax,
+      "offerCount": 1,
+      "priceValidUntil": "2027-12-31",
+      "availability": "https://schema.org/InStock",
+      "url": `https://www.propertysaraansh.in/properties/${property.slug}`
+    }
+  };
+
   const videoSchema = video ? {
     "@context": "https://schema.org",
     "@type": "VideoObject",
@@ -94,12 +120,47 @@ export default async function PropertyPage({ params }: PageProps) {
     "embedUrl": `https://www.youtube.com/embed/${video.id}`
   } : null;
 
+  // Extract FAQs for Schema
+  const faqs: Array<{ question: string; answer: string }> = [];
+  for (let i = 1; i <= 5; i++) {
+    const q = property.acf?.[`faq_${i}_question` as keyof typeof property.acf];
+    const a = property.acf?.[`faq_${i}_answer` as keyof typeof property.acf];
+    if (q && typeof q === 'string' && q.trim() && a && typeof a === 'string' && a.trim()) {
+      faqs.push({
+        question: q.trim(),
+        answer: a.trim()
+      });
+    }
+  }
+
+  const faqSchema = faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  } : null;
+
+  const seoJson = (property as unknown as Record<string, unknown>).rank_math_json || property.yoast_head_json;
+  const rankMathSchema = getRewrittenSchema(seoJson);
+
   return (
     <>
       {/* Real Estate Listing Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(realEstateSchema) }}
+      />
+      
+      {/* Product Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       
       {/* Video Schema if property has review video */}
@@ -109,8 +170,22 @@ export default async function PropertyPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
         />
       )}
+
+      {/* FAQ Schema if FAQs are present */}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+      {rankMathSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: rankMathSchema }}
+        />
+      )}
       
-      <PropertyClient property={property} />
+      <PropertyClient property={property} allProperties={allProperties} />
     </>
   );
 }
@@ -122,7 +197,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const property = await getPropertyBySlug(slug);
 
@@ -132,8 +207,11 @@ export async function generateMetadata({ params }: PageProps) {
     };
   }
 
-  return {
-    title: `${property.title.rendered} | Property Saraansh`,
-    description: property.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || `View details for ${property.title.rendered}`,
-  };
+  const fallbackTitle = `${property.title.rendered} | Property Saraansh`;
+  const fallbackDesc = property.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || `View details for ${property.title.rendered}`;
+  
+  // Prefer RankMath JSON, fallback to Yoast
+  const seoJson = (property as unknown as Record<string, unknown>).rank_math_json || property.yoast_head_json;
+
+  return generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 }

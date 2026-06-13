@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface PropertyCardProps {
   id: string;
@@ -9,17 +10,19 @@ interface PropertyCardProps {
   type: string;
   imageUrl: string;
   bhk?: string[];
+  videoId?: string;
 }
 
-export default function PropertyCard({ id, title, developer = "Eldeco Group", location, price, type, imageUrl, bhk = ["2 BHK", "3 BHK"] }: PropertyCardProps) {
+export default function PropertyCard({ id, title, developer = "Eldeco Group", location, price, type, imageUrl, bhk = ["2 BHK", "3 BHK"], videoId }: PropertyCardProps) {
   return (
-    <div className="group bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 shadow-sm hover:shadow-xl flex flex-col h-full relative">
+    <div className="group bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
       <div className="relative aspect-video overflow-hidden w-full bg-brand-pale">
-        <img 
+        <Image 
           src={imageUrl} 
           alt={title} 
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-          loading="lazy"
         />
         <div className="absolute top-4 left-4 bg-brand-accent text-brand-dark px-3 py-1 rounded text-xs font-bold tracking-wide shadow-md">
           {type}
@@ -51,12 +54,23 @@ export default function PropertyCard({ id, title, developer = "Eldeco Group", lo
         <div className="border-t border-brand-pale pt-4">
           <div className="text-base font-bold text-brand-accent mb-4">{price}</div>
           <div className="flex gap-2">
-            <Link 
-              href={`/properties/${id}?video=1`} 
-              className="flex-1 bg-brand-primary text-white text-center text-xs py-2 px-0 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
-            >
-              Watch Review ▶
-            </Link>
+            {videoId ? (
+              <a 
+                href={`https://www.youtube.com/watch?v=${videoId.includes('youtube.com/watch?v=') ? videoId.split('v=')[1].split('&')[0] : videoId.includes('youtu.be/') ? videoId.split('youtu.be/')[1].split('?')[0] : videoId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-brand-primary text-white text-center text-xs py-2 px-0 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
+              >
+                Watch Review ▶
+              </a>
+            ) : (
+              <Link 
+                href={`/properties/${id}?video=1`} 
+                className="flex-1 bg-brand-primary text-white text-center text-xs py-2 px-0 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
+              >
+                Watch Review ▶
+              </Link>
+            )}
             <Link 
               href={`/properties/${id}`} 
               className="flex-1 bg-brand-dark text-white text-center text-xs py-2 px-0 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
