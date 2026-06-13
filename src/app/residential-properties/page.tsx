@@ -39,7 +39,7 @@ export default async function ResidentialProperties() {
                   key={prop.id}
                   id={prop.slug}
                   title={prop.title.rendered}
-                  developer={acf.developer || "Eldeco Group"}
+                  developer={acf.developer || ""}
                   location={acf.location || 'Noida'}
                   price={acf.price || 'Price on Request'}
                   type={acf.property_type || 'Residential'}

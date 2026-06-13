@@ -245,7 +245,7 @@ export default function PropertiesClient({ properties }: Props) {
                         <div>
                           <div className="flex justify-between items-start mb-2 gap-4">
                             <div>
-                              <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{acf.developer || 'Eldeco Group'}</p>
+                              <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{acf.developer || ''}</p>
                               <h3 className="text-xl font-bold heading-playfair text-brand-ink">{project.title.rendered}</h3>
                             </div>
                             <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{acf.price || 'Price on Request'}</div>

@@ -13,7 +13,7 @@ interface PropertyCardProps {
   videoId?: string;
 }
 
-export default function PropertyCard({ id, title, developer = "Eldeco Group", location, price, type, imageUrl, bhk = ["2 BHK", "3 BHK"], videoId }: PropertyCardProps) {
+export default function PropertyCard({ id, title, developer, location, price, type, imageUrl, bhk = [], videoId }: PropertyCardProps) {
   return (
     <div className="group bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
       <div className="relative aspect-video overflow-hidden w-full bg-brand-pale">

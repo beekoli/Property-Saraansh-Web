@@ -173,12 +173,12 @@ export default async function Home() {
                 <PropertyCard 
                   id={project.slug}
                   title={project.title.rendered}
-                  developer={project.acf?.developer || "Eldeco Group"}
+                  developer={project.acf?.developer || ""}
                   location={project.acf?.location || "Noida"}
                   price={project.acf?.price || "Price on Request"}
                   type={project.acf?.property_type || "Residential"}
                   imageUrl={getFeaturedImage(project)}
-                  bhk={project.acf?.configuration ? project.acf.configuration.split(', ') : ["3 BHK", "4 BHK"]}
+                  bhk={project.acf?.configuration ? project.acf.configuration.split(', ') : []}
                   videoId={project.acf?.video_id}
                 />
               </StaggerItem>

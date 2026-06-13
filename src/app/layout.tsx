@@ -18,6 +18,9 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Property Saraansh | Real Estate Consultancy Noida",
   description: "Trusted real estate consultancy in Noida. We provide expert property advisory, investment guidance, and YouTube-based project reviews.",
+  verification: {
+    google: "_Xr2QUL1CTNah4TlCKAyFAwRQwVlS0lHxqA1gHz74VU",
+  },
 };
 
 export default function RootLayout({

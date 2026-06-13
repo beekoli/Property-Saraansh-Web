@@ -213,7 +213,7 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
   const router = useRouter();
   const acf = property.acf || {};
   const featuredImage = getFeaturedImage(property);
-  const developerBio = getDeveloperBio(acf.developer || "Eldeco Group");
+  const developerBio = getDeveloperBio(acf.developer || "");
 
   // Parse video ID in case user pastes full YouTube URL instead of just the ID
   let parsedVideoId = acf.video_id || "";
