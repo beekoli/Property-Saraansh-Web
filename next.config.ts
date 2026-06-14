@@ -141,6 +141,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/eldeco-7-peaks-omicron-1',
         permanent: true,
       },
+      {
+        source: '/our-videos/commercial-property-in-noida-builder-lease-vs-self-lease',
+        destination: '/our-videos/builder-lease-vs-self-lease-noida',
+        permanent: true,
+      },
     ];
   },
 };
