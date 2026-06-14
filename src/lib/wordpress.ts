@@ -122,6 +122,7 @@ export interface WPProperty {
 
 // Fallback Mock Blog Data
 export const MOCK_BLOGS: WPPost[] = [
+
   {
     id: 1,
     date: "Jun 10, 2026",

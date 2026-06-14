@@ -139,20 +139,30 @@ export default async function BlogPostPage({ params }: PageProps) {
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               {/* Main Content with Custom Class overrides */}
               <div 
-                className="blog-content font-normal text-lg md:text-xl space-y-8 
-                  text-[#2C3E50] leading-[1.85]
-                  prose-headings:heading-playfair prose-headings:text-[#1A252F] prose-headings:font-extrabold prose-headings:mt-12 prose-headings:mb-6
-                  prose-h2:text-3xl prose-h2:md:text-4xl prose-h2:border-b-2 prose-h2:border-brand-accent/20 prose-h2:pb-4
-                  prose-h3:text-2xl prose-h3:md:text-3xl prose-h3:text-brand-primary
-                  prose-p:mb-8 prose-p:leading-[1.85] prose-p:tracking-wide
+                className="blog-content font-normal text-base md:text-lg space-y-6 md:space-y-8 
+                  text-[#2C3E50] leading-[1.75] md:leading-[1.85]
+                  
+                  /* Responsive Images */
+                  [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl md:[&_img]:rounded-2xl [&_img]:shadow-lg [&_img]:my-8 [&_figure]:max-w-full [&_figure]:mx-0 [&_figure]:my-8 [&_iframe]:max-w-full
+                  
+                  prose-headings:heading-playfair prose-headings:text-[#1A252F] prose-headings:font-extrabold prose-headings:mt-10 prose-headings:md:mt-12 prose-headings:mb-4 prose-headings:md:mb-6
+                  prose-h2:text-2xl prose-h2:md:text-3xl lg:prose-h2:text-4xl prose-h2:border-b-2 prose-h2:border-brand-accent/20 prose-h2:pb-3 md:prose-h2:pb-4
+                  prose-h3:text-xl prose-h3:md:text-2xl lg:prose-h3:text-3xl prose-h3:text-brand-primary
+                  prose-p:mb-6 md:prose-p:mb-8 prose-p:tracking-normal md:prose-p:tracking-wide
                   prose-strong:font-bold prose-strong:text-[#111827] prose-strong:bg-brand-pale/40 prose-strong:px-1 prose-strong:rounded-sm
-                  prose-blockquote:border-l-[6px] prose-blockquote:border-brand-accent prose-blockquote:pl-6 md:prose-blockquote:pl-8 prose-blockquote:text-[#34495E] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-xl md:prose-blockquote:text-2xl prose-blockquote:my-10 prose-blockquote:bg-gradient-to-r prose-blockquote:from-brand-pale/50 prose-blockquote:to-transparent prose-blockquote:py-6 prose-blockquote:pr-6 prose-blockquote:rounded-r-3xl
+                  
+                  /* Blockquote fixes for mobile */
+                  prose-blockquote:border-l-[4px] md:prose-blockquote:border-l-[6px] prose-blockquote:border-brand-accent prose-blockquote:pl-4 md:prose-blockquote:pl-8 prose-blockquote:text-[#34495E] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg md:prose-blockquote:text-xl lg:prose-blockquote:text-2xl prose-blockquote:my-8 md:prose-blockquote:my-10 prose-blockquote:bg-gradient-to-r prose-blockquote:from-brand-pale/50 prose-blockquote:to-transparent prose-blockquote:py-4 md:prose-blockquote:py-6 prose-blockquote:pr-4 md:prose-blockquote:pr-6 prose-blockquote:rounded-r-2xl md:prose-blockquote:rounded-r-3xl
+                  
                   prose-a:text-brand-accent prose-a:font-semibold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-brand-primary hover:prose-a:decoration-brand-primary transition-all
-                  prose-ul:list-none prose-ul:pl-0 prose-ul:mb-8 prose-ul:space-y-4
-                  prose-ul>li:relative prose-ul>li:pl-8 prose-ul>li:before:content-[''] prose-ul>li:before:absolute prose-ul>li:before:left-2 prose-ul>li:before:top-3 prose-ul>li:before:w-2 prose-ul>li:before:h-2 prose-ul>li:before:bg-brand-accent prose-ul>li:before:rounded-full
-                  prose-ol:list-decimal prose-ol:pl-8 prose-ol:mb-8 prose-ol:space-y-4 prose-ol:marker:text-brand-primary prose-ol:marker:font-bold
-                  prose-img:rounded-3xl prose-img:shadow-2xl prose-img:my-12 prose-img:w-full prose-img:border prose-img:border-brand-light/20
-                  prose-figcaption:text-center prose-figcaption:text-sm prose-figcaption:text-brand-light prose-figcaption:mt-3 prose-figcaption:italic
+                  
+                  /* List formatting */
+                  prose-ul:list-none prose-ul:pl-0 prose-ul:mb-6 md:prose-ul:mb-8 prose-ul:space-y-3 md:prose-ul:space-y-4
+                  prose-ul>li:relative prose-ul>li:pl-6 md:prose-ul>li:pl-8 prose-ul>li:before:content-[''] prose-ul>li:before:absolute prose-ul>li:before:left-1 md:prose-ul>li:before:left-2 prose-ul>li:before:top-2.5 md:prose-ul>li:before:top-3 prose-ul>li:before:w-1.5 md:prose-ul>li:before:w-2 prose-ul>li:before:h-1.5 md:prose-ul>li:before:h-2 prose-ul>li:before:bg-brand-accent prose-ul>li:before:rounded-full
+                  prose-ol:list-decimal prose-ol:pl-6 md:prose-ol:pl-8 prose-ol:mb-6 md:prose-ol:mb-8 prose-ol:space-y-3 md:prose-ol:space-y-4 prose-ol:marker:text-brand-primary prose-ol:marker:font-bold
+                  
+                  /* Figure & Captions */
+                  prose-figcaption:text-center prose-figcaption:text-xs md:prose-figcaption:text-sm prose-figcaption:text-brand-light prose-figcaption:mt-2 md:prose-figcaption:mt-3 prose-figcaption:italic
                 " 
                 dangerouslySetInnerHTML={{ __html: blog.content.rendered }} 
               />
