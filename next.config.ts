@@ -96,6 +96,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/noida-property-market-reality',
         permanent: true,
       },
+      {
+        source: '/noida-real-estate-reality-illegal-plotting',
+        destination: '/our-videos/noida-property-market-reality',
+        permanent: true,
+      },
     ];
   },
 };
