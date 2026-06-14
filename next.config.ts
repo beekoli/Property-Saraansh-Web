@@ -81,6 +81,16 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/max-estates-105-vs-128',
         permanent: true,
       },
+      {
+        source: '/our-videos/max-estates-105-noida-price-floor-plan-review-investment-analysis',
+        destination: '/our-videos/max-estates-105-vs-128',
+        permanent: true,
+      },
+      {
+        source: '/max-estates-105-noida-price-floor-plan',
+        destination: '/our-videos/max-estates-105-vs-128',
+        permanent: true,
+      },
     ];
   },
 };
