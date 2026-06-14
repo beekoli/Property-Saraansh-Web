@@ -106,6 +106,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/eldeco-7-peaks-omicron-1',
         permanent: true,
       },
+      {
+        source: '/eldeco-7-peaks-residences-greater-noida',
+        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        permanent: true,
+      },
     ];
   },
 };
