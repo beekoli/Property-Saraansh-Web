@@ -151,6 +151,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/commercial-property-in-noida',
         permanent: true,
       },
+      {
+        source: '/our-videos/commercial-real-estate-in-noida',
+        destination: '/our-videos/commercial-property-in-noida',
+        permanent: true,
+      },
     ];
   },
 };
