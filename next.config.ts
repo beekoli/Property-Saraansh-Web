@@ -101,6 +101,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/noida-property-market-reality',
         permanent: true,
       },
+      {
+        source: '/our-videos/eldeco-7-peaks-residences-omicron-1-greater-noida-3bhk-layout-analysis-investmen',
+        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        permanent: true,
+      },
     ];
   },
 };

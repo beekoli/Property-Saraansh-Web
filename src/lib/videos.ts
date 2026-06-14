@@ -73,7 +73,7 @@ export const videos: Video[] = [
     "views": "6.5K views views"
   },
   {
-    "slug": "eldeco-7-peaks-residences-omicron-1-greater-noida-3bhk-layout-analysis-investmen",
+    "slug": "eldeco-7-peaks-omicron-1",
     "title": "Eldeco 7 Peaks Residences Omicron 1 Greater Noida | 3BHK Layout Analysis + Investment Potential",
     "description": "Watch the full review of Eldeco 7 Peaks Residences Omicron 1 Greater Noida | 3BHK Layout Analysis + Investment Potential by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "hCyx0D2_RzE",
