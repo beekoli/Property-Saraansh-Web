@@ -71,6 +71,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/noida-market-slowdown-2026',
         permanent: true,
       },
+      {
+        source: '/our-videos/noida-real-estate-market-slowdown-2026',
+        destination: '/our-videos/noida-market-slowdown-2026',
+        permanent: true,
+      },
     ];
   },
 };
