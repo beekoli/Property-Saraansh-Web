@@ -91,6 +91,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/max-estates-105-vs-128',
         permanent: true,
       },
+      {
+        source: '/our-videos/noida-property-market-reality-authority-builder-broker-buyer-truth',
+        destination: '/our-videos/noida-property-market-reality',
+        permanent: true,
+      },
     ];
   },
 };

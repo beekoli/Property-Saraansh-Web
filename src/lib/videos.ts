@@ -61,7 +61,7 @@ export const videos: Video[] = [
     "views": "6.1K views views"
   },
   {
-    "slug": "noida-property-market-reality-authority-builder-broker-buyer-truth",
+    "slug": "noida-property-market-reality",
     "title": "Noida Property Market Reality | Authority, Builder, Broker & Buyer Truth",
     "description": "Watch the full review of Noida Property Market Reality | Authority, Builder, Broker & Buyer Truth by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "YKWtYdh_4dQ",
