@@ -121,6 +121,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/yamuna-expressway-investment-2030',
         permanent: true,
       },
+      {
+        source: '/our-videos/eldeco-7-peaks-greater-noida',
+        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        permanent: true,
+      },
     ];
   },
 };
