@@ -131,6 +131,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/crc-the-peridona-jaypee-greens',
         permanent: true,
       },
+      {
+        source: '/crc-the-peridona-jaypee-greens-noida',
+        destination: '/our-videos/crc-the-peridona-jaypee-greens',
+        permanent: true,
+      },
     ];
   },
 };
