@@ -166,6 +166,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/noida-property-market-2025',
         permanent: true,
       },
+      {
+        source: '/our-shorts/elie-saab-noida-vs-jacob-co-noida-vs-m3m-cullinan',
+        destination: '/our-videos/elie-saab-jacob-co-noida-vs-m3m-cullinan-resale-m3mnoida',
+        permanent: true,
+      },
     ];
   },
 };
