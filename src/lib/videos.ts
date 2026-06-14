@@ -25,7 +25,7 @@ export const videos: Video[] = [
     "views": "25K views views"
   },
   {
-    "slug": "crc-the-peridona-jaypee-greens-noida-why-this-is-noidas-most-exclusive-project",
+    "slug": "crc-the-peridona-jaypee-greens",
     "title": "CRC The Peridona Jaypee Greens Noida | Why This Is Noida’s Most Exclusive Project?",
     "description": "Watch the full review of CRC The Peridona Jaypee Greens Noida | Why This Is Noida’s Most Exclusive Project? by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "pAs9OoMvjQE",

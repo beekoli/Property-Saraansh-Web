@@ -126,6 +126,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/eldeco-7-peaks-omicron-1',
         permanent: true,
       },
+      {
+        source: '/our-videos/crc-the-peridona-jaypee-greens-noida-why-this-is-noidas-most-exclusive-project',
+        destination: '/our-videos/crc-the-peridona-jaypee-greens',
+        permanent: true,
+      },
     ];
   },
 };
