@@ -143,7 +143,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/our-videos/commercial-property-in-noida-builder-lease-vs-self-lease',
-        destination: '/our-videos/builder-lease-vs-self-lease-noida',
+        destination: '/our-videos/commercial-property-in-noida',
+        permanent: true,
+      },
+      {
+        source: '/our-videos/builder-lease-vs-self-lease-noida',
+        destination: '/our-videos/commercial-property-in-noida',
         permanent: true,
       },
     ];

@@ -85,7 +85,7 @@ export const videos: Video[] = [
     "views": "18K views views"
   },
   {
-    "slug": "builder-lease-vs-self-lease-noida",
+    "slug": "commercial-property-in-noida",
     "title": "Commercial Property in Noida: Builder Lease vs Self Lease",
     "description": "Watch the full review of Commercial Property in Noida: Builder Lease vs Self Lease by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "LJo0YtPpTnY",
