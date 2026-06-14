@@ -116,6 +116,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/yamuna-expressway-investment-2030',
         permanent: true,
       },
+      {
+        source: '/our-videos/yamuna-expressway-noida-investment-2030-should-you-buy-property-near-jewar-airport',
+        destination: '/our-videos/yamuna-expressway-investment-2030',
+        permanent: true,
+      },
     ];
   },
 };
