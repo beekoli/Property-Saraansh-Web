@@ -76,6 +76,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/noida-market-slowdown-2026',
         permanent: true,
       },
+      {
+        source: '/our-videos/max-estates-105-vs-max-estates-128-which-one-is-better',
+        destination: '/our-videos/max-estates-105-vs-128',
+        permanent: true,
+      },
     ];
   },
 };

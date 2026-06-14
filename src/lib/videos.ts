@@ -49,7 +49,7 @@ export const videos: Video[] = [
     "views": "15K views views"
   },
   {
-    "slug": "max-estates-105-vs-max-estates-128-which-one-is-better",
+    "slug": "max-estates-105-vs-128",
     "title": "Max Estates 105 vs Max Estates 128 | Which One is Better?",
     "description": "Watch the full review of Max Estates 105 vs Max Estates 128 | Which One is Better? by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "qfwf1IcrlsI",
