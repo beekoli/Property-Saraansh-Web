@@ -111,6 +111,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/eldeco-7-peaks-omicron-1',
         permanent: true,
       },
+      {
+        source: '/our-videos/yamuna-expressway-investment-2030-who-should-buy-who-should-avoid-future-price-p',
+        destination: '/our-videos/yamuna-expressway-investment-2030',
+        permanent: true,
+      },
     ];
   },
 };

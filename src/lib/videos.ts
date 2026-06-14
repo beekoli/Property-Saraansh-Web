@@ -13,7 +13,7 @@ export interface Video {
 
 export const videos: Video[] = [
   {
-    "slug": "yamuna-expressway-investment-2030-who-should-buy-who-should-avoid-future-price-p",
+    "slug": "yamuna-expressway-investment-2030",
     "title": "Yamuna Expressway Investment 2030: Who Should Buy, Who Should Avoid & Future Price Prediction",
     "description": "Watch the full review of Yamuna Expressway Investment 2030: Who Should Buy, Who Should Avoid & Future Price Prediction by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "qWAgkIW6Mj0",

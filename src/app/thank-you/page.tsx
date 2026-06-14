@@ -10,7 +10,7 @@ export const metadata = {
 export default function ThankYouPage() {
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
   const latestVideo = longVideos[0] || {
-    slug: "yamuna-expressway-investment-2030-who-should-buy-who-should-avoid-future-price-p",
+    slug: "yamuna-expressway-investment-2030",
     youtubeId: "qWAgkIW6Mj0",
     title: "Yamuna Expressway Noida Investment 2030: Should You Buy Property Near Jewar Airport?",
     description: "Watch the latest video update for Yamuna Expressway Noida Investment 2030.",
