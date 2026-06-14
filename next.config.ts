@@ -136,6 +136,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/crc-the-peridona-jaypee-greens',
         permanent: true,
       },
+      {
+        source: '/eldeco-greater-noida-detailed-review-of-eldeco-7-peaks-residences',
+        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        permanent: true,
+      },
     ];
   },
 };
