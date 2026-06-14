@@ -161,6 +161,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/noida-property-market-2025',
         permanent: true,
       },
+      {
+        source: '/noida-real-estate-2025-conclusion-project-by-project-reality-check-by-property-saraansh',
+        destination: '/our-videos/noida-property-market-2025',
+        permanent: true,
+      },
     ];
   },
 };
