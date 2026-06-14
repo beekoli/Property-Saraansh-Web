@@ -156,6 +156,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/commercial-property-in-noida',
         permanent: true,
       },
+      {
+        source: '/our-videos/noida-property-market-2025-what-worked-what-failed',
+        destination: '/our-videos/noida-property-market-2025',
+        permanent: true,
+      },
     ];
   },
 };

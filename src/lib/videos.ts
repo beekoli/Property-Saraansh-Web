@@ -121,7 +121,7 @@ export const videos: Video[] = [
     "views": "5K views views"
   },
   {
-    "slug": "noida-property-market-2025-what-worked-what-failed",
+    "slug": "noida-property-market-2025",
     "title": "Noida Property Market 2025: What Worked & What Failed",
     "description": "Watch the full review of Noida Property Market 2025: What Worked & What Failed by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "xicR-MeU77g",
