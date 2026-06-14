@@ -48,7 +48,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/our-videos/jacob-co-noida-first-branded-residence',
-        destination: '/our-videos/jacob-co-noida-indias-first-branded-residence-in-noida-m3m-x-jacob-co-ultra-luxu',
+        destination: '/our-videos/m3m-jacob-co-noida',
+        permanent: true,
+      },
+      {
+        source: '/our-videos/jacob-co-noida-indias-first-branded-residence-in-noida-m3m-x-jacob-co-ultra-luxu',
+        destination: '/our-videos/m3m-jacob-co-noida',
         permanent: true,
       },
       {

@@ -169,7 +169,7 @@ export const videos: Video[] = [
     "views": "7.5K views views"
   },
   {
-    "slug": "jacob-co-noida-indias-first-branded-residence-in-noida-m3m-x-jacob-co-ultra-luxu",
+    "slug": "m3m-jacob-co-noida",
     "title": "Jacob & Co Noida | India’s First Branded Residence in Noida | M3M x Jacob & Co Ultra Luxury Review",
     "description": "Watch the full review of Jacob & Co Noida | India’s First Branded Residence in Noida | M3M x Jacob & Co Ultra Luxury Review by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "LRZV-H--Qlw",

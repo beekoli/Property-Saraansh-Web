@@ -83,7 +83,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
     "name": video.title,
     "description": video.description,
     "thumbnailUrl": [video.thumbnail],
-    "uploadDate": video.publishedAt,
+    "uploadDate": video.publishedAt.includes('T') ? video.publishedAt : `${video.publishedAt}T00:00:00+05:30`,
     "duration": video.duration,
     "contentUrl": `https://www.youtube.com/watch?v=${video.youtubeId}`,
     "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,

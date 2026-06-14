@@ -43,7 +43,7 @@ export default async function Home() {
             "thumbnailUrl": [
               featuredVideo.thumbnail || `https://img.youtube.com/vi/${featuredVideo.youtubeId}/maxresdefault.jpg`
             ],
-            "uploadDate": featuredVideo.publishedAt || "2026-06-11",
+            "uploadDate": featuredVideo.publishedAt ? (featuredVideo.publishedAt.includes('T') ? featuredVideo.publishedAt : `${featuredVideo.publishedAt}T00:00:00+05:30`) : "2026-06-11T00:00:00+05:30",
             "duration": featuredVideo.duration || "PT19M35S",
             "embedUrl": `https://www.youtube.com/embed/${featuredVideo.youtubeId}`
           })

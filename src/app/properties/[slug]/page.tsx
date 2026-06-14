@@ -112,9 +112,8 @@ export default async function PropertyPage({ params }: PageProps) {
     "description": video.description || `Watch honest video review of ${property.title.rendered} by Property Saraansh.`,
     "thumbnailUrl": [video.thumbnail],
     "uploadDate": (() => {
-      if (!video.publishedAt) return "2026-06-11";
-      const d = new Date(video.publishedAt);
-      return isNaN(d.getTime()) ? "2026-06-11" : d.toISOString().split('T')[0];
+      if (!video.publishedAt) return "2026-06-11T00:00:00+05:30";
+      return video.publishedAt.includes('T') ? video.publishedAt : `${video.publishedAt}T00:00:00+05:30`;
     })(),
     "duration": convertDurationToIso(video.duration),
     "embedUrl": `https://www.youtube.com/embed/${video.id}`
