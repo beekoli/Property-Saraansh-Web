@@ -66,6 +66,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/m3m-jacob-co-noida',
         permanent: true,
       },
+      {
+        source: '/our-videos/noida-market-slowdown-effects-on-builders-sellers-buyers-in-2026',
+        destination: '/our-videos/noida-market-slowdown-2026',
+        permanent: true,
+      },
     ];
   },
 };

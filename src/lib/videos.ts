@@ -37,7 +37,7 @@ export const videos: Video[] = [
     "views": "18K views views"
   },
   {
-    "slug": "noida-market-slowdown-effects-on-builders-sellers-buyers-in-2026",
+    "slug": "noida-market-slowdown-2026",
     "title": "Noida Market Slowdown: Effects on Builders, Sellers & Buyers in 2026",
     "description": "Watch the full review of Noida Market Slowdown: Effects on Builders, Sellers & Buyers in 2026 by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "g2dN6stL3i0",
