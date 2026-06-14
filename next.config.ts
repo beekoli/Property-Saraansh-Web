@@ -61,6 +61,11 @@ const nextConfig: NextConfig = {
         destination: '/blog/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
         permanent: true,
       },
+      {
+        source: '/jacob-co-noida-first-branded-residences-in-noida',
+        destination: '/our-videos/m3m-jacob-co-noida',
+        permanent: true,
+      },
     ];
   },
 };
