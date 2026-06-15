@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, getRewrittenSchema } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, parseDateToISO8601 } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
 import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
@@ -75,10 +75,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     "name": video.title,
     "description": video.description || `Watch real estate guide video review related to ${blog.title.rendered}.`,
     "thumbnailUrl": [video.thumbnail],
-    "uploadDate": (() => {
-      if (!video.publishedAt) return "2026-06-11T00:00:00+05:30";
-      return video.publishedAt.includes('T') ? video.publishedAt : `${video.publishedAt}T00:00:00+05:30`;
-    })(),
+    "uploadDate": parseDateToISO8601(video.publishedAt),
     "duration": convertDurationToIso(video.duration),
     "embedUrl": `https://www.youtube.com/embed/${video.id}`
   } : null;

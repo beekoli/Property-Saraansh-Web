@@ -6,7 +6,7 @@ import { videos, getVideoBySlug } from '@/lib/videos';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
-import { FRONTEND_URL } from '@/lib/seo';
+import { FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -83,7 +83,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
     "name": video.title,
     "description": video.description,
     "thumbnailUrl": [video.thumbnail],
-    "uploadDate": video.publishedAt.includes('T') ? video.publishedAt : `${video.publishedAt}T00:00:00+05:30`,
+    "uploadDate": parseDateToISO8601(video.publishedAt),
     "duration": video.duration,
     "contentUrl": `https://www.youtube.com/watch?v=${video.youtubeId}`,
     "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,

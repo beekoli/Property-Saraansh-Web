@@ -9,6 +9,7 @@ import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
+import { parseDateToISO8601 } from '@/lib/seo';
 
 
 export const revalidate = 60; // Revalidate every minute
@@ -43,7 +44,7 @@ export default async function Home() {
             "thumbnailUrl": [
               featuredVideo.thumbnail || `https://img.youtube.com/vi/${featuredVideo.youtubeId}/maxresdefault.jpg`
             ],
-            "uploadDate": featuredVideo.publishedAt ? (featuredVideo.publishedAt.includes('T') ? featuredVideo.publishedAt : `${featuredVideo.publishedAt}T00:00:00+05:30`) : "2026-06-11T00:00:00+05:30",
+            "uploadDate": parseDateToISO8601(featuredVideo.publishedAt),
             "duration": featuredVideo.duration || "PT19M35S",
             "embedUrl": `https://www.youtube.com/embed/${featuredVideo.youtubeId}`
           })

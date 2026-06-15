@@ -196,3 +196,43 @@ export function getRewrittenSchema(seoJson: SEOJson | null | undefined): string 
   
   return rewrittenSchema;
 }
+
+/**
+ * Ensures a date string is parsed and formatted as a valid ISO 8601 string.
+ * This resolves Google Search Console 'uploadDate' errors for relative dates.
+ */
+export function parseDateToISO8601(dateStr: string | undefined | null): string {
+  const fallback = "2026-06-11T00:00:00+05:30";
+  if (!dateStr) return fallback;
+  
+  if (dateStr.includes('T')) {
+    return dateStr;
+  }
+
+  const str = dateStr.toLowerCase();
+  const now = new Date();
+  
+  if (str.includes('ago') || str === 'recently') {
+    if (str.includes('day')) {
+      const match = str.match(/\d+/);
+      if (match) now.setDate(now.getDate() - parseInt(match[0], 10));
+    } else if (str.includes('week')) {
+      const match = str.match(/\d+/);
+      if (match) now.setDate(now.getDate() - parseInt(match[0], 10) * 7);
+    } else if (str.includes('month')) {
+      const match = str.match(/\d+/);
+      if (match) now.setMonth(now.getMonth() - parseInt(match[0], 10));
+    } else if (str.includes('year')) {
+      const match = str.match(/\d+/);
+      if (match) now.setFullYear(now.getFullYear() - parseInt(match[0], 10));
+    }
+    return now.toISOString();
+  }
+
+  const parsed = new Date(dateStr);
+  if (!isNaN(parsed.getTime())) {
+    return parsed.toISOString();
+  }
+
+  return fallback;
+}

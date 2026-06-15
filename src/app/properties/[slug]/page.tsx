@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
 import { getPropertyBySlug, getProperties, getFeaturedImage, stripHtml } from '@/lib/wordpress';
 import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
@@ -111,10 +111,7 @@ export default async function PropertyPage({ params }: PageProps) {
     "name": video.title,
     "description": video.description || `Watch honest video review of ${property.title.rendered} by Property Saraansh.`,
     "thumbnailUrl": [video.thumbnail],
-    "uploadDate": (() => {
-      if (!video.publishedAt) return "2026-06-11T00:00:00+05:30";
-      return video.publishedAt.includes('T') ? video.publishedAt : `${video.publishedAt}T00:00:00+05:30`;
-    })(),
+    "uploadDate": parseDateToISO8601(video.publishedAt),
     "duration": convertDurationToIso(video.duration),
     "embedUrl": `https://www.youtube.com/embed/${video.id}`
   } : null;
