@@ -206,12 +206,18 @@ export function parseDateToISO8601(dateStr: string | undefined | null): string {
   if (!dateStr) return fallback;
   
   if (dateStr.includes('T')) {
-    return dateStr;
+    // If it has 'T', it's likely already ISO, but strip milliseconds if present
+    return dateStr.replace(/\.\d+Z$/, '+00:00');
   }
 
   const str = dateStr.toLowerCase();
   const now = new Date();
   
+  const formatISOWithTZ = (d: Date) => {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T00:00:00+05:30`;
+  };
+
   if (str.includes('ago') || str === 'recently') {
     if (str.includes('day')) {
       const match = str.match(/\d+/);
@@ -226,12 +232,12 @@ export function parseDateToISO8601(dateStr: string | undefined | null): string {
       const match = str.match(/\d+/);
       if (match) now.setFullYear(now.getFullYear() - parseInt(match[0], 10));
     }
-    return now.toISOString();
+    return formatISOWithTZ(now);
   }
 
   const parsed = new Date(dateStr);
   if (!isNaN(parsed.getTime())) {
-    return parsed.toISOString();
+    return formatISOWithTZ(parsed);
   }
 
   return fallback;
