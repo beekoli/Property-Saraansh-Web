@@ -238,7 +238,7 @@ export default function ContactClient({ address, phone, email }: Props) {
               {/* Dynamic Google Maps embed */}
               <div className="w-full aspect-[2/1] rounded-xl overflow-hidden shadow-inner border border-brand-light/10">
                 <iframe 
-                  src={process.env.NEXT_PUBLIC_GOOGLE_MAP_EMBED_URL || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.743126002166!2d77.36836487532392!3d28.549265275685794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceb9148d89a7f%3A0x6e76839352e89694!2sATS%20Bouquet%2C%20Block%20A%2C%20Sector%20132%2C%20Noida%2C%20Uttar%20Pradesh%20201304!5e0!3m2!1sen!2sin!4v1718127600000!5m2!1sen!2sin"} 
+                  src={process.env.NEXT_PUBLIC_GOOGLE_MAP_EMBED_URL || "https://www.google.com/maps?q=ATS+Bouquet,+Sector+132,+Noida,+Uttar+Pradesh+201304&z=16&output=embed"}
                   width="100%" 
                   height="100%" 
                   style={{ border: 0 }} 
