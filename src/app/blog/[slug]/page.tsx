@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import VideoPlayer from '@/components/VideoPlayer';
+import { getVideoByYoutubeId } from '@/lib/videos';
 import BlogCard from '@/components/BlogCard';
 import FAQSection from '@/components/blog/FAQSection';
 import TableOfContents from '@/components/blog/TableOfContents';
@@ -65,6 +67,11 @@ export default async function BlogPostPage({ params }: PageProps) {
       relatedVideoId = "e-WJp9zY7o8"; // Eldeco 7 Peaks
     }
   }
+
+  // Resolve the canonical watch page for the embedded video (if it exists in
+  // our video library) so we can add an internal link to its canonical home.
+  const watchPageVideo = getVideoByYoutubeId(relatedVideoId);
+  const watchPageHref = watchPageVideo ? `/our-videos/${watchPageVideo.slug}` : null;
 
   // NOTE: We intentionally do NOT emit a VideoObject schema here.
   // The same video has its canonical home on the dedicated watch page
@@ -137,6 +144,15 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <p className="text-brand-pale text-xs md:text-sm font-light italic leading-relaxed">
                   Watch the full site analysis and ground reality review. Subscribe to Property Saraansh for more project walk-throughs in Noida.
                 </p>
+                {watchPageHref && (
+                  <Link
+                    href={watchPageHref}
+                    className="inline-flex items-center gap-1.5 mt-3 text-brand-accent hover:text-white font-semibold text-xs md:text-sm uppercase tracking-wider transition-colors"
+                  >
+                    Watch the full review on its page
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                )}
               </div>
             </div>
 

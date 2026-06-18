@@ -994,6 +994,16 @@ export function getVideoBySlug(slug: string): Video | null {
   return videos.find((v) => v.slug === cleanSlug || cleanSlug.endsWith(v.youtubeId.toLowerCase())) || null;
 }
 
+/**
+ * Finds a video by its raw YouTube ID. Used to resolve the canonical watch
+ * page (/our-videos/[slug]) for a video that is embedded elsewhere (e.g. on
+ * a blog post), so we can add an internal link to its canonical home.
+ */
+export function getVideoByYoutubeId(youtubeId: string): Video | null {
+  if (!youtubeId) return null;
+  return videos.find((v) => v.youtubeId === youtubeId) || null;
+}
+
 export async function getVideosWithRealtimeStats(): Promise<Video[]> {
   const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
   if (!YOUTUBE_API_KEY) {
