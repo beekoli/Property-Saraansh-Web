@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { getChannelStats } from '@/lib/youtube';
-import { videos } from '@/lib/videos';
+import { getVideosWithRealtimeStats } from '@/lib/videos';
 import VideosClient from './VideosClient';
 
 export const revalidate = 60; // Revalidate every minute
@@ -14,7 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function OurVideos() {
-  const stats = await getChannelStats();
+  const [stats, videos] = await Promise.all([
+    getChannelStats(),
+    getVideosWithRealtimeStats()
+  ]);
 
   // Exclude Shorts from the long videos directory page
   const longVideos = videos.filter((video) => video.category !== 'Shorts');

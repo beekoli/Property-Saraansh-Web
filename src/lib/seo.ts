@@ -198,25 +198,31 @@ export function getRewrittenSchema(seoJson: SEOJson | null | undefined): string 
 }
 
 /**
- * Ensures a date string is parsed and formatted as a valid ISO 8601 string.
- * This resolves Google Search Console 'uploadDate' errors for relative dates.
+ * Ensures a date string is parsed and formatted as a valid ISO 8601 string
+ * WITH timezone, as required by Google Search Console for VideoObject schema.
+ * Output format: "2026-06-16T00:00:00+05:30"
  */
 export function parseDateToISO8601(dateStr: string | undefined | null): string {
   const fallback = "2026-06-11T00:00:00+05:30";
   if (!dateStr) return fallback;
-  
-  if (dateStr.includes('T')) {
-    // If it has 'T', it's likely already ISO, but strip milliseconds if present
-    return dateStr.replace(/\.\d+Z$/, '+00:00');
-  }
 
   const str = dateStr.toLowerCase();
   const now = new Date();
-  
-  const formatISOWithTZ = (d: Date) => {
+
+  const formatDate = (d: Date) => {
     const pad = (n: number) => n.toString().padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T00:00:00+05:30`;
   };
+
+  // If already has timezone info, return as-is
+  if (dateStr.includes('T') && (dateStr.includes('+') || dateStr.includes('Z'))) {
+    return dateStr;
+  }
+
+  // If it's a date with T but no timezone, append IST
+  if (dateStr.includes('T')) {
+    return dateStr + '+05:30';
+  }
 
   if (str.includes('ago') || str === 'recently') {
     if (str.includes('day')) {
@@ -232,13 +238,33 @@ export function parseDateToISO8601(dateStr: string | undefined | null): string {
       const match = str.match(/\d+/);
       if (match) now.setFullYear(now.getFullYear() - parseInt(match[0], 10));
     }
-    return formatISOWithTZ(now);
+    return formatDate(now);
   }
 
   const parsed = new Date(dateStr);
   if (!isNaN(parsed.getTime())) {
-    return formatISOWithTZ(parsed);
+    return formatDate(parsed);
   }
 
   return fallback;
+}
+
+/**
+ * Converts a display duration (e.g. "14:39" or "1:19:35") to ISO 8601 format (e.g. "PT14M39S").
+ * Also handles durations already in ISO format (e.g. "PT14M39S").
+ */
+export function durationToISO8601(duration: string | undefined | null): string {
+  if (!duration) return 'PT10M0S';
+  // Already ISO 8601
+  if (duration.startsWith('PT')) return duration;
+  
+  const parts = duration.split(':').map(Number);
+  if (parts.length === 3) {
+    const [h, m, s] = parts;
+    return `PT${h}H${m}M${s}S`;
+  } else if (parts.length === 2) {
+    const [m, s] = parts;
+    return `PT${m}M${s}S`;
+  }
+  return 'PT10M0S';
 }

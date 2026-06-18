@@ -5,6 +5,9 @@ import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
+import FAQSection from '@/components/blog/FAQSection';
+import TableOfContents from '@/components/blog/TableOfContents';
+import { blogFAQs, generateFAQSchema } from '@/lib/blogFaqs';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -83,6 +86,10 @@ export default async function BlogPostPage({ params }: PageProps) {
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
   const rankMathSchema = getRewrittenSchema(seoJson);
 
+  // FAQs for this blog post (if any)
+  const faqs = blogFAQs[slug] || [];
+  const faqSchema = faqs.length > 0 ? generateFAQSchema(faqs) : null;
+
   return (
     <>
       {rankMathSchema && (
@@ -97,10 +104,16 @@ export default async function BlogPostPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
         />
       )}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <div className="bg-brand-pale/40 min-h-screen pb-20">
       
         {/* Modern Premium Hero Banner */}
-        <section className="bg-brand-dark text-white pt-32 pb-44 px-4 text-center relative overflow-hidden border-b border-brand-accent/20">
+        <section className="bg-brand-dark text-white pt-32 pb-16 px-4 text-center relative overflow-hidden border-b border-brand-accent/20">
           {/* Subtle Background Pattern */}
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-light/10 rounded-full blur-[120px] pointer-events-none"></div>
@@ -122,17 +135,29 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Featured Image - Overlapping Layout */}
-        <div className="max-w-4xl mx-auto px-4 -mt-28 mb-12 relative z-20">
-          <div className="aspect-[21/10] md:aspect-[21/9] rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-brand-dark">
-            <img src={getFeaturedImage(blog)} alt={blog.title.rendered} className="w-full h-full object-cover hover:scale-102 transition-transform duration-700" />
-          </div>
-        </div>
-
         {/* Article Content Container */}
-        <div className="max-w-4xl mx-auto px-4 relative z-20">
+        <div className="max-w-4xl mx-auto px-4 py-12 relative z-20">
           <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-brand-light/10">
             
+            {/* Table of Contents */}
+            <TableOfContents htmlContent={blog.content.rendered} />
+
+            {/* Video Guide — placed above article for engagement & SEO */}
+            <div className="mb-10 bg-brand-dark text-white rounded-3xl p-6 md:p-8 shadow-xl border border-brand-primary">
+              <h3 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
+                <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                ▶ Watch the Video Guide
+              </h3>
+              <div className="bg-[#09221D] p-2 rounded-xl shadow-inner border border-brand-primary/30 overflow-hidden">
+                <VideoPlayer videoId={relatedVideoId} title={blog.title.rendered} />
+              </div>
+              <div className="mt-5 bg-brand-primary/40 border-l-4 border-brand-accent p-4 rounded-r-xl">
+                <p className="text-brand-pale text-xs md:text-sm font-light italic leading-relaxed">
+                  Watch the full site analysis and ground reality review. Subscribe to Property Saraansh for more project walk-throughs in Noida.
+                </p>
+              </div>
+            </div>
+
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               {/* Main Content with Custom Class overrides */}
               <div 
@@ -164,21 +189,6 @@ export default async function BlogPostPage({ params }: PageProps) {
                 dangerouslySetInnerHTML={{ __html: blog.content.rendered }} 
               />
 
-              {/* Dynamic Video Player Section */}
-              <div className="my-14 bg-brand-dark text-white rounded-3xl p-6 md:p-8 shadow-xl border border-brand-primary">
-                <h3 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
-                  <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
-                  Video Guide & Analysis
-                </h3>
-                <div className="bg-[#09221D] p-2 rounded-xl shadow-inner border border-brand-primary/30 overflow-hidden">
-                  <VideoPlayer videoId={relatedVideoId} title={blog.title.rendered} />
-                </div>
-                <div className="mt-5 bg-brand-primary/40 border-l-4 border-brand-accent p-4 rounded-r-xl">
-                  <p className="text-brand-pale text-xs md:text-sm font-light italic leading-relaxed">
-                    Watch the full site analysis and ground reality review. Subscribe to Property Saraansh for more project walk-throughs in Noida.
-                  </p>
-                </div>
-              </div>
 
               {/* Author Bio Card (End of Article) */}
               <div className="bg-brand-pale/30 border border-brand-light/10 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 mt-16 shadow-inner">
@@ -216,6 +226,11 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </div>
                 </div>
               </div>
+
+              {/* FAQ Section */}
+              {faqs.length > 0 && (
+                <FAQSection faqs={faqs} />
+              )}
 
             </article>
             

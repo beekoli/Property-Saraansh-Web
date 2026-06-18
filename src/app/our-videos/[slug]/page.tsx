@@ -2,11 +2,11 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
-import { videos, getVideoBySlug } from '@/lib/videos';
+import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
-import { FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
+import { FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -63,14 +63,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
-  const video = getVideoBySlug(slug);
+  const video = await getHydratedVideoBySlug(slug);
 
   if (!video) {
     notFound();
   }
 
   // Fetch stats and filter related videos
-  const stats = await getChannelStats();
+  const [stats, videos] = await Promise.all([
+    getChannelStats(),
+    getVideosWithRealtimeStats()
+  ]);
 
   const isCurrentShort = video.category === 'Shorts';
   const relatedVideos = videos
@@ -84,7 +87,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
     "description": video.description,
     "thumbnailUrl": [video.thumbnail],
     "uploadDate": parseDateToISO8601(video.publishedAt),
-    "duration": video.duration,
+    "duration": durationToISO8601(video.duration),
     "contentUrl": `https://www.youtube.com/watch?v=${video.youtubeId}`,
     "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,
     "publisher": {

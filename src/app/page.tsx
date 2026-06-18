@@ -4,22 +4,23 @@ import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
 import { getChannelStats } from '@/lib/youtube';
 import { getProperties, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
-import { videos } from '@/lib/videos';
+import { getVideosWithRealtimeStats } from '@/lib/videos';
 import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
-import { parseDateToISO8601 } from '@/lib/seo';
+import { parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
 
 
 export const revalidate = 60; // Revalidate every minute
 
 export default async function Home() {
   // Concurrent fetching of server-side data
-  const [properties, latestBlogs, channelStats] = await Promise.all([
+  const [properties, latestBlogs, channelStats, videos] = await Promise.all([
     getProperties(3),
     getLatestBlogs(3),
-    getChannelStats()
+    getChannelStats(),
+    getVideosWithRealtimeStats()
   ]);
 
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
@@ -45,7 +46,7 @@ export default async function Home() {
               featuredVideo.thumbnail || `https://img.youtube.com/vi/${featuredVideo.youtubeId}/maxresdefault.jpg`
             ],
             "uploadDate": parseDateToISO8601(featuredVideo.publishedAt),
-            "duration": featuredVideo.duration || "PT19M35S",
+            "duration": durationToISO8601(featuredVideo.duration) || "PT19M35S",
             "embedUrl": `https://www.youtube.com/embed/${featuredVideo.youtubeId}`
           })
         }}

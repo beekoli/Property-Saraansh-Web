@@ -7,6 +7,8 @@ export interface YTVideo {
   duration: string;
   category: string;
   views?: string;
+  likes?: string;
+  comments?: string;
 }
 
 export function getVideoSlug(video: { id: string; title: string }): string {
@@ -23,6 +25,18 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_Y
 const YOUTUBE_CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'UC5eDcgQ_bYCzNrJUm34C4_w';
 
 export const MOCK_YOUTUBE_VIDEOS: YTVideo[] = [
+  {
+      "id": "z-nxbCBtffY",
+      "title": "Things Nobody Talks About Noida Residents | Social Issues Every Noida Resident Faces",
+      "description": "Things Nobody Talks About Noida Residents | Social Issues Every Noida Resident Faces - An honest deep dive into the real social issues faced by Noida residents that nobody talks about. Property Saraansh explores the ground reality of living in Noida beyond just real estate.",
+      "thumbnail": "https://i.ytimg.com/vi/z-nxbCBtffY/hqdefault.jpg",
+      "publishedAt": "2026-06-16",
+      "duration": "0:00",
+      "category": "Real Estate",
+      "views": "0 views",
+      "likes": "0",
+      "comments": "0"
+    },
   {
       "id": "qWAgkIW6Mj0",
       "title": "Yamuna Expressway Investment 2030: Who Should Buy, Who Should Avoid & Future Price Prediction",
@@ -862,13 +876,11 @@ export async function getLatestVideosFromRss(channelId: string, limit = 12): Pro
         const id = videoIdMatch[1].trim();
         const title = decodeXml(titleMatch[1].trim());
         const publishedVal = publishedMatch ? publishedMatch[1].trim() : "";
-        const publishedAt = publishedVal 
-          ? new Date(publishedVal).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            })
-          : "Recently";
+        let publishedAt = "Recently";
+        if (publishedVal) {
+          const d = new Date(publishedVal);
+          publishedAt = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
           
         const thumbnail = thumbMatch ? thumbMatch[1].trim() : `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
         const rawDesc = descMatch ? descMatch[1].trim() : "";
@@ -905,7 +917,7 @@ export async function getLatestVideosFromRss(channelId: string, limit = 12): Pro
 }
 
 
-function parseIsoDuration(durationStr: string): { seconds: number; formatted: string } {
+export function parseIsoDuration(durationStr: string): { seconds: number; formatted: string } {
   const matches = durationStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
   if (!matches) {
     return { seconds: 0, formatted: "10:00" };
@@ -927,7 +939,7 @@ function parseIsoDuration(durationStr: string): { seconds: number; formatted: st
   return { seconds: totalSeconds, formatted };
 }
 
-function formatViewCount(viewsStr?: string): string {
+export function formatViewCount(viewsStr?: string): string {
   if (!viewsStr) return "10K+ views";
   const viewsNum = parseInt(viewsStr, 10);
   if (isNaN(viewsNum)) return "10K+ views";
@@ -941,7 +953,6 @@ function formatViewCount(viewsStr?: string): string {
 
 export async function getLatestYouTubeVideos(limit = 12): Promise<YTVideo[]> {
   if (!YOUTUBE_API_KEY || YOUTUBE_CHANNEL_ID === 'UC-placeholder') {
-    // Attempt to parse live RSS feed first so it's dynamic even without an API key!
     const rssVideos = await getLatestVideosFromRss(YOUTUBE_CHANNEL_ID, limit);
     const seenIds = new Set(rssVideos.map(v => v.id));
     const combined = [...rssVideos];
@@ -963,9 +974,9 @@ export async function getLatestYouTubeVideos(limit = 12): Promise<YTVideo[]> {
   try {
     while (allVideos.length < limit) {
       const fetchLimit = Math.min(limit - allVideos.length, 50);
-      let url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${YOUTUBE_API_KEY}&playlistId=${uploadsPlaylistId}&part=snippet&maxResults=${fetchLimit}`;
+      let url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${YOUTUBE_API_KEY}\u0026playlistId=${uploadsPlaylistId}\u0026part=snippet,contentDetails\u0026maxResults=${fetchLimit}`;
       if (pageToken) {
-        url += `&pageToken=${pageToken}`;
+        url += `\u0026pageToken=${pageToken}`;
       }
 
       const response = await fetch(url, { next: { revalidate: 3600 } });
@@ -980,7 +991,7 @@ export async function getLatestYouTubeVideos(limit = 12): Promise<YTVideo[]> {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const videoIds = data.items.map((item: any) => item.snippet.resourceId?.videoId).filter(Boolean);
-      const detailsMap: Record<string, { duration: string; views: string; isShort: boolean }> = {};
+      const detailsMap: Record<string, { duration: string; views: string; likes: string; comments: string; isShort: boolean }> = {};
       
       if (videoIds.length > 0) {
         try {
@@ -993,12 +1004,16 @@ export async function getLatestYouTubeVideos(limit = 12): Promise<YTVideo[]> {
               detailsData.items.forEach((item: any) => {
                 const durationStr = item.contentDetails?.duration || "";
                 const viewsStr = item.statistics?.viewCount || "";
+                const likesStr = item.statistics?.likeCount || "";
+                const commentsStr = item.statistics?.commentCount || "";
                 const { seconds, formatted } = parseIsoDuration(durationStr);
                 const isShortDuration = seconds > 0 && seconds <= 60;
                 
                 detailsMap[item.id] = {
                   duration: formatted,
                   views: formatViewCount(viewsStr),
+                  likes: formatViewCount(likesStr),
+                  comments: formatViewCount(commentsStr),
                   isShort: isShortDuration
                 };
               });

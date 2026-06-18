@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { videos } from '@/lib/videos';
+import { getVideosWithRealtimeStats } from '@/lib/videos';
 
-export default function Footer() {
+export default async function Footer() {
+  const videos = await getVideosWithRealtimeStats();
   const latestVideos = videos.filter((v) => v.category !== 'Shorts').slice(0, 3);
 
   return (

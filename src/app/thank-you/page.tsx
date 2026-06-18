@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { CheckCircle2, ArrowRight, Play, Calendar, Eye } from 'lucide-react';
-import { videos } from '@/lib/videos';
+import { getVideosWithRealtimeStats } from '@/lib/videos';
 
 export const metadata = {
   title: 'Thank You | Property Saraansh',
   description: 'Thank you for your enquiry. We will get back to you shortly.',
 };
 
-export default function ThankYouPage() {
+export default async function ThankYouPage() {
+  const videos = await getVideosWithRealtimeStats();
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
   const latestVideo = longVideos[0] || {
     slug: "yamuna-expressway-investment-2030",

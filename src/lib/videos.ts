@@ -1,3 +1,5 @@
+import { parseIsoDuration, formatViewCount } from '@/lib/youtube';
+
 export interface Video {
   slug: string;
   title: string;
@@ -13,16 +15,28 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "things-nobody-talks-about-noida-residents",
+    "title": "Things Nobody Talks About Noida Residents | Social Issues Every Noida Resident Faces",
+    "description": "An honest deep dive into the real social issues faced by Noida residents that nobody talks about. Property Saraansh explores the ground reality of living in Noida beyond just real estate — traffic, infrastructure, civic amenities and more.",
+    "youtubeId": "z-nxbCBtffY",
+    "thumbnail": "https://i.ytimg.com/vi/z-nxbCBtffY/hqdefault.jpg",
+    "publishedAt": "2026-06-16",
+    "duration": "PT14M39S",
+    "focusKeyword": "noida residents social issues",
+    "category": "Real Estate",
+    "views": "653 views"
+  },
+  {
     "slug": "yamuna-expressway-investment-2030",
     "title": "Yamuna Expressway Investment 2030: Who Should Buy, Who Should Avoid & Future Price Prediction",
     "description": "Watch the full review of Yamuna Expressway Investment 2030: Who Should Buy, Who Should Avoid & Future Price Prediction by Property Saraansh. Learn about layouts, project specifications, location advantages, pricing, and possession timelines in Noida.",
     "youtubeId": "qWAgkIW6Mj0",
     "thumbnail": "https://img.youtube.com/vi/qWAgkIW6Mj0/maxresdefault.jpg",
-    "publishedAt": "2026-06-11",
+    "publishedAt": "2026-05-29",
     "duration": "PT19M35S",
     "focusKeyword": "yamuna expressway investment",
     "category": "Real Estate",
-    "views": "25K views views"
+    "views": "29K views"
   },
   {
     "slug": "crc-the-peridona-jaypee-greens",
@@ -978,4 +992,88 @@ export function getVideoBySlug(slug: string): Video | null {
   // Support both slug-only and slug-with-id
   const cleanSlug = slug.toLowerCase();
   return videos.find((v) => v.slug === cleanSlug || cleanSlug.endsWith(v.youtubeId.toLowerCase())) || null;
+}
+
+export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+  const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+  if (!YOUTUBE_API_KEY) {
+    return videos;
+  }
+
+  try {
+    const videoIds = videos.map(v => v.youtubeId);
+    const detailsMap: Record<string, { views: string; duration: string }> = {};
+
+    // Fetch in batches of 50
+    for (let i = 0; i < videoIds.length; i += 50) {
+      const batch = videoIds.slice(i, i + 50);
+      const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${batch.join(',')}&part=contentDetails,statistics`;
+      
+      const res = await fetch(url, { next: { revalidate: 3600 } });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.items) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data.items.forEach((item: any) => {
+            const viewsStr = item.statistics?.viewCount || "";
+            const durationStr = item.contentDetails?.duration || "";
+            const { formatted } = parseIsoDuration(durationStr);
+            
+            detailsMap[item.id] = {
+              views: formatViewCount(viewsStr),
+              duration: formatted || "0:00"
+            };
+          });
+        }
+      }
+    }
+
+    return videos.map(video => {
+      const stats = detailsMap[video.youtubeId];
+      if (stats) {
+        return {
+          ...video,
+          views: stats.views,
+          // Only update duration if it wasn't already hardcoded correctly, 
+          // or just always use the real one:
+          duration: stats.duration.includes(':') ? stats.duration : video.duration
+        };
+      }
+      return video;
+    });
+  } catch (error) {
+    console.error("Failed to fetch real-time video stats", error);
+    return videos; // Fallback to static
+  }
+}
+
+export async function getHydratedVideoBySlug(slug: string): Promise<Video | null> {
+  const staticVideo = getVideoBySlug(slug);
+  if (!staticVideo) return null;
+
+  const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+  if (!YOUTUBE_API_KEY) return staticVideo;
+
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=contentDetails,statistics`;
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.items && data.items.length > 0) {
+        const item = data.items[0];
+        const viewsStr = item.statistics?.viewCount || "";
+        const durationStr = item.contentDetails?.duration || "";
+        const { formatted } = parseIsoDuration(durationStr);
+        return {
+          ...staticVideo,
+          views: formatViewCount(viewsStr),
+          duration: formatted || staticVideo.duration
+        };
+      }
+    }
+  } catch (err) {
+    console.error("Failed to fetch real-time stats for video", err);
+  }
+
+  return staticVideo;
 }
