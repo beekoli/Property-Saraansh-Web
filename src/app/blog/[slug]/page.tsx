@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, getRewrittenSchema, parseDateToISO8601 } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
-import { getVideoById } from '@/lib/youtube';
 import { notFound } from 'next/navigation';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
@@ -13,20 +12,6 @@ export const revalidate = 60; // Revalidate every minute
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-}
-
-function convertDurationToIso(duration: string): string {
-  if (!duration) return 'PT10M0S';
-  if (duration.startsWith('PT')) return duration;
-  const parts = duration.split(':').map(Number);
-  if (parts.length === 3) {
-    const [h, m, s] = parts;
-    return `PT${h}H${m}M${s}S`;
-  } else if (parts.length === 2) {
-    const [m, s] = parts;
-    return `PT${m}M${s}S`;
-  }
-  return 'PT10M0S';
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -45,7 +30,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
 
-  return generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
+  const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
+
+  // Ensure the article always has a self-referencing canonical so the blog
+  // post is the canonical home for its written content (RankMath usually
+  // provides this, but we guarantee a fallback).
+  meta.alternates = {
+    ...meta.alternates,
+    canonical: meta.alternates?.canonical || `${FRONTEND_URL}/blog/${slug}`,
+  };
+
+  return meta;
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -71,17 +66,12 @@ export default async function BlogPostPage({ params }: PageProps) {
     }
   }
 
-  const video = await getVideoById(relatedVideoId);
-  const videoSchema = video ? {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": video.title,
-    "description": video.description || `Watch real estate guide video review related to ${blog.title.rendered}.`,
-    "thumbnailUrl": [video.thumbnail],
-    "uploadDate": parseDateToISO8601(video.publishedAt),
-    "duration": convertDurationToIso(video.duration),
-    "embedUrl": `https://www.youtube.com/embed/${video.id}`
-  } : null;
+  // NOTE: We intentionally do NOT emit a VideoObject schema here.
+  // The same video has its canonical home on the dedicated watch page
+  // (/our-videos/[slug]), which carries the full VideoObject schema.
+  // Duplicating it on the blog would split video signals and let Google
+  // pick an unintended canonical. The blog ranks on its article content
+  // (BlogPosting schema below); the watch page ranks for the video.
 
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
   const rankMathSchema = getRewrittenSchema(seoJson);
@@ -96,12 +86,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: rankMathSchema }}
-        />
-      )}
-      {videoSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
         />
       )}
       {faqSchema && (
@@ -139,15 +123,13 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 py-12 relative z-20">
           <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-brand-light/10">
             
-            {/* Table of Contents */}
-            <TableOfContents htmlContent={blog.content.rendered} />
-
-            {/* Video Guide — placed above article for engagement & SEO */}
+            {/* Video Guide — placed FIRST (above TOC) so the video is the
+                prominent lead element for engagement and video SEO */}
             <div className="mb-10 bg-brand-dark text-white rounded-3xl p-6 md:p-8 shadow-xl border border-brand-primary">
-              <h3 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
+              <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
                 <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
                 ▶ Watch the Video Guide
-              </h3>
+              </h2>
               <div className="bg-[#09221D] p-2 rounded-xl shadow-inner border border-brand-primary/30 overflow-hidden">
                 <VideoPlayer videoId={relatedVideoId} title={blog.title.rendered} />
               </div>
@@ -157,6 +139,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </p>
               </div>
             </div>
+
+            {/* Table of Contents — below the video */}
+            <TableOfContents htmlContent={blog.content.rendered} />
 
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               {/* Main Content with Custom Class overrides */}
