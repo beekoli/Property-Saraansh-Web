@@ -165,7 +165,20 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </span>
                 </div>
               </div>
-            </div>
+                          {/* Rich Content Section */}
+              {video.content && (
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
+                  <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
+                    About This Review
+                  </h2>
+                  <div className="text-sm text-brand-ink/80 leading-relaxed space-y-4">
+                    {video.content.split('||').map((para, i) => (
+                      <p key={i}>{para}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+</div>
 
             {/* Right Column: Sticky Lead Capture and Stats */}
             <div className="w-full lg:w-4/12 lg:sticky lg:top-28 space-y-6">
