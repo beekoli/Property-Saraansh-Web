@@ -37,7 +37,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
     } catch (apiError) {
       console.error('Failed to forward lead to API:', apiError);
     }
-    
+
     // Redirect to Thank You page after a short delay
     setTimeout(() => {
       router.push('/thank-you');
@@ -50,7 +50,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
       <p className="text-xs text-brand-dark/60 mb-5 font-light leading-relaxed">
         Have questions about this review or want to discuss pricing? Message Saraansh Seth.
       </p>
-      
+
       {submitted ? (
         <div className="bg-brand-pale/50 border border-brand-accent/30 rounded-xl p-5 text-center">
           <svg className="w-10 h-10 text-brand-accent mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           </svg>
           <h4 className="font-bold text-sm text-brand-dark mb-1">Request Received!</h4>
           <p className="text-xs text-brand-dark/70 font-light leading-relaxed">
-            Redirecting you to WhatsApp to start your 1-on-1 strategy session...
+            Our team will reach out to you within 24 hours.
           </p>
         </div>
       ) : (
@@ -104,7 +104,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
               placeholder="Specify budget, configuration or questions..."
             ></textarea>
           </div>
-          
+
           <button
             type="submit"
             className="w-full bg-brand-dark hover:bg-brand-primary text-white border border-brand-accent text-center py-3 rounded-lg text-xs uppercase tracking-wider font-bold font-sans flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 shadow-md"
