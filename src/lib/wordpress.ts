@@ -3,7 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 export interface WPPost {
   id: number;
   date: string;
-    modified?: string;
+  modified?: string;
   slug: string;
   title: {
     rendered: string;
@@ -17,9 +17,17 @@ export interface WPPost {
   acf?: {
     video_id?: string;
   };
+  ps_video_id?: string;
   yoast_head?: string;
   yoast_head_json?: Record<string, unknown>;
-  rank_math_json?: Record<string, unknown>;
+  rank_math_json?: {
+    title?: string;
+    description?: string;
+    og_title?: string;
+    og_description?: string;
+    og_image?: string;
+    canonical?: string;
+  };
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url: string;
