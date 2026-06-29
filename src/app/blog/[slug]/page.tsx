@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   // (/our-videos/[slug]), which carries the full VideoObject schema.
   // Duplicating it on the blog would split video signals and let Google
   // pick an unintended canonical. The blog ranks on its article content
-  // (BlogPosting schema below); the watch page ranks for the video.
+  // (hh schema below); the watch page ranks for the video.
 
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
   const rankMathSchema = getRewrittenSchema(seoJson);
@@ -86,6 +86,39 @@ export default async function BlogPostPage({ params }: PageProps) {
   // FAQs for this blog post (if any)
   const faqs = blogFAQs[slug] || [];
   const faqSchema = faqs.length > 0 ? generateFAQSchema(faqs) : null;
+  
+  // BlogPosting schema — always present, built from post data (no RankMath needed)
+  const postUrl = `${FRONTEND_URL}/blog/${slug}`;
+  const featuredImage = getFeaturedImage(blog);
+  const cleanDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim().slice(0, 200) || '';
+  const blogTitle = blog.title.rendered.replace(/&#038;/g, '&').replace(/&amp;/g, '&');
+  const blogModified = (blog as unknown as { modified?: string }).modified || blog.date;
+
+  const blogPostingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: blogTitle,
+    datePublished: parseDateToISO8601(blog.date),
+    dateModified: parseDateToISO8601(blogModified),
+    author: { '@type': 'Person', name: 'Saraansh Seth', url: `${FRONTEND_URL}/about` },
+    publisher: { '@type': 'Organization', name: 'Property Saraansh', logo: { '@type': 'ImageObject', url: `${FRONTEND_URL}/logo.png` } },
+    description: cleanDesc,
+    url: postUrl,
+    image: { '@type': 'ImageObject', url: featuredImage },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+    articleSection: 'Real Estate Review',
+    inLanguage: 'en-IN',
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: FRONTEND_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${FRONTEND_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: blogTitle, item: postUrl },
+    ],
+  };
 
   return (
     <>
@@ -101,6 +134,15 @@ export default async function BlogPostPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       )}
+      
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="bg-brand-pale/40 min-h-screen pb-20">
       
         {/* Modern Premium Hero Banner */}
