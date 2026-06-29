@@ -58,7 +58,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const relatedBlogs = allBlogs.filter(b => b.slug !== slug).slice(0, 3);
 
   // Dynamically resolve video ID from post ACF field, falling back to slug-based or a signature review video
-  const acfVideoId = blog.acf?.video_id;
+  const acfVideoId = blog.ps_video_id || blog.acf?.video_id;
   let relatedVideoId = acfVideoId || "e-WJp9zY7o8"; // Premium default video
   if (!acfVideoId) {
     if (slug.includes('commercial')) {
@@ -161,7 +161,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="flex items-center justify-center gap-3 text-xs md:text-sm text-brand-pale/80 font-semibold uppercase tracking-wider">
               <span className="text-brand-accent font-bold">By Saraansh Seth</span>
               <span className="w-1.5 h-1.5 rounded-full bg-brand-accent/40"></span>
-              <span>{blog.date}</span>
+              <span>{new Date(blog.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-brand-accent/40"></span>
               <span>6 min read</span>
             </div>
