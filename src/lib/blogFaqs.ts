@@ -45,6 +45,40 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
       answer: "First-time buyers should verify the builder's RERA registration, check for pending authority dues, visit the site physically, understand the difference between leasehold and freehold, factor in maintenance costs for high-rise societies, and research the sector's existing infrastructure rather than relying solely on brochures."
     }
   ],
+  "crc-the-peridona-jaypee-greens-an-honest-review-investment-analysis": [
+    {
+      question: "What is CRC The Peridona in Jaypee Greens Noida?",
+      answer: "CRC The Peridona is an ultra-luxury residential project by CRC Group located in the Jaypee Greens township, Sector 128, Noida Expressway. It offers 4 BHK and 5 BHK premium apartments spread across 7 towers of 43 floors each. The project sits within the prestigious Jaypee Greens ecosystem, which includes an 18-hole PGA golf course, 5-star hotels, and a world-class clubhouse spanning 1.8 lakh square feet."
+    },
+    {
+      question: "What is the price of flats in CRC The Peridona?",
+      answer: "CRC The Peridona apartments start from approximately ₹13 Crore for 4 BHK units with a carpet area of around 5,500 sq ft. The 5 BHK and larger configurations are priced higher. Given the ultra-luxury positioning within the Jaypee Greens address, pricing reflects a significant premium over standard Noida Expressway projects. Always verify current pricing directly with the developer or an authorised channel partner."
+    },
+    {
+      question: "Is CRC The Peridona a good investment in 2025-26?",
+      answer: "CRC The Peridona is positioned as a long-term investment in the ultra-luxury segment of the Noida Expressway. Its location within Jaypee Greens — home to a PGA golf course, premium hotels, and established commercial zones — gives it strong addressal value. The Noida Expressway corridor has seen consistent appreciation, and supply in the true luxury segment (above ₹10 Cr) remains limited. However, buyers should conduct thorough RERA due diligence and assess their holding horizon before investing."
+    },
+    {
+      question: "Where exactly is CRC The Peridona located?",
+      answer: "CRC The Peridona is located in Sector 128, Noida Expressway, within the Jaypee Greens integrated township. It enjoys proximity to the Jaypee Greens golf course, DND Flyway, and key commercial hubs like Sector 135 and the IT corridor. The project is approximately 30-40 minutes from Connaught Place, Delhi, and well-connected to the upcoming Jewar International Airport via the Yamuna Expressway."
+    },
+    {
+      question: "What amenities are available at CRC The Peridona?",
+      answer: "CRC The Peridona residents get access to a 1.8 lakh sq ft clubhouse — one of the largest in the NCR — featuring swimming pools, a spa, gymnasium, sports courts, fine dining, and banquet halls. The Jaypee Greens township adds an 18-hole PGA-standard golf course, 5-star hotels, a hospital, and schools. Within the project, amenities include concierge services, smart home integration, EV charging, a sky lounge, and landscaped podiums."
+    },
+    {
+      question: "Who is the developer of CRC The Peridona and what is their track record?",
+      answer: "CRC The Peridona is developed by CRC Group, an NCR-based real estate developer known for previous projects like CRC Sublimis and CRC Joyous in Greater Noida West. With Peridona, CRC has entered the ultra-luxury segment for the first time, marking a significant shift in their product positioning. Buyers should review the developer's RERA registration and delivery history before making a booking decision."
+    },
+    {
+      question: "How does CRC The Peridona compare to other luxury projects on the Noida Expressway?",
+      answer: "Among luxury projects on the Noida Expressway, CRC The Peridona competes with Gaur Legacy (Sector 129), L&T Green Reserve (Sector 128), and ATS Knightsbridge. Peridona's key differentiator is its location inside the Jaypee Greens township, offering golf course access and 5-star hotel proximity. In terms of apartment size and pricing, it sits at the very top of the Noida luxury market, most comparable to ATS Knightsbridge."
+    },
+    {
+      question: "What floor plan configurations are available in CRC The Peridona?",
+      answer: "CRC The Peridona offers 4 BHK and 5 BHK configurations. The 4 BHK apartments cover approximately 5,500 sq ft of carpet area, making them among the largest in the category on the Noida Expressway. The 5 BHK units offer even larger living spaces with private lift lobbies, premium imported fittings, and expansive balconies with golf course or expressway views."
+    }
+  ],
 };
 
 /**
