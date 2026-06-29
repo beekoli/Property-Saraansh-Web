@@ -20,14 +20,7 @@ export interface WPPost {
   ps_video_id?: string;
   yoast_head?: string;
   yoast_head_json?: Record<string, unknown>;
-  rank_math_json?: {
-    title?: string;
-    description?: string;
-    og_title?: string;
-    og_description?: string;
-    og_image?: string;
-    canonical?: string;
-  };
+  rank_math_json?: Record<string, unknown>;
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url: string;
