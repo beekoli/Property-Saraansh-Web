@@ -156,7 +156,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               Real Estate Insights
             </span>
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold heading-playfair leading-tight mb-6 text-white uppercase tracking-tight max-w-4xl mx-auto">
-              {blog.title.rendered}
+              {blog.title.rendered.replace(/&#038;/g, '&').replace(/&amp;/g, '&')}
             </h1>
             <div className="flex items-center justify-center gap-3 text-xs md:text-sm text-brand-pale/80 font-semibold uppercase tracking-wider">
               <span className="text-brand-accent font-bold">By Saraansh Seth</span>
