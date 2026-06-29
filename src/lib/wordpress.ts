@@ -3,6 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 export interface WPPost {
   id: number;
   date: string;
+    modified?: string;
   slug: string;
   title: {
     rendered: string;
