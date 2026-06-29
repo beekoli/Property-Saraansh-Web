@@ -27,7 +27,7 @@ export default function ContactClient({ address, phone, email }: Props) {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.email) return;
     setFormSubmitted(true);
-    
+
     try {
       await fetch('/api/leads', {
         method: 'POST',
@@ -39,6 +39,8 @@ export default function ContactClient({ address, phone, email }: Props) {
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
+          city: formData.city,
+          budget: formData.budget,
           type: formData.propertyType,
           message: formData.message,
         }),
@@ -56,7 +58,7 @@ export default function ContactClient({ address, phone, email }: Props) {
   return (
     <div className="bg-[#E8F5F2] min-h-screen pt-24 pb-32 text-brand-ink">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Page Title */}
         <div className="text-center mb-16 max-w-2xl mx-auto">
           <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Get in touch</span>
@@ -66,17 +68,17 @@ export default function ContactClient({ address, phone, email }: Props) {
             Ready to find your dream property? Fill out the form below, and Saraansh Seth will guide you with deep market analysis.
           </p>
         </div>
-        
+
         {/* Split Layout Container */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-2xl overflow-hidden border border-brand-light/10 shadow-lg">
-          
+
           {/* Left Column: Lead Form */}
           <div className="p-8 md:p-12">
             <h2 className="text-2xl font-bold heading-playfair text-brand-dark mb-6 flex items-center gap-2 uppercase tracking-wide">
               <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
               Send us an enquiry
             </h2>
-            
+
             {formSubmitted ? (
               <div className="text-center py-16 bg-brand-pale/50 border border-brand-light/20 rounded-2xl p-6 animate-fade-in">
                 <CheckCircle className="text-brand-primary mx-auto mb-4" size={48} />
@@ -90,52 +92,52 @@ export default function ContactClient({ address, phone, email }: Props) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Full Name</label>
-                    <input 
-                      type="text" 
-                      id="name" 
+                    <input
+                      type="text"
+                      id="name"
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors" 
-                      placeholder="John Doe" 
+                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors"
+                      placeholder="John Doe"
                     />
                   </div>
                   <div>
                     <label htmlFor="phone" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Phone Number</label>
-                    <input 
-                      type="tel" 
-                      id="phone" 
+                    <input
+                      type="tel"
+                      id="phone"
                       required
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors" 
-                      placeholder="+91 98765 43210" 
+                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors"
+                      placeholder="+91 98765 43210"
                     />
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="email" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Email Address</label>
-                    <input 
-                      type="email" 
-                      id="email" 
+                    <input
+                      type="email"
+                      id="email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors" 
-                      placeholder="john@example.com" 
+                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors"
+                      placeholder="john@example.com"
                     />
                   </div>
                   <div>
                     <label htmlFor="city" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Your Current City</label>
-                    <input 
-                      type="text" 
-                      id="city" 
+                    <input
+                      type="text"
+                      id="city"
                       value={formData.city}
                       onChange={(e) => setFormData({...formData, city: e.target.value})}
-                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors" 
-                      placeholder="Delhi / Noida / Mumbai" 
+                      className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors"
+                      placeholder="Delhi / Noida / Mumbai"
                     />
                   </div>
                 </div>
@@ -143,8 +145,8 @@ export default function ContactClient({ address, phone, email }: Props) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="budget" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Budget Range</label>
-                    <select 
-                      id="budget" 
+                    <select
+                      id="budget"
                       value={formData.budget}
                       onChange={(e) => setFormData({...formData, budget: e.target.value})}
                       className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-primary font-semibold transition-colors"
@@ -158,8 +160,8 @@ export default function ContactClient({ address, phone, email }: Props) {
                   </div>
                   <div>
                     <label htmlFor="propertyType" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Property Type</label>
-                    <select 
-                      id="propertyType" 
+                    <select
+                      id="propertyType"
                       value={formData.propertyType}
                       onChange={(e) => setFormData({...formData, propertyType: e.target.value})}
                       className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-primary font-semibold transition-colors"
@@ -173,18 +175,18 @@ export default function ContactClient({ address, phone, email }: Props) {
 
                 <div>
                   <label htmlFor="message" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Your Requirements / Message</label>
-                  <textarea 
-                    id="message" 
-                    rows={4} 
+                  <textarea
+                    id="message"
+                    rows={4}
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors" 
+                    className="w-full bg-brand-pale/30 border border-brand-light/25 rounded-lg px-4 py-3 text-sm placeholder-brand-light/50 focus:outline-none focus:border-brand-primary font-semibold transition-colors"
                     placeholder="I am looking for a ready-to-move 3BHK flat on Noida Expressway..."
                   ></textarea>
                 </div>
-                
-                <button 
-                  type="submit" 
+
+                <button
+                  type="submit"
                   className="w-full btn-primary font-bold rounded-lg py-3.5 transition-all shadow-md hover:shadow-lg text-sm uppercase tracking-wider"
                 >
                   Send Enquiry
@@ -192,17 +194,17 @@ export default function ContactClient({ address, phone, email }: Props) {
               </form>
             )}
           </div>
-          
+
           {/* Right Column: Contact Details & Map (Dark Teal Bg) */}
           <div className="bg-brand-dark text-white p-8 md:p-12 flex flex-col justify-between border-l border-brand-light/20 relative">
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '15px 15px' }}></div>
-            
+
             <div className="relative z-10 space-y-8">
               <h2 className="text-2xl font-bold heading-playfair text-brand-accent mb-6 flex items-center gap-2 uppercase tracking-wide">
                 <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
                 Contact Information
               </h2>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="flex-shrink-0 text-brand-accent mt-1">
@@ -213,7 +215,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                     <p className="mt-1 leading-relaxed text-sm" dangerouslySetInnerHTML={{ __html: address }}></p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="flex-shrink-0 text-brand-accent mt-1">
                     <Phone size={22} />
@@ -223,7 +225,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                     <p className="mt-1 leading-none text-sm">{phone}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
                   <div className="flex-shrink-0 text-brand-accent mt-1">
                     <Mail size={22} />
@@ -237,23 +239,23 @@ export default function ContactClient({ address, phone, email }: Props) {
 
               {/* Dynamic Google Maps embed */}
               <div className="w-full aspect-[2/1] rounded-xl overflow-hidden shadow-inner border border-brand-light/10">
-                <iframe 
+                <iframe
                   src={process.env.NEXT_PUBLIC_GOOGLE_MAP_EMBED_URL || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2670.5759350805865!2d77.38047089999999!3d28.5100428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x67c3045ff37d3ed%3A0xe9087e5e072a83d8!2sProperty%20Saraansh!5e1!3m2!1sen!2sin!4v1781814796947!5m2!1sen!2sin"}
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0 }} 
-                  allowFullScreen={false} 
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
                   loading="lazy"
                   title="Office map location"
                 ></iframe>
               </div>
             </div>
-            
+
             <div className="mt-12 relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 border-t border-brand-light/20 pt-6">
               <div>
                 <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">WhatsApp Directly</h3>
-                <a 
-                  href="https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20looking%20for%20a%20property%20consultation." 
+                <a
+                  href="https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20looking%20for%20a%20property%20consultation."
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:!text-white font-bold px-6 py-2.5 rounded-lg text-xs hover:bg-[#1ebd59] transition-all shadow-md"
@@ -262,7 +264,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                   Chat on WhatsApp
                 </a>
               </div>
-              
+
               <div>
                 <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">Follow Us</h3>
                 <div className="flex flex-wrap gap-4 text-brand-accent">
@@ -274,7 +276,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                 </div>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>
