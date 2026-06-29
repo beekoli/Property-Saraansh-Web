@@ -23,6 +23,54 @@ export const metadata: Metadata = {
   },
 };
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "RealEstateAgent"],
+  name: "Property Saraansh",
+  description:
+    "Property Saraansh is Noida's trusted real estate consultancy, helping home buyers, investors, and NRIs find the right residential and commercial properties across Noida, Greater Noida, and Noida Extension.",
+  url: "https://propertysaraansh.com",
+  telephone: "+91-80761-78189",
+  email: "karmaglobalretail@gmail.com",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Office No. 1604, Tower-A, ATS Bouquet, Block B, Sector 132",
+    addressLocality: "Noida",
+    addressRegion: "Uttar Pradesh",
+    postalCode: "201301",
+    addressCountry: "IN",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 28.5022,
+    longitude: 77.4053,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "09:30",
+      closes: "18:30",
+    },
+  ],
+  sameAs: [
+    "https://www.youtube.com/@PropertySaraansh",
+    "https://www.facebook.com/PropertySaraansh",
+    "https://instagram.com/propertysaraansh",
+    "https://www.linkedin.com/company/propertysaraansh/",
+    "https://x.com/propsaraansh",
+  ],
+  areaServed: [
+    { "@type": "City", name: "Noida" },
+    { "@type": "City", name: "Greater Noida" },
+    { "@type": "City", name: "Noida Extension" },
+  ],
+  founder: {
+    "@type": "Person",
+    name: "Saraansh Seth",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,6 +79,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* LocalBusiness JSON-LD Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
+        />
         {/* Google Tag Manager */}
         <Script
           id="gtm-script"
