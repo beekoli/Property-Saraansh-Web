@@ -10,7 +10,34 @@ export interface BlogFAQ {
   answer: string;
 }
 
+const yamunaExpressway2030FAQs: BlogFAQ[] = [
+  {
+    question: "Is Yamuna Expressway a good investment in 2026?",
+    answer: "Yes, for investors with a 6-8 year horizon and the capacity to hold. Yamuna Expressway is currently an investor-driven market with limited end-user (resident) demand, so it suits patient capital rather than quick flips or immediate rental income. Buyers needing fast exits or rental yield today may find better options elsewhere."
+  },
+  {
+    question: "What is the current plot price on Yamuna Expressway?",
+    answer: "Township plots on the corridor start at around ₹1.4 lakh per square yard. YEIDA's 2026 authority residential scheme (RPS-10) priced plots at about ₹36,260 per square metre across Sectors 15C, 18 and 24A near the Noida International Airport. Authority (YEIDA) plots carry far lower title and approval risk than private deals."
+  },
+  {
+    question: "What is the average apartment price on Yamuna Expressway?",
+    answer: "Apartments on the Yamuna Expressway corridor average around ₹9,700 per sq ft, with premium listed-developer projects (such as Godrej, ATS, Migsun and Eldeco) ranging from roughly ₹9,000 to ₹15,000+ per sq ft depending on sector and specification."
+  },
+  {
+    question: "Will Jewar Airport increase property prices?",
+    answer: "Over the long term, yes — but not instantly. Airports serve demand rather than create it. Gurgaon's example shows that a real estate boom follows large-scale white-collar job growth, which can take years after an airport becomes operational. The Noida International Airport at Jewar (Phase 1 inaugurated March 2026) is a powerful catalyst, but a sustainable price rise depends on well-paid jobs arriving in numbers."
+  },
+  {
+    question: "What are the risks of investing in Yamuna Expressway?",
+    answer: "The main risks are possession delays, infrastructure gaps (metro/RRTS connectivity is still years away, leaving the expressway as the main access), aggressive over-pricing, and fraud from plots sold without proper approvals. Protect yourself by buying only directly from YEIDA or from RERA-registered, verified developers, and by physically and online verifying the survey number, approvals and RERA registration before any payment."
+  }
+];
+
 export const blogFAQs: Record<string, BlogFAQ[]> = {
+  // Yamuna Expressway investment article — keyed under both the new SEO slug and the
+  // current slug so the FAQ accordion + FAQPage schema render regardless of which is live.
+  "yamuna-expressway-property-investment-2030": yamunaExpressway2030FAQs,
+  "yamuna-expressway-noida-who-should-invest-and-what-will-the-real-estate-market-look-like-by-2030": yamunaExpressway2030FAQs,
   "noida-residents-things-nobody-talks-aboutsocial-issues-best-sectors-the-real-picture-of-life-in-noida": [
     {
       question: "What are the most common social issues faced by Noida residents?",
