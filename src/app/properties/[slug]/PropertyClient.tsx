@@ -211,7 +211,7 @@ interface Props {
 
 export default function PropertyClient({ property, allProperties = [] }: Props) {
   const router = useRouter();
-  const acf = property.acf || {};
+  const acf = (property.acf || {}) as WPProperty['acf'] & { master_layout_image?: string; project_tagline?: string };
   const featuredImage = getFeaturedImage(property);
   const developerBio = getDeveloperBio(acf.developer || "");
 
