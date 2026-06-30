@@ -34,12 +34,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
-  // Ensure the article always has a self-referencing canonical so the blog
-  // post is the canonical home for its written content (RankMath usually
-  // provides this, but we guarantee a fallback).
+  // Guarantee canonical always points to this blog post
   meta.alternates = {
     ...meta.alternates,
     canonical: meta.alternates?.canonical || `${FRONTEND_URL}/blog/${slug}`,
+  };
+
+  // ── Article-specific OG fixes ────────────────────────────────────────────
+  // RankMath often emits og:type="website" for posts and omits og:image when
+  // no social image is explicitly set. We override both here so every blog
+  // post gets correct Open Graph markup regardless of RankMath config.
+  const blogModified = (blog as unknown as { modified?: string }).modified || blog.date;
+  const featuredImg = getFeaturedImage(blog);
+
+  // Use RankMath-provided OG images if available, else fall back to the
+  // WordPress featured image (already resolved by getFeaturedImage).
+  const existingImages = meta.openGraph?.images;
+  const hasImages = Array.isArray(existingImages)
+    ? existingImages.length > 0
+    : existingImages != null;
+
+  meta.openGraph = {
+    ...meta.openGraph,
+    type: 'article',
+    publishedTime: parseDateToISO8601(blog.date),
+    modifiedTime: parseDateToISO8601(blogModified),
+    authors: [`${FRONTEND_URL}/about`],
+    images: hasImages
+      ? existingImages
+      : [{ url: featuredImg, width: 1200, height: 630, alt: blog.title.rendered }],
   };
 
   return meta;
