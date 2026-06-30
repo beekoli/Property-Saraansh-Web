@@ -11,6 +11,18 @@ interface Props {
 
 const CATEGORIES = ['All', 'Market Trends', 'Investment Tips', 'Area Guides', 'Project Reviews', 'Legal Advice'];
 
+// Decode common WordPress HTML entities in title.rendered
+const decodeHtml = (str: string) =>
+  str
+    .replace(/&#038;/g, '&')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8211;/g, '–')
+    .replace(/&#8212;/g, '—')
+    .replace(/&#8216;/g, '‘')
+    .replace(/&#8217;/g, '’')
+    .replace(/&#8220;/g, '“')
+    .replace(/&#8221;/g, '”');
+
 export default function BlogClient({ initialBlogs }: Props) {
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -73,7 +85,7 @@ export default function BlogClient({ initialBlogs }: Props) {
               <div className="lg:w-1/2 relative h-64 lg:h-auto overflow-hidden bg-brand-pale">
                 <img
                   src={getFeaturedImage(featuredPost)}
-                  alt={featuredPost.title.rendered}
+                  alt={decodeHtml(featuredPost.title.rendered)}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
@@ -85,7 +97,7 @@ export default function BlogClient({ initialBlogs }: Props) {
                 <div>
                   <Link href={`/blog/${featuredPost.slug}`} className="block group/link">
                     <h3 className="heading-playfair text-2xl md:text-3xl text-brand-dark mb-4 font-bold leading-tight group-hover/link:text-brand-primary transition-colors">
-                      {featuredPost.title.rendered}
+                      {decodeHtml(featuredPost.title.rendered)}
                     </h3>
                   </Link>
                   <p className="text-brand-dark/70 text-sm md:text-base mb-8 leading-relaxed font-light">
