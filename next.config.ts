@@ -171,6 +171,11 @@ const nextConfig: NextConfig = {
         destination: '/our-videos/elie-saab-jacob-co-noida-vs-m3m-cullinan-resale-m3mnoida',
         permanent: true,
       },
+      {
+                  source: '/blog/crc-the-peridona-jaypee-greens-an-honest-review-investment-analysis',
+                  destination: '/blog/crc-peridona-jaypee-greens-review-noida',
+                  permanent: true,
+      },
     ];
   },
 };
