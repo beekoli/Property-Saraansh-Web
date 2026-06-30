@@ -132,6 +132,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/yamuna-expressway-noida-who-should-invest-and-what-will-the-real-estate-market-look-like-by-2030',
+        destination: '/blog/yamuna-expressway-property-investment-2030',
+        permanent: true,
+      },
+      {
         source: '/our-videos/eldeco-7-peaks-greater-noida',
         destination: '/our-videos/eldeco-7-peaks-omicron-1',
         permanent: true,
