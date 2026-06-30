@@ -71,7 +71,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   const relatedBlogs = allBlogs.filter(b => b.slug !== slug).slice(0, 3);
 
   // Dynamically resolve video ID from post ACF field, falling back to slug-based or a signature review video
-  const acfVideoId = blog.acf?.video_id;
+  // Video ID priority: WordPress backend field (ps_video_id) → ACF field → slug rule → default.
+  const acfVideoId = blog.ps_video_id?.trim() || blog.acf?.video_id;
   let relatedVideoId = acfVideoId || "e-WJp9zY7o8"; // Premium default video
   if (!acfVideoId) {
     if (slug.includes('yamuna-expressway')) {

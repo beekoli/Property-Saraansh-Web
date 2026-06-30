@@ -16,6 +16,8 @@ export interface WPPost {
   acf?: {
     video_id?: string;
   };
+  /** YouTube video ID set per-post in the WordPress backend (Custom Field key: ps_video_id). */
+  ps_video_id?: string;
   yoast_head?: string;
   yoast_head_json?: Record<string, unknown>;
   rank_math_json?: Record<string, unknown>;
