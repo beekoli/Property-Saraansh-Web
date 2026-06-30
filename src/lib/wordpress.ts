@@ -3,7 +3,6 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 export interface WPPost {
   id: number;
   date: string;
-  modified?: string;
   slug: string;
   title: {
     rendered: string;
@@ -17,7 +16,6 @@ export interface WPPost {
   acf?: {
     video_id?: string;
   };
-  ps_video_id?: string;
   yoast_head?: string;
   yoast_head_json?: Record<string, unknown>;
   rank_math_json?: Record<string, unknown>;
@@ -122,82 +120,14 @@ export interface WPProperty {
   };
 }
 
-// Fallback Mock Blog Data
-export const MOCK_BLOGS: WPPost[] = [
+import propertiesData from '@/data/properties.json';
+import blogsData from '@/data/blogs.json';
 
-  {
-    id: 1,
-    date: "Jun 10, 2026",
-    slug: "is-commercial-real-estate-in-noida-a-good-investment",
-    title: { rendered: "Is Commercial Real Estate in Noida a Good Investment in 2026?" },
-    excerpt: { rendered: "Analyzing the ROI, rental yields, and upcoming commercial hubs in Noida and Greater Noida..." },
-    content: { 
-      rendered: `
-        <p>Noida's commercial real estate is experiencing an unprecedented boom in 2026. With major infrastructural drivers like the Jewar International Airport nearing completion and massive corporate relocations, investors are looking closely at high-street retail shops and office spaces.</p>
-        
-        <h2>Why Noida Commercial?</h2>
-        <p>Unlike residential properties which typically yield a 2-3% rental return, commercial spaces in prime Noida sectors like Sector 62, 129, and 132 are delivering rental yields of 7-9%. Furthermore, the capital appreciation along the Noida-Greater Noida Expressway has averaged 15% annually over the last three years.</p>
-        
-        <blockquote>"Investing in commercial retail shops along the Expressway is currently the highest-yielding real estate play in the entire NCR region, backed by rapid corporate density."</blockquote>
-        
-        <h2>Key Areas to Watch</h2>
-        <p>Keep a close eye on Sector 94, Sector 129, and Greater Noida West. These micro-markets have high residential catchment populations, which is essential to drive footfall for commercial retail ventures.</p>
-      ` 
-    },
-    _embedded: {
-      'wp:featuredmedia': [{ source_url: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800" }]
-    }
-  },
-  {
-    id: 2,
-    date: "Jun 05, 2026",
-    slug: "top-5-upcoming-residential-projects-noida-expressway",
-    title: { rendered: "Top 5 Upcoming Residential Projects in Noida Expressway" },
-    excerpt: { rendered: "A comprehensive review of the most anticipated premium and luxury projects launching this year..." },
-    content: {
-      rendered: `
-        <p>The Noida Expressway remains the hotbed for luxury residential developments in Delhi NCR. With low-density project approvals and green corridors, developers are offering world-class living standards.</p>
-        
-        <h2>Top Pick: Eldeco 7 Peaks Residences</h2>
-        <p>Located in Sector 150, Eldeco 7 Peaks Residences is a prime example of premium living. Spanning 7.5 Acres, it features G+30 standalone towers with only 4 apartments per floor. Its proximity to the upcoming Jewar Airport makes it a highly sought-after investment.</p>
-        
-        <blockquote>"The expressway projects are no longer just apartments; they are lifestyle enclaves with sky clubs, private pools, and double-height lobbies."</blockquote>
-        
-        <h2>Other Notable Launches</h2>
-        <p>Other major luxury projects include M3M The Cullinan in Sector 94 and County 107 in Sector 107. Both projects are pushing the envelope of luxury with fully air-conditioned residences, private golf courses, and high-street retail below.</p>
-      `
-    },
-    _embedded: {
-      'wp:featuredmedia': [{ source_url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=800" }]
-    }
-  },
-  {
-    id: 3,
-    date: "May 28, 2026",
-    slug: "understanding-rera-guidelines-homebuyers",
-    title: { rendered: "Understanding the RERA Guidelines for Homebuyers" },
-    excerpt: { rendered: "Don't invest before reading this! Protect your investment with these crucial RERA rules and checks." },
-    content: {
-      rendered: `
-        <p>The Real Estate Regulatory Authority (RERA) has transformed how property transactions occur in India. As a homebuyer in Noida, understanding RERA regulations is your biggest safeguard against builder delays and project defaults.</p>
-        
-        <h2>What to Check First?</h2>
-        <p>Every builder must advertise their RERA registration number. You should always visit the UP-RERA portal and cross-verify the project details. Look for construction timelines, land ownership approvals, and escrow account records.</p>
-        
-        <blockquote>"A registered RERA number is your legal armor. Never sign an allotment letter or pay a booking amount for a project that does not have active UP-RERA approval."</blockquote>
-        
-        <h2>Key Protections under RERA</h2>
-        <p>Under RERA, builders cannot charge more than 10% of the property cost as an advance booking fee before signing a registered builder-buyer agreement. Additionally, 70% of the money collected from buyers must be deposited in a separate escrow account dedicated solely to construction costs for that project.</p>
-      `
-    },
-    _embedded: {
-      'wp:featuredmedia': [{ source_url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800" }]
-    }
-  }
-];
+// Fallback Mock Blog Data
+export const MOCK_BLOGS: WPPost[] = blogsData as WPPost[];
 
 // Fallback Mock Property Data (Matches mockup exactly)
-export const MOCK_PROPERTIES: WPProperty[] = [];
+export const MOCK_PROPERTIES: WPProperty[] = propertiesData as WPProperty[];
 
 async function fetchAPI(endpoint: string) {
   if (!API_URL) {
@@ -208,7 +138,20 @@ async function fetchAPI(endpoint: string) {
       next: { revalidate: 60 },
     });
     if (!res.ok) return null;
-    return res.json();
+    const rawText = await res.text();
+
+    const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com';
+    const frontendUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
+
+    const wpHost = wpUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const frontendHost = frontendUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+    let rewrittenText = rawText;
+    if (wpHost && frontendHost) {
+      rewrittenText = rawText.replace(new RegExp(wpHost.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), frontendHost);
+    }
+
+    return JSON.parse(rewrittenText);
   } catch (err) {
     console.error("WordPress Fetch Error:", err);
     return null;

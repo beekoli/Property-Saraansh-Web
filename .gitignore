@@ -42,3 +42,12 @@ scratch/
 next-env.d.ts
 
 .vercel
+scripts/token_drive.json
+deploy-push.bat
+CORRECT-page-content.txt
+CORRECT-our-videos-LISTING-page.txt
+scripts/token_drive.json
+deploy-push.bat
+fix-and-push.bat
+CORRECT-page-content.txt
+CORRECT-our-videos-LISTING-page.txt

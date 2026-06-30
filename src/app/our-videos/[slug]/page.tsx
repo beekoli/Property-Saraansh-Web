@@ -100,26 +100,12 @@ export default async function VideoWatchPage({ params }: PageProps) {
     }
   };
 
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": FRONTEND_URL },
-      { "@type": "ListItem", "position": 2, "name": "Our Videos", "item": `${FRONTEND_URL}/our-videos` },
-      { "@type": "ListItem", "position": 3, "name": video.title, "item": `${FRONTEND_URL}/our-videos/${video.slug}` }
-    ]
-  };
-
   return (
     <>
       {/* Schema Markup for search engines */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       <div className="min-h-screen bg-brand-pale flex flex-col pt-0">
@@ -167,12 +153,6 @@ export default async function VideoWatchPage({ params }: PageProps) {
                 <h1 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-ink leading-tight">
                   {video.title}
                 </h1>
-
-                {video.description && (
-                  <p className="text-sm md:text-base text-brand-ink/70 leading-relaxed font-light">
-                    {video.description}
-                  </p>
-                )}
 
                 <div className="flex items-center gap-6 text-xs text-brand-light pt-2 border-t border-brand-pale font-light">
                   <span className="flex items-center gap-1.5">
@@ -285,4 +265,25 @@ export default async function VideoWatchPage({ params }: PageProps) {
                     
                     <div className="p-4 flex-grow flex flex-col justify-between">
                       <Link 
-                        href
+                        href={`/our-videos/${item.slug}`}
+                        className="block"
+                      >
+                        <h3 className="text-xs font-semibold text-black line-clamp-2 leading-relaxed group-hover:text-brand-primary transition-colors">
+                          {item.title}
+                        </h3>
+                      </Link>
+                      <div className="text-[10px] text-brand-light/80 mt-3 pt-2.5 border-t border-brand-pale font-light flex justify-between">
+                        <span>{item.publishedAt}</span>
+                        <span>{item.views}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}

@@ -42,6 +42,38 @@ export async function POST(request: Request) {
       console.error('Error forwarding lead to Google Sheets:', sheetErr);
     }
 
+    // 1.5. Forward lead to the local CRM
+    const crmUrl = process.env.CRM_API_URL || "http://localhost:3001/api/leads";
+    let crmSuccess = false;
+    try {
+      const crmResponse = await fetch(crmUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          source: source || 'Website Contact Form',
+          name,
+          phone,
+          email: email || '',
+          comment: message || '',
+          propertyName: project || '',
+          configuration: type || '',
+          queryType: type || '',
+        }),
+      });
+
+      if (crmResponse.ok) {
+        crmSuccess = true;
+        console.log('Successfully logged lead to local CRM.');
+      } else {
+        console.warn('Failed to log lead to local CRM. Status:', crmResponse.status);
+      }
+    } catch (crmErr: unknown) {
+      const errorMessage = crmErr instanceof Error ? crmErr.message : String(crmErr);
+      console.log('CRM integration skipped or offline:', errorMessage);
+    }
+
     // 2. Dispatch email notification via SMTP (if configured)
     const host = process.env.SMTP_HOST;
     const port = process.env.SMTP_PORT;
@@ -165,6 +197,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       loggedToSheet: sheetSuccess,
+      loggedToCRM: crmSuccess,
       emailed: emailSuccess,
     });
   } catch (error: unknown) {

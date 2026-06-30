@@ -98,8 +98,16 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
 export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
 
 export function getWPBaseUrl() {
+  const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+  if (wpUrl) {
+    return wpUrl.replace(/\/$/, '');
+  }
   const apiUrl = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || '';
-  return apiUrl.replace('/wp-json', '').replace(/\/$/, '');
+  const idx = apiUrl.indexOf('/wp-json');
+  if (idx !== -1) {
+    return apiUrl.substring(0, idx);
+  }
+  return apiUrl.replace(/\/$/, '');
 }
 
 /**

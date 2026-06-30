@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'linen-gorilla-480120.hostingersite.com',
+        hostname: 'login.propertysaraansh.com',
       },
       {
         protocol: 'https',
@@ -44,6 +44,16 @@ const nextConfig: NextConfig = {
       {
         source: '/our-videos/experion-saatori-sector-151-noida-premium-3-4-bhk-review',
         destination: '/our-videos/experion-saatori-sector-151-noida-honest-review-investment-analysis',
+        permanent: true,
+      },
+      {
+        source: '/our-videos/exit-advice-on-3-residential-projects-in-noida-ace-terra-godrej-tropical-isle-an',
+        destination: '/our-videos/exit-advice-noida-residential-projects',
+        permanent: true,
+      },
+      {
+        source: '/our-videos/exit-advice-on-3-residential-projects-in-noida',
+        destination: '/our-videos/exit-advice-noida-residential-projects',
         permanent: true,
       },
       {
@@ -172,9 +182,32 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-                  source: '/blog/crc-the-peridona-jaypee-greens-an-honest-review-investment-analysis',
-                  destination: '/blog/crc-peridona-jaypee-greens-review-noida',
-                  permanent: true,
+        source: '/wp-admin',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/wp-login.php',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/wp-login',
+        destination: '/',
+        permanent: false,
+      },
+    ];
+  },
+  async rewrites() {
+    const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com';
+    return [
+      {
+        source: '/wp-content/:path*',
+        destination: `${wpUrl}/wp-content/:path*`,
+      },
+      {
+        source: '/wp-includes/:path*',
+        destination: `${wpUrl}/wp-includes/:path*`,
       },
     ];
   },

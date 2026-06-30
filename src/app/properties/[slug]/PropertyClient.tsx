@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { WPProperty, getFeaturedImage, MOCK_PROPERTIES } from '@/lib/wordpress';
+import { WPProperty, getFeaturedImage } from '@/lib/wordpress';
 import VideoPlayer from '@/components/VideoPlayer';
 import PropertyCard from '@/components/PropertyCard';
 import { MapPin, Phone, MessageSquare, ShieldCheck, Download, CheckCircle, ChevronRight, X, Waves, Dumbbell, Car, Leaf, TreePine, Home, Trophy, Baby, Footprints, Zap, Droplets, Video, Wifi, ArrowUpDown, ShoppingBag, PartyPopper, Flame, Bike } from 'lucide-react';
@@ -601,7 +601,7 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
     .filter(p => p.slug !== property.slug)
     .slice(0, 2)
     .map(p => ({
-      title: `${p.title.rendered} — Sector ${p.acf.location?.match(/\d+/)?.[0] || '150'} Analysis`,
+      title: `${p.title.rendered} — Sector ${p.acf?.location?.match(/\d+/)?.[0] || '150'} Analysis`,
       slug: p.slug
     }));
 
@@ -1337,13 +1337,13 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
               key={prop.slug}
               id={prop.slug}
               title={prop.title.rendered}
-              developer={prop.acf.developer}
-              location={prop.acf.location || "Noida"}
-              price={prop.acf.price || "Contact for Price"}
-              type={prop.acf.property_type || "Residential"}
+              developer={prop.acf?.developer}
+              location={prop.acf?.location || "Noida"}
+              price={prop.acf?.price || "Contact for Price"}
+              type={prop.acf?.property_type || "Residential"}
               imageUrl={getFeaturedImage(prop)}
-              bhk={(prop.acf.configuration || "3 BHK").split(',').map(s => s.trim())}
-              videoId={prop.acf.video_id}
+              bhk={(prop.acf?.configuration || "3 BHK").split(',').map(s => s.trim())}
+              videoId={prop.acf?.video_id}
             />
           ))}
         </div>
