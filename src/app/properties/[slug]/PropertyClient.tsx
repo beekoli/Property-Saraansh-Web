@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { WPProperty, getFeaturedImage } from '@/lib/wordpress';
+import { WPProperty, getFeaturedImage, MOCK_PROPERTIES } from '@/lib/wordpress';
 import VideoPlayer from '@/components/VideoPlayer';
 import PropertyCard from '@/components/PropertyCard';
 import { MapPin, Phone, MessageSquare, ShieldCheck, Download, CheckCircle, ChevronRight, X, Waves, Dumbbell, Car, Leaf, TreePine, Home, Trophy, Baby, Footprints, Zap, Droplets, Video, Wifi, ArrowUpDown, ShoppingBag, PartyPopper, Flame, Bike } from 'lucide-react';
@@ -227,6 +227,8 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
 
   // States
   const [activeFloorPlan, setActiveFloorPlan] = useState<number>(1);
+  const [activeSitePlanTab, setActiveSitePlanTab] = useState<'master' | 'siteplan'>('master');
+  const [aboutExpanded, setAboutExpanded] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -582,6 +584,10 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
     ? acf.site_plan_image.trim() 
     : null;
 
+  const masterLayoutImage = acf.master_layout_image && typeof acf.master_layout_image === 'string' && acf.master_layout_image.trim() !== ''
+    ? acf.master_layout_image.trim()
+    : null;
+
   // No fallback to hardcoded defaults so that rows are 100% WordPress-driven
   if (amenities.length === 0) {
     amenities = [
@@ -601,7 +607,7 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
     .filter(p => p.slug !== property.slug)
     .slice(0, 2)
     .map(p => ({
-      title: `${p.title.rendered} — Sector ${p.acf?.location?.match(/\d+/)?.[0] || '150'} Analysis`,
+      title: `${p.title.rendered} — Sector ${p.acf.location?.match(/\d+/)?.[0] || '150'} Analysis`,
       slug: p.slug
     }));
 
@@ -634,7 +640,7 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
           <button onClick={() => scrollNav('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
           <button onClick={() => scrollNav('saraansh-review')} className="hover:text-brand-accent transition-colors">Saraansh&apos;s Review</button>
           <button onClick={() => scrollNav('highlights')} className="hover:text-brand-accent transition-colors">Highlights</button>
-          {sitePlanImage && (
+          {(sitePlanImage || masterLayoutImage) && (
             <button onClick={() => scrollNav('siteplan')} className="hover:text-brand-accent transition-colors">Site Plan</button>
           )}
           <button onClick={() => scrollNav('floorplan')} className="hover:text-brand-accent transition-colors">Floor Plan</button>
@@ -721,6 +727,40 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
           {/* LEFT COLUMN: 70% Width */}
           <div className="w-full lg:w-8/12 space-y-10">
             
+            {/* About the Project section */}
+            {(property.content?.rendered || acf.project_overview) && (
+              <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm border border-brand-light/10 text-center">
+                <div className="mb-4">
+                  <span className="inline-block bg-brand-pale/60 border border-brand-accent/20 text-brand-accent text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">
+                    About the Project
+                  </span>
+                </div>
+                <h2 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-dark mb-2 leading-tight">
+                  {property.title.rendered}
+                  {acf.project_tagline && (
+                    <> &mdash; <span className="text-brand-accent">{acf.project_tagline}</span></>
+                  )}
+                </h2>
+                <div className="w-12 h-0.5 bg-brand-accent mx-auto mb-6 rounded-full" />
+
+                <div
+                  className={`text-left text-sm text-brand-ink/80 leading-relaxed prose prose-sm max-w-none overflow-hidden transition-all duration-500 ${aboutExpanded ? 'max-h-[2000px]' : 'max-h-[220px]'}`}
+                  dangerouslySetInnerHTML={{ __html: property.content?.rendered || `<p>${acf.project_overview}</p>` }}
+                />
+
+                {/* Fade + Read More button */}
+                {!aboutExpanded && (
+                  <div className="relative -mt-10 pb-1 bg-gradient-to-t from-white via-white/80 to-transparent h-14 pointer-events-none" />
+                )}
+                <button
+                  onClick={() => setAboutExpanded(v => !v)}
+                  className="mt-4 inline-flex items-center gap-1.5 border border-brand-dark text-brand-dark text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-brand-dark hover:text-white transition-all"
+                >
+                  {aboutExpanded ? 'Read Less ▲' : 'Read More ▼'}
+                </button>
+              </div>
+            )}
+
             {/* overview section */}
             <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
@@ -822,45 +862,69 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
               </div>
             </div>
 
-            {/* site plan section */}
-            {sitePlanImage && (
-              <div id="siteplan" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
-                <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
-                  <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
-                  Site Plan
-                </h2>
-                
-                <div className="space-y-6">
-                  {/* Dynamic Site Plan Image Container */}
-                  <div 
-                    className="max-w-2xl mx-auto bg-brand-pale rounded-xl border border-brand-light/20 relative overflow-hidden group cursor-zoom-in shadow-inner"
-                    onClick={() => { 
-                      setLightboxIndex(999); 
-                      setLightboxOpen(true); 
-                    }}
-                  >
-                    <div className="relative aspect-[16/10] w-full">
-                      <Image 
-                        src={sitePlanImage} 
-                        alt={`${property.title.rendered} Site Plan / Master Layout`}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 800px"
-                        className="object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500" 
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors flex items-center justify-center">
-                      <span className="bg-brand-dark/80 text-white text-xs px-4 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transition-opacity">Click to Expand Layout</span>
-                    </div>
+            {/* site plan & master layout section */}
+            {(sitePlanImage || masterLayoutImage) && (() => {
+              const activeImg = masterLayoutImage && sitePlanImage
+                ? (activeSitePlanTab === 'master' ? masterLayoutImage : sitePlanImage)
+                : (masterLayoutImage || sitePlanImage);
+              return (
+                <div id="siteplan" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+                  <div className="mb-1">
+                    <span className="text-xs font-bold uppercase tracking-widest text-brand-accent">PROJECT LAYOUT</span>
                   </div>
+                  <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-3 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                    Site Plan &amp; Master Layout
+                  </h2>
+                  <p className="text-sm text-brand-light mb-5 text-center">
+                    Explore the complete layout of {property.title.rendered}{acf.total_land ? ` — ${acf.total_land} of ultra-luxury living` : ''} within the 452-acre Jaypee Greens township.
+                  </p>
 
-                  <div className="max-w-md mx-auto text-center">
-                    <p className="text-xs text-brand-light font-light leading-relaxed">
-                      Master Layout and Site Plan for {property.title.rendered}. Click on the layout plan image to view in high resolution.
-                    </p>
+                  {/* Tab switcher — only shown when both images are uploaded */}
+                  {masterLayoutImage && sitePlanImage && (
+                    <div className="flex gap-2 mb-6 justify-center">
+                      <button
+                        onClick={() => setActiveSitePlanTab('master')}
+                        className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${activeSitePlanTab === 'master' ? 'bg-brand-dark text-white shadow' : 'border border-brand-pale text-brand-dark hover:bg-brand-pale/30'}`}
+                      >
+                        Master Layout
+                      </button>
+                      <button
+                        onClick={() => setActiveSitePlanTab('siteplan')}
+                        className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${activeSitePlanTab === 'siteplan' ? 'bg-brand-dark text-white shadow' : 'border border-brand-pale text-brand-dark hover:bg-brand-pale/30'}`}
+                      >
+                        Site Plan
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="space-y-6">
+                    <div
+                      className="max-w-2xl mx-auto bg-brand-pale rounded-xl border border-brand-light/20 relative overflow-hidden group cursor-zoom-in shadow-inner"
+                      onClick={() => { setLightboxIndex(999); setLightboxOpen(true); }}
+                    >
+                      <div className="relative aspect-[16/10] w-full">
+                        <Image
+                          src={activeImg!}
+                          alt={`${property.title.rendered} ${activeSitePlanTab === 'master' ? 'Master Layout' : 'Site Plan'}`}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 800px"
+                          className="object-contain p-2 group-hover:scale-[1.03] transition-transform duration-500"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors flex items-center justify-center">
+                        <span className="bg-brand-dark/80 text-white text-xs px-4 py-2 rounded-full font-bold opacity-0 group-hover:opacity-100 transition-opacity">Click to Expand Layout</span>
+                      </div>
+                    </div>
+                    <div className="max-w-md mx-auto text-center">
+                      <p className="text-xs text-brand-light font-light leading-relaxed">
+                        Master Layout and Site Plan for {property.title.rendered}. Click on the image to view in high resolution.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* floor plans section */}
             <div id="floorplan" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
@@ -1337,13 +1401,13 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
               key={prop.slug}
               id={prop.slug}
               title={prop.title.rendered}
-              developer={prop.acf?.developer}
-              location={prop.acf?.location || "Noida"}
-              price={prop.acf?.price || "Contact for Price"}
-              type={prop.acf?.property_type || "Residential"}
+              developer={prop.acf.developer}
+              location={prop.acf.location || "Noida"}
+              price={prop.acf.price || "Contact for Price"}
+              type={prop.acf.property_type || "Residential"}
               imageUrl={getFeaturedImage(prop)}
-              bhk={(prop.acf?.configuration || "3 BHK").split(',').map(s => s.trim())}
-              videoId={prop.acf?.video_id}
+              bhk={(prop.acf.configuration || "3 BHK").split(',').map(s => s.trim())}
+              videoId={prop.acf.video_id}
             />
           ))}
         </div>
@@ -1361,11 +1425,11 @@ export default function PropertyClient({ property, allProperties = [] }: Props) 
           
           <div className="max-w-4xl max-h-[80vh] px-4 flex flex-col items-center justify-center">
             {lightboxIndex === 999 ? (
-              // Site Plan index
-              <img 
-                src={sitePlanImage || ""} 
-                alt="Site Plan Layout" 
-                className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl" 
+              // Site Plan / Master Layout
+              <img
+                src={(masterLayoutImage && sitePlanImage ? (activeSitePlanTab === 'master' ? masterLayoutImage : sitePlanImage) : (masterLayoutImage || sitePlanImage)) || ""}
+                alt="Site Plan / Master Layout"
+                className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
               />
             ) : lightboxIndex >= 6 ? (
               // Floor plan index
