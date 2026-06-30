@@ -74,7 +74,9 @@ export default async function BlogPostPage({ params }: PageProps) {
   const acfVideoId = blog.acf?.video_id;
   let relatedVideoId = acfVideoId || "e-WJp9zY7o8"; // Premium default video
   if (!acfVideoId) {
-    if (slug.includes('commercial')) {
+    if (slug.includes('yamuna-expressway')) {
+      relatedVideoId = "qWAgkIW6Mj0"; // Yamuna Expressway Investment 2030
+    } else if (slug.includes('commercial')) {
       relatedVideoId = "video-7"; // Sector 129 commercial
     } else if (slug.includes('residential') || slug.includes('eldeco')) {
       relatedVideoId = "e-WJp9zY7o8"; // Eldeco 7 Peaks
