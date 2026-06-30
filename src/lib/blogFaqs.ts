@@ -45,7 +45,7 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
       answer: "First-time buyers should verify the builder's RERA registration, check for pending authority dues, visit the site physically, understand the difference between leasehold and freehold, factor in maintenance costs for high-rise societies, and research the sector's existing infrastructure rather than relying solely on brochures."
     }
   ],
-  "crc-the-peridona-jaypee-greens-an-honest-review-investment-analysis": [
+  "crc-peridona-jaypee-greens-review-noida": [
     {
       question: "What is CRC The Peridona in Jaypee Greens Noida?",
       answer: "CRC The Peridona is an ultra-luxury residential project by CRC Group located in the Jaypee Greens township, Sector 128, Noida Expressway. It offers 4 BHK and 5 BHK premium apartments spread across 7 towers of 43 floors each. The project sits within the prestigious Jaypee Greens ecosystem, which includes an 18-hole PGA golf course, 5-star hotels, and a world-class clubhouse spanning 1.8 lakh square feet."
