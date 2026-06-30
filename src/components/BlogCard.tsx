@@ -11,8 +11,22 @@ interface BlogCardProps {
   thumbnail: string;
 }
 
+// Decode common WordPress HTML entities that WP encodes in title.rendered / excerpt.rendered
+const decodeHtml = (str: string) =>
+  str
+    .replace(/&#038;/g, '&')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8211;/g, '–')
+    .replace(/&#8212;/g, '—')
+    .replace(/&#8216;/g, '‘')
+    .replace(/&#8217;/g, '’')
+    .replace(/&#8220;/g, '“')
+    .replace(/&#8221;/g, '”');
+
 export default function BlogCard({ id, title, excerpt, category, author, date, readTime, thumbnail }: BlogCardProps) {
   const formattedDate = new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  const cleanTitle = decodeHtml(title);
+  const cleanExcerpt = decodeHtml(excerpt);
 
   return (
     <div className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 border border-brand-pale flex flex-col h-full">
@@ -28,9 +42,9 @@ export default function BlogCard({ id, title, excerpt, category, author, date, r
 
       <div className="p-5 flex-grow flex flex-col">
         <Link href={`/blog/${id}`} className="block flex-grow">
-          <h3 className="text-xl heading-playfair text-brand-ink mb-2 line-clamp-2 group-hover:text-brand-primary transition-colors">{title}</h3>
+          <h3 className="text-xl heading-playfair text-brand-ink mb-2 line-clamp-2 group-hover:text-brand-primary transition-colors">{cleanTitle}</h3>
           <p className="text-brand-dark/70 text-sm line-clamp-2 mb-4 leading-relaxed">
-            {excerpt}
+            {cleanExcerpt}
           </p>
         </Link>
 
