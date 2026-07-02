@@ -1069,4 +1069,25 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
   if (!YOUTUBE_API_KEY) return staticVideo;
 
   try {
-    const url = `https:/
+    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=contentDetails,statistics`;
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.items && data.items.length > 0) {
+        const item = data.items[0];
+        const viewsStr = item.statistics?.viewCount || "";
+        const durationStr = item.contentDetails?.duration || "";
+        const { formatted } = parseIsoDuration(durationStr);
+        return {
+          ...staticVideo,
+          views: formatViewCount(viewsStr),
+          duration: formatted || staticVideo.duration
+        };
+      }
+    }
+  } catch (err) {
+    console.error("Failed to fetch real-time stats for video", err);
+  }
+
+  return staticVideo;
+}
