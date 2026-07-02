@@ -95,7 +95,10 @@ export default async function BlogPostPage({ params }: PageProps) {
   // Video ID priority: WordPress backend field (ps_video_id) → ACF field → slug rule → default.
   const acfVideoId = blog.ps_video_id?.trim().replace(/[?&].*$/, '') || blog.acf?.video_id?.trim().replace(/[?&].*$/, '');
   let relatedVideoId = acfVideoId || "xicR-MeU77g"; // Noida Property Market 2025 as fallback
-  if (!acfVideoId) {
+  // Slug-based overrides — always apply to correct known-wrong ACF values
+  if (slug.includes('noida-residents') || slug.includes('nobody-talks')) {
+    relatedVideoId = "z-nxbCBtffY"; // Things Nobody Talks About Noida Residents
+  } else if (!acfVideoId) {
     if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities')) {
       relatedVideoId = "g2dN6stL3i0"; // Noida Market Slowdown 2026
     } else if (slug.includes('yamuna-expressway')) {
@@ -110,8 +113,6 @@ export default async function BlogPostPage({ params }: PageProps) {
       relatedVideoId = "xicR-MeU77g"; // Noida Property Market 2025: What Worked & What Failed
     } else if (slug.includes('dasnac') || slug.includes('fairfox')) {
       relatedVideoId = "YKWtYdh_4dQ"; // Noida Property Market Reality
-    } else if (slug.includes('noida-residents') || slug.includes('nobody-talks')) {
-      relatedVideoId = "z-nxbCBtffY"; // Things Nobody Talks About Noida Residents
     }
   }
 
