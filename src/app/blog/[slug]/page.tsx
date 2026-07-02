@@ -16,6 +16,18 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Decode common WordPress HTML entities (e.g. &amp; -> &) so titles don't show raw entity codes.
+const decodeHtml = (str: string) =>
+  str
+    .replace(/&#038;/g, '&')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8211;/g, '–')
+    .replace(/&#8212;/g, '—')
+    .replace(/&#8216;/g, '‘')
+    .replace(/&#8217;/g, '’')
+    .replace(/&#8220;/g, '“')
+    .replace(/&#8221;/g, '”');
+
 // Label a post by its actual WordPress category (prefer a specific one over the generic "Blog").
 const titleCaseCat = (s: string) => s.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 function getPostCategory(post: { _embedded?: { 'wp:term'?: Array<Array<{ name: string }>> } }): string {
@@ -35,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const fallbackTitle = `${blog.title.rendered} | Property Saraansh`;
+  const fallbackTitle = `${blog.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh`;
   const fallbackDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${blog.title.rendered}`;
   
   // Prefer RankMath JSON, fallback to Yoast
@@ -161,7 +173,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               Real Estate Insights
             </span>
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold heading-playfair leading-tight mb-6 text-white uppercase tracking-tight max-w-4xl mx-auto">
-              {blog.title.rendered}
+              {decodeHtml(blog.title.rendered)}
             </h1>
             <div className="flex items-center justify-center gap-3 text-xs md:text-sm text-brand-pale/80 font-semibold uppercase tracking-wider">
               <span className="text-brand-accent font-bold">By Saraansh Seth</span>
