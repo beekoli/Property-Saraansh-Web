@@ -55,15 +55,16 @@ export const videos: Video[] = [
   },
   {
     "slug": "noida-market-slowdown-2026",
-    "title": "Noida Market Slowdown: Effects on Builders, Sellers & Buyers in 2026",
-    "description": "What the 2026 Noida real estate slowdown means for builders, sellers and buyers — the causes, who's affected, and how to navigate it smartly.",
+    "title": "Noida Real Estate Market Slowdown 2026 | Builder, Seller & Buyer Strategy",
+    "description": "Is Noida real estate crashing in 2026? Saraansh Seth explains the market slowdown impact on Builders, Sellers & Buyers — with practical strategies to buy, sell, or hold property in Noida.",
     "youtubeId": "g2dN6stL3i0",
     "thumbnail": "https://img.youtube.com/vi/g2dN6stL3i0/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT10M51S",
-    "focusKeyword": "noida market slowdown",
+    "focusKeyword": "noida real estate market slowdown 2026",
     "category": "Real Estate",
-    "views": "15K views views"
+    "views": "15K views",
+    "content": "Is Noida Real Estate crashing — ya sirf ek slowdown hai? Saraansh Seth is video mein Builders, Resale Sellers, Investors aur Buyers ke liye clear strategy explain karte hain. Agar aapka paisa Noida property market mein laga hai — ya laane ka soch rahe hain — toh yeh video aapke liye hai.||Noida real estate market 2026 mein ek significant slowdown se guzar rahi hai. Demand slow hui hai, buyers cautious hain, aur sellers ke liye exits mushkil ho rahe hain. Lekin yeh 2013-2020 wala slowdown nahi hai — Noida ki fundamentals ab kaafi strong hain. Is video mein hum discuss karte hain ki iss soft market mein Builders ko kya karna chahiye, Resale Sellers ko hold karna chahiye ya sell, aur Buyers ke liye best strategy kya hai."
   },
   {
     "slug": "max-estates-105-vs-128",

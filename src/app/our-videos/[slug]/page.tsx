@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${video.title} | Watch Review | Property Saraansh`,
+    title: `${video.title} | Property Saraansh`,
     description: video.description || `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`,
     alternates: {
       canonical: `${FRONTEND_URL}/our-videos/${video.slug}`,
@@ -80,7 +80,9 @@ export default async function VideoWatchPage({ params }: PageProps) {
     .filter((v) => v.slug !== video.slug && (isCurrentShort ? v.category === 'Shorts' : v.category !== 'Shorts'))
     .slice(0, 3);
 
-  const jsonLd = {
+  const isNoidaSlowdown = video.slug === 'noida-market-slowdown-2026';
+
+  const videoJsonLd = {
     "@context": "https://schema.org",
     "@type": "VideoObject",
     "name": video.title,
@@ -90,15 +92,87 @@ export default async function VideoWatchPage({ params }: PageProps) {
     "duration": durationToISO8601(video.duration),
     "contentUrl": `https://www.youtube.com/watch?v=${video.youtubeId}`,
     "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,
+    "url": `${FRONTEND_URL}/our-videos/${video.slug}`,
+    "interactionStatistic": {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/WatchAction",
+      "userInteractionCount": parseInt((video.views || '0').replace(/[^0-9]/g, '')) * 1000 || 15000
+    },
     "publisher": {
       "@type": "Organization",
       "name": "Property Saraansh",
+      "url": FRONTEND_URL,
       "logo": {
         "@type": "ImageObject",
         "url": `${FRONTEND_URL}/logo.png`
-      }
-    }
+      },
+      "sameAs": [
+        "https://www.youtube.com/@PropertySaraansh",
+        "https://instagram.com/propertysaraansh",
+        "https://www.facebook.com/PropertySaraansh",
+        "https://www.linkedin.com/company/propertysaraansh/"
+      ]
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Saraansh Seth",
+      "url": `${FRONTEND_URL}/about-us`
+    },
+    ...(isNoidaSlowdown && {
+      "keywords": "Noida real estate slowdown 2026, Noida property market crash, builder strategy slow market, resale seller investor Noida, buyer tips Noida property, real estate India 2026",
+      "inLanguage": "hi-IN",
+      "hasPart": [
+        { "@type": "Clip", "name": "Crash vs Slowdown Explained", "startOffset": 45, "endOffset": 96, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=45s` },
+        { "@type": "Clip", "name": "Builder Strategy: Payment Plans & Unit Sizes", "startOffset": 96, "endOffset": 371, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=96s` },
+        { "@type": "Clip", "name": "Seller & Investor Strategy: Hold or Sell?", "startOffset": 371, "endOffset": 509, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=371s` },
+        { "@type": "Clip", "name": "Buyer Strategy in Slow Noida Property Market", "startOffset": 509, "endOffset": 651, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=509s` }
+      ]
+    })
   };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": FRONTEND_URL },
+      { "@type": "ListItem", "position": 2, "name": "Our Videos", "item": `${FRONTEND_URL}/our-videos` },
+      { "@type": "ListItem", "position": 3, "name": video.title, "item": `${FRONTEND_URL}/our-videos/${video.slug}` }
+    ]
+  };
+
+  const faqJsonLd = isNoidaSlowdown ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is the Noida real estate market crashing in 2026?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. The Noida real estate market is going through a slowdown or correction phase after a post-pandemic boom — not a crash. Prices have stabilized but have not fallen sharply. Demand has slowed but end-user activity continues." }
+      },
+      {
+        "@type": "Question",
+        "name": "Should I buy property in Noida during the slowdown?",
+        "acceptedAnswer": { "@type": "Answer", "text": "If you are buying for self-use, this is a good time to negotiate. For investment, focus on mid-range resale properties with aggressive sellers rather than luxury launches. Avoid taking loans for pure investment in a slow market." }
+      },
+      {
+        "@type": "Question",
+        "name": "Will builders reduce prices in the Noida market slowdown?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Builders rarely slash prices directly in ongoing projects. Instead, they offer flexible payment plans like 20:80 or 40:60 as an affordability tool. However, paying more than 10% price top-up for such plans is not recommended for investors." }
+      },
+      {
+        "@type": "Question",
+        "name": "Should resale sellers panic and sell immediately?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. If you have no urgent fund requirement and bought without a loan, hold your unit, take possession, rent it out, and wait 2–3 years for the market cycle to recover. Panic selling in a slow market leads to poor exits." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the best investment strategy in Noida property market 2026?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Look for distressed resale deals from motivated sellers, focus on mid-range projects with strong end-user demand, avoid luxury projects with slow habitation, and keep liquidity ready to act on genuine opportunities." }
+      }
+    ]
+  } : null;
+
+  const jsonLd = videoJsonLd;
 
   return (
     <>
@@ -107,6 +181,16 @@ export default async function VideoWatchPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       <div className="min-h-screen bg-brand-pale flex flex-col pt-0">
         {/* Navigation Breadcrumb Banner */}
@@ -169,11 +253,34 @@ export default async function VideoWatchPage({ params }: PageProps) {
               {video.content && (
                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
                   <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
-                    About This Review
+                    About This Video
                   </h2>
                   <div className="text-sm text-brand-ink/80 leading-relaxed space-y-4">
                     {video.content.split('||').map((para, i) => (
                       <p key={i}>{para}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* FAQ Section — only for Noida Market Slowdown */}
+              {isNoidaSlowdown && (
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
+                  <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-6">
+                    Frequently Asked Questions
+                  </h2>
+                  <div className="space-y-5">
+                    {[
+                      { q: "Is the Noida real estate market crashing in 2026?", a: "No. The Noida real estate market is going through a slowdown or correction phase after a post-pandemic boom — not a crash. Prices have stabilized but have not fallen sharply. Demand has slowed but end-user activity continues." },
+                      { q: "Should I buy property in Noida during the slowdown?", a: "If you are buying for self-use, this is a good time to negotiate. For investment, focus on mid-range resale properties with aggressive sellers rather than luxury launches. Avoid taking loans for pure investment in a slow market." },
+                      { q: "Will builders reduce prices in the Noida market slowdown?", a: "Builders rarely slash prices in ongoing projects. Instead, they offer flexible payment plans like 20:80 or 40:60 as an affordability tool. However, paying more than 10% price top-up for such plans is not recommended for investors." },
+                      { q: "Should resale sellers panic and sell immediately?", a: "No. If you have no urgent fund requirement and bought without a loan, hold your unit, take possession, rent it out, and wait 2–3 years for the market cycle to recover. Panic selling in a slow market leads to poor exits." },
+                      { q: "What is the best investment strategy in Noida property market 2026?", a: "Look for distressed resale deals from motivated sellers, focus on mid-range projects with strong end-user demand, avoid luxury projects with slow habitation, and keep liquidity ready to act on genuine opportunities." },
+                    ].map((faq, i) => (
+                      <div key={i} className="border-b border-brand-pale pb-5 last:border-0 last:pb-0">
+                        <h3 className="text-sm font-semibold text-brand-ink mb-2">{faq.q}</h3>
+                        <p className="text-sm text-brand-ink/70 leading-relaxed">{faq.a}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
