@@ -140,6 +140,162 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
       answer: "CRC The Peridona offers 4 BHK and 5 BHK configurations. The 4 BHK apartments cover approximately 5,500 sq ft of carpet area, making them among the largest in the category on the Noida Expressway. The 5 BHK units offer even larger living spaces with private lift lobbies, premium imported fittings, and expansive balconies with golf course or expressway views."
     }
   ],
+  "eldeco-greater-noida-detailed-review-of-eldeco-7-peaks-residences-by-property-saraansh": [
+    {
+      question: "What is Eldeco 7 Peaks Residences in Greater Noida?",
+      answer: "Eldeco 7 Peaks Residences is a premium project by Eldeco Group in Sector Omicron 1, Greater Noida — 7.37 acres, 7 towers up to 31 floors, only 4 apartments per floor. It offers 3 BHK and 4 BHK apartments from 1,825 sq ft to 2,850 sq ft, plus 24 exclusive duplex penthouses. Located on a 130-metre-wide road near Pari Chowk with direct access to Noida Expressway, Yamuna Expressway, and the Aqua Metro."
+    },
+    {
+      question: "What is the price of Eldeco 7 Peaks Residences?",
+      answer: "Base sale price starts at approximately ₹13,000 per sq ft, with early booking pricing closer to ₹12,000 per sq ft. PLC and GST are additional. The 3 BHK configurations from 1,825 sq ft translate to an all-in investment of approximately ₹2.2–2.5 Crore. No separate club or parking charges were announced at launch."
+    },
+    {
+      question: "Why is the 1850 sq ft unit better than the 1825 sq ft unit in Eldeco 7 Peaks?",
+      answer: "Despite just a 25 sq ft difference in super area, the 1,850 sq ft apartment delivers significantly more usable space, larger balconies, and improved room dimensions due to more efficient internal planning. Property Saraansh strongly recommends the 1,850 sq ft layout — the added practical value far outweighs the marginal price difference."
+    },
+    {
+      question: "Is Eldeco 7 Peaks a good investment in 2026?",
+      answer: "Yes, as a long-term play. Key strengths: low-density 4-units-per-floor planning, nearly 500 metres of open surroundings with no immediate obstruction, construction-linked payment plan, and Eldeco's track record as a publicly listed developer with 200+ projects delivered. Greater Noida infrastructure maturity and the Jewar Airport effect provide long-term appreciation support. A 4–6 year holding horizon is recommended."
+    },
+    {
+      question: "How does Eldeco 7 Peaks compare to Godrej Arden and Experion Satori?",
+      answer: "Eldeco 7 Peaks has a more established Pari Chowk location compared to Godrej Arden (Sigma 3, Greater Noida) and is competitively priced versus Experion Satori (Sector 151, Noida Expressway). All three developers are publicly listed with strong delivery records. Eldeco 7 Peaks focuses specifically on spacious 3 BHK layouts, giving it a clear edge for family end-users seeking practical large-format living."
+    },
+    {
+      question: "What makes the Vastu planning at Eldeco 7 Peaks stand out?",
+      answer: "Eldeco 7 Peaks integrates several Vastu-sensitive planning elements: kitchens do not share walls with washrooms, most balconies avoid south-facing orientation, and the overall layout ensures better natural sunlight and cross-ventilation. These details matter significantly to NCR homebuyers and add an important layer of appeal that most competing projects at this price point do not address explicitly."
+    }
+  ],
+  "godrej-arden-detailed-review-price-analysis-investment-potential-in-greater-noida": [
+    {
+      question: "What is Godrej Arden in Greater Noida and where is it located?",
+      answer: "Godrej Arden is a premium low-density residential project by Godrej Properties in Sigma 3, Greater Noida, near Pari Chowk. Spread across 9.58 acres, it features 9 towers with only 4 units per floor, 3 separate entry and exit gates, and a 45,000 sq ft clubhouse. The 4-side open plot with surrounding green belts ensures openness and privacy. It is connected to the Yamuna Expressway, Noida–Greater Noida Expressway, and Eastern Peripheral Expressway."
+    },
+    {
+      question: "What are the apartment prices and configurations in Godrej Arden?",
+      answer: "Godrej Arden offers: 2 BHK + Study (1,375 sq ft from ₹1.63 Cr), 3 BHK (1,850 sq ft from ₹2.20 Cr), 3 BHK + Study (2,100–2,150 sq ft from ₹2.52 Cr), 3 BHK + Servant (2,450–2,550 sq ft from ₹2.85 Cr), and 4 BHK (2,700–2,900 sq ft from ₹3.10 Cr). Pre-launch base price is ₹11,812 per sq ft. The 2 BHK + Study category is a standout feature missing in most Greater Noida premium launches."
+    },
+    {
+      question: "Is Godrej Arden a good investment in 2026?",
+      answer: "Godrej Arden is a well-balanced opportunity for both end-users and investors. Strengths: Godrej brand reliability (200+ deliveries), low-density 4-units-per-floor planning, multi-road facing open plot, competitive pre-launch pricing, and a 30:40:30 construction-linked payment plan. Long-term appreciation is supported by Greater Noida's maturing infrastructure and the Jewar Airport effect. A 4–6 year holding horizon is advisable for investors."
+    },
+    {
+      question: "What is the payment plan for Godrej Arden?",
+      answer: "Godrej Arden follows a 30:40:30 construction-linked plan — 30% on booking, 40% at key construction milestones, and 30% near possession. This reduces upfront financial pressure for buyers and allows investors to manage capital efficiently while the project appreciates during construction."
+    },
+    {
+      question: "How does Godrej Arden's tower planning differ from other Greater Noida projects?",
+      answer: "Godrej Arden uses angular tower placement — not conventional parallel rows — to maximise east-west orientation, natural sunlight, cross ventilation, and inter-tower privacy. With just 4 units per floor and green belt boundaries on multiple sides, the project offers significantly better living quality than large-format developments with 8–12 units per floor. Towers 8 and 9 (33 floors) offer premium park and pool-facing 4 BHK residences with the best views."
+    },
+    {
+      question: "How does Godrej Arden compare to Sobha Aurum and Eldeco 7 Peaks in Greater Noida?",
+      answer: "Godrej Arden competes most directly with Sobha Aurum (Sector 36) and Eldeco 7 Peaks (Omicron 1) in Greater Noida. Godrej Arden's edge: superior land parcel openness, the unique 2 BHK + Study option, and Godrej's trusted national brand. Sobha Aurum offers exceptional construction quality but at higher pricing. Eldeco 7 Peaks has a more established Pari Chowk address. For buyers prioritising open green surroundings and affordable luxury, Godrej Arden stands out."
+    }
+  ],
+  "commercial-property-in-noida-the-complete-guide": [
+    {
+      question: "What is the difference between builder lease and self lease in commercial property in Noida?",
+      answer: "In builder lease, the developer controls tenant acquisition — they bring premium brands, negotiate leases, and manage the retail mix. You earn income based on revenue-sharing or assured returns. In self lease, you independently manage your own tenant with a direct rental agreement giving complete clarity on monthly income, escalations, and deposit. Builder lease offers premium brand positioning but complexity; self lease offers rental certainty with simpler structures."
+    },
+    {
+      question: "Are assured return schemes in Noida commercial property actually guaranteed?",
+      answer: "Assured returns are often partially self-funded. A common structure: the developer sells at ₹5,000–10,000 per sq ft above market price and redistributes that premium as 'guaranteed rental' over 3–5 years. After the guarantee period, you receive actual market rent or revenue share — which could be significantly lower. Always calculate your net return AFTER the guarantee period ends. That number — not the assured period yield — determines the investment's true quality."
+    },
+    {
+      question: "What is capex in commercial real estate and who pays it?",
+      answer: "Capex (capital expenditure) is the cost a brand spends setting up their store — interiors, lighting, trial rooms, AC, and display systems. In many builder-leased Noida projects, capex is charged to investors, often on super area rather than carpet area. At ₹1,500–2,000 per sq ft, this can add ₹7–15 lakh per unit. It may also repeat when the tenant changes. Always ask: who pays capex, is it on super area or carpet area, and what happens when the tenant exits?"
+    },
+    {
+      question: "What is the best commercial investment strategy in Noida in 2026?",
+      answer: "For builder-leased commercial: prefer ground floor front-facing units in projects with confirmed (not promised) operators; understand all revenue-sharing and capex terms before signing. For self-leased: focus on society retail in dense residential catchments (1,000+ nearby flats) or office campus retail near IT hubs in Sectors 62, 90, 132, 140, and 142. Avoid overpaying — high acquisition cost forces unrealistic rental expectations that increase tenant failure risk."
+    },
+    {
+      question: "Is commercial property in Noida a better investment than residential in 2026?",
+      answer: "Commercial property in Noida offers higher rental yields (6–9% annually vs 2–3% for residential), but comes with greater complexity: capex obligations, tenant sourcing challenges, revenue-sharing structures, and lower resale liquidity. Self-leased society shops and office campus retail are the most accessible and predictable entry points. Builder-leased luxury commercial requires careful due diligence on the post-guarantee rental structure before committing."
+    },
+    {
+      question: "Why is office campus retail a better commercial investment than luxury high street in Noida?",
+      answer: "Office campus retail near Noida's IT corridors serves daily consumption needs — coffee, food, banking, fitness — creating recurring, predictable demand. Luxury high-street retail depends on footfall driven by entertainment, which is harder to sustain in a slow market. During downturns, office campus retail near Sectors 62, 90, 132, and 140 maintains stable occupancy while luxury retail goes vacant — making it a safer choice for income-focused investors."
+    }
+  ],
+  "noida-real-estate-2025-conclusion-project-by-project-reality-check-by-property-saraansh": [
+    {
+      question: "Which was the strongest investment recommendation from Property Saraansh for Noida in 2025?",
+      answer: "Experion 151 received the strongest and most unanimous recommendation in 2025 — a must-buy for end-users, investors, and traders. It was the only project that balanced pricing, density control, luxury quality, Noida Expressway location (Sector 151), and genuine end-user appeal simultaneously. No other project reviewed in 2025 scored positively across all parameters at once."
+    },
+    {
+      question: "Were Yamuna Expressway apartments a good investment in 2025?",
+      answer: "No — apartments on Yamuna Expressway remained risky throughout 2025. The corridor lacks the end-user ecosystem (jobs, schools, hospitals, daily amenities) needed to sustain apartment demand. Projects like ACE Verde, Purvanchal Sunbliss, and Gaur Chrysalis attracted investor interest but not genuine residents. Property Saraansh's consistent position: buy plots on Yamuna with a 5–7 year horizon; avoid high-rise apartments until the ecosystem matures."
+    },
+    {
+      question: "Why did investors struggle to exit Noida projects in 2025?",
+      answer: "Most investors bought like traders, not future residents. Projects across Yamuna Expressway, parts of Greater Noida West, and certain Noida Expressway launches became investor-dominated with very few genuine end-users. When everyone tries to sell simultaneously to a small buyer pool, exits slow down and resale pricing gets squeezed even if builder headline rates hold. Lesson: if you won't live there, check that others actually will — that is what determines your exit market."
+    },
+    {
+      question: "What made Prestige City Ghaziabad a successful project in 2025?",
+      answer: "Prestige City Ghaziabad succeeded through massive township scale, a layered pricing strategy (first-layer buyers received the best advantage), national brand recognition, and strategic location positioning. It created a complete self-contained ecosystem. However, traffic and accessibility challenges remain a concern as it grows. Property Saraansh's view: a genuinely difficult project to replicate, which supports long-term value — but watch infrastructure development carefully."
+    },
+    {
+      question: "What is the biggest lesson from the Noida real estate market in 2025?",
+      answer: "Pricing discipline beats brand name. Even top developers struggled when pricing exceeded what the location's end-user market could absorb (Sobha Extension in Noida Extension being a clear example). The winners — Prestige City, Experion 151, Sobha Aurum — got the price-to-location ratio right. Going into 2026: entry price and real end-user demand are the two most important variables for investor returns. Marketing hype is irrelevant."
+    },
+    {
+      question: "Is Godrej Riverine a good long-term investment?",
+      answer: "Godrej Riverine is an excellent project for end-users wanting premium luxury near Delhi. For investors, aspirational pricing and high investor participation create resale risk and slower exits. It competes with L&T luxury projects, Max Estates, and branded residences. Property Saraansh verdict: buy if you plan to live there for 5+ years; be cautious if you're expecting quick appreciation or a profitable short-term exit."
+    }
+  ],
+  "why-exit-has-become-the-biggest-problem-in-noida-real-estate": [
+    {
+      question: "Why are investors unable to exit their Noida real estate investments?",
+      answer: "The root cause is investor-dominated inventory with insufficient end-user demand. Between 2021 and 2024, investors bought heavily in projects driven by airport stories, exit policies, and FOMO — without asking: 'Would I actually live here?' Near possession, all investors try to sell simultaneously to a small pool of genuine buyers, creating an exit bottleneck. Resale pricing gets squeezed even while builder headline rates remain stable."
+    },
+    {
+      question: "What should ACE Terra investors on Yamuna Expressway do?",
+      answer: "ACE Terra investors face a difficult exit due to investor-heavy inventory and limited end-user demand. If you have no EMI pressure and a 5–7 year patience horizon, the Jewar Airport effect may eventually improve liquidity. However, if you are under financial pressure, exiting at no profit today is smarter than accumulating EMI burden and opportunity cost for years. Don't wait for a dream price in an investor-saturated location."
+    },
+    {
+      question: "Should Godrej Tropical Isle investors hold or sell?",
+      answer: "Investors who entered Godrej Tropical Isle at ₹12,500–13,000 per sq ft have reasonable positioning. Despite nearby dumpyard and freight corridor concerns, Godrej controls independent execution, brand reputation ensures delivery quality, and structural progress is improving confidence. Holding until 2027 — when construction visibility and surrounding infrastructure clarity improve — may meaningfully improve exit options. Unlike ACE Terra, Tropical Isle has enough fundamentals to justify patience."
+    },
+    {
+      question: "Is ACE Hanei Greater Noida West worth holding?",
+      answer: "ACE Hanei has long-term potential but was slightly ahead of its market timing. Greater Noida West currently lacks sufficient ultra-luxury demand to absorb larger units. The strategy: stay invested until the Occupancy Certificate is applied, allow project execution to improve buyer confidence, and target a future resale zone around ₹15,000 per sq ft as the market matures. Entry pricing was not unreasonable — patience is the right call here."
+    },
+    {
+      question: "How can future investors avoid exit problems in Noida real estate?",
+      answer: "Ask three questions before buying: (1) Would I actually live here? If no, your resale buyer pool is only other investors — a much weaker market. (2) Does this location have real livability today — schools, hospitals, connectivity, daily amenities — not 5 years from now? (3) What does the active resale market look like versus builder pricing? Ignore airport narratives, exit policy gimmicks, and FOMO marketing. Real appreciation follows genuine residential demand."
+    },
+    {
+      question: "What is the difference between investor-driven and end-user-driven real estate in Noida?",
+      answer: "An investor-driven market (Yamuna Expressway high-rises, ACE Hanei) has most buyers expecting appreciation, not habitation. Near possession, all investors compete for a small end-user pool — creating oversupply and weak resale despite stable builder prices. An end-user-driven market (Prestige City Ghaziabad, Experion 151) has real residential demand that absorbs inventory steadily, making exits faster and resale premiums achievable. Always check: what percentage of buyers actually plan to live there?"
+    }
+  ],
+  "noida-real-estate-2026-dasnac-arc-fairfox-eon": [
+    {
+      question: "What is the rental yield of Dasnac Arc studios in Sector 72 Noida?",
+      answer: "Dasnac Arc commercial studios in Sector 72, Central Noida offer approximately 8–8.5% annual rental yield. With resale entry around ₹15,500 per sq ft (vs ₹18,500 fresh), the all-in investment is ₹75–78 lakh for expected monthly rentals of ₹55,000. This is one of the strongest commercial studio yields in Noida today, supported by a confirmed hotel operator and a dense residential catchment of 1.5–2 lakh nearby population."
+    },
+    {
+      question: "Should I buy fresh or resale at Dasnac Arc?",
+      answer: "Resale is the smarter entry in 2026. Fresh pricing at Dasnac Arc is around ₹18,500 per sq ft, while resale units are available at ₹15,500 per sq ft — saving ₹3,000 per sq ft with identical rental income potential. On a 400 sq ft studio, that's ₹12 lakh saved. Target resale units with existing hotel operator assignments for the fastest rental activation."
+    },
+    {
+      question: "Is Fairfox EON a good commercial investment in Noida in 2026?",
+      answer: "Fairfox EON in Sector 140, Noida Expressway is a good investment — but only for the right product. Studios at resale pricing of ₹9,800–9,900 per sq ft offer ₹40,000–42,000 per month rental at ₹75 lakh all-in, translating to approximately 6.4% yield. Avoid office spaces (oversupply risk); focus on studios or ground-floor retail. The real working ecosystem — multiple operational offices and daily footfall — makes Fairfox EON a genuine rental play, not a speculative one."
+    },
+    {
+      question: "What makes M3M The Cullinan a smart resale investment versus new luxury launches?",
+      answer: "M3M The Cullinan offers a complete integrated address — residential towers, Trump Towers, a self-leased mall, and high-street retail — at resale pricing of ₹24,000 per sq ft, compared to comparable new luxury launches at ₹30,000–35,000+ per sq ft. Buyers entering at resale benefit from established branding, a mature community, and significant upside as the gap with newer launches narrows. Lower downside risk than fresh luxury inventory is the key advantage."
+    },
+    {
+      question: "Are ATS Plots and ACE Acreville on Yamuna Expressway good investments in 2026?",
+      answer: "Yes, with clear conditions. ACE Acreville and ACE Estate offer resale entry around ₹1.25 lakh per gaj versus fresh rates touching ₹1.5 lakh — better risk-reward at resale. For ATS Plots, budget above ₹2 Crore and a 5–7 year holding horizon are essential. Plots remain the safest bet on Yamuna Expressway because land stays scarce over time. Avoid apartments here — the end-user ecosystem is still too underdeveloped to support strong resale demand."
+    },
+    {
+      question: "What is the core investment principle for Noida real estate in 2026?",
+      answer: "Buy smart, not loud. Fresh launches in 2026 are driven by marketing rather than real pricing logic. Smart investors target resale units in fundamentally strong projects — lower entry price, established community, faster rental activation. Dasnac Arc, Fairfox EON, M3M The Cullinan, and ACE Acreville/Estate outperform because their demand economics hold up to scrutiny. Real money in Noida 2026 is made in the right resale, not the loudest new launch."
+    }
+  ]
 };
 
 /**

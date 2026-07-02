@@ -115,7 +115,7 @@ export const videos: Video[] = [
     "views": "8.2K views views"
   },
   {
-    "slug": "godrej-arden-sigma-3-review-price-floor-plan-location-analysis",
+    "slug": "godrej-arden-sigma-3-review",
     "title": "Godrej Arden Sigma 3 Review | Price, Floor Plan & Location Analysis",
     "description": "Godrej Arden Sigma 3 Greater Noida review — price, floor plans, location analysis and whether it's a smart buy.",
     "youtubeId": "tWk2i0WUqiY",
@@ -127,7 +127,7 @@ export const videos: Video[] = [
     "views": "11K views views"
   },
   {
-    "slug": "commercial-investment-in-noida-builder-leased-vs-self-lease",
+    "slug": "noida-commercial-builder-vs-self-lease",
     "title": "Commercial investment in Noida | Builder Leased vs Self Lease ?",
     "description": "Commercial investment in Noida — builder-leased vs self-lease compared on returns, risk and resale to help you choose the right option.",
     "youtubeId": "41xfVmmczUA",
@@ -151,7 +151,7 @@ export const videos: Video[] = [
     "views": "17K views views"
   },
   {
-    "slug": "exit-advice-on-3-residential-projects-in-noida-ace-terra-godrej-tropical-isle-an",
+    "slug": "exit-advice-noida-residential-projects",
     "title": "Exit Advice on 3 Residential Projects in Noida  Ace Terra, Godrej Tropical Isle and Ace Hanei",
     "description": "Honest exit advice on three Noida projects — Ace Terra, Godrej Tropical Isle and Ace Hanei — when to hold, when to sell, and how to protect your returns.",
     "youtubeId": "9iAnowOVwjo",
@@ -163,7 +163,7 @@ export const videos: Video[] = [
     "views": "28K views views"
   },
   {
-    "slug": "experion-saatori-sector-151-noida-honest-review-investment-analysis",
+    "slug": "experion-saatori-sector-151-noida",
     "title": "Experion Saatori Sector 151 Noida | Honest Review & Investment Analysis",
     "description": "Experion Saatori Sector 151 Noida — honest review and investment analysis covering price, layouts, location and appreciation potential.",
     "youtubeId": "gYfkP-0pi0o",
@@ -175,7 +175,7 @@ export const videos: Video[] = [
     "views": "23K views views"
   },
   {
-    "slug": "sobha-rivana-noida-extension-review-better-than-sobha-aurum-or-overpriced",
+    "slug": "sobha-rivana-noida-extension-review",
     "title": "Sobha Rivana Noida Extension Review Better Than Sobha Aurum or Overpriced?",
     "description": "Sobha Rivana Noida Extension review — better value than Sobha Aurum, or overpriced? Layout, pricing and an honest investment verdict.",
     "youtubeId": "6P-wf8O5Or8",
@@ -199,7 +199,7 @@ export const videos: Video[] = [
     "views": "12K views views"
   },
   {
-    "slug": "lt-green-reserve-noida-price-detail-payment-plan-exit-policy-appreciation-prospe",
+    "slug": "lt-green-reserve-noida-price-payment-plan",
     "title": "L&T Green Reserve Noida price detail payment plan exit Policy & Appreciation Prospects",
     "description": "L&T Green Reserve Noida — price details, payment plan, exit policy and appreciation prospects in this complete investment breakdown.",
     "youtubeId": "oecEN5Ng0-o",
@@ -211,7 +211,7 @@ export const videos: Video[] = [
     "views": "5.3K views views"
   },
   {
-    "slug": "prestige-city-ghaziabad-4-month-update-new-phase-project-progress-explained",
+    "slug": "prestige-city-ghaziabad-4-month-update",
     "title": "Prestige City Ghaziabad 4-Month Update | New Phase & Project Progress Explained",
     "description": "Prestige City Ghaziabad 4-month update — new phase launch, construction progress and what's changed for buyers and investors.",
     "youtubeId": "ugD-yKaiV2U",
@@ -223,7 +223,7 @@ export const videos: Video[] = [
     "views": "8.5K views views"
   },
   {
-    "slug": "lt-green-reserve-sector-128-noida-watch-this-video-before-you-buy-compete-buying",
+    "slug": "lt-green-reserve-sector-128-buying-guide",
     "title": "⁠L&T Green Reserve Sector 128 Noida - Watch this video before you buy ! Compete Buying Guide",
     "description": "L&T Green Reserve Sector 128 Noida — a complete buying guide covering price, payment plan and the risks you must know before you book.",
     "youtubeId": "YL6j01ID38w",
@@ -235,7 +235,7 @@ export const videos: Video[] = [
     "views": "9.4K views views"
   },
   {
-    "slug": "is-gaurs-yamuna-expressway-launch-a-worthy-or-overpriced",
+    "slug": "gaurs-yamuna-expressway-launch-review",
     "title": "Is Gaur's Yamuna Expressway Launch a Worthy or Overpriced?",
     "description": "Is Gaur's new Yamuna Expressway launch worth it or overpriced? Pricing, location and investment potential analysed honestly.",
     "youtubeId": "qKtESl55t-8",
@@ -247,7 +247,7 @@ export const videos: Video[] = [
     "views": "6.7K views views"
   },
   {
-    "slug": "noida-expressways-top3-most-profitable-self-use-projects-in-2025-revealed",
+    "slug": "top-3-self-use-projects-noida-expressway",
     "title": "Noida Expressway's TOP3 Most PROFITABLE Self-Use Projects in 2025 Revealed",
     "description": "The top 3 most profitable self-use projects on Noida Expressway in 2025, revealed — with location, pricing and value analysis.",
     "youtubeId": "tQlCLCmTe5g",
@@ -259,7 +259,7 @@ export const videos: Video[] = [
     "views": "7.3K views views"
   },
   {
-    "slug": "is-ace-the-nest-studio-apartments-and-ace-verde-on-yamuna-expressway-an-opportun",
+    "slug": "ace-the-nest-ace-verde-yamuna-expressway",
     "title": "Is Ace The Nest Studio Apartments and Ace Verde on Yamuna Expressway an Opportunity or Huge Mistake?",
     "description": "Are Ace The Nest studio apartments and Ace Verde on Yamuna Expressway a real opportunity or a costly mistake? An honest ROI breakdown.",
     "youtubeId": "Q54r9FzP6oA",
@@ -271,7 +271,7 @@ export const videos: Video[] = [
     "views": "10K views views"
   },
   {
-    "slug": "is-panvel-the-new-future-of-mumbais-3o-real-estate-market-godrejcitypanvel",
+    "slug": "godrej-city-panvel-mumbai-review",
     "title": "Is Panvel the NEW FUTURE of Mumbai's 3.O Real Estate Market? #GodrejCityPanvel",
     "description": "Is Panvel the next future of Mumbai's real estate? A look at Godrej City Panvel and whether this emerging corridor is worth investing in.",
     "youtubeId": "HJ461VdqOQ8",
@@ -283,7 +283,7 @@ export const videos: Video[] = [
     "views": "7.8K views views"
   },
   {
-    "slug": "godrej-evergreen-square-apartments-in-hinjewadi-pune",
+    "slug": "godrej-evergreen-square-hinjewadi-pune",
     "title": "Godrej Evergreen Square Apartments in Hinjewadi Pune",
     "description": "Godrej Evergreen Square, Hinjewadi Pune — apartment review covering location, pricing, layouts and investment potential in Pune's IT hub.",
     "youtubeId": "i3FOJ1ZX79Q",
@@ -295,7 +295,7 @@ export const videos: Video[] = [
     "views": "5.2K views views"
   },
   {
-    "slug": "sobha-aurum-greater-noida-sector-36-or-prestige-city-indirapuram-which-one-is-be",
+    "slug": "sobha-aurum-sector-36-vs-prestige-indirapuram",
     "title": "Sobha Aurum Greater Noida Sector 36 OR Prestige City Indirapuram Which ONE IS BETTER for you ?",
     "description": "Sobha Aurum Greater Noida Sector 36 vs Prestige City Indirapuram — which project is the better buy for you? A side-by-side comparison.",
     "youtubeId": "j3U6dH_TqC8",
@@ -307,7 +307,7 @@ export const videos: Video[] = [
     "views": "9.3K views views"
   },
   {
-    "slug": "is-godrej-majesty-noida-extension-worthy-of-an-investment",
+    "slug": "godrej-majesty-noida-extension-review",
     "title": "Is Godrej Majesty Noida extension worthy of an Investment?",
     "description": "Is Godrej Majesty in Noida Extension worth investing in? Pricing, layouts, location and appreciation potential reviewed.",
     "youtubeId": "oL--4DULuS8",
@@ -319,7 +319,7 @@ export const videos: Video[] = [
     "views": "4.7K views views"
   },
   {
-    "slug": "is-ace-acreville-really-worth-the-high-price-of-13l-per-yard",
+    "slug": "ace-acreville-price-review",
     "title": "Is ACE ACREVILLE Really Worth the HIGH Price of 1.3L per yard?",
     "description": "Is Ace Acreville really worth its high price of ₹1.3L per yard? An honest look at the project, location and investment case.",
     "youtubeId": "K-s0W7NJMrk",
@@ -331,7 +331,7 @@ export const videos: Video[] = [
     "views": "4.3K views views"
   },
   {
-    "slug": "dasnac-yuva-studio-apartments-review-rental-reality-roi-investment-analysis",
+    "slug": "dasnac-yuva-studio-apartments-review",
     "title": "Dasnac Yuva Studio Apartments Review | Rental Reality, ROI & Investment Analysis",
     "description": "Dasnac Yuva studio apartments review — rental reality, ROI and investment analysis for this Noida Expressway studio option.",
     "youtubeId": "q37-HJHFhGc",
@@ -355,7 +355,7 @@ export const videos: Video[] = [
     "views": "8.8K views views"
   },
   {
-    "slug": "sobha-aurum-greater-noida-sector-36-is-it-worth-the-hype",
+    "slug": "sobha-aurum-sector-36-greater-noida-review",
     "title": "Sobha Aurum Greater Noida Sector 36, Is it worth the hype ?",
     "description": "Sobha Aurum Greater Noida Sector 36 — is it worth the hype? Price, layouts, location and an honest investment verdict.",
     "youtubeId": "vhttyOmqcuQ",
@@ -367,7 +367,7 @@ export const videos: Video[] = [
     "views": "17K views views"
   },
   {
-    "slug": "ats-province-d-olympia-vs-ace-estate-which-yamuna-expressway-township-is-better-",
+    "slug": "ats-province-d-olympia-vs-ace-estate",
     "title": "ATS Province D Olympia vs ACE Estate: Which Yamuna Expressway Township Is Better in 2025?",
     "description": "ATS Province D Olympia vs Ace Estate — which Yamuna Expressway township is the better investment in 2025? A detailed comparison.",
     "youtubeId": "WGZZIqeLoaU",
@@ -379,7 +379,7 @@ export const videos: Video[] = [
     "views": "20K views views"
   },
   {
-    "slug": "purvanchal-sunbliss-22d-yamuna-expressway-secrets-for-best-investment",
+    "slug": "purvanchal-sunbliss-22d-yamuna-expressway",
     "title": "Purvanchal Sunbliss 22D Yamuna Expressway  Secrets For BEST Investment",
     "description": "Purvanchal Sunbliss Sector 22D Yamuna Expressway — pricing, layouts and the key secrets to making the best investment decision.",
     "youtubeId": "g805jc8GKhU",
@@ -391,7 +391,7 @@ export const videos: Video[] = [
     "views": "12K views views"
   },
   {
-    "slug": "ska-estate-luxury-apartments-in-greater-noida-at-realistic-prices",
+    "slug": "ska-estate-greater-noida-review",
     "title": "SKA estate Luxury Apartments in Greater Noida at Realistic Prices",
     "description": "SKA Estate Greater Noida — luxury apartments at realistic prices reviewed, with layouts, location and value analysis.",
     "youtubeId": "PbyXvIrful0",
@@ -403,7 +403,7 @@ export const videos: Video[] = [
     "views": "15K views"
   },
   {
-    "slug": "ace-groups-new-residential-plots-at-yamuna-expressway-noida",
+    "slug": "ace-residential-plots-yamuna-expressway",
     "title": "Ace Groups New Residential Plots at Yamuna Expressway Noida",
     "description": "Ace Group's new residential plots on Yamuna Expressway, Noida — pricing, location and whether these plots are a smart investment.",
     "youtubeId": "RiwupPz-wmQ",
@@ -415,7 +415,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "godrej-riverine-a-luxury-apartment-option-near-delhi",
+    "slug": "godrej-riverine-luxury-apartments-delhi",
     "title": "Godrej Riverine – A Luxury Apartment Option Near Delhi",
     "description": "Godrej Riverine — a luxury apartment option near Delhi reviewed, covering location advantages, pricing and investment potential.",
     "youtubeId": "Dfba98En7rk",
@@ -427,7 +427,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "prestige-city-ghaziabad-launch-everything-you-need-to-know-n",
+    "slug": "prestige-city-ghaziabad-launch-guide",
     "title": "Prestige City Ghaziabad Launch: Everything You Need to Know Now",
     "description": "Prestige City Ghaziabad launch — everything you need to know now: pricing, location, phases and the investment opportunity.",
     "youtubeId": "NAb2cM4Q-1I",
@@ -451,7 +451,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "legacy-by-gaurs-launches-dream-homes-at-unbeatable-prices",
+    "slug": "legacy-by-gaurs-launch",
     "title": "Legacy by Gaurs Launches Dream Homes at Unbeatable Prices",
     "description": "Legacy by Gaurs launches dream homes at unbeatable prices — project details, pricing and whether it's worth booking.",
     "youtubeId": "jFlFfLNOKx0",
@@ -463,7 +463,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "what-makes-ace-hanei-the-most-desired-3-and-4-bhk-in-noida",
+    "slug": "ace-hanei-noida-3-4-bhk-review",
     "title": "What Makes ACE Hanei the MOST Desired 3 and 4 BHK in Noida",
     "description": "What makes Ace Hanei the most desired 3 and 4 BHK in Noida — layouts, amenities, pricing and the investment case explained.",
     "youtubeId": "NQf0pS1cjPE",
@@ -475,7 +475,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "taj-skyscape-noida-why-hnis-are-choosing-hotel-managed-resid",
+    "slug": "taj-skyscape-noida-review",
     "title": "Taj Skyscape Noida | Why HNIs Are Choosing Hotel-Managed Residences Over Luxury Apartments",
     "description": "Taj Skyscape Noida — why HNIs are choosing hotel-managed residences over luxury apartments. Features, pricing and the investment angle.",
     "youtubeId": "WTMe76bD6-I",
@@ -487,7 +487,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "m3m-cullinan-and-max-estate-128-on-noida-expressway-are-the-",
+    "slug": "m3m-cullinan-vs-max-estate-128-noida",
     "title": "M3M Cullinan and Max estate 128 on Noida Expressway are The MOST Luxurious Apartments",
     "description": "M3M Cullinan vs Max Estate 128 on Noida Expressway — a look at the most luxurious apartments, their pricing and investment appeal.",
     "youtubeId": "d89gA6WupxM",
@@ -499,7 +499,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "further-clarity-on-prestige-city-ghaziabad-payment-plan-exit",
+    "slug": "prestige-city-ghaziabad-payment-plan-exit",
     "title": "Further Clarity on Prestige City Ghaziabad Payment Plan | Exit Plan | Better than Gaur NYC?",
     "description": "Further clarity on Prestige City Ghaziabad — payment plan, exit plan, and how it compares to Gaur NYC for investors.",
     "youtubeId": "ux80FKaXqdg",
@@ -511,7 +511,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "comparing-top-noida-studio-projects-eon-vs-orion-vs-m3m-vs-g",
+    "slug": "noida-studio-projects-eon-vs-orion-vs-m3m",
     "title": "Comparing Top Noida Studio Projects - EON vs Orion vs M3M Vs Golden Palm",
     "description": "Top Noida studio projects compared — EON vs Orion vs M3M vs Golden Palm on price, location and ROI to find the best bet.",
     "youtubeId": "vhbwRsbIO5c",
@@ -523,7 +523,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "prestige-city-ghaziabad-a-practical-review-by-property-saraa",
+    "slug": "prestige-city-ghaziabad-review",
     "title": "Prestige City Ghaziabad - A Practical Review by Property Saraansh",
     "description": "A practical, no-hype review of Prestige City Ghaziabad by Property Saraansh — pricing, location and real investment potential.",
     "youtubeId": "qeOagu8B3Kc",
@@ -535,7 +535,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "want-to-buy-an-apartment-in-noida-things-you-should-consider",
+    "slug": "buying-apartment-in-noida-guide",
     "title": "Want to buy an Apartment in Noida? Things you should consider!",
     "description": "Planning to buy an apartment in Noida? The key things to consider — location, builder, pricing and resale — before you decide.",
     "youtubeId": "WPmnUl3ru9U",
@@ -547,7 +547,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "i-compared-dasnac-arc-and-m3m-the-line-for-rental-income-her",
+    "slug": "dasnac-arc-vs-m3m-the-line-rental-income",
     "title": "I Compared Dasnac ARC and M3M The Line for Rental Income Here's What I Found",
     "description": "Dasnac ARC vs M3M The Line compared for rental income — real numbers on ROI and which studio investment comes out ahead.",
     "youtubeId": "rbgRjoP2KIU",
@@ -559,7 +559,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "is-samridhi-daksh-avenue-really-better-than-prateek-canary-f",
+    "slug": "samridhi-daksh-avenue-vs-prateek-canary",
     "title": "Is Samridhi Daksh Avenue Really BETTER Than Prateek Canary For Investment",
     "description": "Is Samridhi Daksh Avenue really better than Prateek Canary for investment? Pricing, location and returns compared.",
     "youtubeId": "s6V6M2zApmI",
@@ -583,7 +583,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "studio-apartments-in-noida-best-small-investment-on-noida-ex",
+    "slug": "studio-apartments-noida-expressway-investment",
     "title": "Studio Apartments in Noida - Best Small investment on Noida Expressway",
     "description": "Studio apartments in Noida — the best small investment on Noida Expressway? Rental potential, ROI and what to watch for.",
     "youtubeId": "DidX6OywjW0",
@@ -607,7 +607,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "gulshan-dynasty-sample-flat-tour-ready-to-move-in-4-bhk-ultr",
+    "slug": "gulshan-dynasty-4-bhk-sample-flat-tour",
     "title": "Gulshan Dynasty Sample flat tour ready to move in 4 BHK Ultra Luxury Apartments",
     "description": "Gulshan Dynasty sample flat tour — ready-to-move 4 BHK ultra-luxury apartments in Noida, with layouts, finishes and pricing.",
     "youtubeId": "0crM1LCI8dk",
@@ -619,7 +619,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "top-5-residential-projects-on-noida-expressway",
+    "slug": "top-5-residential-projects-noida-expressway",
     "title": "Top 5 Residential Projects on Noida Expressway",
     "description": "The top 5 residential projects on Noida Expressway — the best options compared on location, pricing and long-term investment value.",
     "youtubeId": "LLYIqQZ9Qr8",
@@ -631,7 +631,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "best-commercial-property-on-noida-expressway-for-investment",
+    "slug": "best-commercial-property-noida-expressway",
     "title": "Best Commercial Property on Noida Expressway for Investment",
     "description": "The best commercial property on Noida Expressway for investment — what to look for in returns, leasing and location.",
     "youtubeId": "Hd7cHcVrBWE",
@@ -643,7 +643,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "max-estates-128-and-max-estates-360-your-gateway-to-luxury-l",
+    "slug": "max-estates-128-and-360-noida",
     "title": "Max Estates 128 and Max Estates 360: Your Gateway to Luxury Living",
     "description": "Max Estates 128 and Max Estates 360 — your gateway to luxury living on Noida Expressway. Layouts, pricing and investment potential.",
     "youtubeId": "P0qDqzgMcho",
@@ -655,7 +655,7 @@ export const videos: Video[] = [
     "views": "10K+ views"
   },
   {
-    "slug": "will-yamuna-expressway-actually-boom-by-2030-yamunaexpressway-noidarealestate",
+    "slug": "will-yamuna-expressway-boom-by-2030",
     "title": "Will Yamuna Expressway Actually Boom by 2030? #yamunaexpressway #noidarealestate",
     "description": "Will Yamuna Expressway really boom by 2030? A quick, honest take on the corridor's real estate future.",
     "youtubeId": "fslL0ubv2O4",
@@ -667,7 +667,7 @@ export const videos: Video[] = [
     "views": "10K views"
   },
   {
-    "slug": "crc-sublimis-success-now-crc-the-peridona-takes-over",
+    "slug": "crc-sublimis-to-crc-the-peridona",
     "title": "CRC Sublimis Success ➝ Now CRC The Peridona Takes Over!",
     "description": "From CRC Sublimis' success to CRC The Peridona — a quick look at CRC Group's track record and their most exclusive Noida launch.",
     "youtubeId": "Hh_ZPRycdKE",
@@ -679,7 +679,7 @@ export const videos: Video[] = [
     "views": "771 views"
   },
   {
-    "slug": "crc-the-flagship-noida-exclusivity-begins-here",
+    "slug": "crc-the-flagship-noida",
     "title": "CRC The Flagship noida exclusivity begins here",
     "description": "CRC The Flagship, Noida — where exclusivity begins. A quick look at this premium project.",
     "youtubeId": "aYa-PtBcXl4",
@@ -691,7 +691,7 @@ export const videos: Video[] = [
     "views": "1K views"
   },
   {
-    "slug": "how-does-the-same-land-price-double-in-noida-shorts",
+    "slug": "how-land-price-doubles-in-noida",
     "title": "How Does the Same Land Price Double in Noida? #shorts",
     "description": "How does the same land price double in Noida? The simple mechanics behind real estate appreciation, explained fast.",
     "youtubeId": "IDO0ymvDMN0",
@@ -715,7 +715,7 @@ export const videos: Video[] = [
     "views": "2.6K views"
   },
   {
-    "slug": "eldeco-7-peaks-residences-full-honest-review-eldecogreaternoida",
+    "slug": "eldeco-7-peaks-full-review",
     "title": "Eldeco 7 Peaks Residences | Full Honest Review #eldecogreaternoida",
     "description": "A quick honest review of Eldeco 7 Peaks Residences, Greater Noida — layout, pricing and investment potential.",
     "youtubeId": "X-4FBRXMegE",
@@ -727,7 +727,7 @@ export const videos: Video[] = [
     "views": "8.6K views"
   },
   {
-    "slug": "elie-saab-jacob-co-noida-vs-m3m-cullinan-resale-m3mnoida",
+    "slug": "elie-saab-jacob-co-vs-m3m-cullinan-noida",
     "title": "Elie Saab & Jacob & Co Noida vs M3M Cullinan Resale? #m3mnoida",
     "description": "Elie Saab & Jacob & Co Noida vs M3M Cullinan on resale — a fast take on which branded luxury residence holds value better.",
     "youtubeId": "bPvVo3fyY0g",
@@ -739,7 +739,7 @@ export const videos: Video[] = [
     "views": "2.2K views"
   },
   {
-    "slug": "ace-estate-vs-ace-acreville-vs-ats-province-d-olympia-plots-on-yamuna-expressway",
+    "slug": "ace-estate-vs-acreville-vs-ats-olympia-plots",
     "title": "ACE Estate vs ACE Acreville vs ATS Province D Olympia Plots on Yamuna Expressway: Fresh or Resale?",
     "description": "Ace Estate vs Ace Acreville vs ATS Province D Olympia on Yamuna Expressway — fresh booking or resale? A quick verdict.",
     "youtubeId": "Xm0a4TfOIcs",
@@ -763,7 +763,7 @@ export const videos: Video[] = [
     "views": "2.2K views"
   },
   {
-    "slug": "builder-lease-vs-self-lease-which-is-best-for-your-noida-commercial-property-sho",
+    "slug": "builder-lease-vs-self-lease-noida-short",
     "title": "Builder Lease vs Self Lease Which is BEST for Your Noida Commercial Property #shorts",
     "description": "Builder lease vs self lease for Noida commercial property — which is best? A fast, clear answer.",
     "youtubeId": "j9WmfwO6R1A",
@@ -787,7 +787,7 @@ export const videos: Video[] = [
     "views": "2.2K views"
   },
   {
-    "slug": "unable-to-exit-your-noida-property-investment-watch-this-first-propertysaraansh-",
+    "slug": "unable-to-exit-noida-property-investment",
     "title": "Unable to Exit Your Noida Property Investment? Watch This First  #propertysaraansh #noidarealty",
     "description": "Stuck and unable to exit your Noida property investment? Watch this first — quick advice to protect your money.",
     "youtubeId": "n3xQEmTDZS4",
@@ -799,7 +799,7 @@ export const videos: Video[] = [
     "views": "2.2K views"
   },
   {
-    "slug": "experion-151-noida-honest-review-should-you-buy-here",
+    "slug": "experion-151-noida-review",
     "title": "Experion 151 Noida Honest Review | Should You Buy Here?",
     "description": "A quick honest review of Experion Sector 151 Noida — should you buy here? Key pros, cons and pricing.",
     "youtubeId": "GD1ax-NI1gY",
@@ -811,7 +811,7 @@ export const videos: Video[] = [
     "views": "2.7K views"
   },
   {
-    "slug": "wishing-you-a-happy-diwali-team-property-saraansh-happydiwali",
+    "slug": "happy-diwali-property-saraansh",
     "title": "Wishing You a Happy Diwali Team Property Saraansh #happydiwali",
     "description": "Property Saraansh wishes you a very Happy Diwali.",
     "youtubeId": "3uW5F19WXY0",
@@ -823,7 +823,7 @@ export const videos: Video[] = [
     "views": "1.5K views"
   },
   {
-    "slug": "lt-golf-course-apartments-sector-128-noida-expressway-reserve-green-eoi-started",
+    "slug": "lt-golf-course-apartments-sector-128-noida",
     "title": "L&T Golf Course Apartments Sector 128 Noida Expressway Reserve Green EOI Started",
     "description": "L&T Reserve Green golf-course apartments, Sector 128 Noida Expressway — EOI now open. Quick details on this premium launch.",
     "youtubeId": "I1O5bCqKcgs",
@@ -835,7 +835,7 @@ export const videos: Video[] = [
     "views": "5K views"
   },
   {
-    "slug": "ace-the-nest-or-fairfox-eon-dasnac-arc-which-studio-apartment-wins-for-roi-locat",
+    "slug": "ace-nest-vs-fairfox-eon-vs-dasnac-arc",
     "title": "ACE The Nest or Fairfox EON, Dasnac ARC ? | Which Studio Apartment Wins for ROI & Location in 2025?",
     "description": "Ace The Nest vs Fairfox EON vs Dasnac ARC — which Noida studio apartment wins on ROI and location in 2025? A quick comparison.",
     "youtubeId": "o1EvJ6eO9WI",
@@ -847,7 +847,7 @@ export const videos: Video[] = [
     "views": "8.2K views"
   },
   {
-    "slug": "godrej-evergreen-square-in-hinjewadi-pune-godrejevergreensquare-godrejhinjewadip",
+    "slug": "godrej-evergreen-square-hinjewadi-short",
     "title": "Godrej Evergreen Square in Hinjewadi Pune #godrejevergreensquare #godrejhinjewadipune",
     "description": "A quick look at Godrej Evergreen Square, Hinjewadi Pune — highlights, location and investment appeal.",
     "youtubeId": "V0-CB-BHygo",
@@ -859,7 +859,7 @@ export const videos: Video[] = [
     "views": "2.5K views"
   },
   {
-    "slug": "the-future-of-luxury-living-in-noida-revealed-jaypeegreens-camellias-dlfprivana",
+    "slug": "future-of-luxury-living-in-noida",
     "title": "The Future of Luxury Living in NOIDA Revealed #jaypeegreens #camellias #dlfprivana",
     "description": "The future of luxury living in Noida — a quick glimpse at marquee addresses like Jaypee Greens, The Camellias and DLF Privana.",
     "youtubeId": "6hop-aVpJHs",
@@ -883,7 +883,7 @@ export const videos: Video[] = [
     "views": "1.5K views"
   },
   {
-    "slug": "oakwood-at-the-prestige-city-ghaziabad-prestigesiddharthvihar-oawoodprestige-pre",
+    "slug": "oakwood-prestige-city-ghaziabad",
     "title": "Oakwood At The Prestige City Ghaziabad #prestigesiddharthvihar #oawoodprestige #prestigeghaziabad",
     "description": "Oakwood at The Prestige City Ghaziabad, Siddharth Vihar — a quick look at what this offering brings to buyers.",
     "youtubeId": "zhbuPaDFGqc",
@@ -895,7 +895,7 @@ export const videos: Video[] = [
     "views": "3.4K views"
   },
   {
-    "slug": "prestige-city-ghaziabad-rera-received-prestigesiddharthvihar-prestigeghaziabad",
+    "slug": "prestige-city-ghaziabad-rera-received",
     "title": "Prestige city Ghaziabad RERA Received #prestigesiddharthvihar #prestigeghaziabad",
     "description": "Prestige City Ghaziabad has received RERA approval — a quick update for interested buyers and investors.",
     "youtubeId": "IAu1mHz5BPU",
@@ -907,7 +907,7 @@ export const videos: Video[] = [
     "views": "3.8K views"
   },
   {
-    "slug": "purvanchal-sunbliss-sector-22d-on-yamuna-expressway-pricing-and-pre-launch-detai",
+    "slug": "purvanchal-sunbliss-22d-pricing-details",
     "title": "Purvanchal Sunbliss Sector 22D on Yamuna Expressway Pricing and Pre-Launch Details",
     "description": "Purvanchal Sunbliss, Sector 22D Yamuna Expressway — quick pricing and pre-launch details you should know.",
     "youtubeId": "_KdW-ZbDDwg",
@@ -919,7 +919,7 @@ export const videos: Video[] = [
     "views": "5.8K views"
   },
   {
-    "slug": "94-crore-luxury-4bhk-in-noida-that-sells-out-fast-luxuryhomes-noida",
+    "slug": "9-4-crore-luxury-4bhk-noida",
     "title": "₹9.4 Crore Luxury 4BHK in Noida That Sells Out Fast #LuxuryHomes #Noida",
     "description": "A ₹9.4 crore luxury 4BHK in Noida that sells out fast — a quick look at the project drawing premium buyers.",
     "youtubeId": "heHoAeyzVqI",
@@ -931,7 +931,7 @@ export const videos: Video[] = [
     "views": "2.7K views"
   },
   {
-    "slug": "wishing-entire-family-of-property-saraansh-a-very-happy-new-year-happynewyear-ne",
+    "slug": "happy-new-year-property-saraansh",
     "title": "Wishing entire Family of PROPERTY SARAANSH a Very Happy New Year ! #happynewyear #newyear2025",
     "description": "Property Saraansh wishes its entire family a very Happy New Year!",
     "youtubeId": "XaJAvEMOY3c",
@@ -955,7 +955,7 @@ export const videos: Video[] = [
     "views": "9.3K views"
   },
   {
-    "slug": "prestige-siddharth-vihar-pre-launch-opportunity-prestigecity-prestigecityghaziab",
+    "slug": "prestige-siddharth-vihar-pre-launch",
     "title": "Prestige Siddharth Vihar Pre Launch Opportunity #prestigecity #prestigecityghaziabad",
     "description": "Prestige Siddharth Vihar (Prestige City Ghaziabad) pre-launch opportunity — a quick look at the early-investor advantage.",
     "youtubeId": "sF4KdO4AzsM",
@@ -967,7 +967,7 @@ export const videos: Video[] = [
     "views": "3.1K views"
   },
   {
-    "slug": "orion-132-best-commercial-investment-noidaexpressway-commercialproperty-studioap",
+    "slug": "orion-132-commercial-investment-noida",
     "title": "Orion 132 best commercial investment #noidaexpressway #commercialproperty #studioapartments",
     "description": "Orion 132 — a quick case for one of Noida Expressway's best commercial investments, with studio apartment options.",
     "youtubeId": "VMFJGlKdBD4",
@@ -979,7 +979,7 @@ export const videos: Video[] = [
     "views": "7.2K views"
   },
   {
-    "slug": "my-attitude-after-closing-10-deals-realtor-realtorsofinstagram-realestatemarket2",
+    "slug": "realtor-life-after-10-deals",
     "title": "My attitude after closing 10 deals😛 #realtor #realtorsofinstagram  #realestatemarket2024 #realtors",
     "description": "A light, fun moment from the Property Saraansh team after closing 10 deals.",
     "youtubeId": "HDT3ksdZdCg",
@@ -1069,25 +1069,4 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
   if (!YOUTUBE_API_KEY) return staticVideo;
 
   try {
-    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=contentDetails,statistics`;
-    const res = await fetch(url, { next: { revalidate: 3600 } });
-    if (res.ok) {
-      const data = await res.json();
-      if (data.items && data.items.length > 0) {
-        const item = data.items[0];
-        const viewsStr = item.statistics?.viewCount || "";
-        const durationStr = item.contentDetails?.duration || "";
-        const { formatted } = parseIsoDuration(durationStr);
-        return {
-          ...staticVideo,
-          views: formatViewCount(viewsStr),
-          duration: formatted || staticVideo.duration
-        };
-      }
-    }
-  } catch (err) {
-    console.error("Failed to fetch real-time stats for video", err);
-  }
-
-  return staticVideo;
-}
+    const url = `https:/

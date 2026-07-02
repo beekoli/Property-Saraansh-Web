@@ -94,16 +94,22 @@ export default async function BlogPostPage({ params }: PageProps) {
   // Dynamically resolve video ID from post ACF field, falling back to slug-based or a signature review video
   // Video ID priority: WordPress backend field (ps_video_id) → ACF field → slug rule → default.
   const acfVideoId = blog.ps_video_id?.trim() || blog.acf?.video_id;
-  let relatedVideoId = acfVideoId || "e-WJp9zY7o8"; // Premium default video
+  let relatedVideoId = acfVideoId || "xicR-MeU77g"; // Noida Property Market 2025 as fallback
   if (!acfVideoId) {
     if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities')) {
       relatedVideoId = "g2dN6stL3i0"; // Noida Market Slowdown 2026
     } else if (slug.includes('yamuna-expressway')) {
       relatedVideoId = "qWAgkIW6Mj0"; // Yamuna Expressway Investment 2030
     } else if (slug.includes('commercial')) {
-      relatedVideoId = "video-7"; // Sector 129 commercial
-    } else if (slug.includes('residential') || slug.includes('eldeco')) {
-      relatedVideoId = "e-WJp9zY7o8"; // Eldeco 7 Peaks
+      relatedVideoId = "41xfVmmczUA"; // Commercial: Builder Lease vs Self Lease
+    } else if (slug.includes('eldeco')) {
+      relatedVideoId = "hCyx0D2_RzE"; // Eldeco 7 Peaks Residences
+    } else if (slug.includes('why-exit') || slug.includes('exit-has-become')) {
+      relatedVideoId = "9iAnowOVwjo"; // Exit Advice: Ace Terra, Godrej Tropical Isle, Ace Hanei
+    } else if (slug.includes('2025-conclusion') || slug.includes('reality-check')) {
+      relatedVideoId = "xicR-MeU77g"; // Noida Property Market 2025: What Worked & What Failed
+    } else if (slug.includes('dasnac') || slug.includes('fairfox')) {
+      relatedVideoId = "YKWtYdh_4dQ"; // Noida Property Market Reality
     }
   }
 
