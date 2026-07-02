@@ -67,6 +67,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/noida-residents-things-nobody-talks-aboutsocial-issues-best-sectors-the-real-picture-of-life-in-noida',
+        destination: '/blog/noida-residents-social-issues-best-sectors',
+        permanent: true,
+      },
+      {
         source: '/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
         destination: '/blog/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
         permanent: true,
