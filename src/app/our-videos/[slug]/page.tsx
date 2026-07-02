@@ -238,6 +238,12 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   {video.title}
                 </h1>
 
+                {video.description && (
+                  <p className="text-sm md:text-base text-brand-ink/70 leading-relaxed mt-3">
+                    {video.description}
+                  </p>
+                )}
+
                 <div className="flex items-center gap-6 text-xs text-brand-light pt-2 border-t border-brand-pale font-light">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={14} className="text-brand-primary" />
