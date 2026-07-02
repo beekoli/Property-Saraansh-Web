@@ -16,6 +16,15 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Label a post by its actual WordPress category (prefer a specific one over the generic "Blog").
+const titleCaseCat = (s: string) => s.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+function getPostCategory(post: { _embedded?: { 'wp:term'?: Array<Array<{ name: string }>> } }): string {
+  const terms = post._embedded?.['wp:term']?.[0] || [];
+  const names = terms.map(t => t.name).filter(Boolean);
+  const specific = names.find(n => n.toLowerCase() !== 'blog') || names[0] || 'Insights';
+  return titleCaseCat(specific);
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
@@ -75,7 +84,9 @@ export default async function BlogPostPage({ params }: PageProps) {
   const acfVideoId = blog.ps_video_id?.trim() || blog.acf?.video_id;
   let relatedVideoId = acfVideoId || "e-WJp9zY7o8"; // Premium default video
   if (!acfVideoId) {
-    if (slug.includes('yamuna-expressway')) {
+    if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities')) {
+      relatedVideoId = "g2dN6stL3i0"; // Noida Market Slowdown 2026
+    } else if (slug.includes('yamuna-expressway')) {
       relatedVideoId = "qWAgkIW6Mj0"; // Yamuna Expressway Investment 2030
     } else if (slug.includes('commercial')) {
       relatedVideoId = "video-7"; // Sector 129 commercial
@@ -108,6 +119,17 @@ export default async function BlogPostPage({ params }: PageProps) {
   const faqs = blogFAQs[slug] || [];
   const faqSchema = faqs.length > 0 ? generateFAQSchema(faqs) : null;
 
+  // BreadcrumbList schema for all blog posts
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": FRONTEND_URL },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${FRONTEND_URL}/blog` },
+      { "@type": "ListItem", "position": 3, "name": blog.title.rendered.replace(/<[^>]*>/g, ''), "item": `${FRONTEND_URL}/blog/${slug}` }
+    ]
+  };
+
   return (
     <>
       {rankMathSchema && (
@@ -122,6 +144,10 @@ export default async function BlogPostPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="bg-brand-pale/40 min-h-screen pb-20">
       
         {/* Modern Premium Hero Banner */}
@@ -289,48 +315,4 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* FAQ Section */}
-              {faqs.length > 0 && (
-                <FAQSection faqs={faqs} />
-              )}
-
-            </article>
-            
-          </div>
-        </div>
-
-        {/* Related Posts: Grid of 3 */}
-        {relatedBlogs.length > 0 && (
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pt-16 border-t border-brand-light/20">
-            <h2 className="heading-playfair text-2xl md:text-3xl font-bold mb-10 text-brand-dark text-center">
-              Related Insights You Might Like
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedBlogs.map((post) => (
-                <BlogCard 
-                  key={post.id} 
-                  id={post.slug}
-                  title={post.title.rendered}
-                  excerpt={post.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
-                  category="Market Insights"
-                  author="Saraansh Seth"
-                  date={post.date}
-                  readTime="6 min read"
-                  thumbnail={getFeaturedImage(post)}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-      </div>
-    </>
-  );
-}
-
-export async function generateStaticParams() {
-  const blogs = await getLatestBlogs(100);
-  return blogs.map((post) => ({
-    slug: post.slug,
-  }));
-}
+           
