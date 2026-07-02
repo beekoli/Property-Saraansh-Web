@@ -315,4 +315,48 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </div>
               </div>
 
-           
+              {/* FAQ Section */}
+              {faqs.length > 0 && (
+                <FAQSection faqs={faqs} />
+              )}
+
+            </article>
+            
+          </div>
+        </div>
+
+        {/* Related Posts: Grid of 3 */}
+        {relatedBlogs.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pt-16 border-t border-brand-light/20">
+            <h2 className="heading-playfair text-2xl md:text-3xl font-bold mb-10 text-brand-dark text-center">
+              Related Insights You Might Like
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {relatedBlogs.map((post) => (
+                <BlogCard 
+                  key={post.id} 
+                  id={post.slug}
+                  title={post.title.rendered}
+                  excerpt={post.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
+                  category={getPostCategory(post)}
+                  author="Saraansh Seth"
+                  date={post.date}
+                  readTime="6 min read"
+                  thumbnail={getFeaturedImage(post)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+      </div>
+    </>
+  );
+}
+
+export async function generateStaticParams() {
+  const blogs = await getLatestBlogs(100);
+  return blogs.map((post) => ({
+    slug: post.slug,
+  }));
+}

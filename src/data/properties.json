@@ -1,0 +1,362 @@
+[
+  {
+    "id": 62,
+    "date": "2026-06-12T10:41:36",
+    "date_gmt": "2026-06-12T10:41:36",
+    "guid": {
+      "rendered": "https://www.propertysaraansh.com/?post_type=properties&#038;p=62"
+    },
+    "modified": "2026-06-12T14:02:37",
+    "modified_gmt": "2026-06-12T14:02:37",
+    "slug": "eldeco-7-peaks-residences",
+    "status": "publish",
+    "type": "properties",
+    "link": "https://www.propertysaraansh.com/properties/eldeco-7-peaks-residences/",
+    "title": {
+      "rendered": "Eldeco 7 Peaks residences"
+    },
+    "content": {
+      "rendered": "\n<p class=\"wp-block-paragraph\">SEO Full para here </p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>SEO Full para here</p>\n",
+      "protected": false
+    },
+    "featured_media": 48,
+    "template": "",
+    "class_list": [
+      "post-62",
+      "properties",
+      "type-properties",
+      "status-publish",
+      "has-post-thumbnail",
+      "hentry"
+    ],
+    "acf": {
+      "price": "₹ 2.35 Cr* - ₹ 4.65",
+      "location": "Greater Noida Omicron1A",
+      "property_type": "Residential",
+      "developer": "Eldeco Group ",
+      "project_logo": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/logo.png",
+      "developer_description": "",
+      "developer_experience": "",
+      "developer_delivered_projects": "",
+      "developer_ongoing_projects": "",
+      "project_overview": "Eldeco 7 Peaks Residences is a premium 3 & 4 BHK oxy-rich residential project in Eldeco Greater Omicron 1 Greater Noida, thoughtfully planned across 7.5 acres of low-density green development. Featuring 7 standalone towers, wraparound balconies, abundant natural light, and resort-style amenities, this ultra-luxury address offers spacious layouts, privacy, and seamless connectivity to Yamuna Expressway, Noida Expressway, and the upcoming Noida International Airport—making it an ideal choice for both end-users and investors in Greater Noida.\r\n",
+      "total_land": "6.5 Acres",
+      "rera_number": "UPRERAPRJ106523",
+      "configuration": "3 BHK, 4 BHK & duplexs",
+      "total_units": "900",
+      "possession_date": "2030-07-30",
+      "launch_date": "2025-10-10",
+      "total_floors": "G+30",
+      "units_per_floor": "4",
+      "lifts_per_floor": "3",
+      "base_price": "₹ 12000 Per Sq. Ft.",
+      "video_id": "hCyx0D2_RzE?si=s9yazwUopvF9I5Kr",
+      "video_review_text": "We will suggest you to buy this project ",
+      "price_list_desc": "<p>Basic Sale Price of Eldeco 7 Peaks Residences is ₹13,000 per sq.ft. However, buyers who deposit an initial ₹10 lakh Expression of Interest (EOI) amount can lock their price at ₹12,000 per sq.ft. Unlike many developers, Eldeco is not charging separate parking or club membership fees over and above the base price; only PLC (Preferential Location Charges) and GST are applicable as per unit selection Based on previous Eldeco launches, PLC typically ranges between ₹400 to ₹800 per sq.ft, taking the expected all-inclusive price range to approximately ₹13,000 – ₹13,450 per sq.ft depending on tower and floor preference</p>\n",
+      "highlights": "Exclusive 7 standalone towers spread over 7.5 acres with green views;\r\n4 side open towers with diagonal positioning for optimal airflow;\r\nEach apartment having 3 side open with infinite views;\r\nWraparound curved balconies and sunlit interiors in every apartment;\r\nAll apartments face greens or central tropical water features;\r\nSwimming Pool Deck;\r\n4 Swimming pools – Lap pool, tropical pool, all-weather heated pool and kids’ pool with sand beach;\r\nLavish clubhouse with state-of-the-art amenities",
+      "location_advantages": "<div class=\"flex items-start gap-3\"><span class=\"text-sm font-semibold leading-relaxed\">Seamless access to Noida-Greater Noida Expressway &amp; Yamuna Expressway</span></div>\n<div class=\"flex items-start gap-3\"><span class=\"text-sm font-semibold leading-relaxed\">close to the upcoming Noida International Airport</span></div>\n<div class=\"flex items-start gap-3\"><span class=\"text-sm font-semibold leading-relaxed\">Near Delta 1 Metro Station (Aqua Line)</span></div>\n<div class=\"flex items-start gap-3\"><span class=\"text-sm font-semibold leading-relaxed\">Close to industrial corridors like Ecotech and Kasna Industrial Area.</span></div>\n<div class=\"flex items-start gap-3\"><span class=\"text-sm font-semibold leading-relaxed\">Radisson Blu Hotel 4.5 Km</span></div>\n<div class=\"flex items-start gap-3\"><span class=\"text-sm font-semibold leading-relaxed\">Jaypee Cricket Stadium 17.3 Km</span></div>\n",
+      "google_map_embed": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7015.551397155153!2d77.55439521477007!3d28.45617719274656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cbfc3d742294b%3A0x54eb8c3b5feb8305!2sEldeco%207%20Peaks%20Residences!5e0!3m2!1sen!2sin!4v1781271348650!5m2!1sen!2sin\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>",
+      "amenity_1_icon": false,
+      "amenity_1_name": "Pickleball Court",
+      "amenity_2_icon": false,
+      "amenity_2_name": "Multipurpose Court",
+      "amenity_3_icon": false,
+      "amenity_3_name": "Jogging Track-Cycling Track",
+      "amenity_4_icon": false,
+      "amenity_4_name": "Senior Citizen Garden",
+      "amenity_5_icon": false,
+      "amenity_5_name": "Kids’ Play Area",
+      "amenity_6_icon": false,
+      "amenity_6_name": "Swimming Pool Deck",
+      "amenity_7_icon": false,
+      "amenity_7_name": "Commercial (Retail) Plaza",
+      "amenity_8_icon": false,
+      "amenity_8_name": "Skating Circuit",
+      "amenity_9_icon": false,
+      "amenity_9_name": "",
+      "amenity_10_icon": false,
+      "amenity_10_name": "",
+      "amenity_11_icon": false,
+      "amenity_11_name": "",
+      "amenity_12_icon": false,
+      "amenity_12_name": "",
+      "site_plan_image": false,
+      "floor_plan_1_title": "3BHK 1825 sq. ft. to 2100 sq. ft.",
+      "floor_plan_1_desc": "Floor Plan 1 Description\r\n",
+      "floor_plan_1_image": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/FP-3BHK.jpg",
+      "floor_plan_2_title": "4BHK 2850 sq. ft.",
+      "floor_plan_2_desc": "Floor Plan 2 Description",
+      "floor_plan_2_image": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/FP-4BHK.jpg",
+      "floor_plan_3_title": "Duplexes 3400 Sq. Ft.",
+      "floor_plan_3_desc": "Floor Plan 3 Description",
+      "floor_plan_3_image": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/FP-Penthouse.jpg",
+      "floor_plan_4_title": "",
+      "floor_plan_4_desc": "",
+      "floor_plan_4_image": false,
+      "floor_plan_footer_text": "$1d",
+      "price_list_row_1_type": "3 BHK",
+      "price_list_row_1_size": "1825 – 2100 sq.ft",
+      "price_list_row_1_base": "₹12,000/sq.ft",
+      "price_list_row_1_total": "₹2.35 Cr* Onwards",
+      "price_list_row_2_type": "4 BHK",
+      "price_list_row_2_size": "2850 sq.ft",
+      "price_list_row_2_base": "₹12,000/sq.ft",
+      "price_list_row_2_total": "₹3.55 Cr*",
+      "price_list_row_3_type": "",
+      "price_list_row_3_size": "",
+      "price_list_row_3_base": "",
+      "price_list_row_3_total": "",
+      "price_list_row_4_type": "",
+      "price_list_row_4_size": "",
+      "price_list_row_4_base": "",
+      "price_list_row_4_total": "",
+      "faq_1_question": "Where is Eldeco 7 Peaks located?",
+      "faq_1_answer": "Eldeco 7 Peaks Residences is located in Omicron 1A, Greater Noida, near Pari Chowk and connected via a 130-meter wide road. The project enjoys excellent connectivity and open green frontage, making it one of the most strategically positioned developments",
+      "faq_2_question": "What configurations are available in Eldeco 7 Peaks?",
+      "faq_2_answer": "Eldeco 7 Peaks offers premium 3 BHK + 3T residences in multiple layout variants and a 4 BHK + servant configuration. The project also features limited duplex penthouses on the top floors.",
+      "faq_3_question": "What is the starting price of Eldeco 7 Peaks?",
+      "faq_3_answer": "The basic sale price of Eldeco 7 Peaks starts at approximately ₹13,000 per sq. ft., with early booking benefits allowing buyers to lock in pricing at ₹12,000 per sq. ft. (subject to builder terms, PLC, and GST)",
+      "faq_4_question": "Is Eldeco 7 Peaks a good investment in Greater Noida?",
+      "faq_4_answer": "Yes, Eldeco 7 Peaks is considered a strong investment opportunity due to: Prime location in Omicron 1A Wide 130-meter road frontage Established residential ecosystem Branded developer track record Balanced end-user and investor demand The project’s",
+      "faq_5_question": "What makes Eldeco 7 Peaks different from other projects in Greater Noida?",
+      "faq_5_answer": "Eldeco 7 Peaks stands out because: Towers are diagonally placed for better sunlight and ventilation Almost 500 meters of open green buffer in front Only 4 apartments per floor Large curved balconies Low-density planning across 7.37 acres This design",
+      "gallery_image_1": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/eldeco7peaks-banner.webp",
+      "gallery_image_2": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-2.jpg",
+      "gallery_image_3": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-3.jpg",
+      "gallery_image_4": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-4.jpg",
+      "gallery_image_5": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-5.jpg",
+      "gallery_image_6": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-6.jpg",
+      "gallery_image_7": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-7.jpg",
+      "gallery_image_8": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-8.jpg",
+      "gallery_image_9": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-9.jpg",
+      "gallery_image_10": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/7peaks-Gallery-1.jpg"
+    },
+    "property_gallery": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/properties/62",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/properties"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/types/properties"
+        }
+      ],
+      "wp:featuredmedia": [
+        {
+          "embeddable": true,
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/media/48"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/media?parent=62"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    },
+    "_embedded": {
+      "wp:featuredmedia": [
+        {
+          "code": "rest_forbidden",
+          "message": "Sorry, you are not allowed to do that.",
+          "data": {
+            "status": 401
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": 120,
+    "date": "2026-06-13T10:10:11",
+    "date_gmt": "2026-06-13T10:10:11",
+    "guid": {
+      "rendered": "https://www.propertysaraansh.com/?post_type=properties&#038;p=120"
+    },
+    "modified": "2026-06-13T10:10:11",
+    "modified_gmt": "2026-06-13T10:10:11",
+    "slug": "jacob-and-co-noida",
+    "status": "publish",
+    "type": "properties",
+    "link": "https://www.propertysaraansh.com/properties/jacob-and-co-noida/",
+    "title": {
+      "rendered": "Jacob and Co. Noida"
+    },
+    "content": {
+      "rendered": "\n<p class=\"wp-block-paragraph\">The gallery of <strong>M3M Jacob &amp; Co Noida</strong> showcases the project’s stunning architecture, premium interiors, and world-class lifestyle features, giving a glimpse of its ultra-luxury appeal. The amenities include a signature clubhouse, infinity pool, rooftop lounge, fitness</p>\n\n\n\n<!--more-->\n\n\n\n<!--more-->\n\n\n\n<!--more-->\n\n\n\n<p class=\"wp-block-paragraph\">center, spa, concierge services, and private entertainment spaces designed for an elite living experience. The layouts are thoughtfully planned with spacious 3, 4 &amp; 5 BHK configurations, wide balconies, and open designs that ensure natural light, cross ventilation, and complete privacy, making every residence a perfect blend of comfort and sophistication.</p>\n",
+      "protected": false
+    },
+    "excerpt": {
+      "rendered": "<p>The gallery of M3M Jacob &amp; Co Noida showcases the project’s stunning architecture, premium interiors, and world-class lifestyle features, giving a glimpse of its ultra-luxury appeal. The amenities include a signature clubhouse, infinity pool, rooftop lounge, fitness</p>\n",
+      "protected": false
+    },
+    "featured_media": 0,
+    "template": "",
+    "class_list": [
+      "post-120",
+      "properties",
+      "type-properties",
+      "status-publish",
+      "hentry"
+    ],
+    "acf": {
+      "price": "₹ 7.75 Cr* - ₹ 20 Cr*",
+      "location": "Noida Expressway, Sector 97",
+      "property_type": "Residential",
+      "developer": "M3M Group ",
+      "project_logo": "https://www.propertysaraansh.com/wp-content/uploads/2026/06/developer-logo.png",
+      "developer_description": "",
+      "developer_experience": "",
+      "developer_delivered_projects": "",
+      "developer_ongoing_projects": "",
+      "project_overview": "Welcome to Jacob and Co Noida, an iconic ultra-luxury residential development by M3M India, in collaboration with the globally renowned luxury brand Jacob and Co. Spread across 6.5 acres in Sector 97, Noida, this landmark project brings the concept of branded residences in Noida to a global level. Designed as a collectible masterpiece, it combines architectural brilliance with world-class luxury living.",
+      "total_land": "6.5 Acres",
+      "rera_number": "UPRERAPRJ690055",
+      "configuration": "3 BHK, 4 BHK & 5 BHK",
+      "total_units": "270",
+      "possession_date": "2030-07-30",
+      "launch_date": "2025-10-10",
+      "total_floors": "40",
+      "units_per_floor": "2",
+      "lifts_per_floor": "3",
+      "base_price": "₹ 32000 Per Sq.Ft.",
+      "video_id": "LRZV-H--Qlw?si=axQJYweragbtpQEv",
+      "video_review_text": "",
+      "price_list_desc": "",
+      "highlights": "",
+      "location_advantages": "",
+      "google_map_embed": "",
+      "amenity_1_icon": false,
+      "amenity_1_name": "",
+      "amenity_2_icon": false,
+      "amenity_2_name": "",
+      "amenity_3_icon": false,
+      "amenity_3_name": "",
+      "amenity_4_icon": false,
+      "amenity_4_name": "",
+      "amenity_5_icon": false,
+      "amenity_5_name": "",
+      "amenity_6_icon": false,
+      "amenity_6_name": "",
+      "amenity_7_icon": false,
+      "amenity_7_name": "",
+      "amenity_8_icon": false,
+      "amenity_8_name": "",
+      "amenity_9_icon": false,
+      "amenity_9_name": "",
+      "amenity_10_icon": false,
+      "amenity_10_name": "",
+      "amenity_11_icon": false,
+      "amenity_11_name": "",
+      "amenity_12_icon": false,
+      "amenity_12_name": "",
+      "site_plan_image": false,
+      "floor_plan_1_title": "",
+      "floor_plan_1_desc": "",
+      "floor_plan_1_image": false,
+      "floor_plan_2_title": "",
+      "floor_plan_2_desc": "",
+      "floor_plan_2_image": false,
+      "floor_plan_3_title": "",
+      "floor_plan_3_desc": "",
+      "floor_plan_3_image": false,
+      "floor_plan_4_title": "",
+      "floor_plan_4_desc": "",
+      "floor_plan_4_image": false,
+      "floor_plan_footer_text": "",
+      "price_list_row_1_type": "",
+      "price_list_row_1_size": "",
+      "price_list_row_1_base": "",
+      "price_list_row_1_total": "",
+      "price_list_row_2_type": "",
+      "price_list_row_2_size": "",
+      "price_list_row_2_base": "",
+      "price_list_row_2_total": "",
+      "price_list_row_3_type": "",
+      "price_list_row_3_size": "",
+      "price_list_row_3_base": "",
+      "price_list_row_3_total": "",
+      "price_list_row_4_type": "",
+      "price_list_row_4_size": "",
+      "price_list_row_4_base": "",
+      "price_list_row_4_total": "",
+      "faq_1_question": "",
+      "faq_1_answer": "",
+      "faq_2_question": "",
+      "faq_2_answer": "",
+      "faq_3_question": "",
+      "faq_3_answer": "",
+      "faq_4_question": "",
+      "faq_4_answer": "",
+      "faq_5_question": "",
+      "faq_5_answer": "",
+      "gallery_image_1": false,
+      "gallery_image_2": false,
+      "gallery_image_3": false,
+      "gallery_image_4": false,
+      "gallery_image_5": false,
+      "gallery_image_6": false,
+      "gallery_image_7": false,
+      "gallery_image_8": false,
+      "gallery_image_9": false,
+      "gallery_image_10": false
+    },
+    "property_gallery": [],
+    "_links": {
+      "self": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/properties/120",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/properties"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/types/properties"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "https://www.propertysaraansh.com/wp-json/wp/v2/media?parent=120"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]

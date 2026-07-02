@@ -1,0 +1,63 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+scratch/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+.vercel
+scripts/token_drive.json
+deploy-push.bat
+CORRECT-page-content.txt
+CORRECT-our-videos-LISTING-page.txt
+scripts/token_drive.json
+deploy-push.bat
+fix-and-push.bat
+CORRECT-page-content.txt
+CORRECT-our-videos-LISTING-page.txt
+fix-listing-push.bat
+faq-deploy.bat
+video-deploy.bat
+psvideo-deploy.bat
+redirect-deploy.bat
+secretfix-deploy.bat
+reconcile-deploy.bat
+catlabels-deploy.bat
+catfix-deploy.bat
+catfix2-deploy.bat
