@@ -8,8 +8,12 @@ const blogHtmlDir = path.resolve(__dirname, '../.next/server/app/blog');
 const mediaDir = path.resolve(__dirname, '../temp_extracted_media');
 const publicDir = path.resolve(__dirname, '../public');
 
-const username = 'karmaglobalretail';
-const appPassword = 'K6YS egf9 SEOd jAQp F4Qp i1XX';
+// Credentials are read from environment variables — never hardcode them.
+const username = process.env.WP_USER;
+const appPassword = process.env.WP_APP_PASSWORD;
+if (!username || !appPassword) {
+  throw new Error('Missing WP_USER / WP_APP_PASSWORD environment variables. Set them before running (do not hardcode credentials).');
+}
 const apiBase = 'https://login.propertysaraansh.com/wp-json/wp/v2';
 
 const authHeader = 'Basic ' + Buffer.from(`${username}:${appPassword}`).toString('base64');

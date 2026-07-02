@@ -6,8 +6,14 @@ const propertiesFile = path.resolve(__dirname, '../src/data/properties.json');
 const blogsFile = path.resolve(__dirname, '../src/data/blogs.json');
 const blogHtmlDir = path.resolve(__dirname, '../.next/server/app/blog');
 
-const username = 'karmaglobalretail';
-const appPassword = 'K6YS egf9 SEOd jAQp F4Qp i1XX';
+// Credentials are read from environment variables — never hardcode them.
+// Set them before running, e.g. (PowerShell):
+//   $env:WP_USER="karmaglobalretail"; $env:WP_APP_PASSWORD="xxxx xxxx xxxx"; node scripts/restore_to_wp.js
+const username = process.env.WP_USER;
+const appPassword = process.env.WP_APP_PASSWORD;
+if (!username || !appPassword) {
+  throw new Error('Missing WP_USER / WP_APP_PASSWORD environment variables. Set them before running (do not hardcode credentials).');
+}
 const apiBase = 'https://login.propertysaraansh.com/wp-json/wp/v2';
 
 // Basic Auth Token
