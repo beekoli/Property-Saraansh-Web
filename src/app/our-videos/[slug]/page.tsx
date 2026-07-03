@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Eye, ArrowLeft } from 'lucide-react';
+import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
 import { FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
-import { getWPVideoBySlug } from '@/lib/wordpress';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -31,24 +30,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  // Fetch WordPress SEO overrides (title, meta description)
-  const wpVideo = await getWPVideoBySlug(slug);
-  const metaTitle = wpVideo?.acf?.meta_title || video.title;
-  const metaDescription =
-    wpVideo?.acf?.meta_description ||
-    wpVideo?.acf?.short_description ||
-    video.description ||
-    `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`;
-
   return {
-    title: `${metaTitle} | Property Saraansh`,
-    description: metaDescription,
+    title: `${video.title} | Property Saraansh`,
+    description: video.description || `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`,
     alternates: {
       canonical: `${FRONTEND_URL}/our-videos/${video.slug}`,
     },
     openGraph: {
-      title: `${metaTitle} | Property Saraansh`,
-      description: metaDescription,
+      title: `${video.title} | Property Saraansh`,
+      description: video.description || `Watch honest real estate project reviews on YouTube.`,
       images: [
         {
           url: video.thumbnail,
@@ -61,8 +51,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: "summary_large_image",
-      title: metaTitle,
-      description: metaDescription,
+      title: video.title,
+      description: video.description,
       images: [video.thumbnail],
     },
     other: {
@@ -73,33 +63,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
+  const video = await getHydratedVideoBySlug(slug);
 
-  // Fetch everything in parallel — WordPress data, YouTube stats, and related videos
-  const [hydratedVideo, wpVideo, stats, videosList] = await Promise.all([
-    getHydratedVideoBySlug(slug),
-    getWPVideoBySlug(slug),
-    getChannelStats(),
-    getVideosWithRealtimeStats(),
-  ]);
-
-  if (!hydratedVideo) {
+  if (!video) {
     notFound();
   }
 
-  // Merge WordPress overrides — WP fields take priority when set
-  const video = {
-    ...hydratedVideo,
-    ...(wpVideo?.acf?.meta_title && { title: wpVideo.acf.meta_title }),
-    ...(wpVideo?.acf?.short_description && { description: wpVideo.acf.short_description }),
-    ...(wpVideo?.acf?.about_this_video && { content: wpVideo.acf.about_this_video }),
-  };
+  // Fetch stats and filter related videos
+  const [stats, videos] = await Promise.all([
+    getChannelStats(),
+    getVideosWithRealtimeStats()
+  ]);
 
   const isCurrentShort = video.category === 'Shorts';
-  const relatedVideos = videosList
+  const relatedVideos = videos
     .filter((v) => v.slug !== video.slug && (isCurrentShort ? v.category === 'Shorts' : v.category !== 'Shorts'))
     .slice(0, 3);
 
   const isNoidaSlowdown = video.slug === 'noida-market-slowdown-2026';
+  const isGodrejArden = video.slug === 'godrej-arden-sigma-3-review';
 
   const videoJsonLd = {
     "@context": "https://schema.org",
@@ -144,7 +126,18 @@ export default async function VideoWatchPage({ params }: PageProps) {
         { "@type": "Clip", "name": "Crash vs Slowdown Explained", "startOffset": 45, "endOffset": 96, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=45s` },
         { "@type": "Clip", "name": "Builder Strategy: Payment Plans & Unit Sizes", "startOffset": 96, "endOffset": 371, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=96s` },
         { "@type": "Clip", "name": "Seller & Investor Strategy: Hold or Sell?", "startOffset": 371, "endOffset": 509, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=371s` },
-        { "@type": "Clip", "name": "Buyer Strategy in Slow Noida Property Market", "startOffset": 509, "endOffset": 651, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=651s` }
+        { "@type": "Clip", "name": "Buyer Strategy in Slow Noida Property Market", "startOffset": 509, "endOffset": 651, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=509s` }
+      ]
+    }),
+    ...(isGodrejArden && {
+      "keywords": "godrej arden, godrej arden greater noida, godrej arden sigma 3, godrej arden price, godrej arden floor plan, godrej arden review, greater noida real estate 2026, godrej arden investment",
+      "hasPart": [
+        { "@type": "Clip", "name": "Introduction & Reality Check", "startOffset": 0, "endOffset": 139, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=0s` },
+        { "@type": "Clip", "name": "Godrej Arden Location Analysis — Sigma 3, Greater Noida", "startOffset": 139, "endOffset": 237, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=139s` },
+        { "@type": "Clip", "name": "Project Planning & Layout Review", "startOffset": 237, "endOffset": 455, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=237s` },
+        { "@type": "Clip", "name": "Godrej Arden Price & Payment Plan", "startOffset": 455, "endOffset": 521, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=521s` },
+        { "@type": "Clip", "name": "Competition: Godrej Arden vs Experion 151 vs Sobha", "startOffset": 521, "endOffset": 647, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=521s` },
+        { "@type": "Clip", "name": "Should You Buy Godrej Arden? — Property Saraansh Verdict", "startOffset": 647, "endOffset": 743, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=647s` }
       ]
     })
   };
@@ -191,12 +184,14 @@ export default async function VideoWatchPage({ params }: PageProps) {
     ]
   } : null;
 
+  const jsonLd = videoJsonLd;
+
   return (
     <>
-      {/* Schema Markup */}
+      {/* Schema Markup for search engines */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <script
         type="application/ld+json"
@@ -272,8 +267,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </span>
                 </div>
               </div>
-
-              {/* Rich Content Section — "About This Video" */}
+                          {/* Rich Content Section */}
               {video.content && (
                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
                   <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
@@ -281,7 +275,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </h2>
                   <div className="text-sm text-brand-ink/80 leading-relaxed space-y-4">
                     {video.content.split('||').map((para, i) => (
-                      <p key={i}>{para.trim()}</p>
+                      <p key={i}>{para}</p>
                     ))}
                   </div>
                 </div>
@@ -309,7 +303,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </div>
                 </div>
               )}
-            </div>
+</div>
 
             {/* Right Column: Sticky Lead Capture and Stats */}
             <div className="w-full lg:w-4/12 lg:sticky lg:top-28 space-y-6">
@@ -342,7 +336,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                     </tr>
                     <tr>
                       <td className="py-2.5 text-brand-accent/80 font-medium">Focus Area</td>
-                      <td className="py-2.5 text-right font-normal">Noida &amp; Greater Noida</td>
+                      <td className="py-2.5 text-right font-normal">Noida & Greater Noida</td>
                     </tr>
                   </tbody>
                 </table>
