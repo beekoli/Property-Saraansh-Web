@@ -1,12 +1,13 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
+import { Calendar, Eye, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
 import { FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
+import { getWPVideoBySlug } from '@/lib/wordpress';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -30,15 +31,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  // Fetch WordPress SEO overrides (title, meta description)
+  const wpVideo = await getWPVideoBySlug(slug);
+  const metaTitle = wpVideo?.acf?.meta_title || video.title;
+  const metaDescription =
+    wpVideo?.acf?.meta_description ||
+    wpVideo?.acf?.short_description ||
+    video.description ||
+    `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`;
+
   return {
-    title: `${video.title} | Property Saraansh`,
-    description: video.description || `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`,
+    title: `${metaTitle} | Property Saraansh`,
+    description: metaDescription,
     alternates: {
       canonical: `${FRONTEND_URL}/our-videos/${video.slug}`,
     },
     openGraph: {
-      title: `${video.title} | Property Saraansh`,
-      description: video.description || `Watch honest real estate project reviews on YouTube.`,
+      title: `${metaTitle} | Property Saraansh`,
+      description: metaDescription,
       images: [
         {
           url: video.thumbnail,
@@ -51,8 +61,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: "summary_large_image",
-      title: video.title,
-      description: video.description,
+      title: metaTitle,
+      description: metaDescription,
       images: [video.thumbnail],
     },
     other: {
@@ -63,20 +73,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
-  const video = await getHydratedVideoBySlug(slug);
 
-  if (!video) {
+  // Fetch everything in parallel — WordPress data, YouTube stats, and related videos
+  const [hydratedVideo, wpVideo, stats, videosList] = await Promise.all([
+    getHydratedVideoBySlug(slug),
+    getWPVideoBySlug(slug),
+    getChannelStats(),
+    getVideosWithRealtimeStats(),
+  ]);
+
+  if (!hydratedVideo) {
     notFound();
   }
 
-  // Fetch stats and filter related videos
-  const [stats, videos] = await Promise.all([
-    getChannelStats(),
-    getVideosWithRealtimeStats()
-  ]);
+  // Merge WordPress overrides — WP fields take priority when set
+  const video = {
+    ...hydratedVideo,
+    ...(wpVideo?.acf?.meta_title && { title: wpVideo.acf.meta_title }),
+    ...(wpVideo?.acf?.short_description && { description: wpVideo.acf.short_description }),
+    ...(wpVideo?.acf?.about_this_video && { content: wpVideo.acf.about_this_video }),
+  };
 
   const isCurrentShort = video.category === 'Shorts';
-  const relatedVideos = videos
+  const relatedVideos = videosList
     .filter((v) => v.slug !== video.slug && (isCurrentShort ? v.category === 'Shorts' : v.category !== 'Shorts'))
     .slice(0, 3);
 
@@ -125,7 +144,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
         { "@type": "Clip", "name": "Crash vs Slowdown Explained", "startOffset": 45, "endOffset": 96, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=45s` },
         { "@type": "Clip", "name": "Builder Strategy: Payment Plans & Unit Sizes", "startOffset": 96, "endOffset": 371, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=96s` },
         { "@type": "Clip", "name": "Seller & Investor Strategy: Hold or Sell?", "startOffset": 371, "endOffset": 509, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=371s` },
-        { "@type": "Clip", "name": "Buyer Strategy in Slow Noida Property Market", "startOffset": 509, "endOffset": 651, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=509s` }
+        { "@type": "Clip", "name": "Buyer Strategy in Slow Noida Property Market", "startOffset": 509, "endOffset": 651, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=651s` }
       ]
     })
   };
@@ -172,14 +191,12 @@ export default async function VideoWatchPage({ params }: PageProps) {
     ]
   } : null;
 
-  const jsonLd = videoJsonLd;
-
   return (
     <>
-      {/* Schema Markup for search engines */}
+      {/* Schema Markup */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
       />
       <script
         type="application/ld+json"
@@ -255,7 +272,8 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </span>
                 </div>
               </div>
-                          {/* Rich Content Section */}
+
+              {/* Rich Content Section — "About This Video" */}
               {video.content && (
                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
                   <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
@@ -263,7 +281,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </h2>
                   <div className="text-sm text-brand-ink/80 leading-relaxed space-y-4">
                     {video.content.split('||').map((para, i) => (
-                      <p key={i}>{para}</p>
+                      <p key={i}>{para.trim()}</p>
                     ))}
                   </div>
                 </div>
@@ -291,7 +309,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </div>
                 </div>
               )}
-</div>
+            </div>
 
             {/* Right Column: Sticky Lead Capture and Stats */}
             <div className="w-full lg:w-4/12 lg:sticky lg:top-28 space-y-6">
@@ -324,7 +342,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                     </tr>
                     <tr>
                       <td className="py-2.5 text-brand-accent/80 font-medium">Focus Area</td>
-                      <td className="py-2.5 text-right font-normal">Noida & Greater Noida</td>
+                      <td className="py-2.5 text-right font-normal">Noida &amp; Greater Noida</td>
                     </tr>
                   </tbody>
                 </table>
