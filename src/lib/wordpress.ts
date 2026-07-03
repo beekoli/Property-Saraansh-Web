@@ -88,7 +88,7 @@ export interface WPProperty {
     base_price?: string;
     video_id?: string;
     video_review_text?: string;
-    highlights?: string; // Semicolon-separated list of highlights
+    highlights?: string;
     google_map_embed?: string;
     project_logo?: string;
     floor_plan_footer_text?: string;
@@ -121,6 +121,42 @@ export interface WPProperty {
     og_image?: Array<{ url: string }>;
     canonical?: string;
   };
+}
+
+// --- Video CPT Integration ---
+// WordPress CPT slug: ps_video
+// ACF fields to create in WordPress (see setup instructions):
+//   short_description  (Textarea) — shown below video title + used as meta description
+//   about_this_video   (Textarea) — "About This Video" body; separate paragraphs with ||
+//   meta_title         (Text)     — optional SEO page title override
+//   meta_description   (Text)     — optional SEO meta description override
+//   youtube_id         (Text)     — YouTube video ID (optional override)
+export interface WPVideo {
+  id: number;
+  slug: string;
+  title: { rendered: string };
+  acf: {
+    short_description?: string;
+    about_this_video?: string;
+    meta_title?: string;
+    meta_description?: string;
+    youtube_id?: string;
+  };
+}
+
+export async function getWPVideoBySlug(slug: string): Promise<WPVideo | null> {
+  const data = await fetchAPI(
+    `/ps_video?slug=${slug}&acf_format=standard&_fields=id,slug,title,acf`
+  );
+  if (data && Array.isArray(data) && data.length > 0) return data[0] as WPVideo;
+  return null;
+}
+
+export async function getWPVideos(limit = 100): Promise<WPVideo[]> {
+  const data = await fetchAPI(
+    `/ps_video?acf_format=standard&per_page=${limit}&_fields=id,slug,title,acf`
+  );
+  return data && Array.isArray(data) ? (data as WPVideo[]) : [];
 }
 
 import propertiesData from '@/data/properties.json';
@@ -193,7 +229,6 @@ export async function getPropertyBySlug(slug: string): Promise<WPProperty | null
 }
 
 export function getFeaturedImage(post: WPPost | WPProperty): string {
-  // 1. If it's a property CPT and has custom gallery images in ACF, prioritize gallery_image_1
   if ('acf' in post && post.acf) {
     const acf = post.acf as WPProperty['acf'];
     if (acf.gallery_image_1) {
@@ -201,17 +236,14 @@ export function getFeaturedImage(post: WPPost | WPProperty): string {
     }
   }
 
-  // 2. If it has a property_gallery array, use the first element
   if ('property_gallery' in post && post.property_gallery && post.property_gallery.length > 0) {
     return post.property_gallery[0];
   }
 
-  // 3. Fall back to standard WordPress featured media
   if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'].length > 0) {
     return post._embedded['wp:featuredmedia'][0].source_url;
   }
   
-  // 4. Default placeholder
   return "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
 }
 
