@@ -140,7 +140,7 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
       answer: "CRC The Peridona offers 4 BHK and 5 BHK configurations. The 4 BHK apartments cover approximately 5,500 sq ft of carpet area, making them among the largest in the category on the Noida Expressway. The 5 BHK units offer even larger living spaces with private lift lobbies, premium imported fittings, and expansive balconies with golf course or expressway views."
     }
   ],
-  "eldeco-greater-noida-detailed-review-of-eldeco-7-peaks-residences-by-property-saraansh": [
+  "eldeco-7-peaks-greater-noida-review": [
     {
       question: "What is Eldeco 7 Peaks Residences in Greater Noida?",
       answer: "Eldeco 7 Peaks Residences is a premium project by Eldeco Group in Sector Omicron 1, Greater Noida — 7.37 acres, 7 towers up to 31 floors, only 4 apartments per floor. It offers 3 BHK and 4 BHK apartments from 1,825 sq ft to 2,850 sq ft, plus 24 exclusive duplex penthouses. Located on a 130-metre-wide road near Pari Chowk with direct access to Noida Expressway, Yamuna Expressway, and the Aqua Metro."
