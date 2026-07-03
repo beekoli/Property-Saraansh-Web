@@ -502,6 +502,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/crc-the-peridona-jaypee-greens-an-honest-review-investment-analysis',
+        destination: '/blog/crc-peridona-jaypee-greens-review-noida',
+        permanent: true,
+      },
+      {
         source: '/wp-admin',
         destination: '/',
         permanent: false,
