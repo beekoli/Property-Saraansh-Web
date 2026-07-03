@@ -83,7 +83,7 @@ export const videos: Video[] = [
   {
     "slug": "noida-property-market-reality",
     "title": "Noida Property Market Reality | Authority, Builder, Broker & Buyer Truth",
-    "description": "The real truth about Noida's property market from every angle — authority, builder, broker and buyer — so you can see past the hype before investing.",
+    "description": "Buying property in Noida? See how the market really works across its four players — authority, builder, broker and buyer — and the traps to avoid before you pay.",
     "youtubeId": "YKWtYdh_4dQ",
     "thumbnail": "https://img.youtube.com/vi/YKWtYdh_4dQ/maxresdefault.jpg",
     "publishedAt": "2026-06-11",

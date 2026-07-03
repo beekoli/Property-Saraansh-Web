@@ -270,6 +270,32 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
       answer: "An investor-driven market (Yamuna Expressway high-rises, ACE Hanei) has most buyers expecting appreciation, not habitation. Near possession, all investors compete for a small end-user pool — creating oversupply and weak resale despite stable builder prices. An end-user-driven market (Prestige City Ghaziabad, Experion 151) has real residential demand that absorbs inventory steadily, making exits faster and resale premiums achievable. Always check: what percentage of buyers actually plan to live there?"
     }
   ],
+  "max-estates-105-noida-complete-review": [
+    {
+      question: "What is the RERA number for Max Estates 105?",
+      answer: "UPRERAPRJ529777/03/2026. Always verify at up-rera.in before paying any booking amount."
+    },
+    {
+      question: "What is the starting price of Max Estates 105?",
+      answer: "The all-inclusive price is ₹27,300–₹27,700 per sqft. The 4 BHK Type A (3,750 sqft) starts at approximately ₹10.2 Crore all-in including BSP, PLC, Lease Rent, and GST."
+    },
+    {
+      question: "What is FTA technology in Max Estates 105?",
+      answer: "FTA stands for Fresh Treated Air — a building-integrated air management system that draws in fresh outdoor air, filters it through HEPA-grade stages, and delivers clean, pollutant-free air to every apartment. It is not a standard home air purifier; it runs at the building systems level continuously."
+    },
+    {
+      question: "How does Max Estates 105 compare to Max Estates 128?",
+      answer: "Max 128 is fully sold out and delivers approximately 3 years earlier (~2028), making it better for investors needing rental income sooner. Max 105 has a more investor-friendly payment plan (20% now, nothing till 2027), improved layouts, and a newer design standard. Resale at Max 128 (~₹26,500) vs new at Max 105 (₹27,300) is a ~3% premium for a fresh unit and the deferred payment benefit."
+    },
+    {
+      question: "Is Max Estates 105 a good investment in 2026?",
+      answer: "Based on current supply (under 2,000 ultra-luxury units across all of Noida's pipeline), demonstrated demand (₹1,783 Crore in 10 days), and the Gurgaon appreciation precedent, the project has strong long-term potential. We recommend a 5–7 year hold horizon."
+    },
+    {
+      question: "Who is the developer of Max Estates 105?",
+      answer: "Max Estates Limited, a listed company (NSE: MAXESTATES) and part of the Max Group. In FY2026, the company recorded ₹5,305 Crore in pre-sales — one of the strongest performances in the NCR developer space."
+    }
+  ],
   "noida-real-estate-2026-dasnac-arc-fairfox-eon": [
     {
       question: "What is the rental yield of Dasnac Arc studios in Sector 72 Noida?",
