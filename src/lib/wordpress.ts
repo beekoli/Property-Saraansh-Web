@@ -221,4 +221,5 @@ export function stripHtml(html: string) {
 
 export async function getPageBySlug(slug: string): Promise<WPPage | null> {
   const data = await fetchAPI(`/pages?slug=${slug}&_embed`);
-  return data && data.length > 0 
+  return data && data.length > 0 ? data[0] : null;
+}
