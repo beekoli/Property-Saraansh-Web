@@ -72,6 +72,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/eldeco-greater-noida-detailed-review-of-eldeco-7-peaks-residences-by-property-saraansh',
+        destination: '/blog/eldeco-7-peaks-greater-noida-review',
+        permanent: true,
+      },
+      {
         source: '/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
         destination: '/blog/why-exit-has-become-the-biggest-problem-in-noida-real-estate/:path*',
         permanent: true,
