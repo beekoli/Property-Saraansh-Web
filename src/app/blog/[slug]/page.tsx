@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -121,12 +121,55 @@ export default async function BlogPostPage({ params }: PageProps) {
   const watchPageVideo = getVideoByYoutubeId(relatedVideoId);
   const watchPageHref = watchPageVideo ? `/our-videos/${watchPageVideo.slug}` : null;
 
-  // NOTE: We intentionally do NOT emit a VideoObject schema here.
-  // The same video has its canonical home on the dedicated watch page
-  // (/our-videos/[slug]), which carries the full VideoObject schema.
-  // Duplicating it on the blog would split video signals and let Google
-  // pick an unintended canonical. The blog ranks on its article content
-  // (BlogPosting schema below); the watch page ranks for the video.
+  // VideoObject schema for the embedded video guide so Google can surface a
+  // video rich result (thumbnail) for this blog. We build it from our video
+  // library when the video exists there (real title/description/duration),
+  // and fall back to blog + YouTube data otherwise.
+  const videoThumb = watchPageVideo?.thumbnail || `https://i.ytimg.com/vi/${relatedVideoId}/maxresdefault.jpg`;
+  const videoJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": watchPageVideo?.title || decodeHtml(blog.title.rendered),
+    "description":
+      watchPageVideo?.description ||
+      blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim().slice(0, 200) ||
+      decodeHtml(blog.title.rendered),
+    "thumbnailUrl": [videoThumb],
+    "uploadDate": parseDateToISO8601(watchPageVideo?.publishedAt || blog.date),
+    ...(watchPageVideo?.duration ? { "duration": durationToISO8601(watchPageVideo.duration) } : {}),
+    "contentUrl": `https://www.youtube.com/watch?v=${relatedVideoId}`,
+    "embedUrl": `https://www.youtube.com/embed/${relatedVideoId}`,
+    "url": `${FRONTEND_URL}/blog/${slug}`,
+    "publisher": {
+      "@type": "Organization",
+      "name": "Property Saraansh",
+      "url": FRONTEND_URL,
+      "logo": { "@type": "ImageObject", "url": `${FRONTEND_URL}/logo.png` }
+    },
+    "author": { "@type": "Person", "name": "Saraansh Seth", "url": `${FRONTEND_URL}/about-us` }
+  };
+
+  // BlogPosting (Article) schema — signals editorial authorship, date, publisher.
+  const featuredImg = getFeaturedImage(blog);
+  const articleJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": decodeHtml(blog.title.rendered).slice(0, 110),
+    "description":
+      blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim().slice(0, 200) ||
+      decodeHtml(blog.title.rendered),
+    ...(featuredImg ? { "image": [featuredImg] } : {}),
+    "datePublished": parseDateToISO8601(blog.date),
+    "dateModified": parseDateToISO8601(blog.modified || blog.date),
+    "author": { "@type": "Person", "name": "Saraansh Seth", "url": `${FRONTEND_URL}/about-us` },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Property Saraansh",
+      "url": FRONTEND_URL,
+      "logo": { "@type": "ImageObject", "url": `${FRONTEND_URL}/logo.png` }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `${FRONTEND_URL}/blog/${slug}` }
+  };
 
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
   let rankMathSchema = getRewrittenSchema(seoJson);
@@ -168,6 +211,14 @@ export default async function BlogPostPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
       <div className="bg-brand-pale/40 min-h-screen pb-20">
       
@@ -324,60 +375,4 @@ export default async function BlogPostPage({ params }: PageProps) {
                       YouTube
                     </a>
                     <a 
-                      href="https://www.linkedin.com/in/saraansh-seth/" 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="inline-flex bg-[#0077b5] hover:bg-[#005582] text-white font-bold px-6 py-2.5 rounded-lg text-xs transition-colors shadow-md items-center gap-2 uppercase tracking-wider active:scale-95 duration-200"
-                    >
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                      LinkedIn
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* FAQ Section */}
-              {faqs.length > 0 && (
-                <FAQSection faqs={faqs} />
-              )}
-
-            </article>
-            
-          </div>
-        </div>
-
-        {/* Related Posts: Grid of 3 */}
-        {relatedBlogs.length > 0 && (
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pt-16 border-t border-brand-light/20">
-            <h2 className="heading-playfair text-2xl md:text-3xl font-bold mb-10 text-brand-dark text-center">
-              Related Insights You Might Like
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedBlogs.map((post) => (
-                <BlogCard 
-                  key={post.id} 
-                  id={post.slug}
-                  title={post.title.rendered}
-                  excerpt={post.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
-                  category={getPostCategory(post)}
-                  author="Saraansh Seth"
-                  date={post.date}
-                  readTime="6 min read"
-                  thumbnail={getFeaturedImage(post)}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-      </div>
-    </>
-  );
-}
-
-export async function generateStaticParams() {
-  const blogs = await getLatestBlogs(100);
-  return blogs.map((post) => ({
-    slug: post.slug,
-  }));
-}
+      

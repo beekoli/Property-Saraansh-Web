@@ -3,6 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 export interface WPPost {
   id: number;
   date: string;
+  modified?: string;
   slug: string;
   title: {
     rendered: string;
@@ -220,5 +221,4 @@ export function stripHtml(html: string) {
 
 export async function getPageBySlug(slug: string): Promise<WPPage | null> {
   const data = await fetchAPI(`/pages?slug=${slug}&_embed`);
-  return data && data.length > 0 ? data[0] : null;
-}
+  return data && data.length > 0 
