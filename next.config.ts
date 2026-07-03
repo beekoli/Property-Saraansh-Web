@@ -232,6 +232,16 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/our-videos/lt-green-reserve-sector-128-noida',
+        destination: '/our-videos/lt-green-reserve-sector-128-buying-guide',
+        permanent: true,
+      },
+      {
+        source: '/commercial-property-in-noida-the-complete-guide',
+        destination: '/our-videos/noida-commercial-builder-vs-self-lease',
+        permanent: true,
+      },
+      {
         source: '/our-videos/is-gaurs-yamuna-expressway-launch-a-worthy-or-overpriced',
         destination: '/our-videos/gaurs-yamuna-expressway-launch-review',
         permanent: true,
