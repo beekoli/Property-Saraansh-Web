@@ -19,7 +19,7 @@ export const videos: Video[] = [
     "slug": "things-nobody-talks-about-noida-residents",
     "title": "Things Nobody Talks About Noida Residents | Social Issues Every Noida Resident Faces",
     "description": "Moving to Noida? Saraansh Seth reveals 5 real social issues residents face daily — from society parking and pet conflicts to stray cattle and soaring school fees.",
-    "content": "Most Noida real estate content focuses on price charts and location maps — but almost nobody shows what daily life actually looks like inside these societies. In this Property Saraansh video, Saraansh Seth walks through five real social issues that Noida residents deal with every day: the things builders will not mention and brokers will not warn you about before you buy.||Issue 1 — Pets versus residents. Across many Noida housing societies, dog owners and non-pet residents are clashing over lifts, common areas and open spaces, and RWAs are struggling to set rules that work for everyone. It is a small-sounding issue that quietly shapes day-to-day community life.||Issue 2 — The parking crisis. The number of cars per family keeps rising while parking slots do not. Noida Expressway societies such as Advant Navis are facing a severe parking crunch, with no real long-term fix being planned.||Issue 3 — Street vending and stray cattle. Unregulated vendors and stray cows on Noida roads create daily safety hazards, especially near busy sectors, and the problem rarely gets addressed by the authority.||Issue 4 — No budget shopping market. For all its growth, Noida still has no equivalent of a Sarojini Nagar or Rajouri Garden — an affordable, walkable shopping market — a surprising gap for one of India\u2019s fastest-growing cities.||Issue 5 — Shocking school fees. Private school fees in Noida have climbed to a level that even upper-middle-class families find hard to manage, and the video breaks down the real numbers so you know what to budget for.||If you are planning to buy a flat or shift to Noida, these are the ground realities worth understanding before you commit — the social and civic side of society life that price charts never show. Watch the full review for the detailed breakdown, and talk to Property Saraansh for honest, RERA-backed guidance on where to buy.",
+    "content": "Most Noida real estate content focuses on price charts and location maps — but almost nobody shows what daily life actually looks like inside these societies. In this Property Saraansh video, Saraansh Seth walks through five real social issues that Noida residents deal with every day: the things builders will not mention and brokers will not warn you about before you buy.||Issue 1 — Pets versus residents. Across many Noida housing societies, dog owners and non-pet residents are clashing over lifts, common areas and open spaces, and RWAs are struggling to set rules that work for everyone. It is a small-sounding issue that quietly shapes day-to-day community life.||Issue 2 — The parking crisis. The number of cars per family keeps rising while parking slots do not. Noida Expressway societies such as Advant Navis are facing a severe parking crunch, with no real long-term fix being planned.||Issue 3 — Street vending and stray cattle. Unregulated vendors and stray cows on Noida roads create daily safety hazards, especially near busy sectors, and the problem rarely gets addressed by the authority.||Issue 4 — No budget shopping market. For all its growth, Noida still has no equivalent of a Sarojini Nagar or Rajouri Garden — an affordable, walkable shopping market — a surprising gap for one of India's fastest-growing cities.||Issue 5 — Shocking school fees. Private school fees in Noida have climbed to a level that even upper-middle-class families find hard to manage, and the video breaks down the real numbers so you know what to budget for.||If you are planning to buy a flat or shift to Noida, these are the ground realities worth understanding before you commit — the social and civic side of society life that price charts never show. Watch the full review for the detailed breakdown, and talk to Property Saraansh for honest, RERA-backed guidance on where to buy.",
     "youtubeId": "z-nxbCBtffY",
     "thumbnail": "https://i.ytimg.com/vi/z-nxbCBtffY/hqdefault.jpg",
     "publishedAt": "2026-06-16",
@@ -43,7 +43,7 @@ export const videos: Video[] = [
   },
   {
     "slug": "crc-the-peridona-jaypee-greens",
-    "title": "CRC The Peridona Jaypee Greens Noida | Why This Is Noida’s Most Exclusive Project?",
+    "title": "CRC The Peridona Jaypee Greens Noida | Why This Is Noida's Most Exclusive Project?",
     "description": "CRC The Peridona, Jaypee Greens Noida — an honest review of this ultra-luxury 4 & 5 BHK project: developer track record, layouts, amenities and investment outlook.",
     "content": "CRC The Peridona is an ultra-luxury residential project by CRC Group, located on the last available land parcel inside the iconic Jaypee Greens township, Sector 128, Noida Expressway. In this 20-minute honest review, Property Saraansh covers everything a serious buyer or investor needs to know — from developer track record and project scale to layout analysis, amenities, competitor comparison, and investment outlook.||CRC Group is only 7 years old but has already built a reputation for early delivery and exceptional quality. Their first project, CRC Sublimis, was launched at Rs 3,000 per sqft in 2018 and delivered two years ahead of schedule. Today, Sublimis resales command approximately Rs 12,000 per sqft — a near 4x appreciation. CRC Joyous (their second project) is close to possession and trading at similar levels. CRC The Peridona is their most ambitious project yet.||The location is everything. Jaypee Greens is a 452-acre planned township at Pari Chowk on the Noida–Greater Noida border. The entire township houses only around 4,000 homes — roughly 9 units per acre — giving residents access to 60 acres of nature reserve, an 18-hole championship golf course, sports complexes, and club facilities. CRC The Peridona sits on the last 6.8 acres within this township, making the address genuinely irreplaceable.||The project comprises 7 towers of G+43 floors, offering 4 BHK units (4,950 to 6,000 sqft) and 5 BHK units (6,400 to 7,400 sqft). Overall density is just 50 units per acre — roughly half that of comparable ultra-luxury projects in Noida. Five out of seven towers have a single apartment per floor with a private lift lobby opening directly into the home. The starting price is Rs 13 Crore.||The clubhouse is the centrepiece of the project. At 1.8 lakh sqft, it is one of the largest residential clubhouses in Noida. All seven towers are connected at the lower floors creating a seamless grand lobby. Facilities include an ice rink, jazz club, karaoke lounge, two theatres, three swimming pools, a bowling alley, sky bar, infinity pool, observation deck, and jacuzzi deck at sky level.||In direct comparison, CRC The Peridona outperforms Gaur Legacy (the only other ultra-luxury project inside Jaypee Greens) on layout efficiency, density, privacy, and amenity scale. Against M3M Jacob and Co and L&T Green Reserve Sector 128, Peridona wins on community exclusivity, nature integration, and the irreplaceable Jaypee Greens address. The last land parcel in a mature low-density fully green township — with a developer who has proven early delivery — makes CRC The Peridona a compelling case for end-users and long-term HNI investors alike.||This video is ideal for HNI buyers exploring ultra-luxury flats in Noida, NRI investors evaluating Noida real estate, and anyone comparing CRC The Peridona against Gaur Legacy, L&T Green Reserve Sector 128 Noida, or M3M Jacob and Co before making a decision.",
     "youtubeId": "pAs9OoMvjQE",
@@ -52,7 +52,7 @@ export const videos: Video[] = [
     "duration": "PT20M9S",
     "focusKeyword": "crc the peridona",
     "category": "Real Estate",
-    "views": "18K views views"
+    "views": "18K views"
   },
   {
     "slug": "noida-market-slowdown-2026",
@@ -71,14 +71,14 @@ export const videos: Video[] = [
     "slug": "max-estates-105-vs-128",
     "title": "Max Estates 105 vs Max Estates 128 | Which One is Better?",
     "description": "Max Estates 105 Noida review — Sector 105 Expressway specs, ₹27,300/sq ft pricing and payment plan, plus how it compares with Max 128 and Jacob & Co.",
-    "content": "Max Estates’ most anticipated Noida Expressway launch is here, and the entry ticket is around ₹10 crore. In this Property Saraansh review, Saraansh Seth breaks down Max Estates 105 in Sector 105 — location, specifications, pricing, the honest pluses and minuses, and how it stacks up against Max Estates 128 and Jacob & Co.||Location and layout: the project sits on the Noida Expressway, about 6.1 km (8 minutes) from Mahamaya Flyover, across 10.33 acres (5.62 residential, 4.72 commercial). It is two towers of G+37, four units per floor and nine lifts per tower, with 4 BHK homes of 3,750–4,200 sq ft and 5 BHK duplexes from 6,350 to 10,000 sq ft, delivered with VRV air-conditioning, marble and wooden flooring and modular kitchens.||What stands out: Max’s signature interiors, whole-home FTA air purification, a three-layer water system you can drink straight from, and a skywalk jogging track set below window level for privacy. The honest downsides: balcony grills that soften the luxury feel, a red-brick façade rather than glass, and a single service lift serving 37 floors and about 135 families per tower.||Pricing and payment plan: a base of ₹24,500/sq ft works out to an all-inclusive ₹27,300–27,700/sq ft after PLC, lease rent and GST — a starting ticket of about ₹10.2 crore. The plan is investor-friendly: just 20% in 2026, nothing more until end-2027, then 60% across three annual instalments from 2028.||Max 105 vs Max 128 vs Jacob & Co: Jacob & Co runs about ₹9,000/sq ft higher for its glass façade and brand; Max 128 resale (around ₹26,500 all-in) is comparable to Max 105 new. Max 105 wins on layouts, deferred payments and a signal-free approach, while Max 128 offers higher density and is closer to rental income.||The verdict: combined luxury inventory across Max, Cullinan, Jacob & Co, Elie Saab, Riverine and L&T is under 2,000 units against a far larger pool of HNI, NRI and corporate buyers. With Gurgaon already at ₹50,000–60,000/sq ft, Saraansh sees Noida’s ₹27,000 on a similar path and rates Max Estates 105 a recommended long-term buy. (RERA: UPRERAPRJ529777/03/2026; prices indicative and subject to change.)",
+    "content": "Max Estates' most anticipated Noida Expressway launch is here, and the entry ticket is around ₹10 crore. In this Property Saraansh review, Saraansh Seth breaks down Max Estates 105 in Sector 105 — location, specifications, pricing, the honest pluses and minuses, and how it stacks up against Max Estates 128 and Jacob & Co.||Location and layout: the project sits on the Noida Expressway, about 6.1 km (8 minutes) from Mahamaya Flyover, across 10.33 acres (5.62 residential, 4.72 commercial). It is two towers of G+37, four units per floor and nine lifts per tower, with 4 BHK homes of 3,750–4,200 sq ft and 5 BHK duplexes from 6,350 to 10,000 sq ft, delivered with VRV air-conditioning, marble and wooden flooring and modular kitchens.||What stands out: Max's signature interiors, whole-home FTA air purification, a three-layer water system you can drink straight from, and a skywalk jogging track set below window level for privacy. The honest downsides: balcony grills that soften the luxury feel, a red-brick façade rather than glass, and a single service lift serving 37 floors and about 135 families per tower.||Pricing and payment plan: a base of ₹24,500/sq ft works out to an all-inclusive ₹27,300–27,700/sq ft after PLC, lease rent and GST — a starting ticket of about ₹10.2 crore. The plan is investor-friendly: just 20% in 2026, nothing more until end-2027, then 60% across three annual instalments from 2028.||Max 105 vs Max 128 vs Jacob & Co: Jacob & Co runs about ₹9,000/sq ft higher for its glass façade and brand; Max 128 resale (around ₹26,500 all-in) is comparable to Max 105 new. Max 105 wins on layouts, deferred payments and a signal-free approach, while Max 128 offers higher density and is closer to rental income.||The verdict: combined luxury inventory across Max, Cullinan, Jacob & Co, Elie Saab, Riverine and L&T is under 2,000 units against a far larger pool of HNI, NRI and corporate buyers. With Gurgaon already at ₹50,000–60,000/sq ft, Saraansh sees Noida's ₹27,000 on a similar path and rates Max Estates 105 a recommended long-term buy. (RERA: UPRERAPRJ529777/03/2026; prices indicative and subject to change.)",
     "youtubeId": "qfwf1IcrlsI",
     "thumbnail": "https://img.youtube.com/vi/qfwf1IcrlsI/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT12M16S",
     "focusKeyword": "max estates 105",
     "category": "Real Estate",
-    "views": "6.1K views views"
+    "views": "6.1K views"
   },
   {
     "slug": "noida-property-market-reality",
@@ -90,7 +90,7 @@ export const videos: Video[] = [
     "duration": "PT11M56S",
     "focusKeyword": "noida property market",
     "category": "Real Estate",
-    "views": "6.5K views views"
+    "views": "6.5K views"
   },
   {
     "slug": "eldeco-7-peaks-omicron-1",
@@ -103,31 +103,33 @@ export const videos: Video[] = [
     "duration": "PT14M2S",
     "focusKeyword": "eldeco 7 peaks",
     "category": "Real Estate",
-    "views": "18K views views"
+    "views": "18K views"
   },
   {
     "slug": "commercial-property-in-noida",
     "title": "Commercial Property in Noida: Builder Lease vs Self Lease",
-    "description": "Builder lease vs self lease for commercial property in Noida explained — which model gives better returns, security and long-term value.",
+    "description": "Builder lease vs self lease in Noida — real rental yields, project numbers & which model pays more in 2026. Watch the full analysis by Property Saraansh.",
+    "content": "Investing in commercial property in Noida in 2026 means facing one critical decision — builder lease or self lease? In this video, Saraansh Seth breaks down both models with real numbers from Dasnac Arc, Fairfox EON, and M3M The Cullinan so you can invest with confidence, not guesswork.||Studio apartments in Noida's top commercial projects are delivering up to 8.5% rental yield on resale — far above what most fixed deposits or fresh launches can offer. But only if you pick the right model and the right project.||Dasnac Arc (Sector 72, Central Noida): Fresh at ~18,500/sq ft vs resale at ~15,500/sq ft. Entry ticket ~77 lakh all-inclusive, expected rental 55,000/month, rental yield ~8.5%.||Fairfox EON (Sector 140, Noida Expressway): This IT/ITES zone is evolving into a Mini Cyberhub. Buy commercial studios and ground floor retail — avoid office spaces due to oversupply. Resale studios at 9,800-9,900/sq ft, all-in investment ~75 lakh, rental 42,000/month.||Yamuna Expressway Plots: Authority plots suit budgets above 2 crore (300 sqm+). For most buyers, private township resale plots from ACE Estate, ACE Acreville and ATS Province D Olympia offer better value — fresh at 1.5 lakh per gaj vs resale at 1.25 lakh per gaj with better roads and ready infrastructure.||Whether you are a first-time investor, NRI, or HNI looking for commercial property in Noida with genuine rental income — this analysis will save you from costly mistakes. Book a free consultation with our team.",
     "youtubeId": "LJo0YtPpTnY",
     "thumbnail": "https://img.youtube.com/vi/LJo0YtPpTnY/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT12M30S",
-    "focusKeyword": "commercial property in",
+    "focusKeyword": "commercial property in Noida",
     "category": "Real Estate",
-    "views": "8.2K views views"
+    "views": "8.2K views"
   },
   {
     "slug": "godrej-arden-sigma-3-review",
-    "title": "Godrej Arden Sigma 3 Review | Price, Floor Plan & Location Analysis",
-    "description": "Godrej Arden Sigma 3 Greater Noida review — price, floor plans, location analysis and whether it's a smart buy.",
+    "title": "Godrej Arden Greater Noida Review | Price ₹1.63–3.1 Cr, Floor Plans & Honest Investment Analysis",
+    "description": "Is Godrej Arden in Sigma 3, Greater Noida worth ₹11,812/sq ft? Saraansh Seth breaks down price, floor plans, location and investment potential — 4 units per floor, 9.58 acres, May 2030 possession.",
+    "content": "Godrej Arden in Sigma 3, Greater Noida is one of the most talked-about residential launches in the Greater Noida market — and it deserves a closer look before you decide. In this Property Saraansh review, Saraansh Seth breaks down everything a serious buyer or investor needs to know: location, project scale, floor plans, pricing, amenities, and an honest verdict on whether Godrej Arden makes sense at its current BSP of ₹11,812 per sq ft.||The location is a genuine advantage. Sigma 3 sits roughly 3 km from Pari Chowk — one of the most accessible intersections on the Greater Noida grid — with 2 km access to NH-24 and three separate project entry gates to prevent congestion. What makes this project stand out from a design standpoint is the 4-units-per-floor layout across 9 towers on 9.58 acres. With approximately 956 total units across G+35 towers, angular tower placement ensures most homes get three-side open views — a rarity at this price point in Greater Noida.||Configurations range from 2BHK+Study (1,375 sq ft, ~₹1.63 Crore) through 3BHK (1,850 sq ft, ~₹2.20 Crore), 3BHK+Study (2,100–2,150 sq ft, ~₹2.52 Crore), 3BHK+Servant (2,450–2,550 sq ft, ~₹2.85 Crore), and 4BHK (2,700–2,900 sq ft, ~₹3.10 Crore). The payment plan is a 30:40:30 construction-linked structure with RERA registered under UPRERAPRJ110163 and possession declared for May 2030.||The amenities package is strong: a 40,000 sq ft clubhouse, over 70% open green space within the project, elevated walkways between towers, swimming pool, gym, yoga deck, and a jogging track. The Vastu-sensitive layout and angular tower design are deliberate — and these are the kind of details that matter for end-users making a long-term home purchase.||Against competitors, Godrej Arden sits in an interesting position. Eldeco 7 Peaks, on adjacent land in Omicron 1A, is the most direct comparison — Aedas-designed, with a 1 lakh sq ft clubhouse and an all-inclusive price of approximately ₹13,000/sq ft. Experion Saatori on Sector 151, Noida Expressway, targets a premium buyer at a higher price point. Godrej Arden's ₹11,812 BSP positions it as the mid-premium choice in this triangle — more accessible than Experion, with a stronger brand name than most Greater Noida alternatives.||The honest verdict: for end-users buying a home in Greater Noida, Godrej Arden offers a compelling combination of developer credibility, low-density design and practical location at a reasonable entry price. For investors, the Greater Noida market has slower appreciation velocity than Noida Expressway — but the combination of the Godrej brand, low per-floor density and multi-road access makes this a lower-risk hold. If you are comparing projects in the ₹2–3 crore range in Greater Noida, Godrej Arden should be on your shortlist — but always verify the all-inclusive cost before you commit.",
     "youtubeId": "tWk2i0WUqiY",
     "thumbnail": "https://img.youtube.com/vi/tWk2i0WUqiY/maxresdefault.jpg",
-    "publishedAt": "2026-06-11",
-    "duration": "PT12M24S",
-    "focusKeyword": "godrej arden sigma",
+    "publishedAt": "2026-05-15",
+    "duration": "PT12M23S",
+    "focusKeyword": "godrej arden",
     "category": "Real Estate",
-    "views": "11K views views"
+    "views": "11K views"
   },
   {
     "slug": "noida-commercial-builder-vs-self-lease",
@@ -139,7 +141,7 @@ export const videos: Video[] = [
     "duration": "PT12M38S",
     "focusKeyword": "commercial investment in",
     "category": "Real Estate",
-    "views": "5K views views"
+    "views": "5K views"
   },
   {
     "slug": "noida-property-market-2025",
@@ -151,7 +153,7 @@ export const videos: Video[] = [
     "duration": "PT32M41S",
     "focusKeyword": "noida property market",
     "category": "Real Estate",
-    "views": "17K views views"
+    "views": "17K views"
   },
   {
     "slug": "exit-advice-noida-residential-projects",
@@ -163,7 +165,7 @@ export const videos: Video[] = [
     "duration": "PT11M47S",
     "focusKeyword": "exit advice on",
     "category": "Real Estate",
-    "views": "28K views views"
+    "views": "28K views"
   },
   {
     "slug": "experion-saatori-sector-151-noida",
@@ -175,7 +177,7 @@ export const videos: Video[] = [
     "duration": "PT11M57S",
     "focusKeyword": "experion saatori sector",
     "category": "Real Estate",
-    "views": "23K views views"
+    "views": "23K views"
   },
   {
     "slug": "sobha-rivana-noida-extension-review",
@@ -187,11 +189,11 @@ export const videos: Video[] = [
     "duration": "PT11M34S",
     "focusKeyword": "sobha rivana noida",
     "category": "Real Estate",
-    "views": "7.5K views views"
+    "views": "7.5K views"
   },
   {
     "slug": "m3m-jacob-co-noida",
-    "title": "Jacob & Co Noida | India’s First Branded Residence in Noida | M3M x Jacob & Co Ultra Luxury Review",
+    "title": "Jacob & Co Noida | India's First Branded Residence in Noida | M3M x Jacob & Co Ultra Luxury Review",
     "description": "Jacob & Co Noida by M3M — India's first branded residence reviewed. Ultra-luxury features, pricing and whether it's worth it for HNI buyers.",
     "youtubeId": "LRZV-H--Qlw",
     "thumbnail": "https://img.youtube.com/vi/LRZV-H--Qlw/maxresdefault.jpg",
@@ -199,7 +201,7 @@ export const videos: Video[] = [
     "duration": "PT11M27S",
     "focusKeyword": "jacob  co",
     "category": "Real Estate",
-    "views": "12K views views"
+    "views": "12K views"
   },
   {
     "slug": "lt-green-reserve-noida-price-payment-plan",
@@ -211,7 +213,7 @@ export const videos: Video[] = [
     "duration": "PT13M5S",
     "focusKeyword": "lt green reserve",
     "category": "Real Estate",
-    "views": "5.3K views views"
+    "views": "5.3K views"
   },
   {
     "slug": "prestige-city-ghaziabad-4-month-update",
@@ -223,7 +225,7 @@ export const videos: Video[] = [
     "duration": "PT10M17S",
     "focusKeyword": "prestige city ghaziabad",
     "category": "Real Estate",
-    "views": "8.5K views views"
+    "views": "8.5K views"
   },
   {
     "slug": "lt-green-reserve-sector-128-buying-guide",
@@ -235,7 +237,7 @@ export const videos: Video[] = [
     "duration": "PT9M1S",
     "focusKeyword": "lt green reserve",
     "category": "Real Estate",
-    "views": "9.4K views views"
+    "views": "9.4K views"
   },
   {
     "slug": "gaurs-yamuna-expressway-launch-review",
@@ -247,7 +249,7 @@ export const videos: Video[] = [
     "duration": "PT10M41S",
     "focusKeyword": "is gaurs yamuna",
     "category": "Real Estate",
-    "views": "6.7K views views"
+    "views": "6.7K views"
   },
   {
     "slug": "top-3-self-use-projects-noida-expressway",
@@ -259,7 +261,7 @@ export const videos: Video[] = [
     "duration": "PT16M17S",
     "focusKeyword": "noida expressways top3",
     "category": "Real Estate",
-    "views": "7.3K views views"
+    "views": "7.3K views"
   },
   {
     "slug": "ace-the-nest-ace-verde-yamuna-expressway",
@@ -271,7 +273,7 @@ export const videos: Video[] = [
     "duration": "PT15M38S",
     "focusKeyword": "is ace the",
     "category": "Real Estate",
-    "views": "10K views views"
+    "views": "10K views"
   },
   {
     "slug": "godrej-city-panvel-mumbai-review",
@@ -283,7 +285,7 @@ export const videos: Video[] = [
     "duration": "PT10M23S",
     "focusKeyword": "is panvel the",
     "category": "Real Estate",
-    "views": "7.8K views views"
+    "views": "7.8K views"
   },
   {
     "slug": "godrej-evergreen-square-hinjewadi-pune",
@@ -295,7 +297,7 @@ export const videos: Video[] = [
     "duration": "PT6M35S",
     "focusKeyword": "godrej evergreen square",
     "category": "Real Estate",
-    "views": "5.2K views views"
+    "views": "5.2K views"
   },
   {
     "slug": "sobha-aurum-sector-36-vs-prestige-indirapuram",
@@ -307,7 +309,7 @@ export const videos: Video[] = [
     "duration": "PT10M59S",
     "focusKeyword": "sobha aurum greater",
     "category": "Real Estate",
-    "views": "9.3K views views"
+    "views": "9.3K views"
   },
   {
     "slug": "godrej-majesty-noida-extension-review",
@@ -319,7 +321,7 @@ export const videos: Video[] = [
     "duration": "PT11M2S",
     "focusKeyword": "is godrej majesty",
     "category": "Real Estate",
-    "views": "4.7K views views"
+    "views": "4.7K views"
   },
   {
     "slug": "ace-acreville-price-review",
@@ -331,7 +333,7 @@ export const videos: Video[] = [
     "duration": "PT11M12S",
     "focusKeyword": "is ace acreville",
     "category": "Real Estate",
-    "views": "4.3K views views"
+    "views": "4.3K views"
   },
   {
     "slug": "dasnac-yuva-studio-apartments-review",
@@ -343,7 +345,7 @@ export const videos: Video[] = [
     "duration": "PT7M13S",
     "focusKeyword": "dasnac yuva studio",
     "category": "Real Estate",
-    "views": "12K views views"
+    "views": "12K views"
   },
   {
     "slug": "top-3-ready-to-move-flats-on-noida-expressway",
@@ -355,7 +357,7 @@ export const videos: Video[] = [
     "duration": "PT11M43S",
     "focusKeyword": "top 3 ready",
     "category": "Real Estate",
-    "views": "8.8K views views"
+    "views": "8.8K views"
   },
   {
     "slug": "sobha-aurum-sector-36-greater-noida-review",
@@ -367,7 +369,7 @@ export const videos: Video[] = [
     "duration": "PT14M25S",
     "focusKeyword": "sobha aurum greater",
     "category": "Real Estate",
-    "views": "17K views views"
+    "views": "17K views"
   },
   {
     "slug": "ats-province-d-olympia-vs-ace-estate",
@@ -379,7 +381,7 @@ export const videos: Video[] = [
     "duration": "PT5M35S",
     "focusKeyword": "ats province d",
     "category": "Real Estate",
-    "views": "20K views views"
+    "views": "20K views"
   },
   {
     "slug": "purvanchal-sunbliss-22d-yamuna-expressway",
@@ -391,7 +393,7 @@ export const videos: Video[] = [
     "duration": "PT7M19S",
     "focusKeyword": "purvanchal sunbliss 22d",
     "category": "Real Estate",
-    "views": "12K views views"
+    "views": "12K views"
   },
   {
     "slug": "ska-estate-greater-noida-review",
