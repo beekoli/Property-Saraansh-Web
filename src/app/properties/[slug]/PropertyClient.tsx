@@ -609,8 +609,8 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                   <div key={plan.id} className="space-y-6 animate-fade-in">
                     <div className="aspect-[4/3] max-w-lg mx-auto bg-brand-pale rounded-xl border border-brand-light/20 relative overflow-hidden group cursor-zoom-in" onClick={() => { setLightboxIndex(plan.id + 5); setLightboxOpen(true); }}>
                       <Image 
-                        src={plan.image} 
-                        alt={plan.title} 
+                        src={plan.image || ''}
+                        alt={plan.title}
                         fill
                         sizes="(max-width: 768px) 100vw, 512px"
                         className="object-cover group-hover:scale-105 transition-transform duration-500" 
