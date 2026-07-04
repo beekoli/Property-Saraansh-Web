@@ -232,6 +232,22 @@ export async function getProperties(limit = 10, propertyType?: string): Promise<
   return list.slice(0, limit);
 }
 
+/**
+ * Fetch properties filtered server-side by the `ps_property_type` WordPress
+ * taxonomy (term id), instead of fetching everything and filtering client-side
+ * on an ACF text field. This gives each type-specific listing page (residential,
+ * commercial) its own distinct fetch/cache key, and lets WordPress do the
+ * filtering — so a stale cache on one listing page can no longer mask newly
+ * published or re-tagged properties on another.
+ *
+ * Known term ids (see WordPress Properties > Property Type):
+ *   Residential = 74, Commercial = 75
+ */
+export async function getPropertiesByTypeTerm(limit = 20, termId: number): Promise<WPProperty[]> {
+  const data = await fetchAPI(`/properties?_embed&per_page=${limit}&property-type=${termId}`);
+  return data && data.length > 0 ? data : [];
+}
+
 export async function getPropertyBySlug(slug: string): Promise<WPProperty | null> {
   const data = await fetchAPI(`/properties?_embed&slug=${slug}`);
   if (data && data.length > 0) return data[0];
