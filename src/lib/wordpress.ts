@@ -93,6 +93,9 @@ export interface WPProperty {
     project_logo?: string;
     floor_plan_footer_text?: string;
     site_plan_image?: string | false;
+    master_layout_image?: string | false;
+    price_range?: string;
+    tagline?: string;
     // SEO fields
     seo_title?: string;
     seo_description?: string;
