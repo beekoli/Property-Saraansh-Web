@@ -343,6 +343,8 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
             <span className="text-brand-pale/30">·</span>
             <button onClick={() => scrollNav('price')} className="hover:text-brand-accent transition-colors">Price</button>
             <span className="text-brand-pale/30">·</span>
+            <button onClick={() => scrollNav('payment-plan')} className="hover:text-brand-accent transition-colors">Payment</button>
+            <span className="text-brand-pale/30">·</span>
             <button onClick={() => scrollNav('location')} className="hover:text-brand-accent transition-colors">Location</button>
             <span className="text-brand-pale/30">·</span>
             <button onClick={() => scrollNav('gallery')} className="hover:text-brand-accent transition-colors">Gallery</button>
@@ -370,7 +372,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
         {/* mobile nav dropdown */}
         {isMobileNavOpen && (
           <div className="md:hidden bg-brand-dark/98 border-t border-brand-light/10 px-4 py-3 grid grid-cols-3 gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-pale/70">
-            {['overview','highlights','floorplan','amenities','price','location','gallery','possession','faq'].map(id => (
+            {['overview','highlights','floorplan','amenities','price','payment-plan','location','gallery','possession','faq'].map(id => (
               <button key={id} onClick={() => scrollNav(id)} className="hover:text-brand-accent transition-colors text-left py-1">
                 {id.charAt(0).toUpperCase() + id.slice(1)}
               </button>
@@ -751,6 +753,124 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                 </div>
               </div>
             )}
+
+            {/* ── Payment Plan Section ── */}
+            {acf.payment_plan_step_1_title && (() => {
+              const steps = [1,2,3,4,5].map(i => ({
+                title: acf[`payment_plan_step_${i}_title` as keyof typeof acf] as string | undefined,
+                desc:  acf[`payment_plan_step_${i}_desc`  as keyof typeof acf] as string | undefined,
+                pct:   acf[`payment_plan_step_${i}_pct`   as keyof typeof acf] as string | undefined,
+              })).filter(s => s.title);
+              const sums = [1,2,3].map(i => ({
+                pct:   acf[`payment_plan_sum_${i}_pct`   as keyof typeof acf] as string | undefined,
+                label: acf[`payment_plan_sum_${i}_label` as keyof typeof acf] as string | undefined,
+              })).filter(s => s.pct);
+              return (
+                <div id="payment-plan" className="bg-[#f5f7fa] rounded-2xl p-8 md:p-12 shadow-sm border border-brand-light/10 text-center">
+                  {/* Pill */}
+                  <div className="inline-flex items-center border border-brand-primary/30 rounded-full px-5 py-1.5 mb-6">
+                    <span className="text-xs font-bold uppercase tracking-widest text-brand-primary/70">
+                      {(acf.payment_plan_label as string | undefined) || 'Payment Plan'}
+                    </span>
+                  </div>
+
+                  {/* Heading */}
+                  <h2 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-dark mb-3">
+                    {property.title.rendered} Payment Plan
+                  </h2>
+
+                  {/* Tagline */}
+                  {(acf.payment_plan_tagline as string | undefined) && (
+                    <p className="text-brand-accent text-sm italic font-medium max-w-xl mx-auto mb-8 leading-relaxed">
+                      {acf.payment_plan_tagline as string}
+                    </p>
+                  )}
+
+                  {/* Steps */}
+                  <div className="max-w-lg mx-auto space-y-3 mb-8 text-left">
+                    {steps.map((step, idx) => {
+                      const isLast = idx === steps.length - 1;
+                      return (
+                        <div
+                          key={idx}
+                          className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
+                            isLast
+                              ? 'bg-brand-dark border-brand-dark text-white'
+                              : 'bg-white border-brand-pale'
+                          }`}
+                        >
+                          {/* Step number circle */}
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
+                            isLast ? 'bg-white text-brand-dark' : 'bg-brand-primary text-white'
+                          }`}>
+                            {idx + 1}
+                          </div>
+
+                          {/* Title + desc */}
+                          <div className="flex-1 min-w-0">
+                            <div className={`font-bold text-sm ${isLast ? 'text-white' : 'text-brand-dark'}`}>
+                              {step.title}
+                            </div>
+                            {step.desc && (
+                              <div className={`text-xs mt-0.5 leading-relaxed ${isLast ? 'text-white/60' : 'text-brand-light'}`}>
+                                {step.desc}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Percentage */}
+                          {step.pct && (
+                            <div className={`text-base font-bold shrink-0 ${
+                              isLast ? 'text-brand-accent' : 'text-brand-primary'
+                            }`}>
+                              {step.pct}%
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Summary boxes */}
+                  {sums.length > 0 && (
+                    <div className="flex gap-3 justify-center max-w-lg mx-auto mb-8">
+                      {sums.map((s, idx) => {
+                        const isHighlight = idx === Math.floor(sums.length / 2);
+                        return (
+                          <div
+                            key={idx}
+                            className={`flex-1 rounded-2xl p-4 text-center ${
+                              isHighlight
+                                ? 'bg-brand-primary text-white shadow-lg'
+                                : 'bg-white text-brand-dark border border-brand-pale'
+                            }`}
+                          >
+                            <div className="text-xl md:text-2xl font-bold">{s.pct}%</div>
+                            {s.label && (
+                              <div className="text-[11px] mt-1 font-semibold opacity-80 leading-tight">{s.label}</div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* CTA */}
+                  <button
+                    onClick={() => {
+                      setFloorPlanModalTitle("Custom Payment Plan");
+                      setFloorPlanForm({ name: '', phone: '' });
+                      setFloorPlanSubmitError('');
+                      setIsFloorPlanModalOpen(true);
+                    }}
+                    className="inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white font-bold text-sm px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
+                  >
+                    <Download className="w-4 h-4" />
+                    Get Custom Payment Plan
+                  </button>
+                </div>
+              );
+            })()}
 
             {/* location advantages & map section */}
             {(acf.location_advantages || acf.google_map_embed) && (
@@ -1173,3 +1293,4 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
     </div>
   );
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
