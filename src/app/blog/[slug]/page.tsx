@@ -48,60 +48,42 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const fallbackTitle = `${blog.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh`;
-  // Trim the excerpt at a word boundary so the meta description never cuts mid-word.
-  const rawExcerpt = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim() || `Read ${blog.title.rendered}`;
-  const fallbackDesc = rawExcerpt.length > 158 ? rawExcerpt.slice(0, 158).replace(/\s+\S*$/, '') + '…' : rawExcerpt;
+  const fallbackDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${blog.title.rendered}`;
   
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
 
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
+  // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website")
+  if (meta.openGraph) {
+    meta.openGraph.type = 'article';
+  }
+
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
+  // and has NO trailing slash (Next.js serves without trailing slash by default).
   if (meta.alternates?.canonical) {
     const canonicalStr = typeof meta.alternates.canonical === 'string'
       ? meta.alternates.canonical
       : meta.alternates.canonical.toString();
-      
+
     if (!canonicalStr.includes('/blog/')) {
       try {
         const urlObj = new URL(canonicalStr);
-        meta.alternates.canonical = `${urlObj.origin}/blog${urlObj.pathname}${urlObj.search}`;
+        // Strip trailing slash from pathname before constructing the canonical
+        const cleanPath = urlObj.pathname.replace(/\/$/, '');
+        meta.alternates.canonical = `${urlObj.origin}/blog${cleanPath}${urlObj.search}`;
       } catch (e) {
         meta.alternates.canonical = `${FRONTEND_URL}/blog/${slug}`;
       }
+    } else {
+      // Already has /blog/ — just strip any trailing slash
+      meta.alternates.canonical = canonicalStr.replace(/\/$/, '');
     }
   } else {
     meta.alternates = {
       ...meta.alternates,
       canonical: `${FRONTEND_URL}/blog/${slug}`,
-    };
-  }
-
-  // Guarantee Open Graph / Twitter Card tags even when no RankMath/Yoast data
-  // exists for the post (rank_math_json is null for many posts). Without these,
-  // WhatsApp/Facebook/LinkedIn shares render as bare links with no preview.
-  const canonicalUrl = `${FRONTEND_URL}/blog/${slug}`;
-  const featuredImg = getFeaturedImage(blog);
-  if (!meta.openGraph) {
-    meta.openGraph = {
-      title: fallbackTitle,
-      description: fallbackDesc,
-      url: canonicalUrl,
-      siteName: 'Property Saraansh',
-      locale: 'en_IN',
-      type: 'article',
-      images: featuredImg ? [{ url: featuredImg, width: 1200, height: 630 }] : [],
-    };
-  } else if ((!meta.openGraph.images || (Array.isArray(meta.openGraph.images) && meta.openGraph.images.length === 0)) && featuredImg) {
-    meta.openGraph.images = [{ url: featuredImg, width: 1200, height: 630 }];
-  }
-  if (!meta.twitter) {
-    meta.twitter = {
-      card: 'summary_large_image',
-      title: fallbackTitle,
-      description: fallbackDesc,
-      images: featuredImg ? [featuredImg] : undefined,
     };
   }
 
@@ -116,12 +98,6 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  // Demote any stray H1s inside WordPress content — this page already renders
-  // its single H1 in the hero banner, so content headings must start at H2.
-  const contentHtml = blog.content.rendered
-    .replace(/<h1([\s>])/gi, '<h2$1')
-    .replace(/<\/h1>/gi, '</h2>');
-
   // Fetch related posts (exclude current)
   const allBlogs = await getLatestBlogs(4);
   const relatedBlogs = allBlogs.filter(b => b.slug !== slug).slice(0, 3);
@@ -133,6 +109,10 @@ export default async function BlogPostPage({ params }: PageProps) {
   // Slug-based overrides — always apply to correct known-wrong ACF values
   if (slug.includes('noida-residents') || slug.includes('nobody-talks')) {
     relatedVideoId = "z-nxbCBtffY"; // Things Nobody Talks About Noida Residents
+  } else if (slug === 'noida-real-estate-2026-dasnac-arc-fairfox-eon') {
+    relatedVideoId = "LJo0YtPpTnY"; // Commercial: Builder Lease vs Self Lease
+  } else if (slug.includes('godrej-arden-detailed-review')) {
+    relatedVideoId = "tWk2i0WUqiY"; // Godrej Arden Sigma 3 Review
   } else if (!acfVideoId) {
     if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities')) {
       relatedVideoId = "g2dN6stL3i0"; // Noida Market Slowdown 2026
@@ -351,7 +331,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
 
             {/* Table of Contents — below the video */}
-            <TableOfContents htmlContent={contentHtml} />
+            <TableOfContents htmlContent={blog.content.rendered} />
 
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               {/* Main Content with Custom Class overrides */}
@@ -381,7 +361,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   /* Figure & Captions */
                   prose-figcaption:text-center prose-figcaption:text-xs md:prose-figcaption:text-sm prose-figcaption:text-brand-light prose-figcaption:mt-2 md:prose-figcaption:mt-3 prose-figcaption:italic
                 " 
-                dangerouslySetInnerHTML={{ __html: contentHtml }} 
+                dangerouslySetInnerHTML={{ __html: blog.content.rendered }} 
               />
 
 

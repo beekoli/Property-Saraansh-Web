@@ -146,6 +146,28 @@ export interface SEOJson {
 }
 
 /**
+ * Decode common WordPress HTML entities so metadata doesn't show raw entity codes.
+ * WordPress stores titles/descriptions with HTML-encoded special chars (e.g. &amp; for &).
+ * If passed through to Next.js Metadata as-is, Next.js re-encodes them → &amp;amp; double-encoding.
+ */
+function decodeWPEntities(str: string): string {
+  if (!str) return str;
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&#038;/g, '&')
+    .replace(/&#8211;/g, '–')
+    .replace(/&#8212;/g, '—')
+    .replace(/&#8216;/g, '‘')
+    .replace(/&#8217;/g, '’')
+    .replace(/&#8220;/g, '“')
+    .replace(/&#8221;/g, '”')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'");
+}
+
+/**
  * Generates a Next.js Metadata object from RankMath/Yoast JSON data.
  * The raw JSON object is usually exposed in the REST API as `yoast_head_json` or `rank_math_json`.
  */
@@ -157,12 +179,19 @@ export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fa
     };
   }
 
+  const title = decodeWPEntities(seoJson.title || fallbackTitle);
+  const description = decodeWPEntities(seoJson.description || fallbackDescription);
+  const ogTitle = decodeWPEntities(seoJson.og_title || seoJson.title || fallbackTitle);
+  const ogDescription = decodeWPEntities(seoJson.og_description || seoJson.description || fallbackDescription);
+  const twitterTitle = decodeWPEntities(seoJson.twitter_title || seoJson.title || fallbackTitle);
+  const twitterDescription = decodeWPEntities(seoJson.twitter_description || seoJson.description || fallbackDescription);
+
   return {
-    title: seoJson.title || fallbackTitle,
-    description: seoJson.description || fallbackDescription,
+    title,
+    description,
     openGraph: {
-      title: seoJson.og_title || seoJson.title || fallbackTitle,
-      description: seoJson.og_description || seoJson.description || fallbackDescription,
+      title: ogTitle,
+      description: ogDescription,
       url: seoJson.og_url ? rewriteUrlToFrontend(seoJson.og_url) : undefined,
       siteName: seoJson.og_site_name || 'Property Saraansh',
       images: seoJson.og_image?.map((img) => ({
@@ -176,8 +205,8 @@ export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fa
     },
     twitter: {
       card: (seoJson.twitter_card as "summary_large_image" | "summary" | "player" | "app") || 'summary_large_image',
-      title: seoJson.twitter_title || seoJson.title || fallbackTitle,
-      description: seoJson.twitter_description || seoJson.description || fallbackDescription,
+      title: twitterTitle,
+      description: twitterDescription,
       images: seoJson.twitter_image ? [rewriteUrlToFrontend(seoJson.twitter_image)] : undefined,
     },
     alternates: {
