@@ -397,18 +397,9 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                 Project Overview
               </h2>
 
-              {acf.project_overview ? (
+              {acf.project_overview && (
                 <p className="text-brand-ink/80 text-sm leading-relaxed mb-6 font-medium text-justify whitespace-pre-line">
                   {acf.project_overview}
-                </p>
-              ) : property.content?.rendered ? (
-                <div 
-                  className="prose prose-sm max-w-none text-brand-ink/80 leading-relaxed mb-6 font-medium text-justify"
-                  dangerouslySetInnerHTML={{ __html: property.content.rendered }}
-                />
-              ) : (
-                <p className="text-brand-ink/80 text-sm leading-relaxed mb-6 font-medium text-justify">
-                  Welcome to {property.title.rendered || "this premium property"}. This exceptional project offers high-end residential spaces designed for modern living. Strategically located with excellent connectivity, it features world-class amenities, premium structural quality, and meticulously planned layouts to ensure comfortable, luxury living for your family.
                 </p>
               )}
               
@@ -575,9 +566,11 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                     </div>
                   )}
 
-                  <p className="text-center text-xs text-brand-light mt-4 font-light">
-                    Explore the complete layout of {property.title.rendered}{acf.total_land ? ` — ${acf.total_land} of ultra-luxury living` : ''} within the 452-acre Jaypee Greens township.
-                  </p>
+                  {acf.site_plan_caption && (
+                    <p className="text-center text-xs text-brand-light mt-4 font-light">
+                      {acf.site_plan_caption}
+                    </p>
+                  )}
                 </div>
               );
             })()}
@@ -736,22 +729,24 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                     </button>
                   </div>
 
-                  <div 
-                    ref={priceListTextRef}
-                    className={`mt-4 text-[11px] text-brand-light leading-relaxed font-light italic [&_p]:text-[11px] [&_p]:text-brand-light [&_p]:leading-relaxed [&_p]:font-light [&_p]:italic transition-all duration-300 ${
-                      isPriceListTextExpanded ? '' : 'line-clamp-2'
-                    }`}
-                    dangerouslySetInnerHTML={{ 
-                      __html: acf.price_list_desc || "*PLCs + GST applicable. BSP of ₹12,000/sq.ft includes central air-conditioning, 10% discount on booking first 50 units." 
-                    }}
-                  />
-                  {showPriceListReadMore && (
-                    <button
-                      onClick={() => setIsPriceListTextExpanded(!isPriceListTextExpanded)}
-                      className="text-brand-primary hover:text-brand-accent text-[11px] font-bold uppercase tracking-wider mt-1.5 transition-colors focus:outline-none"
-                    >
-                      {isPriceListTextExpanded ? 'Read Less' : 'Read More'}
-                    </button>
+                  {acf.price_list_desc && (
+                    <>
+                      <div
+                        ref={priceListTextRef}
+                        className={`mt-4 text-[11px] text-brand-light leading-relaxed font-light italic [&_p]:text-[11px] [&_p]:text-brand-light [&_p]:leading-relaxed [&_p]:font-light [&_p]:italic transition-all duration-300 ${
+                          isPriceListTextExpanded ? '' : 'line-clamp-2'
+                        }`}
+                        dangerouslySetInnerHTML={{ __html: acf.price_list_desc }}
+                      />
+                      {showPriceListReadMore && (
+                        <button
+                          onClick={() => setIsPriceListTextExpanded(!isPriceListTextExpanded)}
+                          className="text-brand-primary hover:text-brand-accent text-[11px] font-bold uppercase tracking-wider mt-1.5 transition-colors focus:outline-none"
+                        >
+                          {isPriceListTextExpanded ? 'Read Less' : 'Read More'}
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
