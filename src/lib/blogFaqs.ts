@@ -298,28 +298,20 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
   ],
   "noida-real-estate-2026-dasnac-arc-fairfox-eon": [
     {
-      question: "What is the rental yield of Dasnac Arc studios in Sector 72 Noida?",
-      answer: "Dasnac Arc commercial studios in Sector 72, Central Noida offer approximately 8–8.5% annual rental yield. With resale entry around ₹15,500 per sq ft (vs ₹18,500 fresh), the all-in investment is ₹75–78 lakh for expected monthly rentals of ₹55,000. This is one of the strongest commercial studio yields in Noida today, supported by a confirmed hotel operator and a dense residential catchment of 1.5–2 lakh nearby population."
+      question: "Is builder lease safe for commercial property investment in Noida?",
+      answer: "Builder lease can work — but you must read the fine print carefully. In a builder lease, the developer controls tenant acquisition and manages the retail or hospitality mix. Some structures use 'assured returns' that are actually self-funded: the builder adds ₹5,000–10,000 per sq ft to the base price and redistributes that premium as guaranteed rental over 3–5 years. After the guarantee period, actual market rental (or revenue share) kicks in — which could be significantly lower. Always calculate your net return AFTER the guarantee ends. That number determines the real investment quality. Projects like Dasnac Arc, where a confirmed hotel operator is already signed, offer more transparency than projects with only promised tenants."
     },
     {
-      question: "Should I buy fresh or resale at Dasnac Arc?",
-      answer: "Resale is the smarter entry in 2026. Fresh pricing at Dasnac Arc is around ₹18,500 per sq ft, while resale units are available at ₹15,500 per sq ft — saving ₹3,000 per sq ft with identical rental income potential. On a 400 sq ft studio, that's ₹12 lakh saved. Target resale units with existing hotel operator assignments for the fastest rental activation."
+      question: "Which commercial areas in Noida give the best rental yield in 2026?",
+      answer: "Sector 72 (Central Noida) leads on rental yield in 2026. Dasnac Arc studios bought at resale (₹15,500/sq ft, all-in ₹75–78 lakh) generate approximately ₹55,000/month rental — translating to ~8.5% annual yield. Sector 140 (Noida Expressway) via Fairfox EON offers ~6.4% yield on studio units: resale at ₹9,800–9,900/sq ft, all-in ~₹75 lakh, rental ~₹42,000/month. Office campus retail zones in Sectors 62, 90, 132, and 140 also perform well for self-leased investors due to consistent daily footfall from IT offices. Avoid luxury high-street commercial — footfall dependency makes yields unpredictable."
     },
     {
-      question: "Is Fairfox EON a good commercial investment in Noida in 2026?",
-      answer: "Fairfox EON in Sector 140, Noida Expressway is a good investment — but only for the right product. Studios at resale pricing of ₹9,800–9,900 per sq ft offer ₹40,000–42,000 per month rental at ₹75 lakh all-in, translating to approximately 6.4% yield. Avoid office spaces (oversupply risk); focus on studios or ground-floor retail. The real working ecosystem — multiple operational offices and daily footfall — makes Fairfox EON a genuine rental play, not a speculative one."
+      question: "Should I buy fresh or resale commercial property in Noida in 2026?",
+      answer: "For yield-focused investors in 2026, resale is the smarter entry in most commercial projects. At Dasnac Arc, fresh units are priced at ~₹18,500/sq ft while resale units are available at ~₹15,500/sq ft — that's ₹12 lakh saved on a standard 400 sq ft studio with identical rental income potential. At Fairfox EON, fresh studio pricing is around ₹13,500/sq ft while resale offers ₹9,800–9,900/sq ft — a ~28% saving. Both deliver the same monthly rental. The only scenario where fresh makes sense: projects with no resale market yet, where you want a specific floor/unit or where the builder is offering a below-market launch price on verified demand."
     },
     {
-      question: "What makes M3M The Cullinan a smart resale investment versus new luxury launches?",
-      answer: "M3M The Cullinan offers a complete integrated address — residential towers, Trump Towers, a self-leased mall, and high-street retail — at resale pricing of ₹24,000 per sq ft, compared to comparable new luxury launches at ₹30,000–35,000+ per sq ft. Buyers entering at resale benefit from established branding, a mature community, and significant upside as the gap with newer launches narrows. Lower downside risk than fresh luxury inventory is the key advantage."
-    },
-    {
-      question: "Are ATS Plots and ACE Acreville on Yamuna Expressway good investments in 2026?",
-      answer: "Yes, with clear conditions. ACE Acreville and ACE Estate offer resale entry around ₹1.25 lakh per gaj versus fresh rates touching ₹1.5 lakh — better risk-reward at resale. For ATS Plots, budget above ₹2 Crore and a 5–7 year holding horizon are essential. Plots remain the safest bet on Yamuna Expressway because land stays scarce over time. Avoid apartments here — the end-user ecosystem is still too underdeveloped to support strong resale demand."
-    },
-    {
-      question: "What is the core investment principle for Noida real estate in 2026?",
-      answer: "Buy smart, not loud. Fresh launches in 2026 are driven by marketing rather than real pricing logic. Smart investors target resale units in fundamentally strong projects — lower entry price, established community, faster rental activation. Dasnac Arc, Fairfox EON, M3M The Cullinan, and ACE Acreville/Estate outperform because their demand economics hold up to scrutiny. Real money in Noida 2026 is made in the right resale, not the loudest new launch."
+      question: "What is the minimum investment for commercial property in Noida?",
+      answer: "Commercial studio apartments in Noida's top projects start from approximately ₹60–75 lakh all-inclusive on a resale basis. Dasnac Arc (Sector 72) studios are available at ~₹77 lakh all-in (including registration and stamp duty). Fairfox EON (Sector 140) studios enter at ~₹75 lakh. These are the lowest viable entry points for a genuine income-generating commercial asset with a confirmed operator or working ecosystem. Below ₹60 lakh, you are typically looking at raw shell units in projects without operational operators — which carry higher vacancy risk and lower yield predictability."
     }
   ]
 };
