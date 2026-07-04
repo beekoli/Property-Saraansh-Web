@@ -48,7 +48,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const fallbackTitle = `${blog.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh`;
-  const fallbackDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${blog.title.rendered}`;
+  // Trim the excerpt at a word boundary so the meta description never cuts mid-word.
+  const rawExcerpt = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim() || `Read ${blog.title.rendered}`;
+  const fallbackDesc = rawExcerpt.length > 158 ? rawExcerpt.slice(0, 158).replace(/\s+\S*$/, '') + '…' : rawExcerpt;
   
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
@@ -76,6 +78,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  // Guarantee Open Graph / Twitter Card tags even when no RankMath/Yoast data
+  // exists for the post (rank_math_json is null for many posts). Without these,
+  // WhatsApp/Facebook/LinkedIn shares render as bare links with no preview.
+  const canonicalUrl = `${FRONTEND_URL}/blog/${slug}`;
+  const featuredImg = getFeaturedImage(blog);
+  if (!meta.openGraph) {
+    meta.openGraph = {
+      title: fallbackTitle,
+      description: fallbackDesc,
+      url: canonicalUrl,
+      siteName: 'Property Saraansh',
+      locale: 'en_IN',
+      type: 'article',
+      images: featuredImg ? [{ url: featuredImg, width: 1200, height: 630 }] : [],
+    };
+  } else if ((!meta.openGraph.images || (Array.isArray(meta.openGraph.images) && meta.openGraph.images.length === 0)) && featuredImg) {
+    meta.openGraph.images = [{ url: featuredImg, width: 1200, height: 630 }];
+  }
+  if (!meta.twitter) {
+    meta.twitter = {
+      card: 'summary_large_image',
+      title: fallbackTitle,
+      description: fallbackDesc,
+      images: featuredImg ? [featuredImg] : undefined,
+    };
+  }
+
   return meta;
 }
 
@@ -86,6 +115,12 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!blog) {
     notFound();
   }
+
+  // Demote any stray H1s inside WordPress content — this page already renders
+  // its single H1 in the hero banner, so content headings must start at H2.
+  const contentHtml = blog.content.rendered
+    .replace(/<h1([\s>])/gi, '<h2$1')
+    .replace(/<\/h1>/gi, '</h2>');
 
   // Fetch related posts (exclude current)
   const allBlogs = await getLatestBlogs(4);
@@ -316,7 +351,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
 
             {/* Table of Contents — below the video */}
-            <TableOfContents htmlContent={blog.content.rendered} />
+            <TableOfContents htmlContent={contentHtml} />
 
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               {/* Main Content with Custom Class overrides */}
@@ -346,7 +381,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   /* Figure & Captions */
                   prose-figcaption:text-center prose-figcaption:text-xs md:prose-figcaption:text-sm prose-figcaption:text-brand-light prose-figcaption:mt-2 md:prose-figcaption:mt-3 prose-figcaption:italic
                 " 
-                dangerouslySetInnerHTML={{ __html: blog.content.rendered }} 
+                dangerouslySetInnerHTML={{ __html: contentHtml }} 
               />
 
 
