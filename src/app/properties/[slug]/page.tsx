@@ -203,11 +203,30 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  // ── Primary: ACF custom SEO fields set in WordPress ──
+  const acfFields = property.acf as Record<string, string | undefined>;
+  const acfSeoTitle = acfFields?.seo_title?.trim() || '';
+  const acfSeoDesc = acfFields?.seo_description?.trim() || '';
+
   const fallbackTitle = `${property.title.rendered} | Property Saraansh`;
   const fallbackDesc = property.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || `View details for ${property.title.rendered}`;
-  
-  // Prefer RankMath JSON, fallback to Yoast
+
+  // ── Secondary: RankMath / Yoast JSON from WordPress ──
   const seoJson = (property as unknown as Record<string, unknown>).rank_math_json || property.yoast_head_json;
 
-  return generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
+  // Build metadata — ACF fields take priority over RankMath/Yoast
+  const metadata = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
+
+  if (acfSeoTitle) {
+    metadata.title = acfSeoTitle;
+    if (metadata.openGraph) (metadata.openGraph as Record<string, unknown>).title = acfSeoTitle;
+    if (metadata.twitter) (metadata.twitter as Record<string, unknown>).title = acfSeoTitle;
+  }
+  if (acfSeoDesc) {
+    metadata.description = acfSeoDesc;
+    if (metadata.openGraph) (metadata.openGraph as Record<string, unknown>).description = acfSeoDesc;
+    if (metadata.twitter) (metadata.twitter as Record<string, unknown>).description = acfSeoDesc;
+  }
+
+  return metadata;
 }
