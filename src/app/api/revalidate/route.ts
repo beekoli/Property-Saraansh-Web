@@ -16,10 +16,17 @@ export async function POST(request: NextRequest) {
 
     revalidatePath(`/properties/${slug}`)
     revalidatePath('/properties')
+    // Also refresh the type-specific listing pages — these were never
+    // revalidated on-demand before, so they could silently go stale/fall
+    // back to mock data until the next full deploy.
+    revalidatePath('/residential-properties')
+    revalidatePath('/commercial-properties')
+    revalidatePath('/')
 
     return NextResponse.json({
       revalidated: true,
       path: `/properties/${slug}`,
+      alsoRevalidated: ['/properties', '/residential-properties', '/commercial-properties', '/'],
       timestamp: new Date().toISOString()
     })
 
