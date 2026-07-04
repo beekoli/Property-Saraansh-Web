@@ -133,13 +133,14 @@ export const videos: Video[] = [
   },
   {
     "slug": "noida-commercial-builder-vs-self-lease",
-    "title": "Commercial investment in Noida | Builder Leased vs Self Lease ?",
-    "description": "Commercial investment in Noida — builder-leased vs self-lease compared on returns, risk and resale to help you choose the right option.",
+    "title": "Commercial Investment in Noida: Builder Lease vs Self Lease",
+    "description": "Builder lease vs self lease in Noida — assured return truth, hidden CAPEX charges & resale reality. Elie Saab, Jacob & Co and Fairfox EON analysed.",
+    "content": "Commercial investment in Noida sounds simple — buy a shop, earn 7–8% rental. But the first decision every investor faces is builder lease vs self lease. In this video, Saraansh Seth uses Elie Saab Tower, Jacob & Co Tower and Fairfox EON to explain both models beyond the marketing claims.||The minimum guaranteed rent truth: a ₹35,000/sq ft unit is often sold at ₹40,000/sq ft, and that ₹5,000 differential is returned to you as 'assured rent' over 3 years. Once the guarantee ends, you get actual market rent or a revenue share — which nobody can predict today.||Hidden CAPEX charges: when a brand fits out your shop (racks, trial rooms, lighting, counters), the cost is passed to you — ₹1,200–2,000 per sq ft, usually charged on super area instead of carpet area, and repeated every time the tenant changes.||Resale reality: a builder-leased lockable unit often becomes a virtual unit inside a large brand showroom — hard to show, hard to sell, with a buyer pool roughly one-third of a self-leased shop that has its own shutter and frontage.||Final verdict: in builder-leased projects like Elie Saab, prefer bigger front-facing ground floor units, or second floor over first on smaller budgets. For self lease, society shops under ₹40,000/sq ft and office campus retail like Assotech Business Cresterra offer the most predictable rental income.||Whether you are a first-time investor, NRI or HNI evaluating commercial property in Noida — watch this before signing a builder buyer agreement. Book a free consultation with our team.",
     "youtubeId": "41xfVmmczUA",
     "thumbnail": "https://img.youtube.com/vi/41xfVmmczUA/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT12M38S",
-    "focusKeyword": "commercial investment in",
+    "focusKeyword": "commercial investment in noida",
     "category": "Real Estate",
     "views": "5K views"
   },
