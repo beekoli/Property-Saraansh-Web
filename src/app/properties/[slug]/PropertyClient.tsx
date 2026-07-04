@@ -877,7 +877,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
 
 
             {/* About The Project Section */}
-            {(acf.project_overview || property.content?.rendered) && (
+            {acf.project_overview?.trim() && (
             <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-brand-light/10 text-center">
               {/* Pill label */}
               <div className="inline-flex items-center border border-brand-ink/20 rounded-full px-5 py-1.5 mb-6">
@@ -902,7 +902,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                     !isAboutExpanded ? 'line-clamp-4' : ''
                   }`}
                 >
-                  {acf.project_overview || ''}
+                  {acf.project_overview}
                 </p>
                 <div className="flex justify-center mt-5">
                   <button
