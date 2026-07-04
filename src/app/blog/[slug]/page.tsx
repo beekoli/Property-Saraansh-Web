@@ -55,9 +55,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
-  // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website")
+  // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website").
+  // Next.js's OpenGraph type is a discriminated union keyed by 'type', so TS won't allow
+  // assigning it directly on an already-typed object — cast narrowly just for this assignment.
   if (meta.openGraph) {
-    meta.openGraph.type = 'article';
+    (meta.openGraph as { type?: string }).type = 'article';
   }
 
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
