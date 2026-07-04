@@ -104,9 +104,6 @@ export interface WPProperty {
     about_project_image?: string | false;
     // Site plan caption
     site_plan_caption?: string;
-    // Payment plan
-    payment_plan_label?: string;
-    payment_plan_tagline?: string;
     [key: `amenity_${number}_icon`]: string | false;
     [key: `amenity_${number}_name`]: string;
     [key: `floor_plan_${number}_title`]: string;
@@ -119,11 +116,6 @@ export interface WPProperty {
     [key: `price_list_row_${number}_total`]: string;
     [key: `faq_${number}_question`]: string;
     [key: `faq_${number}_answer`]: string;
-    [key: `payment_plan_step_${number}_title`]: string;
-    [key: `payment_plan_step_${number}_desc`]: string;
-    [key: `payment_plan_step_${number}_pct`]: string;
-    [key: `payment_plan_sum_${number}_pct`]: string;
-    [key: `payment_plan_sum_${number}_label`]: string;
   };
   _embedded?: {
     'wp:featuredmedia'?: Array<{
