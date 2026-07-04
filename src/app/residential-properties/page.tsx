@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import PropertyCard from '@/components/PropertyCard';
-import { getProperties, getFeaturedImage } from '@/lib/wordpress';
+import { getPropertiesByTypeTerm, getFeaturedImage } from '@/lib/wordpress';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ResidentialProperties() {
-  const properties = await getProperties(20, 'residential');
+  const properties = await getPropertiesByTypeTerm(20, 74); // Residential taxonomy term id
 
   return (
     <div className="bg-brand-pale min-h-screen pt-24 pb-32">
