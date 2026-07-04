@@ -104,6 +104,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
   const [showFloorPlanReadMore, setShowFloorPlanReadMore] = useState(false);
   const [isPriceListTextExpanded, setIsPriceListTextExpanded] = useState(false);
   const [showPriceListReadMore, setShowPriceListReadMore] = useState(false);
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
 
   const floorPlanTextRef = useRef<HTMLParagraphElement>(null);
   const priceListTextRef = useRef<HTMLDivElement>(null);
@@ -151,8 +152,6 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
 
   // ── derived data ──
 
-  let parsedVideoId = acf.video_id || "";
-
   // Extract Highlights
   const highlightsList = acf.highlights ? acf.highlights.split(';').map(h => h.trim()).filter(Boolean) : [];
 
@@ -162,7 +161,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
     : [];
 
   // Extract Gallery (only real ACF/property_gallery images, not the featured image)
-  let gallery: string[] = [];
+  const gallery: string[] = [];
   for (let i = 1; i <= 10; i++) {
     const imgUrl = acf[`gallery_image_${i}` as keyof typeof acf];
     if (imgUrl && typeof imgUrl === 'string' && imgUrl.trim() !== '') {
@@ -206,7 +205,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
   ].filter(plan => plan.title || plan.image);
 
   // Extract Amenities
-  let amenities = [];
+  const amenities: { id: number; name: string; icon: string }[] = [];
   for (let i = 1; i <= 12; i++) {
     const name = acf[`amenity_${i}_name` as keyof typeof acf];
     const icon = acf[`amenity_${i}_icon` as keyof typeof acf];
@@ -871,6 +870,47 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                 <div className="bg-brand-pale/50 border border-brand-light/20 p-4 rounded-xl mt-12 flex justify-between items-center text-xs">
                   <span className="font-semibold text-brand-ink">Timeline Phase:</span>
                   <span className="font-bold text-brand-primary uppercase tracking-widest">New Launch - Booking Open</span>
+                </div>
+              </div>
+            </div>
+            )}
+
+
+            {/* About The Project Section */}
+            {(acf.project_overview || property.content?.rendered) && (
+            <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-brand-light/10 text-center">
+              {/* Pill label */}
+              <div className="inline-flex items-center border border-brand-ink/20 rounded-full px-5 py-1.5 mb-6">
+                <span className="text-xs font-bold uppercase tracking-widest text-brand-ink/50">About The Project</span>
+              </div>
+
+              {/* Two-tone title */}
+              <h2 className="heading-playfair text-2xl md:text-3xl font-bold leading-tight mb-4">
+                <span className="text-brand-dark">{property.title.rendered}</span>
+                {acf.tagline && (
+                  <> &mdash; <span className="text-brand-accent">{acf.tagline}</span></>
+                )}
+              </h2>
+
+              {/* Gold separator */}
+              <div className="w-12 h-0.5 bg-brand-accent mx-auto mb-6"></div>
+
+              {/* Description with Read More */}
+              <div className="max-w-3xl mx-auto text-left">
+                <p
+                  className={`text-brand-ink/75 text-sm md:text-[15px] leading-relaxed font-medium text-justify transition-all duration-300 ${
+                    !isAboutExpanded ? 'line-clamp-4' : ''
+                  }`}
+                >
+                  {acf.project_overview || ''}
+                </p>
+                <div className="flex justify-center mt-5">
+                  <button
+                    onClick={() => setIsAboutExpanded(!isAboutExpanded)}
+                    className="border border-brand-dark text-brand-dark text-[13px] font-semibold px-7 py-2.5 rounded-full hover:bg-brand-dark hover:text-white transition-all duration-200"
+                  >
+                    {isAboutExpanded ? 'Read Less ▲' : 'Read More ▼'}
+                  </button>
                 </div>
               </div>
             </div>
