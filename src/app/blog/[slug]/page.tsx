@@ -55,12 +55,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
-  // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website").
-  // Next.js's OpenGraph type is a discriminated union keyed by 'type', so TS won't allow
-  // assigning it directly on an already-typed object — cast narrowly just for this assignment.
-  if (meta.openGraph) {
-    (meta.openGraph as { type?: string }).type = 'article';
+  // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website")
+  // Also initialise openGraph if generateRankMathMetadata returned none (e.g. rank_math_json is null)
+  if (!meta.openGraph) {
+    meta.openGraph = { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' };
   }
+  meta.openGraph.type = 'article';
 
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
   // and has NO trailing slash (Next.js serves without trailing slash by default).
@@ -289,7 +289,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     className="btn-glossy-whatsapp px-5 py-3 text-center rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.739-1.45L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.588 1.977 14.128.951 11.998.951c-5.444 0-9.866 4.372-9.87 9.802 0 1.714.464 3.391 1.346 4.869l-.993 3.63 3.771-.98-.192-.31zM16.518 14.2c-.27-.135-1.59-.785-1.835-.875-.245-.09-.425-.135-.605.135-.18.27-.695.875-.855 1.05-.16.18-.32.2-.59.065-2.73-1.36-4.52-2.585-6.195-5.45-.16-.275-.16-.44-.025-.575.12-.12.27-.315.405-.47.135-.16.18-.27.27-.45.09-.18.045-.335-.02-.47-.065-.135-.605-1.46-.83-2.005-.22-.53-.46-.455-.63-.463-.165-.008-.355-.01-.545-.01-.19 0-.5.07-.76.36-.26.29-1 1.02-1 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.3 1.27.49 1.7.63.71.22 1.36.19 1.87.11.57-.08 1.59-.65 1.81-1.27.225-.62.225-1.15.15-1.27-.075-.12-.27-.18-.54-.315z"/>
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                     WhatsApp Chat
                   </a>

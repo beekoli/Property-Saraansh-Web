@@ -173,9 +173,22 @@ function decodeWPEntities(str: string): string {
  */
 export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fallbackTitle: string, fallbackDescription: string): Metadata {
   if (!seoJson) {
+    // No SEO plugin data — still emit full OG/Twitter so social shares work
     return {
       title: fallbackTitle,
       description: fallbackDescription,
+      openGraph: {
+        title: fallbackTitle,
+        description: fallbackDescription,
+        siteName: 'Property Saraansh',
+        locale: 'en_IN',
+        type: 'article',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: fallbackTitle,
+        description: fallbackDescription,
+      },
     };
   }
 
