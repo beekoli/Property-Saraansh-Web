@@ -114,6 +114,15 @@ export interface WPProperty {
     payment_step_3_pct?: string;
     payment_step_3_label?: string;
     payment_step_3_desc?: string;
+    payment_step_4_pct?: string;
+    payment_step_4_label?: string;
+    payment_step_4_desc?: string;
+    payment_step_5_pct?: string;
+    payment_step_5_label?: string;
+    payment_step_5_desc?: string;
+    payment_step_6_pct?: string;
+    payment_step_6_label?: string;
+    payment_step_6_desc?: string;
     payment_eoi_note?: string;
     [key: `amenity_${number}_icon`]: string | false;
     [key: `amenity_${number}_name`]: string;

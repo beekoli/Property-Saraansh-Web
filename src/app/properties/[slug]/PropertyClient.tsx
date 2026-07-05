@@ -233,9 +233,9 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
     }
   }
 
-  // Extract Payment Plan Steps (1 to 3) — section only shows if at least one step or milestone is filled in
+  // Extract Payment Plan Steps (1 to 6) — section only shows if at least one step or milestone is filled in
   const paymentSteps = [];
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 6; i++) {
     const pct = acf[`payment_step_${i}_pct` as keyof typeof acf];
     const label = acf[`payment_step_${i}_label` as keyof typeof acf];
     const desc = acf[`payment_step_${i}_desc` as keyof typeof acf];
@@ -256,6 +256,11 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
   }
 
   const hasPaymentPlan = paymentSteps.length > 0 || paymentMilestones.length > 0;
+
+  // Payment step display helpers (used to highlight the largest-share step and size the summary grid)
+  const paymentStepPcts = paymentSteps.map((s) => parseFloat(String(s.pct)) || 0);
+  const paymentMaxPct = paymentStepPcts.length > 0 ? Math.max(...paymentStepPcts) : 0;
+  const paymentColsClass = paymentSteps.length === 1 ? 'sm:grid-cols-1' : paymentSteps.length === 2 ? 'sm:grid-cols-2' : paymentSteps.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-4';
 
   // Extract FAQs (1 to 5 slots)
   const faqs = [];
@@ -791,16 +796,48 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                 </h2>
 
                 {paymentSteps.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    {paymentSteps.map((step) => (
-                      <div key={step.id} className="text-center bg-brand-pale/30 border-t-4 border-brand-accent rounded-xl p-5 shadow-sm">
-                        <div className="text-3xl font-bold text-brand-accent">{step.pct}</div>
-                        <div className="text-sm font-bold text-brand-dark mt-1">{step.label}</div>
-                        {step.desc && (
-                          <div className="text-xs text-brand-light mt-1.5 leading-relaxed">{step.desc}</div>
-                        )}
-                      </div>
-                    ))}
+                  <div className="mb-8">
+                    {/* step-by-step timeline */}
+                    <div className="mb-6">
+                      {paymentSteps.map((step, idx) => {
+                        const isLast = idx === paymentSteps.length - 1;
+                        const isPrimary = !isLast && paymentMaxPct > 0 && (parseFloat(String(step.pct)) || 0) === paymentMaxPct;
+                        return (
+                          <div key={step.id} className="flex gap-4 md:gap-5">
+                            <div className="flex flex-col items-center">
+                              <div className={`w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-sm md:text-base shrink-0 ${isLast ? 'bg-brand-dark text-white' : 'bg-brand-accent text-white'}`}>
+                                {idx + 1}
+                              </div>
+                              {!isLast && <div className="w-0.5 flex-1 min-h-[20px] bg-brand-accent/30"></div>}
+                            </div>
+                            <div className={`flex-1 mb-4 rounded-xl p-4 md:p-5 flex items-center justify-between gap-4 ${
+                              isLast ? 'bg-brand-dark' : isPrimary ? 'bg-white border-l-4 border-brand-accent shadow-sm' : 'bg-brand-pale/40 border border-brand-pale'
+                            }`}>
+                              <div>
+                                <div className={`font-bold text-sm md:text-base ${isLast ? 'text-white' : 'text-brand-dark'}`}>{step.label}</div>
+                                {step.desc && (
+                                  <div className={`text-xs md:text-sm mt-1 leading-relaxed ${isLast ? 'text-white/70' : 'text-brand-light'}`}>{step.desc}</div>
+                                )}
+                              </div>
+                              <div className={`text-xl md:text-2xl font-bold shrink-0 ${isLast ? 'text-brand-accent-light' : 'text-brand-accent'}`}>{step.pct}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* quick-glance summary cards */}
+                    <div className={`grid grid-cols-1 ${paymentColsClass} gap-3`}>
+                      {paymentSteps.map((step) => {
+                        const isPrimary = paymentMaxPct > 0 && (parseFloat(String(step.pct)) || 0) === paymentMaxPct;
+                        return (
+                          <div key={step.id} className={`rounded-xl p-4 text-center ${isPrimary ? 'bg-brand-primary' : 'bg-brand-pale/40 border border-brand-pale'}`}>
+                            <div className={`text-2xl font-bold ${isPrimary ? 'text-white' : 'text-brand-dark'}`}>{step.pct}</div>
+                            <div className={`text-xs mt-1 font-semibold ${isPrimary ? 'text-white/90' : 'text-brand-light'}`}>{step.label}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
 
