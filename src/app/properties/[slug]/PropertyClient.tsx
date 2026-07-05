@@ -233,6 +233,30 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
     }
   }
 
+  // Extract Payment Plan Steps (1 to 3) — section only shows if at least one step or milestone is filled in
+  const paymentSteps = [];
+  for (let i = 1; i <= 3; i++) {
+    const pct = acf[`payment_step_${i}_pct` as keyof typeof acf];
+    const label = acf[`payment_step_${i}_label` as keyof typeof acf];
+    const desc = acf[`payment_step_${i}_desc` as keyof typeof acf];
+    if (pct && label) {
+      paymentSteps.push({ id: i, pct, label, desc: desc || "" });
+    }
+  }
+
+  // Extract Payment Milestone Table Rows (1 to 6)
+  const paymentMilestones = [];
+  for (let i = 1; i <= 6; i++) {
+    const name = acf[`payment_milestone_${i}_name` as keyof typeof acf];
+    const demand = acf[`payment_milestone_${i}_demand` as keyof typeof acf];
+    const cumulative = acf[`payment_milestone_${i}_cumulative` as keyof typeof acf];
+    if (name && demand) {
+      paymentMilestones.push({ id: i, name, demand, cumulative: cumulative || "" });
+    }
+  }
+
+  const hasPaymentPlan = paymentSteps.length > 0 || paymentMilestones.length > 0;
+
   // Extract FAQs (1 to 5 slots)
   const faqs = [];
   for (let i = 1; i <= 5; i++) {
@@ -342,6 +366,12 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
             <button onClick={() => scrollNav('amenities')} className="hover:text-brand-accent transition-colors">Amenities</button>
             <span className="text-brand-pale/30">·</span>
             <button onClick={() => scrollNav('price')} className="hover:text-brand-accent transition-colors">Price</button>
+            {hasPaymentPlan && (
+              <>
+                <span className="text-brand-pale/30">·</span>
+                <button onClick={() => scrollNav('payment')} className="hover:text-brand-accent transition-colors">Payment Plan</button>
+              </>
+            )}
             <span className="text-brand-pale/30">·</span>
             <button onClick={() => scrollNav('location')} className="hover:text-brand-accent transition-colors">Location</button>
             <span className="text-brand-pale/30">·</span>
@@ -370,7 +400,7 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
         {/* mobile nav dropdown */}
         {isMobileNavOpen && (
           <div className="md:hidden bg-brand-dark/98 border-t border-brand-light/10 px-4 py-3 grid grid-cols-3 gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-pale/70">
-            {['overview','highlights','floorplan','amenities','price','location','gallery','possession','faq'].map(id => (
+            {['overview','highlights','floorplan','amenities','price',...(hasPaymentPlan ? ['payment'] : []),'location','gallery','possession','faq'].map(id => (
               <button key={id} onClick={() => scrollNav(id)} className="hover:text-brand-accent transition-colors text-left py-1">
                 {id.charAt(0).toUpperCase() + id.slice(1)}
               </button>
@@ -749,6 +779,60 @@ export default function PropertyClient({ property, allProperties }: PropertyClie
                     </>
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* payment plan section */}
+            {hasPaymentPlan && (
+              <div id="payment" className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-brand-light/10">
+                <h2 className="heading-playfair text-xl md:text-2xl font-bold mb-6 text-brand-dark border-b border-brand-pale pb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
+                  Payment Plan
+                </h2>
+
+                {paymentSteps.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    {paymentSteps.map((step) => (
+                      <div key={step.id} className="text-center bg-brand-pale/30 border-t-4 border-brand-accent rounded-xl p-5 shadow-sm">
+                        <div className="text-3xl font-bold text-brand-accent">{step.pct}</div>
+                        <div className="text-sm font-bold text-brand-dark mt-1">{step.label}</div>
+                        {step.desc && (
+                          <div className="text-xs text-brand-light mt-1.5 leading-relaxed">{step.desc}</div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {paymentMilestones.length > 0 && (
+                  <div className="overflow-x-auto rounded-xl border border-brand-pale">
+                    <table className="w-full text-sm text-brand-ink">
+                      <thead>
+                        <tr className="bg-brand-dark text-white text-xs uppercase tracking-wider">
+                          <th className="py-3 px-4 text-left font-bold">Milestone</th>
+                          <th className="py-3 px-4 text-left font-bold">Demand</th>
+                          <th className="py-3 px-4 text-left font-bold">Cumulative</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-brand-pale">
+                        {paymentMilestones.map((row) => (
+                          <tr key={row.id} className="hover:bg-brand-pale/10">
+                            <td className="py-4 px-4 font-bold text-brand-dark">{row.name}</td>
+                            <td className="py-4 px-4 text-brand-accent font-bold">{row.demand}</td>
+                            <td className="py-4 px-4">{row.cumulative || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {acf.payment_eoi_note && (
+                  <div className="mt-5 bg-brand-pale/40 border border-dashed border-brand-accent/50 rounded-xl p-4 text-xs text-brand-ink/80 leading-relaxed">
+                    <span className="font-bold text-brand-accent">EOI Benefit: </span>
+                    {acf.payment_eoi_note}
+                  </div>
+                )}
               </div>
             )}
 
