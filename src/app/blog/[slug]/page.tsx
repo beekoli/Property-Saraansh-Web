@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   } else if (slug.includes('godrej-arden-detailed-review')) {
     relatedVideoId = "tWk2i0WUqiY"; // Godrej Arden Sigma 3 Review
   } else if (!acfVideoId) {
-    if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities')) {
+    if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities') || slug === 'noida-real-estate-slowdown-2026') {
       relatedVideoId = "g2dN6stL3i0"; // Noida Market Slowdown 2026
     } else if (slug.includes('yamuna-expressway')) {
       relatedVideoId = "qWAgkIW6Mj0"; // Yamuna Expressway Investment 2030
