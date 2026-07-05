@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!meta.openGraph) {
     meta.openGraph = { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' };
   }
-  meta.openGraph.type = 'article';
+  (meta.openGraph as { type?: string }).type = 'article';
 
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
   // and has NO trailing slash (Next.js serves without trailing slash by default).
