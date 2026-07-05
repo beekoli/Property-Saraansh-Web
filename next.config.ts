@@ -517,6 +517,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/noida-real-estate-market-2026-slowdown-investment-opportunities-what-buyers-should-do',
+        destination: '/blog/noida-real-estate-slowdown-2026',
+        permanent: true,
+      },
+      {
         source: '/wp-admin',
         destination: '/',
         permanent: false,
