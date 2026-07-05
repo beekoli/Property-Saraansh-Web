@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Property Saraansh Core
  * Description: Registers the Properties custom post type and Advanced Custom Fields for the Next.js frontend.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: Property Saraansh
  */
 
@@ -264,8 +264,8 @@ if (!function_exists('ps_register_acf_fields')) {
             ));
 
             // Register builder profile field group for the "builder" taxonomy term
-            // (create the "builder" taxonomy first, attached to the Properties CPT,
-            // e.g. via Custom Post Type UI, with "Show in REST API" enabled).
+            // (created via Custom Post Type UI, attached to the Properties CPT,
+            // internal taxonomy slug is "ps_builder" — its REST base alias is "builder").
             acf_add_local_field_group(array(
                 'key' => 'group_builder_profile',
                 'title' => 'Builder Profile',
@@ -312,7 +312,7 @@ if (!function_exists('ps_register_acf_fields')) {
                         array(
                             'param' => 'taxonomy',
                             'operator' => '==',
-                            'value' => 'builder',
+                            'value' => 'ps_builder',
                         ),
                     ),
                 ),
