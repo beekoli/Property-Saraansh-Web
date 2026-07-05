@@ -522,6 +522,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/blog/noida-real-estate-2025-conclusion-project-by-project-reality-check-by-property-saraansh',
+        destination: '/blog/noida-real-estate-2025-recap',
+        permanent: true,
+      },
+      {
         source: '/wp-admin',
         destination: '/',
         permanent: false,
