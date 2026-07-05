@@ -159,6 +159,41 @@ export interface WPProperty {
   };
 }
 
+// --- Builder Taxonomy Integration ---
+// WordPress taxonomy: ps_builder (attached to the "properties" CPT, REST base "builder")
+// ACF field group "Builder Profile" (see ps-core.php) on each builder term:
+//   builder_logo, builder_description, builder_experience,
+//   builder_delivered_projects, builder_ongoing_projects
+export interface WPBuilderTerm {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
+  acf?: {
+    builder_logo?: string | false;
+    builder_description?: string;
+    builder_experience?: string;
+    builder_delivered_projects?: string;
+    builder_ongoing_projects?: string;
+  };
+}
+
+export async function getBuilders(): Promise<WPBuilderTerm[]> {
+  const data = await fetchAPI(`/builder?per_page=100&_fields=id,name,slug,count,acf`);
+  return data && Array.isArray(data) ? (data as WPBuilderTerm[]) : [];
+}
+
+export async function getBuilderBySlug(slug: string): Promise<WPBuilderTerm | null> {
+  const data = await fetchAPI(`/builder?slug=${slug}&_fields=id,name,slug,count,acf`);
+  if (data && Array.isArray(data) && data.length > 0) return data[0] as WPBuilderTerm;
+  return null;
+}
+
+export async function getPropertiesByBuilder(termId: number, limit = 50): Promise<WPProperty[]> {
+  const data = await fetchAPI(`/properties?_embed&per_page=${limit}&builder=${termId}`);
+  return data && Array.isArray(data) && data.length > 0 ? data : [];
+}
+
 // --- Video CPT Integration ---
 // WordPress CPT slug: ps_video
 // ACF fields to create in WordPress (see setup instructions):
