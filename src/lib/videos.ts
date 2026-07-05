@@ -159,13 +159,14 @@ export const videos: Video[] = [
   },
   {
     "slug": "exit-advice-noida-residential-projects",
-    "title": "Exit Advice on 3 Residential Projects in Noida  Ace Terra, Godrej Tropical Isle and Ace Hanei",
-    "description": "Honest exit advice on three Noida projects — Ace Terra, Godrej Tropical Isle and Ace Hanei — when to hold, when to sell, and how to protect your returns.",
+    "title": "Unable to Exit Noida Property? Ace Terra, Godrej Tropical Isle & Ace Hanei — Hold or Sell?",
+    "description": "Stuck with a Noida property you can't sell? Property Saraansh analyses the exit crisis in Ace Terra (Yamuna Expressway), Godrej Tropical Isle (Sector 146), and Ace Hanei (Greater Noida West) — what went wrong at each project and whether to hold, sell, or cut losses now.",
+    "content": "If you've bought a property in Noida recently and are now struggling to sell it, you're not alone. Calls, messages, and panic from investors share one common theme: exit nahi mil rahi. This Property Saraansh video breaks down exactly why this is happening, using three real-world case studies — Ace Terra, Godrej Tropical Isle, and Ace Hanei — based entirely on on-ground logic and buyer behaviour, not brochure promises.||ACE Terra — Yamuna Expressway Exit Crisis. Launched April 2024 in Sector 22D, Yamuna Expressway. 12 towers across ~11 acres. 3 & 4 BHK (1770–3025 sqft). What fired: strong brand recall from ACE Parkway, Jewar Airport and Film City hype. What misfired: buying at ~₹9,000 all-inclusive in 2024 on Yamuna Expressway was a trader's mistake. No end users exist yet. Investors dominate the supply. EMI pressure plus no buyers equals panic selling. Property Saraansh advice: don't wait endlessly. Even selling at break-even and reallocating capital is smarter than wasting years.||Godrej Tropical Isle — Exit Policy vs Reality. Sector 146, Noida Expressway. ~6 acres, 5 towers. Possession 2028. What fired: 20% payment-free exit policy, 2023 bull run psychology. What misfired: dump yard proximity, freight railway corridor, metro station right at the gate — noise and chaos. Premium buyers don't want uncertainty, no matter the brand. Property Saraansh advice: hold for 18 months. Once structure is visible and dump yard clarity emerges, end-user interest can revive.||ACE Hanei — Premium Sizes, Limited Buyers. Sector 12, Greater Noida West. ~6.5 acres, 7 towers. Sizes: 2290–4200 sqft. What fired: massive returns in ACE Divino and Parkway, aggressive ACE marketing across NCR. What misfired: too many towers reducing open space, sizes ahead of current market demand. Property Saraansh advice: stay invested till OC stage. Exit around ₹15,000 psqft is realistic.||Common mistakes across all three: buying like traders not residents, ignoring micro-market maturity, trusting future stories over present livability. The core lesson — markets don't fail people, decisions do. Buy with logic, not launch noise.",
     "youtubeId": "9iAnowOVwjo",
     "thumbnail": "https://img.youtube.com/vi/9iAnowOVwjo/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT11M47S",
-    "focusKeyword": "exit advice on",
+    "focusKeyword": "unable to exit noida property",
     "category": "Real Estate",
     "views": "28K views"
   },
