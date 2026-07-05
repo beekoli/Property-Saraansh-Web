@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Property Saraansh Core
  * Description: Registers the Properties custom post type and Advanced Custom Fields for the Next.js frontend.
- * Version: 1.1.1
+ * Version: 1.2.0
  * Author: Property Saraansh
  */
 
@@ -71,7 +71,7 @@ if (!function_exists('ps_register_acf_fields')) {
                 array('key' => 'field_prop_developer_experience', 'label' => 'Developer Experience (e.g. 15 Years)', 'name' => 'developer_experience', 'type' => 'text', 'show_in_rest' => true),
                 array('key' => 'field_prop_developer_delivered_projects', 'label' => 'Developer Delivered Projects (e.g. 50+)', 'name' => 'developer_delivered_projects', 'type' => 'text', 'show_in_rest' => true),
                 array('key' => 'field_prop_developer_ongoing_projects', 'label' => 'Developer Ongoing Projects (e.g. 10+)', 'name' => 'developer_ongoing_projects', 'type' => 'text', 'show_in_rest' => true),
-                
+
                 // --- Overview Section ---
                 array('key' => 'field_prop_project_overview', 'label' => 'Project Overview Description', 'name' => 'project_overview', 'type' => 'textarea', 'show_in_rest' => true),
                 array('key' => 'field_prop_total_land', 'label' => 'Total Land', 'name' => 'total_land', 'type' => 'text', 'show_in_rest' => true),
@@ -84,11 +84,11 @@ if (!function_exists('ps_register_acf_fields')) {
                 array('key' => 'field_prop_units_per_floor', 'label' => 'Units Per Floor', 'name' => 'units_per_floor', 'type' => 'text', 'show_in_rest' => true),
                 array('key' => 'field_prop_lifts_per_floor', 'label' => 'Lifts Per Floor', 'name' => 'lifts_per_floor', 'type' => 'text', 'show_in_rest' => true),
                 array('key' => 'field_prop_base_price', 'label' => 'Base Price (e.g. ₹ 12,000 / sq.ft)', 'name' => 'base_price', 'type' => 'text', 'show_in_rest' => true),
-                
+
                 // --- Interactive Video Review ---
                 array('key' => 'field_prop_video_id', 'label' => 'YouTube Video ID', 'name' => 'video_id', 'type' => 'text', 'show_in_rest' => true),
                 array('key' => 'field_prop_video_review_text', 'label' => 'Video Review Quote/Text', 'name' => 'video_review_text', 'type' => 'textarea', 'show_in_rest' => true),
-                
+
                 // --- Extra Info & Media ---
                 array('key' => 'field_prop_price_desc', 'label' => 'Price List Description', 'name' => 'price_list_desc', 'type' => 'wysiwyg', 'show_in_rest' => true),
                 array('key' => 'field_prop_highlights', 'label' => 'Highlights (separated by semicolons \';\')', 'name' => 'highlights', 'type' => 'textarea', 'show_in_rest' => true),
@@ -263,6 +263,62 @@ if (!function_exists('ps_register_acf_fields')) {
                 'show_in_rest' => true,
             ));
 
+            // Register builder profile field group for the "builder" taxonomy term
+            // (create the "builder" taxonomy first, attached to the Properties CPT,
+            // e.g. via Custom Post Type UI, with "Show in REST API" enabled).
+            acf_add_local_field_group(array(
+                'key' => 'group_builder_profile',
+                'title' => 'Builder Profile',
+                'fields' => array(
+                    array(
+                        'key' => 'field_builder_logo',
+                        'label' => 'Builder Logo',
+                        'name' => 'builder_logo',
+                        'type' => 'image',
+                        'return_format' => 'url',
+                        'show_in_rest' => true,
+                    ),
+                    array(
+                        'key' => 'field_builder_description',
+                        'label' => 'About the Builder',
+                        'name' => 'builder_description',
+                        'type' => 'textarea',
+                        'show_in_rest' => true,
+                    ),
+                    array(
+                        'key' => 'field_builder_experience',
+                        'label' => 'Experience (e.g. 40+ Years)',
+                        'name' => 'builder_experience',
+                        'type' => 'text',
+                        'show_in_rest' => true,
+                    ),
+                    array(
+                        'key' => 'field_builder_delivered_projects',
+                        'label' => 'Projects Delivered (e.g. 200+)',
+                        'name' => 'builder_delivered_projects',
+                        'type' => 'text',
+                        'show_in_rest' => true,
+                    ),
+                    array(
+                        'key' => 'field_builder_ongoing_projects',
+                        'label' => 'Ongoing Projects (e.g. 25)',
+                        'name' => 'builder_ongoing_projects',
+                        'type' => 'text',
+                        'show_in_rest' => true,
+                    ),
+                ),
+                'location' => array(
+                    array(
+                        array(
+                            'param' => 'taxonomy',
+                            'operator' => '==',
+                            'value' => 'builder',
+                        ),
+                    ),
+                ),
+                'show_in_rest' => true,
+            ));
+
         endif;
     }
 }
@@ -313,7 +369,7 @@ if (!function_exists('ps_gallery_admin_scripts')) {
                         });
                         meta_image_frame.open();
                     });
-                    
+
                     $("#ps_gallery_clear").click(function(e) {
                         e.preventDefault();
                         $("#ps_gallery_ids").val("");
@@ -344,10 +400,10 @@ if (!function_exists('ps_render_gallery_meta_box')) {
     function ps_render_gallery_meta_box($post) {
         wp_nonce_field('ps_save_gallery_meta_box', 'ps_gallery_meta_box_nonce');
         $gallery_ids = get_post_meta($post->ID, '_property_gallery_ids', true);
-        
+
         echo '<p><button id="ps_gallery_button" class="button button-primary">Manage Gallery</button> <button id="ps_gallery_clear" class="button">Clear Gallery</button></p>';
         echo '<input type="hidden" id="ps_gallery_ids" name="ps_gallery_ids" value="' . esc_attr($gallery_ids) . '" />';
-        
+
         echo '<div id="ps_gallery_preview" style="display:flex; flex-wrap:wrap; margin-top:10px;">';
         if (!empty($gallery_ids)) {
             $ids = explode(',', $gallery_ids);
