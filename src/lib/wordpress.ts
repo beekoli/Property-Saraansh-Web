@@ -104,6 +104,17 @@ export interface WPProperty {
     about_project_image?: string | false;
     // Site plan caption
     site_plan_caption?: string;
+    // Payment Plan (optional — section only renders when at least one step is filled in)
+    payment_step_1_pct?: string;
+    payment_step_1_label?: string;
+    payment_step_1_desc?: string;
+    payment_step_2_pct?: string;
+    payment_step_2_label?: string;
+    payment_step_2_desc?: string;
+    payment_step_3_pct?: string;
+    payment_step_3_label?: string;
+    payment_step_3_desc?: string;
+    payment_eoi_note?: string;
     [key: `amenity_${number}_icon`]: string | false;
     [key: `amenity_${number}_name`]: string;
     [key: `floor_plan_${number}_title`]: string;
@@ -114,6 +125,9 @@ export interface WPProperty {
     [key: `price_list_row_${number}_size`]: string;
     [key: `price_list_row_${number}_base`]: string;
     [key: `price_list_row_${number}_total`]: string;
+    [key: `payment_milestone_${number}_name`]: string;
+    [key: `payment_milestone_${number}_demand`]: string;
+    [key: `payment_milestone_${number}_cumulative`]: string;
     [key: `faq_${number}_question`]: string;
     [key: `faq_${number}_answer`]: string;
   };
