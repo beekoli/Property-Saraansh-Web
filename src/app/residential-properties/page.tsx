@@ -17,7 +17,7 @@ export default async function ResidentialProperties() {
   return (
     <div className="bg-brand-pale min-h-screen pt-24 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Page Header */}
         <div className="text-center mb-16 max-w-2xl mx-auto">
           <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Luxury living</span>
@@ -27,7 +27,14 @@ export default async function ResidentialProperties() {
             Discover luxury living spaces, low-density apartment towers, and premium sky condominiums for your family in Sector 150 and Noida Expressway.
           </p>
         </div>
-        
+
+        {/* Results meta */}
+        {properties.length > 0 && (
+          <div className="text-sm font-semibold text-brand-ink/70 mb-6 border-b border-brand-light/20 pb-4">
+            Showing {properties.length} residential {properties.length === 1 ? 'project' : 'projects'}
+          </div>
+        )}
+
         {/* Grid */}
         {properties.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -35,7 +42,7 @@ export default async function ResidentialProperties() {
               const acf = prop.acf || {};
               const bhks = acf.configuration ? acf.configuration.split(', ') : ["3 BHK", "4 BHK"];
               return (
-                <PropertyCard 
+                <PropertyCard
                   key={prop.id}
                   id={prop.slug}
                   title={prop.title.rendered}
@@ -46,6 +53,9 @@ export default async function ResidentialProperties() {
                   imageUrl={getFeaturedImage(prop)}
                   bhk={bhks}
                   videoId={acf.video_id}
+                  reraNumber={acf.rera_number}
+                  possessionDate={acf.possession_date}
+                  nearbyLine={acf.location_advantages}
                 />
               );
             })}
