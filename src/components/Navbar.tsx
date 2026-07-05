@@ -17,7 +17,7 @@ export default function Navbar() {
     setMounted(true);
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Color change condition
       setIsScrolled(currentScrollY > 20);
 
@@ -34,7 +34,7 @@ export default function Navbar() {
 
       setLastScrollY(currentScrollY);
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
@@ -46,14 +46,14 @@ export default function Navbar() {
   };
 
   const isLightPage = mounted && (
-    pathname === '/contact' || 
-    pathname === '/commercial-properties' || 
-    pathname === '/residential-properties' || 
+    pathname === '/contact' ||
+    pathname === '/commercial-properties' ||
+    pathname === '/residential-properties' ||
     (pathname && pathname.startsWith('/blog/') && pathname !== '/blog')
   );
 
   return (
-    <nav 
+    <nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 transform ${
         isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
       } ${
@@ -62,32 +62,32 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
+
           {/* Logo / Monogram */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center group" onClick={closeMobileMenu}>
-              <img 
-                src="/logo.png" 
-                alt="Property Saraansh Logo" 
-                className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+              <img
+                src="/logo.png"
+                alt="Property Saraansh Logo"
+                className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </Link>
           </div>
-          
+
           {/* Desktop Nav Links */}
           <div className="hidden md:flex space-x-6 items-center">
             <Link href="/" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Home</Link>
             <Link href="/about-us" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">About</Link>
             <Link href="/our-videos" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Our Videos</Link>
             <Link href="/our-shorts" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Shorts</Link>
-            
+
             {/* Projects Dropdown */}
-            <div 
+            <div
               className="relative group py-2"
               onMouseEnter={() => setIsDropdownOpen(true)}
               onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <button 
+              <button
                 className="text-white hover:text-brand-accent transition-colors font-medium text-sm flex items-center gap-1 focus:outline-none"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
@@ -96,8 +96,8 @@ export default function Navbar() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              
-              <div 
+
+              <div
                 className={`absolute left-0 mt-2 w-48 bg-brand-dark border border-brand-light/30 rounded-lg shadow-xl py-2 z-50 transition-all duration-200 origin-top-left ${
                   isDropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
                 }`}
@@ -105,9 +105,10 @@ export default function Navbar() {
                 <Link href="/properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">All Projects</Link>
                 <Link href="/commercial-properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Commercial</Link>
                 <Link href="/residential-properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Residential</Link>
+                <Link href="/builders" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Builders</Link>
               </div>
             </div>
-            
+
             <Link href="/blog" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Blog</Link>
             <Link href="/contact" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Contact</Link>
           </div>
@@ -118,10 +119,10 @@ export default function Navbar() {
               Free Consultation
             </Link>
           </div>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
-            <button 
+            <button
               onClick={toggleMobileMenu}
               className="text-white hover:text-brand-accent focus:outline-none"
               aria-label="Toggle mobile menu"
@@ -146,11 +147,12 @@ export default function Navbar() {
             <Link href="/about-us" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">About</Link>
             <Link href="/our-videos" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Our Videos</Link>
             <Link href="/our-shorts" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Shorts</Link>
-            
+
             <div className="pl-2 border-l border-brand-light/30 space-y-1">
               <Link href="/properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">All Projects</Link>
               <Link href="/commercial-properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Commercial Projects</Link>
               <Link href="/residential-properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Residential Projects</Link>
+              <Link href="/builders" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Builders</Link>
             </div>
 
             <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Blog</Link>
