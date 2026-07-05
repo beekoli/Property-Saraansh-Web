@@ -56,11 +56,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
   // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website")
-  // Also initialise openGraph if generateRankMathMetadata returned none (e.g. rank_math_json is null)
-  if (!meta.openGraph) {
-    meta.openGraph = { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' };
-  }
-  meta.openGraph.type = 'article';
+  // Reconstruct as a new object so TypeScript's discriminated union is satisfied.
+  meta.openGraph = {
+    ...(meta.openGraph ?? { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' }),
+    type: 'article',
+  } as Metadata['openGraph'];
 
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
   // and has NO trailing slash (Next.js serves without trailing slash by default).
