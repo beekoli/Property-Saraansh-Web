@@ -49,18 +49,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const fallbackTitle = `${blog.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh`;
   const fallbackDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${blog.title.rendered}`;
-  
+
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
 
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
   // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website")
-  // Reconstruct as a new object so TypeScript's discriminated union is satisfied.
-  meta.openGraph = {
-    ...(meta.openGraph ?? { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' }),
-    type: 'article',
-  } as Metadata['openGraph'];
+  // Also initialise openGraph if generateRankMathMetadata returned none (e.g. rank_math_json is null)
+  if (!meta.openGraph) {
+    meta.openGraph = { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' };
+  }
+  (meta.openGraph as { type?: string }).type = 'article';
 
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
   // and has NO trailing slash (Next.js serves without trailing slash by default).
@@ -238,13 +238,13 @@ export default async function BlogPostPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
       <div className="bg-brand-pale/40 min-h-screen pb-20">
-      
+
         {/* Modern Premium Hero Banner */}
         <section className="bg-brand-dark text-white pt-32 pb-16 px-4 text-center relative overflow-hidden border-b border-brand-accent/20">
           {/* Subtle Background Pattern */}
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-light/10 rounded-full blur-[120px] pointer-events-none"></div>
-          
+
           <div className="max-w-4xl mx-auto relative z-10">
             <span className="text-brand-accent uppercase tracking-widest text-[10px] md:text-xs font-bold bg-brand-primary/40 px-4 py-2 rounded-full border border-brand-accent/30 inline-block mb-6 shadow-sm backdrop-blur-sm">
               {getPostCategory(blog)}
@@ -265,7 +265,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Article Content Container */}
         <div className="max-w-4xl mx-auto px-4 py-12 relative z-20">
           <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-brand-light/10">
-            
+
             {/* Conversion CTA Banner (Above the Fold) */}
             <div className="mb-8 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-brand-dark to-brand-primary border border-brand-accent/30 shadow-lg text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-brand-accent/5 rounded-full blur-2xl pointer-events-none"></div>
@@ -282,7 +282,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                  <a 
+                  <a
                     href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I%20read%20your%20blog%20about%20${encodeURIComponent(blog.title.rendered)}%20and%20want%20to%20book%20a%20free%20consultation.`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -293,7 +293,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     </svg>
                     WhatsApp Chat
                   </a>
-                  <a 
+                  <a
                     href="tel:+918076178189"
                     className="px-5 py-3 text-center border border-brand-accent/60 hover:bg-brand-accent hover:text-brand-dark rounded-xl text-xs font-bold uppercase tracking-wider transition-colors duration-200 flex items-center justify-center gap-2"
                   >
@@ -337,33 +337,33 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               {/* Main Content with Custom Class overrides */}
-              <div 
-                className="blog-content font-normal text-base md:text-lg space-y-6 md:space-y-8 
+              <div
+                className="blog-content font-normal text-base md:text-lg space-y-6 md:space-y-8
                   text-[#2C3E50] leading-[1.75] md:leading-[1.85]
-                  
+
                   /* Responsive Images */
                   [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-xl md:[&_img]:rounded-2xl [&_img]:shadow-lg [&_img]:my-8 [&_figure]:max-w-full [&_figure]:mx-0 [&_figure]:my-8 [&_iframe]:max-w-full
-                  
+
                   prose-headings:heading-playfair prose-headings:text-[#1A252F] prose-headings:font-extrabold prose-headings:mt-10 prose-headings:md:mt-12 prose-headings:mb-4 prose-headings:md:mb-6
                   prose-h2:text-2xl prose-h2:md:text-3xl lg:prose-h2:text-4xl prose-h2:border-b-2 prose-h2:border-brand-accent/20 prose-h2:pb-3 md:prose-h2:pb-4
                   prose-h3:text-xl prose-h3:md:text-2xl lg:prose-h3:text-3xl prose-h3:text-brand-primary
                   prose-p:mb-6 md:prose-p:mb-8 prose-p:tracking-normal md:prose-p:tracking-wide
                   prose-strong:font-bold prose-strong:text-[#111827] prose-strong:bg-brand-pale/40 prose-strong:px-1 prose-strong:rounded-sm
-                  
+
                   /* Blockquote fixes for mobile */
                   prose-blockquote:border-l-[4px] md:prose-blockquote:border-l-[6px] prose-blockquote:border-brand-accent prose-blockquote:pl-4 md:prose-blockquote:pl-8 prose-blockquote:text-[#34495E] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg md:prose-blockquote:text-xl lg:prose-blockquote:text-2xl prose-blockquote:my-8 md:prose-blockquote:my-10 prose-blockquote:bg-gradient-to-r prose-blockquote:from-brand-pale/50 prose-blockquote:to-transparent prose-blockquote:py-4 md:prose-blockquote:py-6 prose-blockquote:pr-4 md:prose-blockquote:pr-6 prose-blockquote:rounded-r-2xl md:prose-blockquote:rounded-r-3xl
-                  
+
                   prose-a:text-brand-accent prose-a:font-semibold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-brand-primary hover:prose-a:decoration-brand-primary transition-all
-                  
+
                   /* List formatting */
                   prose-ul:list-none prose-ul:pl-0 prose-ul:mb-6 md:prose-ul:mb-8 prose-ul:space-y-3 md:prose-ul:space-y-4
                   prose-ul>li:relative prose-ul>li:pl-6 md:prose-ul>li:pl-8 prose-ul>li:before:content-[''] prose-ul>li:before:absolute prose-ul>li:before:left-1 md:prose-ul>li:before:left-2 prose-ul>li:before:top-2.5 md:prose-ul>li:before:top-3 prose-ul>li:before:w-1.5 md:prose-ul>li:before:w-2 prose-ul>li:before:h-1.5 md:prose-ul>li:before:h-2 prose-ul>li:before:bg-brand-accent prose-ul>li:before:rounded-full
                   prose-ol:list-decimal prose-ol:pl-6 md:prose-ol:pl-8 prose-ol:mb-6 md:prose-ol:mb-8 prose-ol:space-y-3 md:prose-ol:space-y-4 prose-ol:marker:text-brand-primary prose-ol:marker:font-bold
-                  
+
                   /* Figure & Captions */
                   prose-figcaption:text-center prose-figcaption:text-xs md:prose-figcaption:text-sm prose-figcaption:text-brand-light prose-figcaption:mt-2 md:prose-figcaption:mt-3 prose-figcaption:italic
-                " 
-                dangerouslySetInnerHTML={{ __html: blog.content.rendered }} 
+                "
+                dangerouslySetInnerHTML={{ __html: blog.content.rendered }}
               />
 
 
@@ -378,12 +378,12 @@ export default async function BlogPostPage({ params }: PageProps) {
                   <p className="text-xs text-brand-ink/80 font-light leading-relaxed mb-4">
                     I physically visit project sites, RERA hearings, and analyze developer balance sheets to bring homebuyers Noida&apos;s most trusted real estate advice on YouTube.
                   </p>
-                  
+
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-2">
-                    <a 
-                      href="https://www.youtube.com/@PropertySaraansh" 
-                      target="_blank" 
-                      rel="noreferrer" 
+                    <a
+                      href="https://www.youtube.com/@PropertySaraansh"
+                      target="_blank"
+                      rel="noreferrer"
                       className="inline-flex bg-[#FF0000] hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-lg text-xs transition-colors shadow-md items-center gap-2 uppercase tracking-wider active:scale-95 duration-200"
                     >
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -391,10 +391,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                       </svg>
                       YouTube
                     </a>
-                    <a 
-                      href="https://www.linkedin.com/in/saraansh-seth/" 
-                      target="_blank" 
-                      rel="noreferrer" 
+                    <a
+                      href="https://www.linkedin.com/in/saraansh-seth/"
+                      target="_blank"
+                      rel="noreferrer"
                       className="inline-flex bg-[#0077b5] hover:bg-[#005582] text-white font-bold px-6 py-2.5 rounded-lg text-xs transition-colors shadow-md items-center gap-2 uppercase tracking-wider active:scale-95 duration-200"
                     >
                       <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
@@ -430,7 +430,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               })()}
 
             </article>
-            
+
           </div>
         </div>
 
@@ -442,8 +442,8 @@ export default async function BlogPostPage({ params }: PageProps) {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {relatedBlogs.map((post) => (
-                <BlogCard 
-                  key={post.id} 
+                <BlogCard
+                  key={post.id}
                   id={post.slug}
                   title={post.title.rendered}
                   excerpt={post.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
