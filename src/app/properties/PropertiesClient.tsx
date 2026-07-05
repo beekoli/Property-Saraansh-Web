@@ -12,9 +12,11 @@ interface Props {
   properties: WPProperty[];
 }
 
+const STATUS_CHIPS = ['All', 'New Launch', 'Under Construction', 'Ready to Move'] as const;
+
 export default function PropertiesClient({ properties }: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  
+
   // Filter States
   const [location, setLocation] = useState('All');
   const [type, setType] = useState('All');
@@ -24,48 +26,48 @@ export default function PropertiesClient({ properties }: Props) {
   // Parse price string to numeric value in Crores for filtering
   const getMinPriceInCrores = (priceStr?: string): number => {
     if (!priceStr) return 0;
-    
+
     // Extract numbers from string
     const cleanStr = priceStr.replace(/,/g, '').toLowerCase();
     const match = cleanStr.match(/(\d+\.?\d*)\s*(cr|lakh)/);
-    
+
     if (match) {
       const val = parseFloat(match[1]);
       const unit = match[2];
       if (unit === 'cr') return val;
       if (unit === 'lakh') return val / 100;
     }
-    
+
     // Check for ranges like "3.5 - 5.2" and grab the first one
     const rangeMatch = cleanStr.match(/(\d+\.?\d*)\s*-\s*(\d+\.?\d*)/);
     if (rangeMatch) {
       return parseFloat(rangeMatch[1]);
     }
-    
+
     return 0; // fallback if "Price on Request"
   };
 
   // Perform client-side filtering
   const filteredProjects = properties.filter((project) => {
     const acf = project.acf || {};
-    
+
     // 1. Location Filter
     if (location !== 'All') {
       const projectLoc = (acf.location || '').toLowerCase();
       if (!projectLoc.includes(location.toLowerCase())) return false;
     }
-    
+
     // 2. Type Filter
     if (type !== 'All') {
       const projectType = (acf.property_type || '').toLowerCase();
       if (!projectType.includes(type.toLowerCase())) return false;
     }
-    
+
     // 3. Status Filter
     if (status !== 'All') {
       const projectStatus = (acf.possession_date || '').toLowerCase();
       const statusKey = status.toLowerCase();
-      
+
       if (statusKey === 'ready to move') {
         if (!projectStatus.includes('ready')) return false;
       } else if (statusKey === 'under construction') {
@@ -74,7 +76,7 @@ export default function PropertiesClient({ properties }: Props) {
         if (!projectStatus.includes('launch') && !projectStatus.includes('2025') && !projectStatus.includes('2026')) return false;
       }
     }
-    
+
     // 4. Budget Filter (if maxBudget is less than 10, filter by price)
     if (maxBudget < 10) {
       const minPrice = getMinPriceInCrores(acf.price);
@@ -84,18 +86,48 @@ export default function PropertiesClient({ properties }: Props) {
     return true;
   });
 
+  // Counts per status chip (computed against location/type/budget filters, ignoring the status filter itself)
+  const preStatusFiltered = properties.filter((project) => {
+    const acf = project.acf || {};
+    if (location !== 'All') {
+      const projectLoc = (acf.location || '').toLowerCase();
+      if (!projectLoc.includes(location.toLowerCase())) return false;
+    }
+    if (type !== 'All') {
+      const projectType = (acf.property_type || '').toLowerCase();
+      if (!projectType.includes(type.toLowerCase())) return false;
+    }
+    if (maxBudget < 10) {
+      const minPrice = getMinPriceInCrores(acf.price);
+      if (minPrice > maxBudget && minPrice > 0) return false;
+    }
+    return true;
+  });
+
+  const chipCount = (chip: string) => {
+    if (chip === 'All') return preStatusFiltered.length;
+    const statusKey = chip.toLowerCase();
+    return preStatusFiltered.filter((project) => {
+      const projectStatus = (project.acf?.possession_date || '').toLowerCase();
+      if (statusKey === 'ready to move') return projectStatus.includes('ready');
+      if (statusKey === 'under construction') return projectStatus.includes('construction') || projectStatus.includes('202');
+      if (statusKey === 'new launch') return projectStatus.includes('launch') || projectStatus.includes('2025') || projectStatus.includes('2026');
+      return false;
+    }).length;
+  };
+
   return (
     <div className="min-h-screen bg-brand-pale flex flex-col">
       {/* Page Header */}
       <section className="bg-brand-dark pt-28 pb-16 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
-        <div 
-          className="absolute inset-0 opacity-[0.04]" 
-          style={{ 
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
             backgroundImage: `
-              linear-gradient(rgba(212, 169, 106, 0.15) 1px, transparent 1px), 
+              linear-gradient(rgba(212, 169, 106, 0.15) 1px, transparent 1px),
               linear-gradient(90deg, rgba(212, 169, 106, 0.15) 1px, transparent 1px)
-            `, 
-            backgroundSize: '40px 40px' 
+            `,
+            backgroundSize: '40px 40px'
           }}
         ></div>
         <StaggerContainer className="relative z-10 max-w-4xl mx-auto" delayChildren={0.1} staggerChildren={0.15}>
@@ -118,7 +150,7 @@ export default function PropertiesClient({ properties }: Props) {
           {/* Location */}
           <div>
             <label className="block text-xs font-bold text-brand-accent uppercase tracking-widest mb-2">Location</label>
-            <select 
+            <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="w-full bg-brand-primary/20 border border-brand-light/30 text-white rounded-lg p-3 outline-none focus:border-brand-accent text-sm font-semibold transition-colors"
@@ -136,7 +168,7 @@ export default function PropertiesClient({ properties }: Props) {
           {/* Type */}
           <div>
             <label className="block text-xs font-bold text-brand-accent uppercase tracking-widest mb-2">Type</label>
-            <select 
+            <select
               value={type}
               onChange={(e) => setType(e.target.value)}
               className="w-full bg-brand-primary/20 border border-brand-light/30 text-white rounded-lg p-3 outline-none focus:border-brand-accent text-sm font-semibold transition-colors"
@@ -151,7 +183,7 @@ export default function PropertiesClient({ properties }: Props) {
           {/* Status */}
           <div>
             <label className="block text-xs font-bold text-brand-accent uppercase tracking-widest mb-2">Status</label>
-            <select 
+            <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               className="w-full bg-brand-primary/20 border border-brand-light/30 text-white rounded-lg p-3 outline-none focus:border-brand-accent text-sm font-semibold transition-colors"
@@ -171,10 +203,10 @@ export default function PropertiesClient({ properties }: Props) {
                 {maxBudget === 10 ? '₹ 10 Cr+' : `₹ ${maxBudget} Cr`}
               </span>
             </div>
-            <input 
-              type="range" 
-              min="1" 
-              max="10" 
+            <input
+              type="range"
+              min="1"
+              max="10"
               value={maxBudget}
               onChange={(e) => setMaxBudget(parseInt(e.target.value))}
               className="w-full h-2 bg-brand-primary/20 border border-brand-light/30 rounded-lg appearance-none cursor-pointer accent-brand-accent"
@@ -192,19 +224,36 @@ export default function PropertiesClient({ properties }: Props) {
 
       {/* Results & Grid Toggle */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full text-brand-ink">
+        {/* Status quick-filter chips */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {STATUS_CHIPS.map((chip) => (
+            <button
+              key={chip}
+              onClick={() => setStatus(chip)}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold border transition-colors ${
+                status === chip
+                  ? 'bg-brand-dark text-white border-brand-dark'
+                  : 'bg-white text-brand-ink border-brand-light/20 hover:border-brand-primary'
+              }`}
+            >
+              {chip} ({chipCount(chip)})
+            </button>
+          ))}
+        </div>
+
         <div className="flex justify-between items-center mb-8 border-b border-brand-light/20 pb-4">
           <div className="font-semibold text-sm">
             Showing {filteredProjects.length} exclusive projects
           </div>
           <div className="flex bg-white rounded-lg border border-brand-light/10 p-1 shadow-sm">
-            <button 
+            <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded transition-colors ${viewMode === 'grid' ? 'bg-brand-pale text-brand-primary shadow-sm' : 'text-brand-light hover:text-brand-primary'}`}
               aria-label="Grid View"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg>
             </button>
-            <button 
+            <button
               onClick={() => setViewMode('list')}
               className={`p-2 rounded transition-colors ${viewMode === 'list' ? 'bg-brand-pale text-brand-primary shadow-sm' : 'text-brand-light hover:text-brand-primary'}`}
               aria-label="List View"
@@ -216,7 +265,7 @@ export default function PropertiesClient({ properties }: Props) {
 
         {/* Projects Render */}
         {filteredProjects.length > 0 ? (
-          <StaggerContainer 
+          <StaggerContainer
             key={`${location}-${type}-${status}-${maxBudget}-${viewMode}-${filteredProjects.length}`}
             className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
           >
@@ -224,21 +273,38 @@ export default function PropertiesClient({ properties }: Props) {
               const acf = project.acf || {};
               const bhks = acf.configuration ? acf.configuration.split(', ') : ["3 BHK", "4 BHK"];
               const imgUrl = getFeaturedImage(project);
-              
+
               if (viewMode === 'list') {
                 return (
                   <StaggerItem key={project.id} yOffset={20}>
                     <div className="flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-sm border border-brand-pale hover:shadow-xl transition-all">
                       {/* Left: Image (16:9 equivalent) */}
                       <div className="md:w-1/3 relative h-56 md:h-auto overflow-hidden bg-brand-pale">
-                        <img 
-                          src={imgUrl} 
-                          alt={project.title.rendered} 
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+                        <img
+                          src={imgUrl}
+                          alt={project.title.rendered}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                         />
-                        <div className="absolute top-4 left-4 bg-brand-accent text-brand-dark px-3 py-1 rounded text-xs font-bold tracking-wide shadow-md">
-                          {acf.property_type || 'Residential'}
+                        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
+                          <span className="bg-brand-accent text-brand-dark px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+                            {acf.property_type || 'Residential'}
+                          </span>
+                          {acf.rera_number && (
+                            <span className="bg-white/95 text-brand-primary px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+                              RERA ✓
+                            </span>
+                          )}
                         </div>
+                        {acf.video_id && (
+                          <a
+                            href={acf.video_id.includes('youtube.com/watch?v=') ? `https://www.youtube.com/watch?v=${acf.video_id.split('v=')[1].split('&')[0]}` : acf.video_id.includes('youtu.be/') ? `https://www.youtube.com/watch?v=${acf.video_id.split('youtu.be/')[1].split('?')[0]}` : `https://www.youtube.com/watch?v=${acf.video_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute bottom-3 right-3 bg-red-600/90 hover:bg-red-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-md flex items-center gap-1 transition-colors"
+                          >
+                            ▶ Video Review
+                          </a>
+                        )}
                       </div>
                       {/* Right: Info */}
                       <div className="md:w-2/3 p-6 flex flex-col justify-between">
@@ -250,7 +316,7 @@ export default function PropertiesClient({ properties }: Props) {
                             </div>
                             <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{acf.price || 'Price on Request'}</div>
                           </div>
-                          
+
                           <div className="flex items-center text-brand-dark/70 mb-4 text-xs font-light">
                             <svg className="w-4 h-4 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -267,20 +333,28 @@ export default function PropertiesClient({ properties }: Props) {
                             ))}
                           </div>
                         </div>
-                        
-                        <div className="flex gap-4 border-t border-brand-pale pt-4">
-                          <Link 
-                            href={`/properties/${project.slug}?video=1`} 
-                            className="flex-1 bg-brand-primary text-white text-center text-xs py-2.5 flex items-center justify-center gap-1 hover:bg-brand-dark transition-colors rounded font-bold shadow-sm"
+
+                        <div className="flex gap-3 border-t border-brand-pale pt-4">
+                          <Link
+                            href={`/properties/${project.slug}`}
+                            className="flex-[1.4] bg-brand-dark text-white text-center text-xs py-2.5 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
                           >
-                            Watch Review ▶
+                            View Details
                           </Link>
-                          <Link 
-                            href={`/properties/${project.slug}`} 
-                            className="flex-1 bg-brand-dark text-white text-center text-xs py-2.5 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
+                          <a
+                            href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${project.title.rendered}. Please share more details.`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 flex items-center justify-center hover:!text-white transition-colors rounded font-bold shadow-sm"
                           >
-                            Get Details
-                          </Link>
+                            WhatsApp
+                          </a>
+                          <a
+                            href="tel:+918076178189"
+                            className="flex-1 bg-brand-pale text-brand-primary text-center text-xs py-2.5 flex items-center justify-center hover:bg-brand-light/10 transition-colors rounded font-bold shadow-sm border border-brand-light/20"
+                          >
+                            Call
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -290,7 +364,7 @@ export default function PropertiesClient({ properties }: Props) {
 
               return (
                 <StaggerItem key={project.id} yOffset={20}>
-                  <PropertyCard 
+                  <PropertyCard
                     id={project.slug}
                     title={project.title.rendered}
                     developer={acf.developer}
@@ -300,6 +374,9 @@ export default function PropertiesClient({ properties }: Props) {
                     imageUrl={imgUrl}
                     bhk={bhks}
                     videoId={acf.video_id}
+                    reraNumber={acf.rera_number}
+                    possessionDate={acf.possession_date}
+                    nearbyLine={acf.location_advantages}
                   />
                 </StaggerItem>
               );
