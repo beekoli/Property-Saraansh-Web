@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Property Saraansh Core
  * Description: Registers the Properties custom post type and Advanced Custom Fields for the Next.js frontend.
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Property Saraansh
  */
 
