@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!meta.openGraph) {
     meta.openGraph = { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' };
   }
-  (meta.openGraph as { type?: string }).type = 'article';
+  meta.openGraph.type = 'article';
 
   // Ensure the canonical URL points to the correct frontend route /blog/[slug]
   // and has NO trailing slash (Next.js serves without trailing slash by default).
@@ -247,7 +247,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           
           <div className="max-w-4xl mx-auto relative z-10">
             <span className="text-brand-accent uppercase tracking-widest text-[10px] md:text-xs font-bold bg-brand-primary/40 px-4 py-2 rounded-full border border-brand-accent/30 inline-block mb-6 shadow-sm backdrop-blur-sm">
-              Real Estate Insights
+              {getPostCategory(blog)}
             </span>
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold heading-playfair leading-tight mb-6 text-white uppercase tracking-tight max-w-4xl mx-auto">
               {decodeHtml(blog.title.rendered)}
@@ -408,6 +408,26 @@ export default async function BlogPostPage({ params }: PageProps) {
               {faqs.length > 0 && (
                 <FAQSection faqs={faqs} />
               )}
+
+              {/* Tags Strip */}
+              {(() => {
+                const postTags: Array<{ id: number; name: string; slug: string }> = blog._embedded?.['wp:term']?.[1] || [];
+                return postTags.length > 0 ? (
+                  <div className="mt-10 pt-6 border-t border-brand-light/10">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-light mb-3">Tags</p>
+                    <div className="flex flex-wrap gap-2">
+                      {postTags.map(tag => (
+                        <span
+                          key={tag.id}
+                          className="inline-block text-xs font-medium text-brand-ink/70 bg-brand-pale border border-brand-light/20 rounded-full px-3 py-1 hover:border-brand-accent/40 hover:text-brand-dark transition-colors duration-200"
+                        >
+                          #{tag.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
 
             </article>
             
