@@ -113,9 +113,9 @@ export default function PropertyDetail({ p }: { p: Property }) {
 
       {/* ================= JUMP NAV (brand green) ================= */}
       <div className="sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
-        <div className="mx-auto flex max-w-6xl items-center gap-5 overflow-x-auto px-5" style={{ height: 50 }}>
+        <div className="mx-auto flex h-[50px] max-w-6xl items-center gap-5 overflow-x-auto overflow-y-hidden px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {SECTIONS.map(([id, label]) => (
-            <a key={id} href={`#${id}`} className="whitespace-nowrap py-4 text-[13.5px] text-white/75 transition hover:text-[#f0d894]">{label}</a>
+            <a key={id} href={`#${id}`} className="whitespace-nowrap text-[13.5px] text-white/75 transition hover:text-[#f0d894]">{label}</a>
           ))}
           <a href={`tel:${PHONE}`} className="ml-auto whitespace-nowrap rounded-lg px-4 py-2 text-[13px] font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
         </div>
