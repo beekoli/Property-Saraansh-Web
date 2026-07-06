@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import PropertyCard from '@/components/PropertyCard';
-import { getPropertiesByTypeTerm, getFeaturedImage } from '@/lib/wordpress';
+import { getPropertiesByTypeTerm, getFeaturedImage, getCardData } from '@/lib/wordpress';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -39,22 +39,21 @@ export default async function ResidentialProperties() {
         {properties.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((prop) => {
-              const acf = prop.acf || {};
-              const bhks = acf.configuration ? acf.configuration.split(', ') : ["3 BHK", "4 BHK"];
+              const card = getCardData(prop);
               return (
                 <PropertyCard
                   key={prop.id}
                   id={prop.slug}
                   title={prop.title.rendered}
-                  developer={acf.developer || ""}
-                  location={acf.location || 'Noida'}
-                  price={acf.price || 'Price on Request'}
-                  type={acf.property_type || 'Residential'}
+                  developer={card.developer}
+                  location={card.location}
+                  price={card.price}
+                  type={card.type}
                   imageUrl={getFeaturedImage(prop)}
-                  bhk={bhks}
-                  videoId={acf.video_id}
-                  reraNumber={acf.rera_number}
-                  possessionDate={acf.possession_date}
+                  bhk={card.bhk.length ? card.bhk : ["3 BHK", "4 BHK"]}
+                  videoId={card.videoId}
+                  reraNumber={card.reraNumber}
+                  possessionDate={card.possessionDate}
                 />
               );
             })}

@@ -66,86 +66,18 @@ export interface WPProperty {
   excerpt?: {
     rendered: string;
   };
-  acf: {
-    price?: string;
-    location?: string;
-    property_type?: string;
-    developer?: string;
-    developer_description?: string;
-    developer_experience?: string;
-    developer_delivered_projects?: string;
-    developer_ongoing_projects?: string;
-    project_overview?: string;
-    total_land?: string;
-    rera_number?: string;
-    configuration?: string;
-    total_units?: string;
-    possession_date?: string;
-    launch_date?: string;
-    total_floors?: string;
-    units_per_floor?: string;
-    lifts_per_floor?: string;
-    price_list_desc?: string;
-    location_advantages?: string;
-    base_price?: string;
-    video_id?: string;
-    video_review_text?: string;
-    highlights?: string;
-    google_map_embed?: string;
-    project_logo?: string;
-    floor_plan_footer_text?: string;
-    site_plan_image?: string | false;
-    master_layout_image?: string | false;
-    price_range?: string;
-    tagline?: string;
-    // SEO fields
-    seo_title?: string;
-    seo_description?: string;
-    // About project
-    about_project?: string;
-    about_project_image?: string | false;
-    // Site plan caption
-    site_plan_caption?: string;
-    // Payment Plan (optional — section only renders when at least one step is filled in)
-    payment_step_1_pct?: string;
-    payment_step_1_label?: string;
-    payment_step_1_desc?: string;
-    payment_step_2_pct?: string;
-    payment_step_2_label?: string;
-    payment_step_2_desc?: string;
-    payment_step_3_pct?: string;
-    payment_step_3_label?: string;
-    payment_step_3_desc?: string;
-    payment_step_4_pct?: string;
-    payment_step_4_label?: string;
-    payment_step_4_desc?: string;
-    payment_step_5_pct?: string;
-    payment_step_5_label?: string;
-    payment_step_5_desc?: string;
-    payment_step_6_pct?: string;
-    payment_step_6_label?: string;
-    payment_step_6_desc?: string;
-    payment_eoi_note?: string;
-    [key: `amenity_${number}_icon`]: string | false;
-    [key: `amenity_${number}_name`]: string;
-    [key: `floor_plan_${number}_title`]: string;
-    [key: `floor_plan_${number}_desc`]: string;
-    [key: `floor_plan_${number}_image`]: string | false;
-    [key: `gallery_image_${number}`]: string | false;
-    [key: `price_list_row_${number}_type`]: string;
-    [key: `price_list_row_${number}_size`]: string;
-    [key: `price_list_row_${number}_base`]: string;
-    [key: `price_list_row_${number}_total`]: string;
-    [key: `payment_milestone_${number}_name`]: string;
-    [key: `payment_milestone_${number}_demand`]: string;
-    [key: `payment_milestone_${number}_cumulative`]: string;
-    [key: `faq_${number}_question`]: string;
-    [key: `faq_${number}_answer`]: string;
-  };
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  acf: any;
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url: string;
     }>;
+    'wp:term'?: Array<Array<{
+      id: number;
+      name: string;
+      slug: string;
+      taxonomy?: string;
+    }>>;
   };
   property_gallery?: string[];
   yoast_head?: string;
@@ -157,6 +89,7 @@ export interface WPProperty {
     og_image?: Array<{ url: string }>;
     canonical?: string;
   };
+  rank_math_json?: Record<string, unknown>;
 }
 
 // --- Builder Taxonomy Integration ---
@@ -196,12 +129,6 @@ export async function getPropertiesByBuilder(termId: number, limit = 50): Promis
 
 // --- Video CPT Integration ---
 // WordPress CPT slug: ps_video
-// ACF fields to create in WordPress (see setup instructions):
-//   short_description  (Textarea) — shown below video title + used as meta description
-//   about_this_video   (Textarea) — "About This Video" body; separate paragraphs with ||
-//   meta_title         (Text)     — optional SEO page title override
-//   meta_description   (Text)     — optional SEO meta description override
-//   youtube_id         (Text)     — YouTube video ID (optional override)
 export interface WPVideo {
   id: number;
   slug: string;
@@ -286,21 +213,14 @@ export async function getProperties(limit = 10, propertyType?: string): Promise<
 
   if (propertyType) {
     return list.filter((p: WPProperty) =>
-      p.acf?.property_type?.toLowerCase().includes(propertyType.toLowerCase())
+      getCardData(p).type.toLowerCase().includes(propertyType.toLowerCase())
     );
   }
   return list.slice(0, limit);
 }
 
 /**
- * Fetch properties filtered server-side by the `ps_property_type` WordPress
- * taxonomy (term id), instead of fetching everything and filtering client-side
- * on an ACF text field. This gives each type-specific listing page (residential,
- * commercial) its own distinct fetch/cache key, and lets WordPress do the
- * filtering — so a stale cache on one listing page can no longer mask newly
- * published or re-tagged properties on another.
- *
- * Known term ids (see WordPress Properties > Property Type):
+ * Fetch properties filtered server-side by the property-type taxonomy term id.
  *   Residential = 74, Commercial = 75
  */
 export async function getPropertiesByTypeTerm(limit = 20, termId: number): Promise<WPProperty[]> {
@@ -315,9 +235,51 @@ export async function getPropertyBySlug(slug: string): Promise<WPProperty | null
   return local || null;
 }
 
+/* -----------------------------------------------------------------------
+ * getCardData — single source of truth for listing-card fields.
+ * Prefers the NEW field structure + taxonomy terms; old flat fields remain
+ * only as fallbacks so nothing breaks while old data is being cleaned up.
+ * --------------------------------------------------------------------- */
+const YT_ID_RE = /(?:v=|youtu\.be\/|embed\/)([\w-]{11})/;
+
+export function getCardData(prop: WPProperty) {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const acf: any = prop.acf || {};
+  const terms: any[] = (prop._embedded?.['wp:term'] ?? []).flat();
+  const term = (...taxes: string[]) => {
+    for (const tax of taxes) {
+      const t = terms.find((x: any) => x?.taxonomy === tax);
+      if (t?.name) return t.name as string;
+    }
+    return '';
+  };
+
+  const videoId: string =
+    (typeof acf.youtube_url === 'string' && (acf.youtube_url.match(YT_ID_RE)?.[1] ?? '')) ||
+    (typeof acf.video_id === 'string' ? (acf.video_id.match(YT_ID_RE)?.[1] ?? acf.video_id) : '') ||
+    '';
+
+  return {
+    developer: term('ps_builder', 'builder') || acf.developer_name || acf.developer || '',
+    location: acf.address || acf.location || term('location') || 'Noida',
+    price: acf.price_display || acf.price || 'Price on Request',
+    type: term('ps_property_type', 'property_type') || acf.property_type || 'Residential',
+    videoId,
+    bhk: acf.configuration ? String(acf.configuration).split(', ') : [],
+    reraNumber: (acf.rera_number as string) || '',
+    possessionDate: (acf.possession_date as string) || '',
+  };
+}
+
 export function getFeaturedImage(post: WPPost | WPProperty): string {
+  // Prefer the real featured image (works with the new field structure)
+  if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'].length > 0) {
+    return post._embedded['wp:featuredmedia'][0].source_url;
+  }
+
   if ('acf' in post && post.acf) {
-    const acf = post.acf as WPProperty['acf'];
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const acf = post.acf as any;
     if (acf.gallery_image_1) {
       return acf.gallery_image_1;
     }
@@ -325,10 +287,6 @@ export function getFeaturedImage(post: WPPost | WPProperty): string {
 
   if ('property_gallery' in post && post.property_gallery && post.property_gallery.length > 0) {
     return post.property_gallery[0];
-  }
-
-  if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'].length > 0) {
-    return post._embedded['wp:featuredmedia'][0].source_url;
   }
 
   return "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
