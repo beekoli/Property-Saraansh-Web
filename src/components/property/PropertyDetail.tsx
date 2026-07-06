@@ -79,6 +79,8 @@ export default function PropertyDetail({ p }: { p: Property }) {
         {p.hero && (
           <Image src={p.hero.url} alt={p.hero.alt} fill priority className="object-cover" sizes="100vw" />
         )}
+        {/* dark top scrim — keeps the transparent site header menu readable over bright images */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-44 bg-gradient-to-b from-[rgba(8,18,30,.88)] via-[rgba(8,18,30,.45)] to-transparent" />
         <div className="relative z-10 w-full bg-gradient-to-t from-[rgba(8,18,30,.94)] to-transparent pb-6 pt-24">
           <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-5">
             <div>
