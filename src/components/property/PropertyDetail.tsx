@@ -30,7 +30,7 @@ const SECTIONS = [
   ["overview", "Overview"], ["video", "Video Review"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
   ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
-  ["gallery", "Gallery"], ["status", "Status"], ["faqs", "FAQs"],
+  ["gallery", "Gallery"], ["status", "Possession & Construction"], ["faqs", "FAQs"],
 ] as const;
 
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
