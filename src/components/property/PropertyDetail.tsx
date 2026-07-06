@@ -11,6 +11,7 @@ import Image from "next/image";
 import type { Property } from "@/lib/property";
 
 const GOLD = "linear-gradient(115deg,#b8913c 0%,#d9b25e 55%,#c9a24b 100%)";
+const BRAND_GREEN = "#0B3038"; // site header button + footer color
 const PHONE = process.env.NEXT_PUBLIC_PHONE || "+918076178189";
 const WHATSAPP = `https://api.whatsapp.com/send?phone=${PHONE.replace("+", "")}&text=`;
 
@@ -104,11 +105,22 @@ export default function PropertyDetail({ p }: { p: Property }) {
         </div>
       </div>
 
-      {/* ================= JUMP NAV ================= */}
-      <div className="sticky top-0 z-40 border-b border-[#e8ecf1] bg-white">
-        <div className="mx-auto flex max-w-6xl items-center gap-5 overflow-x-auto px-5" style={{ height: 50 }}>
+      {/* ================= JUMP NAV (brand green + sliding title) ================= */}
+      <style>{`@keyframes ps-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }`}</style>
+      <div className="sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
+        {/* project title sliding slowly left → right */}
+        <div className="overflow-hidden whitespace-nowrap border-b border-white/10">
+          <div className="inline-block will-change-transform" style={{ animation: "ps-marquee 36s linear infinite" }}>
+            {[0, 1].map((n) => (
+              <span key={n} className="inline-block px-10 py-1 text-[12px] font-bold tracking-[1px] text-[#f0d894]">
+                {p.title}{p.basePrice ? ` · ${p.basePrice}` : ""}{p.status ? ` · ${p.status}` : ""}{p.configuration ? ` · ${p.configuration}` : ""}{p.rera ? ` · RERA: ${p.rera}` : ""} ✦
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="mx-auto flex max-w-6xl items-center gap-5 overflow-x-auto px-5" style={{ height: 48 }}>
           {SECTIONS.map(([id, label]) => (
-            <a key={id} href={`#${id}`} className="whitespace-nowrap py-4 text-[13.5px] text-[#66788c] hover:text-[#8a6a1e]">{label}</a>
+            <a key={id} href={`#${id}`} className="whitespace-nowrap py-4 text-[13.5px] text-white/75 transition hover:text-[#f0d894]">{label}</a>
           ))}
           <a href={`tel:${PHONE}`} className="ml-auto whitespace-nowrap rounded-lg px-4 py-2 text-[13px] font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
         </div>
@@ -407,7 +419,7 @@ export default function PropertyDetail({ p }: { p: Property }) {
 
         {/* ================= DESKTOP STICKY LEAD FORM ================= */}
         <aside className="hidden lg:block">
-          <div className="sticky top-[74px] pt-9">
+          <div className="sticky top-[92px] pt-9">
             <form onSubmit={submitLead} className="rounded-2xl border border-[#e8ecf1] bg-white p-5 shadow-sm">
               <h3 className="text-[16.5px] font-bold text-[#0f2137]">Interested in this project?</h3>
               <p className="mb-3.5 mt-1 text-xs text-[#66788c]">Get price list, payment plan & site visit — free, no spam.</p>
