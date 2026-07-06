@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Property Saraansh Core
  * Description: Registers the Properties custom post type and Advanced Custom Fields for the Next.js frontend.
- * Version: 1.2.2
+ * Version: 1.2.3
  * Author: Property Saraansh
  */
 
@@ -124,6 +124,16 @@ if (!function_exists('ps_register_acf_fields')) {
                 'show_in_rest' => true,
             );
 
+            // --- Master Layout Image (paired with Site Plan in the "Project Layout" section) ---
+            $property_fields[] = array(
+                'key' => 'field_prop_master_layout_image',
+                'label' => 'Master Layout Image',
+                'name' => 'master_layout_image',
+                'type' => 'image',
+                'return_format' => 'url',
+                'show_in_rest' => true,
+            );
+
             // --- Floor Plans (1 to 4 slots) ---
             for ($i = 1; $i <= 4; $i++) {
                 $property_fields[] = array(
@@ -190,6 +200,65 @@ if (!function_exists('ps_register_acf_fields')) {
                     'show_in_rest' => true,
                 );
             }
+
+            // --- Payment Plan Steps (1 to 3 slots: e.g. On Booking / Construction Linked / On Possession) ---
+            for ($i = 1; $i <= 3; $i++) {
+                $property_fields[] = array(
+                    'key' => 'field_prop_payment_step_' . $i . '_pct',
+                    'label' => 'Payment Step ' . $i . ' Percentage (e.g. 30%)',
+                    'name' => 'payment_step_' . $i . '_pct',
+                    'type' => 'text',
+                    'show_in_rest' => true,
+                );
+                $property_fields[] = array(
+                    'key' => 'field_prop_payment_step_' . $i . '_label',
+                    'label' => 'Payment Step ' . $i . ' Label (e.g. On Booking)',
+                    'name' => 'payment_step_' . $i . '_label',
+                    'type' => 'text',
+                    'show_in_rest' => true,
+                );
+                $property_fields[] = array(
+                    'key' => 'field_prop_payment_step_' . $i . '_desc',
+                    'label' => 'Payment Step ' . $i . ' Description',
+                    'name' => 'payment_step_' . $i . '_desc',
+                    'type' => 'text',
+                    'show_in_rest' => true,
+                );
+            }
+
+            // --- Payment Milestone Table (1 to 6 rows) ---
+            for ($i = 1; $i <= 6; $i++) {
+                $property_fields[] = array(
+                    'key' => 'field_prop_payment_milestone_' . $i . '_name',
+                    'label' => 'Payment Milestone ' . $i . ' Name',
+                    'name' => 'payment_milestone_' . $i . '_name',
+                    'type' => 'text',
+                    'show_in_rest' => true,
+                );
+                $property_fields[] = array(
+                    'key' => 'field_prop_payment_milestone_' . $i . '_demand',
+                    'label' => 'Payment Milestone ' . $i . ' Demand (e.g. 30% of BSP)',
+                    'name' => 'payment_milestone_' . $i . '_demand',
+                    'type' => 'text',
+                    'show_in_rest' => true,
+                );
+                $property_fields[] = array(
+                    'key' => 'field_prop_payment_milestone_' . $i . '_cumulative',
+                    'label' => 'Payment Milestone ' . $i . ' Cumulative (e.g. 30%)',
+                    'name' => 'payment_milestone_' . $i . '_cumulative',
+                    'type' => 'text',
+                    'show_in_rest' => true,
+                );
+            }
+
+            // --- Payment Plan EOI Note ---
+            $property_fields[] = array(
+                'key' => 'field_prop_payment_eoi_note',
+                'label' => 'Payment Plan EOI Benefit Note',
+                'name' => 'payment_eoi_note',
+                'type' => 'textarea',
+                'show_in_rest' => true,
+            );
 
             // --- FAQs (1 to 5 slots) ---
             for ($i = 1; $i <= 5; $i++) {
