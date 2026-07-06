@@ -286,11 +286,11 @@ export default function PropertiesClient({ properties }: Props) {
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                         />
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
-                          <span className="bg-brand-accent text-brand-dark px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+                          <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
                             {acf.property_type || 'Residential'}
                           </span>
                           {acf.rera_number && (
-                            <span className="bg-white/95 text-brand-primary px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+                            <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
                               RERA ✓
                             </span>
                           )}
