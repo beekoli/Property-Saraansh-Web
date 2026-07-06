@@ -3,7 +3,7 @@ import PropertyCard from '@/components/PropertyCard';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
 import { getChannelStats } from '@/lib/youtube';
-import { getProperties, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
+import { getProperties, getLatestBlogs, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
@@ -170,21 +170,24 @@ export default async function Home() {
           </SlideUp>
           
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((project) => (
-              <StaggerItem key={project.id}>
-                <PropertyCard 
-                  id={project.slug}
-                  title={project.title.rendered}
-                  developer={project.acf?.developer || ""}
-                  location={project.acf?.location || "Noida"}
-                  price={project.acf?.price || "Price on Request"}
-                  type={project.acf?.property_type || "Residential"}
-                  imageUrl={getFeaturedImage(project)}
-                  bhk={project.acf?.configuration ? project.acf.configuration.split(', ') : []}
-                  videoId={project.acf?.video_id}
-                />
-              </StaggerItem>
-            ))}
+            {properties.map((project) => {
+              const card = getCardData(project);
+              return (
+                <StaggerItem key={project.id}>
+                  <PropertyCard 
+                    id={project.slug}
+                    title={project.title.rendered}
+                    developer={card.developer}
+                    location={card.location}
+                    price={card.price}
+                    type={card.type}
+                    imageUrl={getFeaturedImage(project)}
+                    bhk={card.bhk}
+                    videoId={card.videoId}
+                  />
+                </StaggerItem>
+              );
+            })}
           </StaggerContainer>
           <SlideUp className="text-center mt-12" delay={0.2}>
             <Link href="/properties" className="btn-primary px-8 py-3 rounded shadow-md inline-block">

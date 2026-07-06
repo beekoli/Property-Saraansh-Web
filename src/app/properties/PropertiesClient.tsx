@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import PropertyCard from '@/components/PropertyCard';
-import { WPProperty, getFeaturedImage } from '@/lib/wordpress';
+import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import Link from 'next/link';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
@@ -47,73 +47,38 @@ export default function PropertiesClient({ properties }: Props) {
     return 0; // fallback if "Price on Request"
   };
 
-  // Perform client-side filtering
-  const filteredProjects = properties.filter((project) => {
-    const acf = project.acf || {};
-
-    // 1. Location Filter
-    if (location !== 'All') {
-      const projectLoc = (acf.location || '').toLowerCase();
-      if (!projectLoc.includes(location.toLowerCase())) return false;
-    }
-
-    // 2. Type Filter
-    if (type !== 'All') {
-      const projectType = (acf.property_type || '').toLowerCase();
-      if (!projectType.includes(type.toLowerCase())) return false;
-    }
-
-    // 3. Status Filter
-    if (status !== 'All') {
-      const projectStatus = (acf.possession_date || '').toLowerCase();
-      const statusKey = status.toLowerCase();
-
-      if (statusKey === 'ready to move') {
-        if (!projectStatus.includes('ready')) return false;
-      } else if (statusKey === 'under construction') {
-        if (!projectStatus.includes('construction') && !projectStatus.includes('202')) return false;
-      } else if (statusKey === 'new launch') {
-        if (!projectStatus.includes('launch') && !projectStatus.includes('2025') && !projectStatus.includes('2026')) return false;
-      }
-    }
-
-    // 4. Budget Filter (if maxBudget is less than 10, filter by price)
+  // Perform client-side filtering (normalized data — new fields + taxonomies)
+  const matchesBase = (project: WPProperty) => {
+    const card = getCardData(project);
+    if (location !== 'All' && !card.location.toLowerCase().includes(location.toLowerCase())) return false;
+    if (type !== 'All' && !card.type.toLowerCase().includes(type.toLowerCase())) return false;
     if (maxBudget < 10) {
-      const minPrice = getMinPriceInCrores(acf.price);
+      const minPrice = getMinPriceInCrores(card.price);
       if (minPrice > maxBudget && minPrice > 0) return false;
     }
+    return true;
+  };
 
+  const matchesStatus = (project: WPProperty, statusKey: string) => {
+    const projectStatus = (getCardData(project).possessionDate || '').toLowerCase();
+    if (statusKey === 'ready to move') return projectStatus.includes('ready');
+    if (statusKey === 'under construction') return projectStatus.includes('construction') || projectStatus.includes('202');
+    if (statusKey === 'new launch') return projectStatus.includes('launch') || projectStatus.includes('2025') || projectStatus.includes('2026');
+    return true;
+  };
+
+  const filteredProjects = properties.filter((project) => {
+    if (!matchesBase(project)) return false;
+    if (status !== 'All' && !matchesStatus(project, status.toLowerCase())) return false;
     return true;
   });
 
   // Counts per status chip (computed against location/type/budget filters, ignoring the status filter itself)
-  const preStatusFiltered = properties.filter((project) => {
-    const acf = project.acf || {};
-    if (location !== 'All') {
-      const projectLoc = (acf.location || '').toLowerCase();
-      if (!projectLoc.includes(location.toLowerCase())) return false;
-    }
-    if (type !== 'All') {
-      const projectType = (acf.property_type || '').toLowerCase();
-      if (!projectType.includes(type.toLowerCase())) return false;
-    }
-    if (maxBudget < 10) {
-      const minPrice = getMinPriceInCrores(acf.price);
-      if (minPrice > maxBudget && minPrice > 0) return false;
-    }
-    return true;
-  });
+  const preStatusFiltered = properties.filter(matchesBase);
 
   const chipCount = (chip: string) => {
     if (chip === 'All') return preStatusFiltered.length;
-    const statusKey = chip.toLowerCase();
-    return preStatusFiltered.filter((project) => {
-      const projectStatus = (project.acf?.possession_date || '').toLowerCase();
-      if (statusKey === 'ready to move') return projectStatus.includes('ready');
-      if (statusKey === 'under construction') return projectStatus.includes('construction') || projectStatus.includes('202');
-      if (statusKey === 'new launch') return projectStatus.includes('launch') || projectStatus.includes('2025') || projectStatus.includes('2026');
-      return false;
-    }).length;
+    return preStatusFiltered.filter((project) => matchesStatus(project, chip.toLowerCase())).length;
   };
 
   return (
@@ -270,8 +235,7 @@ export default function PropertiesClient({ properties }: Props) {
             className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
           >
             {filteredProjects.map((project) => {
-              const acf = project.acf || {};
-              const bhks = acf.configuration ? acf.configuration.split(', ') : ["3 BHK", "4 BHK"];
+              const card = getCardData(project);
               const imgUrl = getFeaturedImage(project);
 
               if (viewMode === 'list') {
@@ -287,17 +251,17 @@ export default function PropertiesClient({ properties }: Props) {
                         />
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
                           <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
-                            {acf.property_type || 'Residential'}
+                            {card.type}
                           </span>
-                          {acf.rera_number && (
+                          {card.reraNumber && (
                             <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
                               RERA ✓
                             </span>
                           )}
                         </div>
-                        {acf.video_id && (
+                        {card.videoId && (
                           <a
-                            href={acf.video_id.includes('youtube.com/watch?v=') ? `https://www.youtube.com/watch?v=${acf.video_id.split('v=')[1].split('&')[0]}` : acf.video_id.includes('youtu.be/') ? `https://www.youtube.com/watch?v=${acf.video_id.split('youtu.be/')[1].split('?')[0]}` : `https://www.youtube.com/watch?v=${acf.video_id}`}
+                            href={`https://www.youtube.com/watch?v=${card.videoId}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="absolute bottom-3 right-3 bg-red-600/90 hover:bg-red-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-md flex items-center gap-1 transition-colors"
@@ -311,10 +275,10 @@ export default function PropertiesClient({ properties }: Props) {
                         <div>
                           <div className="flex justify-between items-start mb-2 gap-4">
                             <div>
-                              <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{acf.developer || ''}</p>
+                              <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{card.developer}</p>
                               <h3 className="text-xl font-bold heading-playfair text-brand-ink">{project.title.rendered}</h3>
                             </div>
-                            <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{acf.price || 'Price on Request'}</div>
+                            <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{card.price}</div>
                           </div>
 
                           <div className="flex items-center text-brand-dark/70 mb-4 text-xs font-light">
@@ -322,11 +286,11 @@ export default function PropertiesClient({ properties }: Props) {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            {acf.location}
+                            {card.location}
                           </div>
 
                           <div className="flex flex-wrap gap-1.5 mb-6">
-                            {bhks.map((item, index) => (
+                            {card.bhk.map((item, index) => (
                               <span key={index} className="bg-brand-pale text-brand-primary text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
                                 {item}
                               </span>
@@ -367,15 +331,15 @@ export default function PropertiesClient({ properties }: Props) {
                   <PropertyCard
                     id={project.slug}
                     title={project.title.rendered}
-                    developer={acf.developer}
-                    location={acf.location || "Noida"}
-                    price={acf.price || "Price on Request"}
-                    type={acf.property_type || "Residential"}
+                    developer={card.developer}
+                    location={card.location}
+                    price={card.price}
+                    type={card.type}
                     imageUrl={imgUrl}
-                    bhk={bhks}
-                    videoId={acf.video_id}
-                    reraNumber={acf.rera_number}
-                    possessionDate={acf.possession_date}
+                    bhk={card.bhk}
+                    videoId={card.videoId}
+                    reraNumber={card.reraNumber}
+                    possessionDate={card.possessionDate}
                   />
                 </StaggerItem>
               );
