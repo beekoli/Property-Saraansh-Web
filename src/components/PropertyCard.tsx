@@ -16,18 +16,15 @@ interface PropertyCardProps {
   nearbyLine?: string;
 }
 
-function getStatusBadge(possessionDate?: string): { label: string; className: string } | null {
+// Brand green pill — all informational badges share one consistent style
+const BADGE_CLS = 'bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase';
+
+function getStatusBadge(possessionDate?: string): { label: string } | null {
   if (!possessionDate) return null;
   const p = possessionDate.toLowerCase();
-  if (p.includes('ready')) {
-    return { label: 'READY TO MOVE', className: 'bg-emerald-50 text-emerald-700' };
-  }
-  if (p.includes('launch')) {
-    return { label: 'NEW LAUNCH', className: 'bg-brand-accent/15 text-brand-dark border border-brand-accent/40' };
-  }
-  if (/20\d{2}/.test(p) || p.includes('construction')) {
-    return { label: 'UNDER CONSTRUCTION', className: 'bg-amber-50 text-amber-700' };
-  }
+  if (p.includes('ready')) return { label: 'READY TO MOVE' };
+  if (p.includes('launch')) return { label: 'NEW LAUNCH' };
+  if (/20\d{2}/.test(p) || p.includes('construction')) return { label: 'UNDER CONSTRUCTION' };
   return null;
 }
 
@@ -67,18 +64,18 @@ export default function PropertyCard({
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
-        {/* Top-left badge stack: Type + Status + RERA */}
+        {/* Top-left badge stack: Type + Status + RERA — unified brand green */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
-          <span className="bg-brand-accent text-brand-dark px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+          <span className={BADGE_CLS}>
             {type}
           </span>
           {statusBadge && (
-            <span className={`px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase ${statusBadge.className}`}>
+            <span className={BADGE_CLS}>
               {statusBadge.label}
             </span>
           )}
           {reraNumber && (
-            <span className="bg-white/95 text-brand-primary px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+            <span className={BADGE_CLS}>
               RERA ✓
             </span>
           )}
