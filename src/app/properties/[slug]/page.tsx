@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   // Priority: new ACF SEO tab (meta_title/meta_description, with seo_title
   // fallback inside lib) → RankMath/Yoast JSON → fallbacks
-  const metadata = generateRankMathMetadata(p.seoJson, fallbackTitle, fallbackDesc);
+  const seoJson = p.seoJson as Parameters<typeof generateRankMathMetadata>[0];
+  const metadata = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
 
   if (p.metaTitle) {
     metadata.title = p.metaTitle;
