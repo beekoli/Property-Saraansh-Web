@@ -20,6 +20,12 @@ const CAT_LABELS: Record<string, string> = {
   hospital: "🏥 Hospitals", retail: "🛍️ Retail & Leisure", employment: "🏭 Employment Hubs", other: "✨ Other",
 };
 
+const FACT_ICONS: Record<string, string> = {
+  "Total Land": "📐", "Towers": "🏙️", "Total Units": "🏢", "Total Floors": "🏗️",
+  "Units / Floor": "🚪", "Lifts / Floor": "🛗", "Configuration": "🛏️",
+  "Launch": "🚀", "Possession": "🔑", "RERA No.": "✅", "Base Price": "💰",
+};
+
 const SECTIONS = [
   ["overview", "Overview"], ["video", "Video Review"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
@@ -125,11 +131,14 @@ export default function PropertyDetail({ p }: { p: Property }) {
           <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
             <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
             {p.quickFacts.length > 0 && (
-              <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-[#e8ecf1] sm:grid-cols-3 lg:grid-cols-4">
+              <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {p.quickFacts.map((f) => (
-                  <div key={f.label} className="bg-white p-3.5">
-                    <div className="text-[11px] uppercase tracking-wide text-[#66788c]">{f.label}</div>
-                    <div className={`mt-0.5 text-sm font-bold ${/RERA|Price/.test(f.label) ? "text-[#8a6a1e]" : "text-[#0f2137]"}`}>{f.value}</div>
+                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 transition hover:shadow-md">
+                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(201,162,75,.16)] text-[16px]">{FACT_ICONS[f.label] ?? "✦"}</span>
+                    <div className="min-w-0">
+                      <div className="text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">{f.label}</div>
+                      <div className={`mt-0.5 break-words text-[13.5px] font-bold leading-snug ${/RERA|Price/.test(f.label) ? "text-[#8a6a1e]" : "text-[#0f2137]"}`}>{f.value}</div>
+                    </div>
                   </div>
                 ))}
               </div>
