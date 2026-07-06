@@ -2,25 +2,21 @@
  * Property Saraansh — data layer for the property detail page (v2 fields)
  * Fetches from WordPress REST (new SCF field structure) and normalizes
  * everything the page needs, resolving media IDs → URLs in ONE batched
- * /media request. Applies the same WP→frontend hostname rewrite used in
- * lib/wordpress.ts so image URLs stay on the frontend domain.
+ * /media request.
+ *
+ * NOTE: unlike lib/wordpress.ts, responses are NOT hostname-rewritten —
+ * next/image remotePatterns allows the WP host (login.propertysaraansh.com),
+ * and rewriting image URLs to the frontend host breaks image optimization.
  */
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
 
-const WP_HOST = (process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://login.propertysaraansh.com").replace(/^https?:\/\//, "").replace(/\/$/, "");
-const FE_HOST = SITE.replace(/^https?:\/\//, "");
-
 async function wpFetch(endpoint: string): Promise<unknown> {
   try {
     const res = await fetch(`${API}${endpoint}`, { next: { revalidate: 300 } });
     if (!res.ok) return null;
-    const raw = await res.text();
-    const rewritten = WP_HOST && FE_HOST
-      ? raw.replace(new RegExp(WP_HOST.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"), FE_HOST)
-      : raw;
-    return JSON.parse(rewritten);
+    return await res.json();
   } catch (err) {
     console.error("property.ts fetch error:", err);
     return null;
