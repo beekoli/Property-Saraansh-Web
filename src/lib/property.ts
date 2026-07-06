@@ -173,7 +173,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     configuration: a.configuration || "",
     city: termName(p, "location") || a.location_city || "Noida",
     sector: a.location_sector || "",
-    builder: termName(p, "builder") || a.developer_name || a.developer || "",
+    builder: termName(p, "ps_builder") || termName(p, "builder") || a.developer_name || a.developer || "",
     status: termName(p, "project_status") || a.property_status || "",
     overviewHtml: a.project_overview || p.content?.rendered || "",
     quickFacts: ([
