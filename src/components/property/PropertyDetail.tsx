@@ -1,0 +1,413 @@
+"use client";
+
+/**
+ * Property Saraansh — property detail UI (approved v2 design, balanced gold)
+ * Client component (renders to HTML on the server too — SEO-safe).
+ * Tailwind CSS. Brand: navy #0f2137 · gold #c9a24b (soft two-tone sheen).
+ */
+
+import { useState, type ReactNode } from "react";
+import Image from "next/image";
+import type { Property } from "@/lib/property";
+
+const GOLD = "linear-gradient(115deg,#b8913c 0%,#d9b25e 55%,#c9a24b 100%)";
+const PHONE = process.env.NEXT_PUBLIC_PHONE || "+919999999999";
+const WHATSAPP = `https://api.whatsapp.com/send?phone=${PHONE.replace("+", "")}&text=`;
+
+const CAT_LABELS: Record<string, string> = {
+  metro: "🚇 Metro & Transit", airport: "✈️ Airport & Roads", school: "🏫 Schools",
+  hospital: "🏥 Hospitals", retail: "🛍️ Retail & Leisure", employment: "🏭 Employment Hubs", other: "✨ Other",
+};
+
+const SECTIONS = [
+  ["overview", "Overview"], ["video", "Video Review"], ["highlights", "Highlights"],
+  ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
+  ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
+  ["gallery", "Gallery"], ["status", "Status"], ["faqs", "FAQs"],
+] as const;
+
+function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return (
+    <div className="mb-5">
+      <div className="text-[11.5px] font-extrabold tracking-[2.5px] uppercase text-[#8a6a1e]">{eyebrow}</div>
+      <h2 className="relative mt-1 pb-2.5 text-[23px] font-bold text-[#0f2137]">
+        {title}
+        <span className="absolute bottom-0 left-0 h-[3.5px] w-16 rounded" style={{ background: GOLD }} />
+      </h2>
+    </div>
+  );
+}
+
+function GoldBtn({ href, children, onClick }: { href?: string; children: ReactNode; onClick?: () => void }) {
+  const cls = "inline-block rounded-[10px] px-6 py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(201,162,75,.35)] transition hover:brightness-105";
+  return href
+    ? <a href={href} className={cls} style={{ background: GOLD }} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener">{children}</a>
+    : <button onClick={onClick} className={cls} style={{ background: GOLD }}>{children}</button>;
+}
+
+export default function PropertyDetail({ p }: { p: Property }) {
+  const [fpTab, setFpTab] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [galleryCount, setGalleryCount] = useState(6);
+
+  const wa = WHATSAPP + encodeURIComponent(`Hi, I am interested in ${p.title}. Please share details.`);
+  const doneCount = p.timeline.filter((t) => t.done).length;
+  const progressPct = p.timeline.length > 1 ? ((doneCount - 0.5) / p.timeline.length) * 100 : 10;
+
+  const advByCat: Record<string, Property["locationAdv"]> = {};
+  for (const a of p.locationAdv) (advByCat[a.category] = advByCat[a.category] || []).push(a);
+
+  return (
+    <div className="bg-[#fafbfc] text-[#1c2733]">
+
+      {/* ================= HERO ================= */}
+      <div className="relative flex h-[420px] items-end overflow-hidden bg-[#1d3550]">
+        {p.hero && (
+          <Image src={p.hero.url} alt={p.hero.alt} fill priority className="object-cover" sizes="100vw" />
+        )}
+        <div className="relative z-10 w-full bg-gradient-to-t from-[rgba(8,18,30,.94)] to-transparent pb-6 pt-24">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-5">
+            <div>
+              <div className="mb-2.5 flex flex-wrap gap-2">
+                <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">📍 {p.address || `${p.sector}, ${p.city}`}</span>
+                {p.status && <span className="rounded-2xl px-3.5 py-1 text-xs font-extrabold text-white" style={{ background: GOLD }}>🚀 {p.status}</span>}
+                {p.rera && <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">RERA: {p.rera}</span>}
+              </div>
+              <h1 className="text-[34px] font-bold leading-tight text-white">{p.title}</h1>
+              {p.builder && <div className="mt-1 text-[15px] font-semibold text-[#f0d894]">by {p.builder}</div>}
+              {p.tagline && <div className="mt-1 text-sm text-[#b9c8d9]">{p.tagline}</div>}
+            </div>
+            {p.basePrice && (
+              <div className="text-right">
+                <div className="text-xs text-[#b9c8d9]">Base Price</div>
+                <div className="bg-clip-text text-[26px] font-extrabold text-transparent" style={{ backgroundImage: GOLD }}>{p.basePrice}</div>
+                {p.priceDisplay && <div className="text-xs text-[#b9c8d9]">{p.priceDisplay} · {p.configuration}</div>}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ================= JUMP NAV ================= */}
+      <div className="sticky top-0 z-40 border-b border-[#e8ecf1] bg-white">
+        <div className="mx-auto flex max-w-6xl items-center gap-5 overflow-x-auto px-5" style={{ height: 50 }}>
+          {SECTIONS.map(([id, label]) => (
+            <a key={id} href={`#${id}`} className="whitespace-nowrap py-4 text-[13.5px] text-[#66788c] hover:text-[#8a6a1e]">{label}</a>
+          ))}
+          <a href={`tel:${PHONE}`} className="ml-auto whitespace-nowrap rounded-lg px-4 py-2 text-[13px] font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-5 pb-24">
+
+        {/* ================= OVERVIEW ================= */}
+        <section id="overview" className="scroll-mt-24 pt-9">
+          <SectionHead eyebrow="Project Overview" title={p.title} />
+          <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
+            <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
+            {p.quickFacts.length > 0 && (
+              <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-[#e8ecf1] sm:grid-cols-3 lg:grid-cols-5">
+                {p.quickFacts.map((f) => (
+                  <div key={f.label} className="bg-white p-3.5">
+                    <div className="text-[11px] uppercase tracking-wide text-[#66788c]">{f.label}</div>
+                    <div className={`mt-0.5 text-sm font-bold ${/RERA|Price/.test(f.label) ? "text-[#8a6a1e]" : "text-[#0f2137]"}`}>{f.value}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ================= VIDEO REVIEW ================= */}
+        {p.youtubeId && (
+          <section id="video" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Watch Before You Buy" title={`${p.title} — Property Saraansh Review`} />
+            <div className="overflow-hidden rounded-xl bg-[#0d1b2a]">
+              <div className="relative aspect-video">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${p.youtubeId}?rel=0`}
+                  title={`${p.title} video review by Property Saraansh`}
+                  className="absolute inset-0 h-full w-full"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+            {p.verdict && (
+              <blockquote className="mt-4 rounded-r-xl border-l-4 border-[#c9a24b] bg-[#fff7e0] p-4 text-[14.5px] italic text-[#4a3a12]">
+                <b className="not-italic text-[#8a6a1e]">Saraansh Verdict: </b>{p.verdict}
+              </blockquote>
+            )}
+          </section>
+        )}
+
+        {/* ================= HIGHLIGHTS ================= */}
+        {p.highlights.length > 0 && (
+          <section id="highlights" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Why This Project" title="Project Highlights" />
+            <ul className="grid gap-2.5 sm:grid-cols-2">
+              {p.highlights.map((h) => (
+                <li key={h} className="flex items-start gap-2.5 rounded-xl border border-[#e8ecf1] bg-white px-4 py-3 text-sm">
+                  <span className="text-[#c9a24b]">✦</span>{h}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* ================= PROJECT LAYOUT ================= */}
+        {(p.masterPlan || p.sitePlan) && (
+          <section id="layout" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Project Layout" title="Master Plan & Site Map" />
+            <div className="grid gap-4 md:grid-cols-2">
+              {[{ img: p.masterPlan, cap: "Master Layout" }, { img: p.sitePlan, cap: "Site Plan / Site Map" }]
+                .filter((x) => x.img).map(({ img, cap }) => (
+                <figure key={cap}>
+                  <button onClick={() => setLightbox(img!.url)} className="group relative block w-full overflow-hidden rounded-xl border border-[#e8ecf1]" aria-label={`Expand ${cap}`}>
+                    <Image src={img!.url} alt={img!.alt} width={img!.width ?? 900} height={img!.height ?? 600} className="h-72 w-full object-cover transition group-hover:scale-[1.02]" />
+                    <span className="absolute bottom-3 right-3 rounded-2xl bg-[rgba(15,33,55,.85)] px-3 py-1.5 text-[11.5px] text-white">🔍 Click to Expand</span>
+                  </button>
+                  <figcaption className="mt-2 text-center text-[13px] text-[#66788c]">{cap}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ================= FLOOR PLANS ================= */}
+        {p.floorPlans.length > 0 && (
+          <section id="floor-plans" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Configurations" title="Floor Plans" />
+            <div className="mb-4 flex flex-wrap gap-2">
+              {p.floorPlans.map((f, i) => (
+                <button key={f.title} onClick={() => setFpTab(i)}
+                  className={`rounded-full px-4 py-2 text-[13px] transition ${i === fpTab ? "font-extrabold text-white" : "border-[1.5px] border-[#e8ecf1] bg-white text-[#1c2733]"}`}
+                  style={i === fpTab ? { background: GOLD } : undefined}>
+                  {f.title}
+                </button>
+              ))}
+            </div>
+            {p.floorPlans[fpTab] && (
+              <div>
+                {p.floorPlans[fpTab].description && <p className="mb-3 text-sm text-[#66788c]">{p.floorPlans[fpTab].description}</p>}
+                {p.floorPlans[fpTab].image && (
+                  <button onClick={() => setLightbox(p.floorPlans[fpTab].image!.url)} className="relative block w-full overflow-hidden rounded-xl border border-[#e8ecf1]">
+                    <Image src={p.floorPlans[fpTab].image!.url} alt={p.floorPlans[fpTab].image!.alt} width={1100} height={700} className="max-h-[420px] w-full bg-white object-contain" />
+                    <span className="absolute bottom-3 right-3 rounded-2xl bg-[rgba(15,33,55,.85)] px-3 py-1.5 text-[11.5px] text-white">🔍 Click to Expand</span>
+                  </button>
+                )}
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  {p.floorPlans[fpTab].pdf && <GoldBtn href={p.floorPlans[fpTab].pdf}>📄 Download Floor Plan</GoldBtn>}
+                  {p.floorPlanNote && <span className="text-xs text-[#66788c]">{p.floorPlanNote}</span>}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ================= AMENITIES ================= */}
+        {p.amenities.length > 0 && (
+          <section id="amenities" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Lifestyle" title="Premium Amenities" />
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+              {p.amenities.map((m) => (
+                <div key={m.name} className="rounded-xl border border-[#e8ecf1] bg-white px-3 py-4 text-center text-[12.5px]">
+                  <span className="mb-1.5 block text-[22px]">{m.icon}</span>{m.name}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ================= PRICE LIST ================= */}
+        {p.priceList.length > 0 && (
+          <section id="price" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Pricing" title="Price List" />
+            <div className="overflow-x-auto rounded-xl shadow-sm">
+              <table className="w-full border-collapse bg-white text-sm">
+                <thead>
+                  <tr className="bg-[#0f2137] text-left text-xs tracking-wide text-white">
+                    <th className="px-4 py-3">TYPE</th><th className="px-4 py-3">SIZE</th>
+                    <th className="px-4 py-3">BASE PRICE</th><th className="px-4 py-3">ALL-IN PRICE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {p.priceList.map((r) => (
+                    <tr key={r.type + r.size} className="border-b border-[#e8ecf1] last:border-0 even:bg-[#fbfcfe]">
+                      <td className="px-4 py-3">{r.type}</td><td className="px-4 py-3">{r.size}</td>
+                      <td className="px-4 py-3">{r.base}</td><td className="px-4 py-3 font-extrabold text-[#0f2137]">{r.total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              {p.priceListPdf && <GoldBtn href={p.priceListPdf}>📄 Download Price List</GoldBtn>}
+            </div>
+            {p.priceNote && <p className="mt-3 text-xs text-[#66788c]">{p.priceNote}</p>}
+          </section>
+        )}
+
+        {/* ================= PAYMENT PLAN ================= */}
+        {(p.paymentSteps.length > 0 || p.paymentMilestones.length > 0 || p.eoiNote) && (
+          <section id="payment" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="How You Pay" title="Payment Plan" />
+            {p.paymentSteps.length > 0 && (
+              <div className="mb-5 grid gap-3.5 sm:grid-cols-3">
+                {p.paymentSteps.map((s) => (
+                  <div key={s.title} className="rounded-xl border border-[#e8ecf1] border-t-4 border-t-[#c9a24b] bg-white p-4 text-center shadow-sm">
+                    <div className="bg-clip-text text-3xl font-black text-transparent" style={{ backgroundImage: GOLD }}>{s.percentage}</div>
+                    <div className="mt-1 text-sm font-bold text-[#0f2137]">{s.title}</div>
+                    {s.description && <div className="mt-1 text-xs text-[#66788c]">{s.description}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
+            {p.paymentMilestones.length > 0 && (
+              <div className="overflow-x-auto rounded-xl shadow-sm">
+                <table className="w-full border-collapse bg-white text-[13.5px]">
+                  <thead>
+                    <tr className="bg-[#0f2137] text-left text-xs tracking-wide text-white">
+                      <th className="px-4 py-3">MILESTONE</th><th className="px-4 py-3">DEMAND</th><th className="px-4 py-3">CUMULATIVE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {p.paymentMilestones.map((m) => (
+                      <tr key={m.milestone} className="border-b border-[#e8ecf1] last:border-0">
+                        <td className="px-4 py-2.5">{m.milestone}</td>
+                        <td className="px-4 py-2.5 font-extrabold text-[#8a6a1e]">{m.demand}</td>
+                        <td className="px-4 py-2.5">{m.cumulative}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {p.eoiNote && (
+              <div className="mt-4 rounded-xl border border-dashed border-[#c9a24b] bg-[#fff7e0] p-3.5 text-[13.5px]">
+                <b className="text-[#8a6a1e]">EOI Benefit: </b>{p.eoiNote}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ================= LOCATION ================= */}
+        {(p.locationAdv.length > 0 || p.mapEmbedSrc) && (
+          <section id="location" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Connectivity" title="Location Advantages" />
+            {p.locationAdv.length > 0 && (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {Object.entries(advByCat).map(([cat, items]) => (
+                  <div key={cat} className="rounded-xl border border-[#e8ecf1] bg-white p-3.5">
+                    <div className="mb-1.5 text-xs font-extrabold uppercase tracking-wide text-[#c9a24b]">{CAT_LABELS[cat] ?? cat}</div>
+                    <ul>
+                      {items.map((a) => (
+                        <li key={a.name} className="flex justify-between gap-2 py-1 text-[13px]">
+                          <span>{a.name}</span>
+                          {a.distance && <span className="shrink-0 text-xs text-[#66788c]">{a.distance}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+            {p.mapEmbedSrc && (
+              <div className="mt-4 overflow-hidden rounded-xl border border-[#e8ecf1]">
+                <iframe src={p.mapEmbedSrc} title={`${p.title} location map`} className="h-72 w-full" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ================= GALLERY ================= */}
+        {p.gallery.length > 0 && (
+          <section id="gallery" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Visuals" title="Project Gallery" />
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+              {p.gallery.slice(0, galleryCount).map((g) => (
+                <button key={g.url} onClick={() => setLightbox(g.url)} className="overflow-hidden rounded-xl border border-[#e8ecf1]">
+                  <Image src={g.url} alt={g.alt} width={480} height={320} className="h-44 w-full object-cover transition hover:scale-[1.03]" />
+                </button>
+              ))}
+            </div>
+            {p.gallery.length > galleryCount && (
+              <div className="mt-4 text-center">
+                <GoldBtn onClick={() => setGalleryCount(p.gallery.length)}>+{p.gallery.length - galleryCount} View More</GoldBtn>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ================= POSSESSION & CONSTRUCTION STATUS ================= */}
+        {p.timeline.length > 0 && (
+          <section id="status" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Track The Progress" title="Possession & Construction Status" />
+            <div className="rounded-2xl border border-[#e8ecf1] bg-white p-7 shadow-sm">
+              <div className="relative mx-2 mt-6 h-2 rounded bg-[#e8ecf1]">
+                <div className="absolute inset-y-0 left-0 rounded" style={{ width: `${Math.max(8, Math.min(progressPct, 100))}%`, background: GOLD }} />
+              </div>
+              <div className="mx-2 flex justify-between">
+                {p.timeline.map((t) => (
+                  <div key={t.stage} className="relative pt-4 text-center text-xs text-[#66788c]" style={{ width: `${100 / p.timeline.length}%` }}>
+                    <span className={`absolute -top-[15px] left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-[3px] ${t.done ? "border-[#a97e22]" : "border-[#cfd8e2] bg-white"}`}
+                      style={t.done ? { background: GOLD } : undefined} />
+                    <b className="block text-[12.5px] text-[#0f2137]">{t.stage}</b>{t.date}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 text-center">
+                <span className="rounded-2xl bg-[#e7f4ee] px-4 py-1.5 text-[12.5px] font-extrabold text-[#1e8e5a]">
+                  ✓ Current Phase: {p.timeline.filter((t) => t.done).at(-1)?.stage ?? p.currentPhase}
+                </span>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ================= FAQs ================= */}
+        {p.faqs.length > 0 && (
+          <section id="faqs" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Common Questions" title="Frequently Asked Questions" />
+            <div className="rounded-2xl border border-[#e8ecf1] bg-white px-6 py-2 shadow-sm">
+              {p.faqs.map((f, i) => (
+                <div key={f.question} className="border-b border-[#e8ecf1] py-3.5 last:border-0">
+                  <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="flex w-full items-center justify-between text-left text-[14.5px] font-bold text-[#0f2137]" aria-expanded={openFaq === i}>
+                    {f.question}
+                    <span className="ml-3 font-black text-[#c9a24b]">{openFaq === i ? "−" : "+"}</span>
+                  </button>
+                  {/* answer stays in the HTML (hidden) so crawlers always see it */}
+                  <p className={`mt-1.5 text-[13.5px] text-[#66788c] ${openFaq === i ? "" : "hidden"}`}>{f.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      {/* ================= STICKY BOTTOM BAR ================= */}
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 shadow-[0_-4px_18px_rgba(15,33,55,.10)] backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center gap-2.5 px-5 py-2.5">
+          <div className="mr-auto hidden text-[13px] text-[#66788c] sm:block">
+            <b className="block text-[14.5px] text-[#0f2137]">{p.title}</b>
+            {p.priceDisplay || p.basePrice} · {p.configuration}
+          </div>
+          <a href={wa} target="_blank" rel="noopener" className="rounded-[10px] bg-[#e7f4ee] px-4 py-3 text-sm font-extrabold text-[#1e8e5a]">💬 WhatsApp</a>
+          <a href={`tel:${PHONE}`} className="rounded-[10px] border-[1.5px] border-[#0f2137] bg-white px-5 py-3 text-sm font-extrabold text-[#0f2137]">📞 Call Now</a>
+          <GoldBtn href={p.brochurePdf || "#enquire"}>Get Brochure</GoldBtn>
+        </div>
+      </div>
+
+      {/* ================= LIGHTBOX ================= */}
+      {lightbox && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(8,18,30,.92)] p-6" onClick={() => setLightbox(null)} role="dialog" aria-label="Image preview">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={lightbox} alt="Expanded view" className="max-h-full max-w-full rounded-lg object-contain" />
+          <button className="absolute right-5 top-5 text-3xl text-white" aria-label="Close">✕</button>
+        </div>
+      )}
+    </div>
+  );
+}
