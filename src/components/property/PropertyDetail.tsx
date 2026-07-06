@@ -2,11 +2,11 @@
 
 /**
  * Property Saraansh — property detail UI (approved v2 design, balanced gold)
+ * Desktop: sticky lead form in right sidebar. Mobile: 2-button bottom bar.
  * Client component (renders to HTML on the server too — SEO-safe).
- * Tailwind CSS. Brand: navy #0f2137 · gold #c9a24b (soft two-tone sheen).
  */
 
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, type FormEvent } from "react";
 import Image from "next/image";
 import type { Property } from "@/lib/property";
 
@@ -58,6 +58,19 @@ export default function PropertyDetail({ p }: { p: Property }) {
   const advByCat: Record<string, Property["locationAdv"]> = {};
   for (const a of p.locationAdv) (advByCat[a.category] = advByCat[a.category] || []).push(a);
 
+  // Lead form — until the forms/CRM setup is done, submissions open WhatsApp
+  // pre-filled with the visitor's details so no lead is lost.
+  // TODO: POST to lead API / CRM when forms are set up.
+  function submitLead(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const msg = `Hi, I am ${fd.get("name")} (${fd.get("phone")})${fd.get("buyer_type") ? ", " + fd.get("buyer_type") : ""}. I am interested in ${p.title}. Please share the brochure & price list.`;
+    window.open(WHATSAPP + encodeURIComponent(msg), "_blank");
+    if (p.brochurePdf) window.open(p.brochurePdf, "_blank");
+  }
+
+  const inputCls = "mb-2.5 w-full rounded-lg border border-[#e8ecf1] bg-[#fbfcfe] px-3 py-2.5 text-sm outline-none focus:border-[#c9a24b]";
+
   return (
     <div className="bg-[#fafbfc] text-[#1c2733]">
 
@@ -99,7 +112,9 @@ export default function PropertyDetail({ p }: { p: Property }) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-5 pb-24">
+      {/* ================= CONTENT + DESKTOP SIDEBAR ================= */}
+      <div className="mx-auto max-w-6xl px-5 pb-24 lg:grid lg:grid-cols-[minmax(0,1fr)_330px] lg:gap-8 lg:pb-16">
+        <div className="min-w-0">
 
         {/* ================= OVERVIEW ================= */}
         <section id="overview" className="scroll-mt-24 pt-9">
@@ -107,7 +122,7 @@ export default function PropertyDetail({ p }: { p: Property }) {
           <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
             <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
             {p.quickFacts.length > 0 && (
-              <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-[#e8ecf1] sm:grid-cols-3 lg:grid-cols-5">
+              <div className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-[#e8ecf1] sm:grid-cols-3 lg:grid-cols-4">
                 {p.quickFacts.map((f) => (
                   <div key={f.label} className="bg-white p-3.5">
                     <div className="text-[11px] uppercase tracking-wide text-[#66788c]">{f.label}</div>
@@ -298,7 +313,7 @@ export default function PropertyDetail({ p }: { p: Property }) {
           <section id="location" className="scroll-mt-24 pt-9">
             <SectionHead eyebrow="Connectivity" title="Location Advantages" />
             {p.locationAdv.length > 0 && (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {Object.entries(advByCat).map(([cat, items]) => (
                   <div key={cat} className="rounded-xl border border-[#e8ecf1] bg-white p-3.5">
                     <div className="mb-1.5 text-xs font-extrabold uppercase tracking-wide text-[#c9a24b]">{CAT_LABELS[cat] ?? cat}</div>
@@ -385,18 +400,46 @@ export default function PropertyDetail({ p }: { p: Property }) {
             </div>
           </section>
         )}
+
+        </div>{/* /main column */}
+
+        {/* ================= DESKTOP STICKY LEAD FORM ================= */}
+        <aside className="hidden lg:block">
+          <div className="sticky top-[74px] pt-9">
+            <form onSubmit={submitLead} className="rounded-2xl border border-[#e8ecf1] bg-white p-5 shadow-sm">
+              <h3 className="text-[16.5px] font-bold text-[#0f2137]">Interested in this project?</h3>
+              <p className="mb-3.5 mt-1 text-xs text-[#66788c]">Get price list, payment plan & site visit — free, no spam.</p>
+              <input name="name" required placeholder="Your Name" className={inputCls} />
+              <input name="phone" required type="tel" pattern="[0-9+ ]{10,15}" placeholder="Phone Number" className={inputCls} />
+              <select name="buyer_type" defaultValue="" className={inputCls + " text-[#66788c]"}>
+                <option value="" disabled>I am a…</option>
+                <option>Home Buyer</option>
+                <option>Investor</option>
+                <option>NRI Buyer</option>
+              </select>
+              <button type="submit" className="mt-1 w-full rounded-[10px] py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(201,162,75,.35)] transition hover:brightness-105" style={{ background: GOLD }}>
+                Get Brochure & Price List
+              </button>
+              <a href={wa} target="_blank" rel="noopener" className="mt-2.5 block w-full rounded-[10px] bg-[#e7f4ee] py-3 text-center text-[13.5px] font-extrabold text-[#1e8e5a]">💬 Chat on WhatsApp</a>
+              <a href={`tel:${PHONE}`} className="mt-2.5 block w-full rounded-[10px] border-[1.5px] border-[#0f2137] py-3 text-center text-[13.5px] font-extrabold text-[#0f2137]">📞 {PHONE.replace("+91", "+91 ")}</a>
+              <p className="mt-2.5 text-center text-[11px] text-[#66788c]">Our expert will call you back shortly</p>
+            </form>
+            {p.builder && (
+              <div className="mt-4 rounded-2xl border border-[#e8ecf1] bg-white p-5 text-[13px] shadow-sm">
+                <div className="text-[15px] font-extrabold text-[#0f2137]">{p.builder}</div>
+                <div className="mt-0.5 text-[#66788c]">{p.status} · {p.city}</div>
+                {p.possessionDate && <div className="mt-1 text-[#66788c]">Possession: <b className="text-[#0f2137]">{p.possessionDate}</b></div>}
+              </div>
+            )}
+          </div>
+        </aside>
       </div>
 
-      {/* ================= STICKY BOTTOM BAR ================= */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 shadow-[0_-4px_18px_rgba(15,33,55,.10)] backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-2.5 px-5 py-2.5">
-          <div className="mr-auto hidden text-[13px] text-[#66788c] sm:block">
-            <b className="block text-[14.5px] text-[#0f2137]">{p.title}</b>
-            {p.priceDisplay || p.basePrice} · {p.configuration}
-          </div>
-          <a href={wa} target="_blank" rel="noopener" className="rounded-[10px] bg-[#e7f4ee] px-4 py-3 text-sm font-extrabold text-[#1e8e5a]">💬 WhatsApp</a>
-          <a href={`tel:${PHONE}`} className="rounded-[10px] border-[1.5px] border-[#0f2137] bg-white px-5 py-3 text-sm font-extrabold text-[#0f2137]">📞 Call Now</a>
-          <GoldBtn href={p.brochurePdf || "#enquire"}>Get Brochure</GoldBtn>
+      {/* ================= MOBILE BOTTOM BAR — 2 buttons only ================= */}
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 backdrop-blur lg:hidden">
+        <div className="flex">
+          <a href={wa} target="_blank" rel="noopener" className="flex-1 bg-[#e7f4ee] py-4 text-center text-sm font-extrabold text-[#1e8e5a]">💬 WhatsApp</a>
+          <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
         </div>
       </div>
 
