@@ -376,7 +376,6 @@ export default function PropertiesClient({ properties }: Props) {
                     videoId={acf.video_id}
                     reraNumber={acf.rera_number}
                     possessionDate={acf.possession_date}
-                    nearbyLine={acf.location_advantages}
                   />
                 </StaggerItem>
               );
