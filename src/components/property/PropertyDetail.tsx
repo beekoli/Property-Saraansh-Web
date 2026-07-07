@@ -124,27 +124,42 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         </div>
       </div>
 
-      {/* ================= JUMP NAV (brand green, attention marquee) ================= */}
+      {/* ================= JUMP NAV (brand green — marquee on desktop, swipe on mobile) ================= */}
       <div className="ps-marquee sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
-        <div className="ps-marquee-viewport mx-auto max-w-6xl overflow-hidden px-5 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
+        <div className="ps-marquee-viewport mx-auto max-w-6xl px-5">
           <div className="ps-marquee-track flex h-[50px] w-max items-center gap-7">
-            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => (
-              <a
-                key={`${id}-${i}`}
-                href={`#${id}`}
-                aria-hidden={i >= SECTIONS.length}
-                tabIndex={i >= SECTIONS.length ? -1 : undefined}
-                className="whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]"
-              >
-                {label}
-              </a>
-            ))}
+            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => {
+              const isDup = i >= SECTIONS.length;
+              return (
+                <a
+                  key={`${id}-${i}`}
+                  href={`#${id}`}
+                  aria-hidden={isDup}
+                  tabIndex={isDup ? -1 : undefined}
+                  className={`whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]${isDup ? " hidden lg:block" : ""}`}
+                >
+                  {label}
+                </a>
+              );
+            })}
           </div>
         </div>
         <style>{`
           @keyframes ps-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-          .ps-marquee-track { animation: ps-marquee 28s linear infinite; will-change: transform; }
-          .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+          /* Mobile / tablet: plain horizontally-swipeable nav (no animation) */
+          .ps-marquee-viewport { overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+          .ps-marquee-viewport::-webkit-scrollbar { display: none; }
+          .ps-marquee-track { animation: none; }
+          /* Desktop only: attention marquee */
+          @media (min-width: 1024px) {
+            .ps-marquee-viewport {
+              overflow-x: hidden;
+              -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+              mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+            }
+            .ps-marquee-track { animation: ps-marquee 28s linear infinite; will-change: transform; }
+            .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+          }
           @media (prefers-reduced-motion: reduce) {
             .ps-marquee-track { animation: none; }
             .ps-marquee-viewport { overflow-x: auto; }
@@ -160,19 +175,15 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         <section id="overview" className="scroll-mt-24 pt-9">
           <SectionHead eyebrow="Project Overview" title={p.title} />
           <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
-            <div
-              className="prose prose-sm max-w-none rounded-xl p-5 text-[14.5px] leading-relaxed text-justify text-white [&_p]:text-white [&_strong]:text-white [&_li]:text-white [&_em]:text-white/90 [&_a]:text-[#f0d894]"
-              style={{ background: BRAND_GREEN }}
-              dangerouslySetInnerHTML={{ __html: p.overviewHtml }}
-            />
+            <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
             {p.quickFacts.length > 0 && (
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {p.quickFacts.map((f) => (
-                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 transition hover:shadow-md">
-                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[rgba(201,162,75,.16)] text-[16px]">{FACT_ICONS[f.label] ?? "✦"}</span>
+                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-white/10 p-3.5 transition hover:shadow-md" style={{ background: BRAND_GREEN }}>
+                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-[16px]">{FACT_ICONS[f.label] ?? "✦"}</span>
                     <div className="min-w-0">
-                      <div className="text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">{f.label}</div>
-                      <div className={`mt-0.5 break-words text-[13.5px] font-bold leading-snug ${/RERA|Price/.test(f.label) ? "text-[#8a6a1e]" : "text-[#0f2137]"}`}>{f.value}</div>
+                      <div className="text-[10.5px] font-bold uppercase tracking-wide text-white/60">{f.label}</div>
+                      <div className={`mt-0.5 break-words text-[13.5px] font-bold leading-snug ${/RERA|Price/.test(f.label) ? "text-[#f0d894]" : "text-white"}`}>{f.value}</div>
                     </div>
                   </div>
                 ))}
