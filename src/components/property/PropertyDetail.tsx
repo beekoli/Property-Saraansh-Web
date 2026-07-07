@@ -256,8 +256,10 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
             <div className="mb-4 flex flex-wrap gap-2">
               {p.floorPlans.map((f, i) => (
                 <button key={f.title} onClick={() => setFpTab(i)}
-                  className={`rounded-full px-4 py-2 text-[13px] transition ${i === fpTab ? "font-extrabold text-white" : "border-[1.5px] border-[#e8ecf1] bg-white text-[#1c2733]"}`}
-                  style={i === fpTab ? { background: GOLD } : undefined}>
+                  className={`rounded-full px-5 py-2.5 text-[13px] transition ${i === fpTab
+                    ? "font-extrabold text-white shadow-[0_3px_12px_rgba(11,48,56,.4)]"
+                    : "border-[1.5px] border-[#0B3038]/20 bg-white font-semibold text-[#0B3038] hover:border-[#0B3038] hover:bg-[#0B3038]/[.06]"}`}
+                  style={i === fpTab ? { background: BRAND_GREEN } : undefined}>
                   {f.title}
                 </button>
               ))}
