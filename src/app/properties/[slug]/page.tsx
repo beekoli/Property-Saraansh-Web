@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { generateRankMathMetadata } from '@/lib/seo';
-import { getProperty, getAllPropertySlugs, buildSchemas, SITE } from '@/lib/property';
-import { getBuilderBySlug } from '@/lib/wordpress';
+import { getProperty, getAllPropertySlugs, buildSchemas, SITE, getBuilderProfile } from '@/lib/property';
 import PropertyDetail from '@/components/property/PropertyDetail';
 
 export const revalidate = 300;
@@ -60,7 +59,7 @@ export default async function PropertyPage({ params }: PageProps) {
 
   // Builder profile (logo, description, trust stats) from the ps_builder tag,
   // used for the "Meet the Builder" section + link to /builders/[slug].
-  const builder = property.builderSlug ? await getBuilderBySlug(property.builderSlug) : null;
+  const builder = await getBuilderProfile(property.builderSlug);
 
   return (
     <>
