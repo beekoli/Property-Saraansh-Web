@@ -160,7 +160,11 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         <section id="overview" className="scroll-mt-24 pt-9">
           <SectionHead eyebrow="Project Overview" title={p.title} />
           <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
-            <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
+            <div
+              className="prose prose-sm max-w-none rounded-xl p-5 text-[14.5px] leading-relaxed text-justify text-white [&_p]:text-white [&_strong]:text-white [&_li]:text-white [&_em]:text-white/90 [&_a]:text-[#f0d894]"
+              style={{ background: BRAND_GREEN }}
+              dangerouslySetInnerHTML={{ __html: p.overviewHtml }}
+            />
             {p.quickFacts.length > 0 && (
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {p.quickFacts.map((f) => (
