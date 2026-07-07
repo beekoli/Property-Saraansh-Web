@@ -44,6 +44,7 @@ export interface Property {
   city: string;
   sector: string;
   builder: string;
+  builderSlug: string;
   status: string;
   overviewHtml: string;
   quickFacts: { label: string; value: string }[];
@@ -123,6 +124,9 @@ function toImg(v: RawImg, media: Record<number, Img>, altFallback: string): Img 
 const termName = (p: any, tax: string): string =>
   p._embedded?.["wp:term"]?.flat().find((t: any) => t.taxonomy === tax)?.name ?? "";
 
+const termSlug = (p: any, tax: string): string =>
+  p._embedded?.["wp:term"]?.flat().find((t: any) => t.taxonomy === tax)?.slug ?? "";
+
 // City-level slugs in the ps_location taxonomy. Everything else on a property
 // (Sector 94, Omicron 1A, C1 Jaypee Greens, …) is treated as the sector/area.
 const CITY_SLUGS = new Set([
@@ -188,6 +192,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     city: cityTerm?.name || termName(p, "location") || a.location_city || "Noida",
     sector: sectorTerm?.name || a.location_sector || "",
     builder: termName(p, "ps_builder") || termName(p, "builder") || a.developer_name || a.developer || "",
+    builderSlug: termSlug(p, "ps_builder") || termSlug(p, "builder") || "",
     status: termName(p, "ps_project_status") || termName(p, "project_status") || a.property_status || "",
     overviewHtml: a.project_overview || p.content?.rendered || "",
     quickFacts: ([
