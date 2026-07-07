@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { generateRankMathMetadata } from '@/lib/seo';
 import { getProperty, getAllPropertySlugs, buildSchemas, SITE } from '@/lib/property';
+import { getBuilderBySlug } from '@/lib/wordpress';
 import PropertyDetail from '@/components/property/PropertyDetail';
 
 export const revalidate = 300;
@@ -57,6 +58,10 @@ export default async function PropertyPage({ params }: PageProps) {
   const property = await getProperty(slug);
   if (!property) notFound();
 
+  // Builder profile (logo, description, trust stats) from the ps_builder tag,
+  // used for the "Meet the Builder" section + link to /builders/[slug].
+  const builder = property.builderSlug ? await getBuilderBySlug(property.builderSlug) : null;
+
   return (
     <>
       {buildSchemas(property).map((schema, i) => (
@@ -66,7 +71,7 @@ export default async function PropertyPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <PropertyDetail p={property} />
+      <PropertyDetail p={property} builder={builder} />
     </>
   );
 }
