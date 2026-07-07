@@ -15,11 +15,32 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com";
+const SITE_TITLE = "Property Saraansh | Real Estate Consultancy Noida";
+const SITE_DESCRIPTION =
+  "Trusted real estate consultancy in Noida. We provide expert property advisory, investment guidance, and YouTube-based project reviews.";
+
 export const metadata: Metadata = {
-  title: "Property Saraansh | Real Estate Consultancy Noida",
-  description: "Trusted real estate consultancy in Noida. We provide expert property advisory, investment guidance, and YouTube-based project reviews.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   verification: {
     google: "_Xr2QUL1CTNah4TlCKAyFAwRQwVlS0lHxqA1gHz74VU",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "Property Saraansh",
+    locale: "en_IN",
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Property Saraansh" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/logo.png"],
   },
 };
 
@@ -29,7 +50,7 @@ const localBusinessSchema = {
   name: "Property Saraansh",
   description:
     "Property Saraansh is Noida's trusted real estate consultancy, helping home buyers, investors, and NRIs find the right residential and commercial properties across Noida, Greater Noida, and Noida Extension.",
-  url: "https://propertysaraansh.com",
+  url: "https://www.propertysaraansh.com",
   telephone: "+91-80761-78189",
   email: "karmaglobalretail@gmail.com",
   address: {
