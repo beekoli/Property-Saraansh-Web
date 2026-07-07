@@ -9,7 +9,7 @@
  * and rewriting image URLs to the frontend host breaks image optimization.
  */
 
-import type { WPBuilderTerm } from "@/lib/wordpress";
+import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
@@ -29,6 +29,8 @@ async function wpFetch(endpoint: string): Promise<unknown> {
 
 export interface Img { url: string; alt: string; width?: number; height?: number }
 
+export interface CityTerm { id: number; name: string; slug: string; count: number }
+
 export interface Property {
   id: number;
   slug: string;
@@ -47,6 +49,7 @@ export interface Property {
   sector: string;
   builder: string;
   builderSlug: string;
+  type: string;
   status: string;
   overviewHtml: string;
   quickFacts: { label: string; value: string }[];
@@ -156,6 +159,27 @@ export async function getBuilderProfile(slug: string): Promise<WPBuilderTerm | n
   return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
 }
 
+/**
+ * City terms (ps_location taxonomy, rest base "location") whose slug is a known
+ * city — used to build the /property-in/[city] landing pages.
+ */
+export async function getCities(): Promise<CityTerm[]> {
+  const data = (await wpFetch(`/location?per_page=100&_fields=id,name,slug,count`)) as CityTerm[] | null;
+  return (data ?? []).filter((t) => CITY_SLUGS.has(t.slug));
+}
+
+export async function getCityBySlug(slug: string): Promise<CityTerm | null> {
+  if (!slug) return null;
+  const data = (await wpFetch(`/location?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count`)) as CityTerm[] | null;
+  return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
+}
+
+/** Raw properties (with _embed) tagged with a given ps_location term id. */
+export async function getPropertiesInCity(termId: number, limit = 50): Promise<WPProperty[]> {
+  const data = (await wpFetch(`/properties?_embed&per_page=${limit}&location=${termId}`)) as WPProperty[] | null;
+  return data && Array.isArray(data) ? data : [];
+}
+
 export async function getProperty(slug: string): Promise<Property | null> {
   const posts = (await wpFetch(`/properties?slug=${encodeURIComponent(slug)}&_embed`)) as any[] | null;
   const p = posts?.[0];
@@ -208,6 +232,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     sector: sectorTerm?.name || a.location_sector || "",
     builder: termName(p, "ps_builder") || termName(p, "builder") || a.developer_name || a.developer || "",
     builderSlug: termSlug(p, "ps_builder") || termSlug(p, "builder") || "",
+    type: termName(p, "ps_property_type") || termName(p, "property_type") || a.property_type || "",
     status: termName(p, "ps_project_status") || termName(p, "project_status") || a.property_status || "",
     overviewHtml: a.project_overview || p.content?.rendered || "",
     quickFacts: ([
@@ -319,7 +344,7 @@ export function buildSchemas(prop: Property) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE },
       { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE}/properties` },
-      { "@type": "ListItem", position: 3, name: prop.city, item: `${SITE}/property-in-${citySlug}` },
+      { "@type": "ListItem", position: 3, name: prop.city, item: `${SITE}/property-in/${citySlug}` },
       { "@type": "ListItem", position: 4, name: prop.title, item: url },
     ],
   };
