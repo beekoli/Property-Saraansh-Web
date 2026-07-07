@@ -9,6 +9,8 @@
  * and rewriting image URLs to the frontend host breaks image optimization.
  */
 
+import type { WPBuilderTerm } from "@/lib/wordpress";
+
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
 
@@ -139,6 +141,19 @@ const CITY_SLUGS = new Set([
 export async function getAllPropertySlugs(): Promise<string[]> {
   const posts = (await wpFetch(`/properties?per_page=100&_fields=slug`)) as { slug: string }[] | null;
   return (posts ?? []).map((p) => p.slug);
+}
+
+/**
+ * Builder profile (logo, description, trust stats) for the ps_builder term.
+ * Fetched via this module's wpFetch (which has a hardcoded API fallback) so
+ * the "Meet the Builder" section works on Preview deployments too.
+ */
+export async function getBuilderProfile(slug: string): Promise<WPBuilderTerm | null> {
+  if (!slug) return null;
+  const data = (await wpFetch(
+    `/builder?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count,acf`
+  )) as WPBuilderTerm[] | null;
+  return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
 }
 
 export async function getProperty(slug: string): Promise<Property | null> {
