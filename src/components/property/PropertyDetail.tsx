@@ -96,19 +96,20 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-44 bg-gradient-to-b from-[rgba(8,18,30,.88)] via-[rgba(8,18,30,.45)] to-transparent" />
         <div className="relative z-10 w-full bg-gradient-to-t from-[rgba(8,18,30,.94)] to-transparent pb-6 pt-24">
           <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-5">
-            <div>
+            <div className="min-w-0 flex-1">
               <h1 className="text-[34px] font-bold leading-tight text-white">{p.title}</h1>
               {p.builder && (
                 builder?.slug
                   ? <a href={`/builders/${builder.slug}`} className="mt-1 inline-block text-[15px] font-semibold text-[#f0d894] underline decoration-[#f0d894]/40 underline-offset-2 hover:decoration-[#f0d894]">by {p.builder}</a>
                   : <div className="mt-1 text-[15px] font-semibold text-[#f0d894]">by {p.builder}</div>
               )}
-              <div className="mt-3 flex flex-wrap gap-2">
-                <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">📍 {p.address || `${p.sector}, ${p.city}`}</span>
-                {p.status && <span className="rounded-2xl px-3.5 py-1 text-xs font-extrabold text-white" style={{ background: GOLD }}>🚀 {p.status}</span>}
-                {p.rera && <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">RERA: {p.rera}</span>}
-              </div>
-              {p.tagline && <div className="mt-2 text-sm text-[#b9c8d9]">{p.tagline}</div>}
+              {(p.status || p.rera) && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {p.status && <span className="rounded-2xl px-3.5 py-1 text-xs font-extrabold text-white" style={{ background: GOLD }}>🚀 {p.status}</span>}
+                  {p.rera && <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">RERA: {p.rera}</span>}
+                </div>
+              )}
+              <div className="mt-2 text-sm text-[#b9c8d9]">📍 {p.address || `${p.sector}, ${p.city}`}</div>
             </div>
             {p.basePrice && (
               <div className="text-right">
