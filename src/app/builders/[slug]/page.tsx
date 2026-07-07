@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
-import { getBuilders, getBuilderBySlug, getPropertiesByBuilder, getFeaturedImage } from '@/lib/wordpress';
+import { getBuilders, getBuilderBySlug, getPropertiesByBuilder, getFeaturedImage, getCardData } from '@/lib/wordpress';
 
 export const revalidate = 60;
 
@@ -117,23 +117,21 @@ export default async function BuilderProfilePage({ params }: Props) {
         {properties.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((prop) => {
-              const pacf = prop.acf || {};
-              const bhks = pacf.configuration ? pacf.configuration.split(', ') : ["3 BHK", "4 BHK"];
+              const card = getCardData(prop);
               return (
                 <PropertyCard
                   key={prop.id}
                   id={prop.slug}
                   title={prop.title.rendered}
-                  developer={pacf.developer || builder.name}
-                  location={pacf.location || 'Noida'}
-                  price={pacf.price || 'Price on Request'}
-                  type={pacf.property_type || 'Residential'}
+                  developer={card.developer || builder.name}
+                  location={card.location}
+                  price={card.price}
+                  type={card.type}
                   imageUrl={getFeaturedImage(prop)}
-                  bhk={bhks}
-                  videoId={pacf.video_id}
-                  reraNumber={pacf.rera_number}
-                  possessionDate={pacf.possession_date}
-                  nearbyLine={pacf.location_advantages}
+                  bhk={card.bhk.length ? card.bhk : ["3 BHK", "4 BHK"]}
+                  videoId={card.videoId}
+                  reraNumber={card.reraNumber}
+                  possessionDate={card.possessionDate}
                 />
               );
             })}
