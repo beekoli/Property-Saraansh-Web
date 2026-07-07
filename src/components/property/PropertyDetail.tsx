@@ -28,10 +28,10 @@ const FACT_ICONS: Record<string, string> = {
 };
 
 const SECTIONS = [
-  ["overview", "Overview"], ["builder", "Builder"], ["video", "Video Review"], ["highlights", "Highlights"],
+  ["overview", "Overview"], ["video", "Video Review"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
   ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
-  ["gallery", "Gallery"], ["status", "Possession & Construction"],
+  ["gallery", "Gallery"], ["status", "Possession & Construction"], ["builder", "Builder"],
 ] as const;
 
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
@@ -47,10 +47,10 @@ function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
 }
 
 function GoldBtn({ href, children, onClick }: { href?: string; children: ReactNode; onClick?: () => void }) {
-  const cls = "inline-block rounded-[10px] px-6 py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(201,162,75,.35)] transition hover:brightness-105";
+  const cls = "inline-block rounded-[10px] px-6 py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(11,48,56,.35)] transition hover:brightness-125";
   return href
-    ? <a href={href} className={cls} style={{ background: GOLD }} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener">{children}</a>
-    : <button onClick={onClick} className={cls} style={{ background: GOLD }}>{children}</button>;
+    ? <a href={href} className={cls} style={{ background: BRAND_GREEN }} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener">{children}</a>
+    : <button onClick={onClick} className={cls} style={{ background: BRAND_GREEN }}>{children}</button>;
 }
 
 export default function PropertyDetail({ p, builder }: { p: Property; builder?: WPBuilderTerm | null }) {
@@ -175,7 +175,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         <section id="overview" className="scroll-mt-24 pt-9">
           <SectionHead eyebrow="Project Overview" title={p.title} />
           <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
-            <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
+            <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed text-justify" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
             {p.quickFacts.length > 0 && (
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {p.quickFacts.map((f) => (
@@ -191,58 +191,6 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
             )}
           </div>
         </section>
-
-        {/* ================= BUILDER / DEVELOPER ================= */}
-        {builder && (
-          <section id="builder" className="scroll-mt-24 pt-9">
-            <SectionHead eyebrow="About the Developer" title={`Meet the Builder — ${builder.name}`} />
-            <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f8f3e6]">
-                  {builder.acf?.builder_logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={builder.acf.builder_logo} alt={builder.name} className="h-full w-full object-contain p-2" />
-                  ) : (
-                    <span className="text-xl font-bold text-[#8a6a1e] heading-playfair">{builder.name.slice(0, 3).toUpperCase()}</span>
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <div className="text-[19px] font-bold text-[#0f2137]">{builder.name}</div>
-                  {builder.acf?.builder_description && (
-                    <p className="mt-1 text-[13.5px] leading-relaxed text-[#66788c]">{builder.acf.builder_description}</p>
-                  )}
-                </div>
-              </div>
-
-              {(builder.acf?.builder_experience || builder.acf?.builder_delivered_projects || builder.acf?.builder_ongoing_projects) && (
-                <div className="mt-5 grid grid-cols-3 gap-3">
-                  {builder.acf?.builder_experience && (
-                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
-                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_experience}</div>
-                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Experience</div>
-                    </div>
-                  )}
-                  {builder.acf?.builder_delivered_projects && (
-                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
-                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_delivered_projects}</div>
-                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Delivered</div>
-                    </div>
-                  )}
-                  {builder.acf?.builder_ongoing_projects && (
-                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
-                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_ongoing_projects}</div>
-                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Ongoing</div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="mt-5">
-                <GoldBtn href={`/builders/${builder.slug}`}>View all {builder.name} projects →</GoldBtn>
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* ================= VIDEO REVIEW ================= */}
         {p.youtubeId && (
@@ -492,6 +440,58 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
           </section>
         )}
 
+        {/* ================= BUILDER / DEVELOPER (moved above FAQs) ================= */}
+        {builder && (
+          <section id="builder" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="About the Developer" title={`Meet the Builder — ${builder.name}`} />
+            <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f8f3e6]">
+                  {builder.acf?.builder_logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={builder.acf.builder_logo} alt={builder.name} className="h-full w-full object-contain p-2" />
+                  ) : (
+                    <span className="text-xl font-bold text-[#8a6a1e] heading-playfair">{builder.name.slice(0, 3).toUpperCase()}</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[19px] font-bold text-[#0f2137]">{builder.name}</div>
+                  {builder.acf?.builder_description && (
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-[#66788c]">{builder.acf.builder_description}</p>
+                  )}
+                </div>
+              </div>
+
+              {(builder.acf?.builder_experience || builder.acf?.builder_delivered_projects || builder.acf?.builder_ongoing_projects) && (
+                <div className="mt-5 grid grid-cols-3 gap-3">
+                  {builder.acf?.builder_experience && (
+                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
+                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_experience}</div>
+                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Experience</div>
+                    </div>
+                  )}
+                  {builder.acf?.builder_delivered_projects && (
+                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
+                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_delivered_projects}</div>
+                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Delivered</div>
+                    </div>
+                  )}
+                  {builder.acf?.builder_ongoing_projects && (
+                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
+                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_ongoing_projects}</div>
+                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Ongoing</div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-5">
+                <GoldBtn href={`/builders/${builder.slug}`}>View all {builder.name} projects →</GoldBtn>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ================= FAQs ================= */}
         {p.faqs.length > 0 && (
           <section id="faqs" className="scroll-mt-24 pt-9">
@@ -551,7 +551,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                 <option>Investor</option>
                 <option>NRI Buyer</option>
               </select>
-              <button type="submit" className="mt-1 w-full rounded-[10px] py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(201,162,75,.35)] transition hover:brightness-105" style={{ background: GOLD }}>
+              <button type="submit" className="mt-1 w-full rounded-[10px] py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(11,48,56,.35)] transition hover:brightness-125" style={{ background: BRAND_GREEN }}>
                 Get Brochure & Price List
               </button>
               <a href={wa} target="_blank" rel="noopener" className="mt-2.5 block w-full rounded-[10px] bg-[#e7f4ee] py-3 text-center text-[13.5px] font-extrabold text-[#1e8e5a]">💬 Chat on WhatsApp</a>
