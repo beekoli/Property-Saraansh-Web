@@ -559,11 +559,11 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         </aside>
       </div>
 
-      {/* ================= MOBILE BOTTOM BAR — 2 buttons only ================= */}
+      {/* ================= MOBILE BOTTOM BAR — WhatsApp + phone number ================= */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 backdrop-blur lg:hidden">
         <div className="flex">
           <a href={wa} target="_blank" rel="noopener" className="flex-1 bg-[#e7f4ee] py-4 text-center text-sm font-extrabold text-[#1e8e5a]">💬 WhatsApp</a>
-          <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
+          <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 {PHONE.replace("+91", "+91 ")}</a>
         </div>
       </div>
 
