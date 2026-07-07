@@ -124,27 +124,42 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         </div>
       </div>
 
-      {/* ================= JUMP NAV (brand green, attention marquee) ================= */}
+      {/* ================= JUMP NAV (brand green — marquee on desktop, swipe on mobile) ================= */}
       <div className="ps-marquee sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
-        <div className="ps-marquee-viewport mx-auto max-w-6xl overflow-hidden px-5 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
+        <div className="ps-marquee-viewport mx-auto max-w-6xl px-5">
           <div className="ps-marquee-track flex h-[50px] w-max items-center gap-7">
-            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => (
-              <a
-                key={`${id}-${i}`}
-                href={`#${id}`}
-                aria-hidden={i >= SECTIONS.length}
-                tabIndex={i >= SECTIONS.length ? -1 : undefined}
-                className="whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]"
-              >
-                {label}
-              </a>
-            ))}
+            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => {
+              const isDup = i >= SECTIONS.length;
+              return (
+                <a
+                  key={`${id}-${i}`}
+                  href={`#${id}`}
+                  aria-hidden={isDup}
+                  tabIndex={isDup ? -1 : undefined}
+                  className={`whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]${isDup ? " hidden lg:block" : ""}`}
+                >
+                  {label}
+                </a>
+              );
+            })}
           </div>
         </div>
         <style>{`
           @keyframes ps-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-          .ps-marquee-track { animation: ps-marquee 28s linear infinite; will-change: transform; }
-          .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+          /* Mobile / tablet: plain horizontally-swipeable nav (no animation) */
+          .ps-marquee-viewport { overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+          .ps-marquee-viewport::-webkit-scrollbar { display: none; }
+          .ps-marquee-track { animation: none; }
+          /* Desktop only: attention marquee */
+          @media (min-width: 1024px) {
+            .ps-marquee-viewport {
+              overflow-x: hidden;
+              -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+              mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+            }
+            .ps-marquee-track { animation: ps-marquee 28s linear infinite; will-change: transform; }
+            .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+          }
           @media (prefers-reduced-motion: reduce) {
             .ps-marquee-track { animation: none; }
             .ps-marquee-viewport { overflow-x: auto; }
