@@ -31,7 +31,7 @@ const SECTIONS = [
   ["overview", "Overview"], ["builder", "Builder"], ["video", "Video Review"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
   ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
-  ["gallery", "Gallery"], ["status", "Possession & Construction"], ["faqs", "FAQs"],
+  ["gallery", "Gallery"], ["status", "Possession & Construction"],
 ] as const;
 
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
@@ -124,14 +124,32 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         </div>
       </div>
 
-      {/* ================= JUMP NAV (brand green) ================= */}
-      <div className="sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
-        <div className="mx-auto flex h-[50px] max-w-6xl items-center gap-5 overflow-x-auto overflow-y-hidden px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {SECTIONS.map(([id, label]) => (
-            <a key={id} href={`#${id}`} className="whitespace-nowrap text-[13.5px] text-white/75 transition hover:text-[#f0d894]">{label}</a>
-          ))}
-          <a href={`tel:${PHONE}`} className="ml-auto whitespace-nowrap rounded-lg px-4 py-2 text-[13px] font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
+      {/* ================= JUMP NAV (brand green, attention marquee) ================= */}
+      <div className="ps-marquee sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
+        <div className="ps-marquee-viewport mx-auto max-w-6xl overflow-hidden px-5 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
+          <div className="ps-marquee-track flex h-[50px] w-max items-center gap-7">
+            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => (
+              <a
+                key={`${id}-${i}`}
+                href={`#${id}`}
+                aria-hidden={i >= SECTIONS.length}
+                tabIndex={i >= SECTIONS.length ? -1 : undefined}
+                className="whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
+        <style>{`
+          @keyframes ps-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+          .ps-marquee-track { animation: ps-marquee 28s linear infinite; will-change: transform; }
+          .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+          @media (prefers-reduced-motion: reduce) {
+            .ps-marquee-track { animation: none; }
+            .ps-marquee-viewport { overflow-x: auto; }
+          }
+        `}</style>
       </div>
 
       {/* ================= CONTENT + DESKTOP SIDEBAR ================= */}
