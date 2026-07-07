@@ -31,7 +31,7 @@ const SECTIONS = [
   ["overview", "Overview"], ["builder", "Builder"], ["video", "Video Review"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
   ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
-  ["gallery", "Gallery"], ["status", "Possession & Construction"], ["faqs", "FAQs"],
+  ["gallery", "Gallery"], ["status", "Possession & Construction"],
 ] as const;
 
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
@@ -95,9 +95,9 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         {/* dark top scrim — keeps the transparent site header menu readable over bright images */}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-44 bg-gradient-to-b from-[rgba(8,18,30,.88)] via-[rgba(8,18,30,.45)] to-transparent" />
         <div className="relative z-10 w-full bg-gradient-to-t from-[rgba(8,18,30,.94)] to-transparent pb-6 pt-24">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-5">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-4">
             <div className="min-w-0 flex-1">
-              <h1 className="text-[34px] font-bold leading-tight text-white">{p.title}</h1>
+              <h1 className="text-[26px] font-bold leading-tight text-white sm:text-[34px]">{p.title}</h1>
               {p.builder && (
                 builder?.slug
                   ? <a href={`/builders/${builder.slug}`} className="mt-1 inline-block text-[15px] font-semibold text-[#f0d894] underline decoration-[#f0d894]/40 underline-offset-2 hover:decoration-[#f0d894]">by {p.builder}</a>
@@ -109,10 +109,10 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                   {p.rera && <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">RERA: {p.rera}</span>}
                 </div>
               )}
-              <div className="mt-2 text-sm text-[#b9c8d9]">📍 {p.address || `${p.sector}, ${p.city}`}</div>
+              <div className="mt-2 text-[13px] text-[#b9c8d9] sm:text-sm">📍 {p.address || `${p.sector}, ${p.city}`}</div>
             </div>
             {p.basePrice && (
-              <div className="shrink-0 text-right">
+              <div className="shrink-0 text-left sm:text-right">
                 <div
                   className="text-[18px] font-extrabold leading-tight text-white sm:text-[26px]"
                   style={{ textShadow: "0 1px 16px rgba(240,216,148,.55), 0 1px 3px rgba(0,0,0,.5)" }}
@@ -124,14 +124,32 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         </div>
       </div>
 
-      {/* ================= JUMP NAV (brand green) ================= */}
-      <div className="sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
-        <div className="mx-auto flex h-[50px] max-w-6xl items-center gap-5 overflow-x-auto overflow-y-hidden px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {SECTIONS.map(([id, label]) => (
-            <a key={id} href={`#${id}`} className="whitespace-nowrap text-[13.5px] text-white/75 transition hover:text-[#f0d894]">{label}</a>
-          ))}
-          <a href={`tel:${PHONE}`} className="ml-auto whitespace-nowrap rounded-lg px-4 py-2 text-[13px] font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
+      {/* ================= JUMP NAV (brand green, attention marquee) ================= */}
+      <div className="ps-marquee sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
+        <div className="ps-marquee-viewport mx-auto max-w-6xl overflow-hidden px-5 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
+          <div className="ps-marquee-track flex h-[50px] w-max items-center gap-7">
+            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => (
+              <a
+                key={`${id}-${i}`}
+                href={`#${id}`}
+                aria-hidden={i >= SECTIONS.length}
+                tabIndex={i >= SECTIONS.length ? -1 : undefined}
+                className="whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
+        <style>{`
+          @keyframes ps-marquee { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+          .ps-marquee-track { animation: ps-marquee 28s linear infinite; will-change: transform; }
+          .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+          @media (prefers-reduced-motion: reduce) {
+            .ps-marquee-track { animation: none; }
+            .ps-marquee-viewport { overflow-x: auto; }
+          }
+        `}</style>
       </div>
 
       {/* ================= CONTENT + DESKTOP SIDEBAR ================= */}
@@ -142,7 +160,11 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         <section id="overview" className="scroll-mt-24 pt-9">
           <SectionHead eyebrow="Project Overview" title={p.title} />
           <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
-            <div className="prose prose-sm max-w-none text-[14.5px] leading-relaxed" dangerouslySetInnerHTML={{ __html: p.overviewHtml }} />
+            <div
+              className="prose prose-sm max-w-none rounded-xl p-5 text-[14.5px] leading-relaxed text-justify text-white [&_p]:text-white [&_strong]:text-white [&_li]:text-white [&_em]:text-white/90 [&_a]:text-[#f0d894]"
+              style={{ background: BRAND_GREEN }}
+              dangerouslySetInnerHTML={{ __html: p.overviewHtml }}
+            />
             {p.quickFacts.length > 0 && (
               <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {p.quickFacts.map((f) => (
@@ -537,11 +559,11 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         </aside>
       </div>
 
-      {/* ================= MOBILE BOTTOM BAR — 2 buttons only ================= */}
+      {/* ================= MOBILE BOTTOM BAR — WhatsApp + phone number ================= */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 backdrop-blur lg:hidden">
         <div className="flex">
           <a href={wa} target="_blank" rel="noopener" className="flex-1 bg-[#e7f4ee] py-4 text-center text-sm font-extrabold text-[#1e8e5a]">💬 WhatsApp</a>
-          <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 Call Now</a>
+          <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 {PHONE.replace("+91", "+91 ")}</a>
         </div>
       </div>
 
