@@ -9,6 +9,7 @@
 import { useState, type ReactNode, type FormEvent } from "react";
 import Image from "next/image";
 import type { Property } from "@/lib/property";
+import type { WPBuilderTerm } from "@/lib/wordpress";
 
 const GOLD = "linear-gradient(115deg,#b8913c 0%,#d9b25e 55%,#c9a24b 100%)";
 const BRAND_GREEN = "#0B3038"; // site header button + footer color
@@ -27,7 +28,7 @@ const FACT_ICONS: Record<string, string> = {
 };
 
 const SECTIONS = [
-  ["overview", "Overview"], ["video", "Video Review"], ["highlights", "Highlights"],
+  ["overview", "Overview"], ["builder", "Builder"], ["video", "Video Review"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
   ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
   ["gallery", "Gallery"], ["status", "Possession & Construction"], ["faqs", "FAQs"],
@@ -52,7 +53,7 @@ function GoldBtn({ href, children, onClick }: { href?: string; children: ReactNo
     : <button onClick={onClick} className={cls} style={{ background: GOLD }}>{children}</button>;
 }
 
-export default function PropertyDetail({ p }: { p: Property }) {
+export default function PropertyDetail({ p, builder }: { p: Property; builder?: WPBuilderTerm | null }) {
   const [fpTab, setFpTab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -97,7 +98,11 @@ export default function PropertyDetail({ p }: { p: Property }) {
                 {p.rera && <span className="rounded-2xl border border-white/20 bg-white/15 px-3.5 py-1 text-xs text-white backdrop-blur">RERA: {p.rera}</span>}
               </div>
               <h1 className="text-[34px] font-bold leading-tight text-white">{p.title}</h1>
-              {p.builder && <div className="mt-1 text-[15px] font-semibold text-[#f0d894]">by {p.builder}</div>}
+              {p.builder && (
+                builder?.slug
+                  ? <a href={`/builders/${builder.slug}`} className="mt-1 inline-block text-[15px] font-semibold text-[#f0d894] underline decoration-[#f0d894]/40 underline-offset-2 hover:decoration-[#f0d894]">by {p.builder}</a>
+                  : <div className="mt-1 text-[15px] font-semibold text-[#f0d894]">by {p.builder}</div>
+              )}
               {p.tagline && <div className="mt-1 text-sm text-[#b9c8d9]">{p.tagline}</div>}
             </div>
             {p.basePrice && (
@@ -145,6 +150,58 @@ export default function PropertyDetail({ p }: { p: Property }) {
             )}
           </div>
         </section>
+
+        {/* ================= BUILDER / DEVELOPER ================= */}
+        {builder && (
+          <section id="builder" className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="About the Developer" title={`Meet the Builder — ${builder.name}`} />
+            <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f8f3e6]">
+                  {builder.acf?.builder_logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={builder.acf.builder_logo} alt={builder.name} className="h-full w-full object-contain p-2" />
+                  ) : (
+                    <span className="text-xl font-bold text-[#8a6a1e] heading-playfair">{builder.name.slice(0, 3).toUpperCase()}</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[19px] font-bold text-[#0f2137]">{builder.name}</div>
+                  {builder.acf?.builder_description && (
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-[#66788c]">{builder.acf.builder_description}</p>
+                  )}
+                </div>
+              </div>
+
+              {(builder.acf?.builder_experience || builder.acf?.builder_delivered_projects || builder.acf?.builder_ongoing_projects) && (
+                <div className="mt-5 grid grid-cols-3 gap-3">
+                  {builder.acf?.builder_experience && (
+                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
+                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_experience}</div>
+                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Experience</div>
+                    </div>
+                  )}
+                  {builder.acf?.builder_delivered_projects && (
+                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
+                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_delivered_projects}</div>
+                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Delivered</div>
+                    </div>
+                  )}
+                  {builder.acf?.builder_ongoing_projects && (
+                    <div className="rounded-xl border border-[#eadfc4] bg-gradient-to-br from-[#fffdf7] to-[#f8f3e6] p-3.5 text-center">
+                      <div className="text-lg font-black text-[#8a6a1e]">{builder.acf.builder_ongoing_projects}</div>
+                      <div className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-[#9b8a5c]">Ongoing</div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-5">
+                <GoldBtn href={`/builders/${builder.slug}`}>View all {builder.name} projects →</GoldBtn>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ================= VIDEO REVIEW ================= */}
         {p.youtubeId && (
@@ -441,6 +498,7 @@ export default function PropertyDetail({ p }: { p: Property }) {
                 <div className="text-[15px] font-extrabold text-[#0f2137]">{p.builder}</div>
                 <div className="mt-0.5 text-[#66788c]">{p.status} · {p.city}</div>
                 {p.possessionDate && <div className="mt-1 text-[#66788c]">Possession: <b className="text-[#0f2137]">{p.possessionDate}</b></div>}
+                {builder?.slug && <a href={`/builders/${builder.slug}`} className="mt-2 inline-block text-[12px] font-bold text-[#8a6a1e] hover:underline">View all {p.builder} projects →</a>}
               </div>
             )}
           </div>
