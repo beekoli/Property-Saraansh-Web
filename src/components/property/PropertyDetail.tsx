@@ -66,6 +66,11 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
   const advByCat: Record<string, Property["locationAdv"]> = {};
   for (const a of p.locationAdv) (advByCat[a.category] = advByCat[a.category] || []).push(a);
 
+  const citySlug = p.city ? p.city.toLowerCase().replace(/\s+/g, "-") : "";
+  const typeHref = p.type
+    ? (p.type.toLowerCase().includes("commercial") ? "/commercial-properties" : "/residential-properties")
+    : "";
+
   // Lead form — until the forms/CRM setup is done, submissions open WhatsApp
   // pre-filled with the visitor's details so no lead is lost.
   // TODO: POST to lead API / CRM when forms are set up.
@@ -466,6 +471,30 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                   <p className={`mt-1.5 text-[13.5px] text-[#66788c] ${openFaq === i ? "" : "hidden"}`}>{f.answer}</p>
                 </div>
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* ================= KEEP EXPLORING (tag interlinks) ================= */}
+        {(p.city || p.type || builder?.slug) && (
+          <section className="scroll-mt-24 pt-9">
+            <SectionHead eyebrow="Keep Exploring" title="Similar Projects" />
+            <div className="flex flex-wrap gap-2.5">
+              {p.city && (
+                <a href={`/property-in/${citySlug}`} className="rounded-full border-[1.5px] border-[#e8ecf1] bg-white px-4 py-2.5 text-[13px] font-semibold text-[#0f2137] transition hover:border-[#c9a24b] hover:text-[#8a6a1e]">
+                  📍 All projects in {p.city}
+                </a>
+              )}
+              {typeHref && (
+                <a href={typeHref} className="rounded-full border-[1.5px] border-[#e8ecf1] bg-white px-4 py-2.5 text-[13px] font-semibold text-[#0f2137] transition hover:border-[#c9a24b] hover:text-[#8a6a1e]">
+                  🏢 All {p.type} projects
+                </a>
+              )}
+              {builder?.slug && (
+                <a href={`/builders/${builder.slug}`} className="rounded-full border-[1.5px] border-[#e8ecf1] bg-white px-4 py-2.5 text-[13px] font-semibold text-[#0f2137] transition hover:border-[#c9a24b] hover:text-[#8a6a1e]">
+                  🏗️ More by {p.builder}
+                </a>
+              )}
             </div>
           </section>
         )}
