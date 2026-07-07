@@ -123,6 +123,13 @@ function toImg(v: RawImg, media: Record<number, Img>, altFallback: string): Img 
 const termName = (p: any, tax: string): string =>
   p._embedded?.["wp:term"]?.flat().find((t: any) => t.taxonomy === tax)?.name ?? "";
 
+// City-level slugs in the ps_location taxonomy. Everything else on a property
+// (Sector 94, Omicron 1A, C1 Jaypee Greens, …) is treated as the sector/area.
+const CITY_SLUGS = new Set([
+  "noida", "greater-noida", "noida-extension", "yamuna-expressway",
+  "ghaziabad", "delhi", "gurgaon", "gurugram", "faridabad",
+]);
+
 /* ---------------- fetch + normalize ---------------- */
 
 export async function getAllPropertySlugs(): Promise<string[]> {
@@ -135,6 +142,13 @@ export async function getProperty(slug: string): Promise<Property | null> {
   const p = posts?.[0];
   if (!p) return null;
   const a = p.acf ?? {};
+
+  // City + sector from the single ps_location taxonomy: the term whose slug is
+  // a known city becomes the city, the remaining term becomes the sector.
+  // Non-ps `location` taxonomy + old flat fields stay as fallbacks.
+  const psLocTerms: any[] = (p._embedded?.["wp:term"]?.flat() ?? []).filter((t: any) => t.taxonomy === "ps_location");
+  const cityTerm = psLocTerms.find((t: any) => CITY_SLUGS.has(t.slug));
+  const sectorTerm = psLocTerms.find((t: any) => !CITY_SLUGS.has(t.slug));
 
   const rawImgs: RawImg[] = [
     a.master_plan, a.site_plan, a.logo_image,
@@ -171,10 +185,10 @@ export async function getProperty(slug: string): Promise<Property | null> {
     priceMin: a.price_min_numeric ? Number(a.price_min_numeric) : null,
     priceMax: a.price_max_numeric ? Number(a.price_max_numeric) : null,
     configuration: a.configuration || "",
-    city: termName(p, "location") || a.location_city || "Noida",
-    sector: a.location_sector || "",
+    city: cityTerm?.name || termName(p, "location") || a.location_city || "Noida",
+    sector: sectorTerm?.name || a.location_sector || "",
     builder: termName(p, "ps_builder") || termName(p, "builder") || a.developer_name || a.developer || "",
-    status: termName(p, "project_status") || a.property_status || "",
+    status: termName(p, "ps_project_status") || termName(p, "project_status") || a.property_status || "",
     overviewHtml: a.project_overview || p.content?.rendered || "",
     quickFacts: ([
       ["Total Land", a.quick_facts?.total_land || a.total_land],
