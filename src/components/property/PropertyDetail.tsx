@@ -112,10 +112,12 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
               <div className="mt-2 text-sm text-[#b9c8d9]">📍 {p.address || `${p.sector}, ${p.city}`}</div>
             </div>
             {p.basePrice && (
-              <div className="text-right">
-                <div className="text-xs text-[#b9c8d9]">Base Price</div>
-                <div className="bg-clip-text text-[26px] font-extrabold text-transparent" style={{ backgroundImage: GOLD }}>{p.basePrice}</div>
-                {p.priceDisplay && <div className="text-xs text-[#b9c8d9]">{p.priceDisplay} · {p.configuration}</div>}
+              <div className="shrink-0 text-right">
+                <div
+                  className="text-[18px] font-extrabold leading-tight text-white sm:text-[26px]"
+                  style={{ textShadow: "0 1px 16px rgba(240,216,148,.55), 0 1px 3px rgba(0,0,0,.5)" }}
+                >{p.basePrice}</div>
+                {p.priceDisplay && <div className="mt-0.5 text-[11px] text-[#b9c8d9] sm:text-xs">{p.priceDisplay} · {p.configuration}</div>}
               </div>
             )}
           </div>
