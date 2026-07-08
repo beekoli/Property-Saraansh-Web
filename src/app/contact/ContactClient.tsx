@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MapPin, Phone, Mail, MessageSquare, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
+import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
 interface Props {
   address: string;
@@ -260,7 +261,7 @@ export default function ContactClient({ address, phone, email }: Props) {
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:!text-white font-bold px-6 py-2.5 rounded-lg text-xs hover:bg-[#1ebd59] transition-all shadow-md"
                 >
-                  <MessageSquare size={16} />
+                  <WhatsAppIcon className="w-4 h-4" />
                   Chat on WhatsApp
                 </a>
               </div>

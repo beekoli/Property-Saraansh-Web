@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
 interface Props {
   videoTitle: string;
@@ -125,6 +126,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           rel="noreferrer"
           className="flex items-center justify-center gap-1.5 py-2.5 bg-[#25D366] hover:bg-[#1ebd59] text-white hover:!text-white rounded-lg text-[10px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm cursor-pointer"
         >
+          <WhatsAppIcon className="w-3.5 h-3.5" />
           WhatsApp
         </a>
         <a

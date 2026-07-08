@@ -6,6 +6,7 @@ import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import Link from 'next/link';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
+import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
 
 interface Props {
@@ -309,8 +310,9 @@ export default function PropertiesClient({ properties }: Props) {
                             href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${project.title.rendered}. Please share more details.`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 flex items-center justify-center hover:!text-white transition-colors rounded font-bold shadow-sm"
+                            className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"
                           >
+                            <WhatsAppIcon className="w-4 h-4" />
                             WhatsApp
                           </a>
                           <a

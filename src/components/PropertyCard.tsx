@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
 interface PropertyCardProps {
   id: string;
@@ -141,10 +142,11 @@ export default function PropertyCard({
               href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${title}. Please share more details.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center hover:!text-white transition-colors rounded font-bold shadow-sm"
+              className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"
               aria-label="Chat on WhatsApp"
             >
-              💬 WhatsApp
+              <WhatsAppIcon className="w-4 h-4" />
+              WhatsApp
             </a>
             <a
               href="tel:+918076178189"
