@@ -10,6 +10,7 @@ import { useState, type ReactNode, type FormEvent } from "react";
 import Image from "next/image";
 import type { Property } from "@/lib/property";
 import type { WPBuilderTerm } from "@/lib/wordpress";
+import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 
 const GOLD = "linear-gradient(115deg,#b8913c 0%,#d9b25e 55%,#c9a24b 100%)";
 const BRAND_GREEN = "#0B3038"; // site header button + footer color
@@ -556,7 +557,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
               <button type="submit" className="mt-1 w-full rounded-[10px] py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(11,48,56,.35)] transition hover:brightness-125" style={{ background: BRAND_GREEN }}>
                 Get Brochure & Price List
               </button>
-              <a href={wa} target="_blank" rel="noopener" className="mt-2.5 block w-full rounded-[10px] bg-[#e7f4ee] py-3 text-center text-[13.5px] font-extrabold text-[#1e8e5a]">💬 Chat on WhatsApp</a>
+              <a href={wa} target="_blank" rel="noopener" className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#25D366] py-3 text-center text-[13.5px] font-extrabold text-white transition hover:bg-[#1ebd59]"><WhatsAppIcon className="h-4 w-4" /> Chat on WhatsApp</a>
               <a href={`tel:${PHONE}`} className="mt-2.5 block w-full rounded-[10px] border-[1.5px] border-[#0f2137] py-3 text-center text-[13.5px] font-extrabold text-[#0f2137]">📞 {PHONE.replace("+91", "+91 ")}</a>
               <p className="mt-2.5 text-center text-[11px] text-[#66788c]">Our expert will call you back shortly</p>
             </form>
@@ -575,7 +576,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
       {/* ================= MOBILE BOTTOM BAR — WhatsApp + phone number ================= */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 backdrop-blur lg:hidden">
         <div className="flex">
-          <a href={wa} target="_blank" rel="noopener" className="flex-1 bg-[#e7f4ee] py-4 text-center text-sm font-extrabold text-[#1e8e5a]">💬 WhatsApp</a>
+          <a href={wa} target="_blank" rel="noopener" className="flex flex-1 items-center justify-center gap-2 bg-[#25D366] py-4 text-center text-sm font-extrabold text-white"><WhatsAppIcon className="h-4 w-4" /> WhatsApp</a>
           <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 {PHONE.replace("+91", "+91 ")}</a>
         </div>
       </div>
