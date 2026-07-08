@@ -53,9 +53,18 @@ export default function PropertyCard({
   const videoHref = getVideoHref(id, videoId);
 
   return (
-    <div className="group bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
+    <div className="group isolate bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
+      {/* Full-card click target → property detail page.
+          Non-interactive areas (image, text) have pointer-events-none so clicks
+          fall through to this overlay; the action buttons re-enable pointer events. */}
+      <Link
+        href={`/properties/${id}`}
+        aria-label={`View details for ${title}`}
+        className="absolute inset-0 z-0"
+      />
+
       {/* Image + Badges */}
-      <div className="relative aspect-video overflow-hidden w-full bg-brand-pale">
+      <div className="relative aspect-video overflow-hidden w-full bg-brand-pale pointer-events-none">
         <Image
           src={imageUrl}
           alt={title}
@@ -81,13 +90,13 @@ export default function PropertyCard({
           )}
         </div>
 
-        {/* Video review badge (bottom-right) */}
+        {/* Video review badge (bottom-right) — independent action, above the overlay */}
         {videoId && (
           <a
             href={videoHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute bottom-3 right-3 bg-red-600/90 hover:bg-red-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-md flex items-center gap-1 transition-colors"
+            className="pointer-events-auto absolute bottom-3 right-3 z-10 bg-red-600/90 hover:bg-red-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-md flex items-center gap-1 transition-colors"
           >
             ▶ Video Review
           </a>
@@ -95,7 +104,7 @@ export default function PropertyCard({
       </div>
 
       {/* Body */}
-      <div className="p-5 flex-grow flex flex-col justify-between">
+      <div className="p-5 flex-grow flex flex-col justify-between pointer-events-none">
         <div>
           <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{developer}</p>
           <h3 className="text-base font-bold heading-playfair text-brand-ink mb-2 line-clamp-1">{title}</h3>
@@ -125,29 +134,24 @@ export default function PropertyCard({
           )}
         </div>
 
+        {/* Actions — independent of the card link (pointer events re-enabled, above overlay) */}
         <div className="border-t border-brand-pale pt-4 mt-2">
-          <div className="flex gap-2">
-            <Link
-              href={`/properties/${id}`}
-              className="flex-[1.4] bg-brand-dark text-white text-center text-xs py-2 px-0 flex items-center justify-center hover:bg-brand-primary transition-colors rounded font-bold shadow-sm"
-            >
-              View Details
-            </Link>
+          <div className="pointer-events-auto relative z-10 flex gap-2">
             <a
               href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${title}. Please share more details.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2 px-0 flex items-center justify-center hover:!text-white transition-colors rounded font-bold shadow-sm"
+              className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center hover:!text-white transition-colors rounded font-bold shadow-sm"
               aria-label="Chat on WhatsApp"
             >
-              WhatsApp
+              💬 WhatsApp
             </a>
             <a
               href="tel:+918076178189"
-              className="flex-1 bg-brand-pale text-brand-primary text-center text-xs py-2 px-0 flex items-center justify-center hover:bg-brand-light/10 transition-colors rounded font-bold shadow-sm border border-brand-light/20"
+              className="flex-1 bg-brand-pale text-brand-primary text-center text-xs py-2.5 px-0 flex items-center justify-center hover:bg-brand-light/10 transition-colors rounded font-bold shadow-sm border border-brand-light/20"
               aria-label="Call now"
             >
-              Call
+              📞 Call
             </a>
           </div>
         </div>
