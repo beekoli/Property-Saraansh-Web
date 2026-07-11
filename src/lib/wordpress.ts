@@ -184,8 +184,20 @@ async function fetchAPI(endpoint: string) {
     const frontendHost = frontendUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
     let rewrittenText = rawText;
-    if (wpHost && frontendHost) {
-      rewrittenText = rawText.replace(new RegExp(wpHost.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), frontendHost);
+    if (wpHost && frontendHost && wpHost !== frontendHost) {
+      const wpHostEscaped = wpHost.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+      // Rewrite the WordPress host -> frontend host for page/post links, but NEVER
+      // for media (/wp-content, /wp-includes). Media must keep pointing at
+      // WordPress: next.config's images.remotePatterns already allows that host,
+      // and the /wp-content proxy rewrite does not actually resolve — so a
+      // rewritten image URL 404s. The negative lookahead also tolerates
+      // JSON-escaped slashes (\/), which is how WordPress encodes URLs.
+      const hostRegex = new RegExp(
+        wpHostEscaped + '(?!\\\\?/wp-content|\\\\?/wp-includes)',
+        'g'
+      );
+      rewrittenText = rawText.replace(hostRegex, frontendHost);
     }
 
     return JSON.parse(rewrittenText);
