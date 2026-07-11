@@ -408,13 +408,14 @@ export const videos: Video[] = [
   },
   {
     "slug": "purvanchal-sunbliss-22d-yamuna-expressway",
-    "title": "Purvanchal Sunbliss 22D Yamuna Expressway  Secrets For BEST Investment",
-    "description": "Purvanchal Sunbliss Sector 22D Yamuna Expressway — pricing, layouts and the key secrets to making the best investment decision.",
+    "title": "Purvanchal Sunbliss Yamuna Expressway | Honest Review: Price, 3BHK vs 4BHK & Investment Verdict",
+    "description": "Purvanchal Sunbliss Sector 22D Yamuna Expressway — honest review by Property Saraansh. Price breakdown, 3 BHK vs 4 BHK comparison, builder track record, and investment verdict near Jewar Airport.",
+    "content": "Purvanchal Sunbliss in Sector 22D, Yamuna Expressway is Purvanchal Group's 10.5-acre premium residential project with 7 towers and 1,112 units — configurations from 1 BHK studio to 4 BHK. RERA-approved with possession targeted January 2030. Pricing ranges from ₹87 Lac (studio, 725 sq ft) to ₹1.47 Cr (3 BHK, 1720 sq ft) and ₹3.17 Cr+ for 4 BHK, at ₹10,100–11,000/sq ft (Q1 2026). Located near Jewar International Airport with strong infrastructure support. Book a free consultation — WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "g805jc8GKhU",
     "thumbnail": "https://img.youtube.com/vi/g805jc8GKhU/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT7M19S",
-    "focusKeyword": "purvanchal sunbliss 22d",
+    "focusKeyword": "purvanchal sunbliss yamuna expressway",
     "category": "Real Estate",
     "views": "12K views"
   },
