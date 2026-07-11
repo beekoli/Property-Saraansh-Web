@@ -16,6 +16,19 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "ace-new-launch-sector-150-noida",
+    "title": "ACE New Launch Sector 150 Noida | Parkway 2.O Full Review",
+    "description": "ACE's new Sector 150 Noida launch \u2014 the project everyone is calling ACE Parkway 2.O. Honest pre-launch review: 11 towers on 14.5 acres, 3 & 4 BHK sizes, expected pricing, launch timeline and who should buy.",
+    "content": "ACE's new launch in Sector 150 Noida \u2014 the project the market is already calling ACE Parkway 2.O \u2014 is finally here. In this full review, Property Saraansh gives the first complete, unbiased breakdown of the project before the official launch: the location, the towers and layouts, expected pricing, the launch timeline, and an honest verdict on who should buy and who should stay away.||The timing is the story. Sector 150 has just turned a corner: the five-year Sports City registry ban was lifted in January 2026, and top builders are now lining up launches, with roughly 14 premium launches expected over the next year. Sector 150 remains the least dense sector in Noida \u2014 a green, sports-oriented address on the Noida Expressway. ACE's own track record here is the strongest argument for the corridor: ACE Parkway launched at around \u20b95,000 per sq ft and today trades near \u20b916,000 per sq ft.||The project sits on a 14.5-acre land parcel in Block B, Sector 150, with 11 towers and roughly 800 units \u2014 about 55 units per acre, which is genuinely low density. Configurations are spacious: 3 BHK at approximately 1,900 sq ft, 4 BHK at approximately 2,600 sq ft, and a larger 4 BHK of about 4,400 sq ft with only two units per floor. The layouts are a clear step up from the original ACE Parkway product.||On pricing, expected pre-launch BSP is around \u20b916,995 per sq ft, which works out to roughly \u20b918,500 per sq ft all-inclusive \u2014 putting a 3 BHK at approximately \u20b93.5 Crore all-in. RERA has been applied for, with approval and allotment expected around 10 August 2026. Every number here is tentative until RERA is granted, so verify before booking.||The review also compares the project honestly against ACE Parkway, and against Prestige and County \u2014 Sector 150's other upcoming giants \u2014 and sets out exactly who it suits. It is especially relevant for residents of Gulshan Ikebana, Prateek Stylome, Purvanchal Royal Park, Eldeco Utopia, Gulshan Vivante and Exotica Fresco looking to upgrade, for anyone who missed Experion Saatori, and for NRI investors evaluating premium Noida Expressway launches.||Watch the full review for the tower-by-tower breakdown, the payment plan, the competitor comparison and the Property Saraansh verdict \u2014 then speak to Property Saraansh for honest, RERA-backed guidance before you commit.",
+    "youtubeId": "D930NGq_Wk8",
+    "thumbnail": "https://i.ytimg.com/vi/D930NGq_Wk8/hqdefault.jpg",
+    "publishedAt": "2026-07-10",
+    "duration": "PT17M29S",
+    "focusKeyword": "ace new launch sector 150 noida",
+    "category": "Real Estate",
+    "views": "1.1K views"
+  },
+  {
     "slug": "things-nobody-talks-about-noida-residents",
     "title": "Things Nobody Talks About Noida Residents | Social Issues Every Noida Resident Faces",
     "description": "Moving to Noida? Saraansh Seth reveals 5 real social issues residents face daily — from society parking and pet conflicts to stray cattle and soaring school fees.",
