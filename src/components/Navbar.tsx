@@ -1,43 +1,50 @@
 "use client";
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
+  // Scroll position lives in refs, NOT state. Previously it was state that the
+  // scroll handler wrote on every scroll event, and the effect depended on it —
+  // so every scroll frame re-rendered the navbar and detached/re-attached the
+  // listener. That churn blocked interactions (poor INP). Refs + rAF keep the
+  // scroll path off the React render path entirely.
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
   useEffect(() => {
     setMounted(true);
+
+    const update = () => {
+      const y = window.scrollY;
+
+      // React bails out of a re-render when the boolean is unchanged, so the
+      // navbar only re-renders when the state actually flips.
+      setIsScrolled(y > 20);
+      // Near the top -> always show. Otherwise show only when scrolling up.
+      setIsVisible(y <= 80 || y <= lastScrollY.current);
+
+      lastScrollY.current = y;
+      ticking.current = false;
+    };
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Color change condition
-      setIsScrolled(currentScrollY > 20);
-
-      // Fade & Hide/Show condition
-      if (currentScrollY > 80) {
-        if (currentScrollY > lastScrollY) {
-          setIsVisible(false); // Scrolling down -> fade & hide navbar
-        } else {
-          setIsVisible(true); // Scrolling up -> fade & show navbar
-        }
-      } else {
-        setIsVisible(true); // Near top -> show navbar
-      }
-
-      setLastScrollY(currentScrollY);
+      if (ticking.current) return; // coalesce to at most one update per frame
+      ticking.current = true;
+      window.requestAnimationFrame(update);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []); // attach once
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMobileMenu = () => {
