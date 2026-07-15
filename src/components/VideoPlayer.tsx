@@ -1,17 +1,38 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
- * YouTube "facade": we render the thumbnail + a play button instead of the real
+ * YouTube "facade": render the thumbnail + a play button instead of the real
  * <iframe>. The YouTube embed ships a large amount of cross-origin JS and blocks
- * the main thread (measured: 442ms and 347ms long tasks on the homepage), which
- * delays any click the user makes — the INP problem. Mounting the iframe only on
- * click keeps that cost off initial page load entirely.
+ * the main thread, which delays interactions (poor INP). Mounting the iframe
+ * only on click keeps that cost off initial page load.
+ *
+ * Thumbnail strategy — IMPORTANT: `maxresdefault.jpg` does not exist for every
+ * video, and YouTube returns a 120x90 grey PLACEHOLDER with HTTP 200 (not a 404)
+ * when it's missing. So we can't rely on an <img> onError fallback. Instead we
+ * default to `hqdefault.jpg`, which always exists at real resolution (480x360),
+ * then upgrade to `maxresdefault.jpg` only after confirming it's genuine HD.
  */
 export default function VideoPlayer({ videoId, title, isShort = false }: { videoId: string; title?: string; isShort?: boolean }) {
   const [playing, setPlaying] = useState(false);
+  const [thumb, setThumb] = useState(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`);
   const label = title || 'YouTube video player';
+
+  useEffect(() => {
+    // Reset to the always-present thumbnail when the video changes.
+    setThumb(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`);
+
+    // Probe the HD thumbnail; only upgrade if it's a real image (not the
+    // 120x90 grey placeholder YouTube serves when maxres is unavailable).
+    const hi = new Image();
+    hi.onload = () => {
+      if (hi.naturalWidth > 120) {
+        setThumb(`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`);
+      }
+    };
+    hi.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+  }, [videoId]);
 
   return (
     <div className={`relative w-full rounded-xl overflow-hidden shadow-2xl border border-brand-light/30 ${
@@ -34,17 +55,8 @@ export default function VideoPlayer({ videoId, title, isShort = false }: { video
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
-            onError={(e) => {
-              // maxresdefault doesn't exist for every video — fall back.
-              const img = e.currentTarget as HTMLImageElement;
-              if (!img.dataset.fallback) {
-                img.dataset.fallback = '1';
-                img.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-              }
-            }}
+            src={thumb}
             alt={label}
-            loading="lazy"
             className="absolute inset-0 h-full w-full object-cover"
           />
           <span className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/10" />
