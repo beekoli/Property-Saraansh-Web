@@ -61,10 +61,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-500 transform ${
+      className={`fixed top-0 w-full z-50 py-3 transition-all duration-500 transform ${
         isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
       } ${
-        (isScrolled || isLightPage) ? 'bg-brand-dark border-b border-brand-light/20 shadow-lg py-2' : 'bg-transparent py-4'
+        (isScrolled || isLightPage) ? 'bg-brand-dark border-b border-brand-light/20 shadow-lg' : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
