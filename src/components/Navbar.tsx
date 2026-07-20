@@ -116,6 +116,7 @@ export default function Navbar() {
               </div>
             </div>
 
+            <Link href="/news" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">News</Link>
             <Link href="/blog" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Blog</Link>
             <Link href="/contact" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Contact</Link>
           </div>
@@ -162,6 +163,7 @@ export default function Navbar() {
               <Link href="/builders" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Builders</Link>
             </div>
 
+            <Link href="/news" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">News</Link>
             <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Blog</Link>
             <Link href="/contact" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Contact</Link>
             <Link href="/contact" onClick={closeMobileMenu} className="btn-primary block text-center py-3 rounded font-bold mt-4 shadow-md">Free Consultation</Link>
