@@ -16,6 +16,18 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "property-saraansh-now-on-instagram",
+    "title": "New content dropping on Instagram #reels #propertycontent #shorts",
+    "description": "Property Saraansh is now on Instagram \u2014 the same honest Noida property market analysis in a new short-form format, with latest updates, new project launches and sector-wise price and investment breakdowns.",
+    "youtubeId": "FenPd-tOCTc",
+    "thumbnail": "https://i.ytimg.com/vi/FenPd-tOCTc/hqdefault.jpg",
+    "publishedAt": "2026-07-18",
+    "duration": "PT0M53S",
+    "focusKeyword": "property saraansh instagram",
+    "category": "Shorts",
+    "views": "741 views"
+  },
+  {
     "slug": "ace-new-launch-sector-150-noida",
     "title": "ACE New Launch Sector 150 Noida | Parkway 2.O Full Review",
     "description": "ACE's new Sector 150 Noida launch \u2014 the project everyone is calling ACE Parkway 2.O. Honest pre-launch review: 11 towers on 14.5 acres, 3 & 4 BHK sizes, expected pricing, launch timeline and who should buy.",
