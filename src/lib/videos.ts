@@ -300,14 +300,15 @@ export const videos: Video[] = [
     "views": "7.3K views"
   },
   {
-    "slug": "ace-the-nest-ace-verde-yamuna-expressway",
-    "title": "Is Ace The Nest Studio Apartments and Ace Verde on Yamuna Expressway an Opportunity or Huge Mistake?",
-    "description": "Are Ace The Nest studio apartments and Ace Verde on Yamuna Expressway a real opportunity or a costly mistake? An honest ROI breakdown.",
+    "slug": "ace-nest-studio-yamuna-expressway-review",
+    "title": "ACE Nest Studio Apartments on Yamuna Expressway — Investment or Mistake? Honest Review",
+    "description": "ACE Nest studio apartments on Yamuna Expressway — honest review covering density (182 units/acre), residential vs commercial studio differences, rental competition, and whether it beats ready-to-move alternatives on Noida Expressway.",
+    "content": "Property Saraansh reviews ACE Nest and ACE Verde on Yamuna Expressway. ACE Verde is priced at ₹10,300/sqft all-inclusive — fair value is closer to ₹9,000–9,200. ACE Nest has 749 studios across 8 acres (182 units/acre density). Residential studios have limited Airbnb/commercial use. Yamuna Expressway rental market matures around 2031–32. Jewar Airport is a long-term upside. Book free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "Q54r9FzP6oA",
     "thumbnail": "https://img.youtube.com/vi/Q54r9FzP6oA/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT15M38S",
-    "focusKeyword": "is ace the",
+    "focusKeyword": "studio apartments yamuna expressway",
     "category": "Real Estate",
     "views": "10K views"
   },
