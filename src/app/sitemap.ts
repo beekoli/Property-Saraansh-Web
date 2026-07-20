@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getLatestBlogs, getProperties } from '@/lib/wordpress';
+import { getLatestBlogs, getLatestNews, getProperties } from '@/lib/wordpress';
 import { videos } from '@/lib/videos';
 
 export const revalidate = 3600; // Revalidate sitemap every hour
@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/our-videos',
     '/our-shorts',
     '/blog',
+    '/news',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -53,6 +54,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap blog routes:', err);
   }
 
+  // 3b. Dynamic News Routes
+  let newsRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const news = await getLatestNews(100);
+    newsRoutes = news.map((item) => ({
+      url: `${baseUrl}/news/${item.slug}`,
+      lastModified: new Date(item.modified || item.date),
+      changeFrequency: 'daily',
+      priority: 0.7,
+    }));
+  } catch (err) {
+    console.error('Error generating sitemap news routes:', err);
+  }
+
   // 4. Dynamic Video Watch Routes
   const videoRoutes: MetadataRoute.Sitemap = videos.map((video) => ({
     url: `${baseUrl}/our-videos/${video.slug}`,
@@ -61,5 +76,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...propertyRoutes, ...blogRoutes, ...videoRoutes];
+  return [...staticRoutes, ...propertyRoutes, ...blogRoutes, ...newsRoutes, ...videoRoutes];
 }
