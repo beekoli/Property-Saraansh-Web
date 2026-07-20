@@ -159,12 +159,18 @@ export async function getWPVideos(limit = 100): Promise<WPVideo[]> {
 
 import propertiesData from '@/data/properties.json';
 import blogsData from '@/data/blogs.json';
+import newsData from '@/data/news.json';
 
 // Fallback Mock Blog Data
 export const MOCK_BLOGS: WPPost[] = blogsData as WPPost[];
 
 // Fallback Mock Property Data (Matches mockup exactly)
 export const MOCK_PROPERTIES: WPProperty[] = propertiesData as WPProperty[];
+
+// Fallback Daily-News Data. Empty by default — the real news comes from the
+// WordPress "News" category (see getLatestNews). This exists only so the /news
+// route still renders (an empty state) when the WordPress API is unreachable.
+export const MOCK_NEWS: WPPost[] = newsData as WPPost[];
 
 async function fetchAPI(endpoint: string) {
   if (!API_URL) {
@@ -207,8 +213,27 @@ async function fetchAPI(endpoint: string) {
   }
 }
 
+/**
+ * Resolve the WordPress term id of the "News" category (slug: news).
+ * The daily Real Estate News section is a normal WordPress "post" filed under
+ * this category. We look the id up by slug so nothing is hard-coded — if the
+ * category has not been created in WordPress yet this returns null and callers
+ * fall back gracefully (blog behaves as before, /news shows its empty state).
+ */
+export async function getNewsCategoryId(): Promise<number | null> {
+  const data = await fetchAPI(`/categories?slug=news&_fields=id`);
+  if (data && Array.isArray(data) && data.length > 0 && typeof data[0]?.id === 'number') {
+    return data[0].id as number;
+  }
+  return null;
+}
+
 export async function getLatestBlogs(limit = 3): Promise<WPPost[]> {
-  const data = await fetchAPI(`/posts?_embed&per_page=${limit}`);
+  // Keep daily news OUT of the evergreen blog feed. If the News category
+  // exists, exclude it; otherwise behave exactly as before.
+  const newsCatId = await getNewsCategoryId();
+  const exclude = newsCatId ? `&categories_exclude=${newsCatId}` : '';
+  const data = await fetchAPI(`/posts?_embed&per_page=${limit}${exclude}`);
   return data && data.length > 0 ? data : MOCK_BLOGS.slice(0, limit);
 }
 
@@ -216,6 +241,25 @@ export async function getBlogBySlug(slug: string): Promise<WPPost | null> {
   const data = await fetchAPI(`/posts?_embed&slug=${slug}`);
   if (data && data.length > 0) return data[0];
   const local = MOCK_BLOGS.find(b => b.slug === slug);
+  return local || null;
+}
+
+/**
+ * Latest daily Real Estate News — WordPress posts in the "News" category,
+ * newest first. Falls back to MOCK_NEWS (empty by default) when the category
+ * doesn't exist yet or the API is unreachable.
+ */
+export async function getLatestNews(limit = 20): Promise<WPPost[]> {
+  const newsCatId = await getNewsCategoryId();
+  if (!newsCatId) return MOCK_NEWS.slice(0, limit);
+  const data = await fetchAPI(`/posts?_embed&per_page=${limit}&categories=${newsCatId}&orderby=date&order=desc`);
+  return data && data.length > 0 ? data : MOCK_NEWS.slice(0, limit);
+}
+
+export async function getNewsBySlug(slug: string): Promise<WPPost | null> {
+  const data = await fetchAPI(`/posts?_embed&slug=${slug}`);
+  if (data && data.length > 0) return data[0];
+  const local = MOCK_NEWS.find(n => n.slug === slug);
   return local || null;
 }
 
