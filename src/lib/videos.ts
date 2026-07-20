@@ -288,13 +288,14 @@ export const videos: Video[] = [
   },
   {
     "slug": "top-3-self-use-projects-noida-expressway",
-    "title": "Noida Expressway's TOP3 Most PROFITABLE Self-Use Projects in 2025 Revealed",
-    "description": "The top 3 most profitable self-use projects on Noida Expressway in 2025, revealed — with location, pricing and value analysis.",
+    "title": "Top 3 Self-Use Projects on Noida Expressway | Samridhi, ATS Picturesque & Nimbus Arista",
+    "description": "Top 3 self-use residential projects on Noida Expressway — Samridhi Luxuriya Avenue (Sector 150), ATS Picturesque Reprieves (Sector 152), and Nimbus Arista Luxe (Sector 168). Honest review: construction quality, density, livability, pros & cons.",
+    "content": "Property Saraansh reviews the 3 best self-use projects on Noida Expressway. Samridhi Luxuriya Avenue (Sector 150) starts at ₹1.35 Cr with Mivan construction and 82 units/acre density. ATS Picturesque Reprieves (Sector 152) offers 67% carpet area efficiency and permanent open views. Nimbus Arista Luxe (Sector 168) is IIFL-backed with Sector 142 Metro walkability and 5-min FNG access. Book a free consultation — WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "tQlCLCmTe5g",
     "thumbnail": "https://img.youtube.com/vi/tQlCLCmTe5g/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT16M17S",
-    "focusKeyword": "noida expressways top3",
+    "focusKeyword": "noida expressway self use projects",
     "category": "Real Estate",
     "views": "7.3K views"
   },
