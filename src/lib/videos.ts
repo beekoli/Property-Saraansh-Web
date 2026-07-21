@@ -313,14 +313,15 @@ export const videos: Video[] = [
     "views": "10K views"
   },
   {
-    "slug": "godrej-city-panvel-mumbai-review",
-    "title": "Is Panvel the NEW FUTURE of Mumbai's 3.O Real Estate Market? #GodrejCityPanvel",
-    "description": "Is Panvel the next future of Mumbai's real estate? A look at Godrej City Panvel and whether this emerging corridor is worth investing in.",
+    "slug": "panvel-real-estate-mumbai-3-investment-review",
+    "title": "Is Panvel Mumbai's BEST Real Estate Bet? Godrej City, Hiranandani Fortune City and NAINA Honest Review",
+    "description": "Panvel real estate honest review — Godrej City Panvel (106-acre township), Hiranandani Fortune City, NAINA City near Navi Mumbai Airport, and Wadhwa Wise City. Is Panvel truly Mumbai 3.0 or overhyped?",
+    "content": "Property Saraansh reviews Panvel as Mumbai 3.0. Godrej City Panvel: 106 acres, golf course, MTHL frontage. Hiranandani Fortune City: proven township builder, complete ecosystem. NAINA City: airport-zone positioning, 5–8 year patient money. Wadhwa Wise City: IT park integration for rental income. Mumbai Trans Harbour Link and Navi Mumbai Airport are genuine long-term catalysts. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "HJ461VdqOQ8",
     "thumbnail": "https://img.youtube.com/vi/HJ461VdqOQ8/maxresdefault.jpg",
     "publishedAt": "2026-06-11",
     "duration": "PT10M23S",
-    "focusKeyword": "is panvel the",
+    "focusKeyword": "panvel real estate investment",
     "category": "Real Estate",
     "views": "7.8K views"
   },
