@@ -352,7 +352,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   /* Blockquote fixes for mobile */
                   prose-blockquote:border-l-[4px] md:prose-blockquote:border-l-[6px] prose-blockquote:border-brand-accent prose-blockquote:pl-4 md:prose-blockquote:pl-8 prose-blockquote:text-[#34495E] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg md:prose-blockquote:text-xl lg:prose-blockquote:text-2xl prose-blockquote:my-8 md:prose-blockquote:my-10 prose-blockquote:bg-gradient-to-r prose-blockquote:from-brand-pale/50 prose-blockquote:to-transparent prose-blockquote:py-4 md:prose-blockquote:py-6 prose-blockquote:pr-4 md:prose-blockquote:pr-6 prose-blockquote:rounded-r-2xl md:prose-blockquote:rounded-r-3xl
 
-                  prose-a:text-brand-accent prose-a:font-semibold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-brand-primary hover:prose-a:decoration-brand-primary transition-all
+                  prose-a:text-brand-primary prose-a:font-semibold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-brand-light hover:prose-a:decoration-brand-light transition-all
 
                   /* List formatting */
                   prose-ul:list-none prose-ul:pl-0 prose-ul:mb-6 md:prose-ul:mb-8 prose-ul:space-y-3 md:prose-ul:space-y-4
