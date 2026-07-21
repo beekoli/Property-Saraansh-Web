@@ -326,6 +326,19 @@ export const videos: Video[] = [
     "views": "7.8K views"
   },
   {
+    "slug": "eldeco-7-peaks-residences-greater-noida-review",
+    "title": "Eldeco 7 Peaks Greater Noida HONEST Review | Price, Layout Truth & Investment Reality 2026",
+    "description": "Eldeco 7 Peaks Residences honest review — 7 towers in Omicron 1A Greater Noida, 3BHK from 1825 sq ft, 4BHK at 2850 sq ft. Pre-launch ₹11,999/sq ft vs ₹13,000/sq ft launch price. Honest investment verdict.",
+    "content": "Property Saraansh reviews Eldeco 7 Peaks Residences, Omicron 1A Greater Noida. Seven mountain-themed towers: Asgard, Blanc, Crestone, Denali, Everest, Kili West, Kili East. 3BHK from 1825 sq ft (carpet 990 sq ft) to 2100 sq ft (carpet 1140 sq ft). 4BHK+SQ at 2850 sq ft (carpet 1552 sq ft). 24 exclusive duplex penthouses. 130m wide road frontage, 100m green belt adjacency. Pre-launch ₹11,999/sq ft vs launch ₹13,000/sq ft. UP RERA: UPRERAPRJ106523/01/2026. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
+    "youtubeId": "hCyx0D2_RzE",
+    "thumbnail": "https://img.youtube.com/vi/hCyx0D2_RzE/maxresdefault.jpg",
+    "publishedAt": "2026-02-16",
+    "duration": "PT14M2S",
+    "focusKeyword": "eldeco 7 peaks greater noida",
+    "category": "Real Estate",
+    "views": "18.3K views"
+  },
+  {
     "slug": "godrej-evergreen-square-hinjewadi-pune",
     "title": "Godrej Evergreen Square Apartments in Hinjewadi Pune",
     "description": "Godrej Evergreen Square, Hinjewadi Pune — apartment review covering location, pricing, layouts and investment potential in Pune's IT hub.",
