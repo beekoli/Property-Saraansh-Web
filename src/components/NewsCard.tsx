@@ -24,6 +24,9 @@ const decodeHtml = (str: string) =>
 /**
  * Compact card for daily news items. Deliberately denser than BlogCard
  * (no author/read-time) so the News and Insights sections stay visually distinct.
+ *
+ * Note: the category is shown in the meta row rather than as an overlay on the
+ * thumbnail — the news artwork template already prints the category on the image.
  */
 export default function NewsCard({ slug, title, excerpt, category, date, thumbnail }: NewsCardProps) {
   const published = new Date(date);
@@ -49,20 +52,18 @@ export default function NewsCard({ slug, title, excerpt, category, date, thumbna
           className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
           style={{ backgroundImage: `url(${thumbnail})` }}
         ></div>
-        <span className="absolute top-3 left-3 bg-brand-dark/90 text-brand-accent text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded shadow-sm">
-          {category}
-        </span>
       </div>
 
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex items-center gap-2 mb-2 text-[11px]">
+          <span className="text-brand-primary font-bold uppercase tracking-wider">{category}</span>
           {relative && (
-            <span className="inline-flex items-center gap-1 text-brand-primary font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span>
+            <span className="inline-flex items-center gap-1 text-brand-light">
+              <span className="w-1 h-1 rounded-full bg-brand-accent"></span>
               {relative}
             </span>
           )}
-          <time dateTime={date} className="text-brand-light">
+          <time dateTime={date} className="text-brand-light ml-auto whitespace-nowrap">
             {formattedDate}
           </time>
         </div>
