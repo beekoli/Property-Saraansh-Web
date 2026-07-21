@@ -126,6 +126,26 @@ section[id] {
   a:hover {
     color: var(--color-accent);
   }
+
+  /* WordPress-injected rich text (dangerouslySetInnerHTML) contains bare <a> tags with
+     no utility classes, so the base rule above painted them white — invisible on the
+     light content cards used by property overviews and blog/news article bodies.
+     Note: the @tailwindcss/typography plugin is NOT installed, so the `prose-a:*`
+     modifiers used on the blog page generate nothing and never fixed this.
+     Give links inside injected content a readable, underlined brand colour.
+     Utility classes on a specific link still override this. */
+  .prose a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    font-weight: 600;
+  }
+
+  .prose a:hover {
+    color: var(--color-light);
+    text-decoration-color: currentColor;
+  }
 }
 
 /* Animations */
