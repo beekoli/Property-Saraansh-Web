@@ -17,17 +17,17 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Decode common WordPress HTML entities (e.g. &amp; -> &) so titles don't show raw entity codes.
+// Decode WordPress HTML entities (numeric + common named) so titles don't show raw entity codes.
 const decodeHtml = (str: string) =>
   str
-    .replace(/&#038;/g, '&')
     .replace(/&amp;/g, '&')
-    .replace(/&#8211;/g, '–')
-    .replace(/&#8212;/g, '—')
-    .replace(/&#8216;/g, '‘')
-    .replace(/&#8217;/g, '’')
-    .replace(/&#8220;/g, '“')
-    .replace(/&#8221;/g, '”');
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(parseInt(n, 10)));
 
 // Label a post by its actual WordPress category (prefer a specific one over the generic "Blog").
 const titleCaseCat = (s: string) => s.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
@@ -48,8 +48,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const fallbackTitle = `${blog.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh`;
-  const fallbackDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${blog.title.rendered}`;
+  const fallbackTitle = `${decodeHtml(blog.title.rendered)} | Property Saraansh`;
+  const fallbackDesc = decodeHtml(blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || '').slice(0, 150) || `Read ${decodeHtml(blog.title.rendered)}`;
 
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
@@ -208,7 +208,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": FRONTEND_URL },
       { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${FRONTEND_URL}/blog` },
-      { "@type": "ListItem", "position": 3, "name": blog.title.rendered.replace(/<[^>]*>/g, ''), "item": `${FRONTEND_URL}/blog/${slug}` }
+      { "@type": "ListItem", "position": 3, "name": decodeHtml(blog.title.rendered.replace(/<[^>]*>/g, '')), "item": `${FRONTEND_URL}/blog/${slug}` }
     ]
   };
 
