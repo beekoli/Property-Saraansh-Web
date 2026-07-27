@@ -137,12 +137,12 @@ export default function NewsClient({ initialNews }: Props) {
                 <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-brand-pale flex flex-col lg:flex-row group hover:shadow-xl transition-all">
                   <Link
                     href={`/news/${featuredPost.slug}`}
-                    className="lg:w-1/2 relative h-64 lg:h-auto overflow-hidden bg-brand-pale block"
+                    className="lg:w-1/2 relative h-64 lg:h-auto min-h-[220px] overflow-hidden bg-brand-dark block"
                   >
                     <img
                       src={getFeaturedImage(featuredPost)}
                       alt={decodeHtml(featuredPost.title.rendered)}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
                       {getItemCategory(featuredPost)}
