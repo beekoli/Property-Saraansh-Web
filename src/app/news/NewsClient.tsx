@@ -13,17 +13,17 @@ interface Props {
 const titleCase = (s: string) =>
   s.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 
-// Decode common WordPress HTML entities in title.rendered / excerpt.rendered.
+// Decode WordPress HTML entities (numeric + common named) in title/excerpt.
 const decodeHtml = (str: string) =>
   str
-    .replace(/&#038;/g, '&')
     .replace(/&amp;/g, '&')
-    .replace(/&#8211;/g, '–')
-    .replace(/&#8212;/g, '—')
-    .replace(/&#8216;/g, '‘')
-    .replace(/&#8217;/g, '’')
-    .replace(/&#8220;/g, '“')
-    .replace(/&#8221;/g, '”');
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(parseInt(n, 10)));
 
 // Label a news item by its most specific WordPress category (prefer something
 // other than the generic "News"/"Blog" buckets, e.g. "Launches", "Policy").
@@ -157,7 +157,7 @@ export default function NewsClient({ initialNews }: Props) {
                         </h3>
                       </Link>
                       <p className="text-brand-dark/70 text-sm md:text-base mb-8 leading-relaxed font-light">
-                        {featuredPost.excerpt.rendered.replace(/<[^>]*>?/gm, '').slice(0, 250)}...
+                        {decodeHtml(featuredPost.excerpt.rendered.replace(/<[^>]*>?/gm, '')).slice(0, 250)}...
                       </p>
                     </div>
 
