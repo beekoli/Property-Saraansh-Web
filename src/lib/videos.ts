@@ -376,15 +376,16 @@ export const videos: Video[] = [
   },
   {
     "slug": "ace-acreville-price-review",
-    "title": "Is ACE ACREVILLE Really Worth the HIGH Price of 1.3L per yard?",
-    "description": "Is Ace Acreville really worth its high price of ₹1.3L per yard? An honest look at the project, location and investment case.",
+    "title": "ACE Acreville Yamuna Expressway Plot HONEST Review | Is 1.3L/Yard Worth It?",
+    "description": "ACE Acreville Sector 22A Yamuna Expressway — 100-acre gated township (formerly Lotus City). Fresh plots: 200, 300 & 500 gaj at ₹1.3L/yard. Honest verdict from Property Saraansh.",
+    "content": "ACE Acreville is a 100-acre gated township on Sector 22A, Yamuna Expressway — originally launched as Lotus City by 3C Lotus in 2012, acquired by ACE Group via NCLT resolution at ₹299 Crores. ACE's fresh inventory: 374 plots — 200 gaj (161 units, ~₹2.6 Cr), 300 gaj (148 units, ~₹3.9 Cr), 500 gaj (65 units, ~₹6.5 Cr). Price: ₹1.30L/yard. FAR: 1.8x. Ground coverage: 75% (200/300 gaj), 65% (500 gaj). Payment plan: 50:25:25. Construction deadline: 3.5 years from possession. Verdict: Long-term investors (5-7 year horizon) only. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "K-s0W7NJMrk",
     "thumbnail": "https://img.youtube.com/vi/K-s0W7NJMrk/maxresdefault.jpg",
-    "publishedAt": "2026-06-11",
+    "publishedAt": "2025-04-18",
     "duration": "PT11M12S",
-    "focusKeyword": "is ace acreville",
+    "focusKeyword": "ace acreville yamuna expressway",
     "category": "Real Estate",
-    "views": "4.3K views"
+    "views": "4.4K views"
   },
   {
     "slug": "dasnac-yuva-studio-apartments-review",
