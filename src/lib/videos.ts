@@ -607,15 +607,16 @@ export const videos: Video[] = [
   },
   {
     "slug": "dasnac-arc-vs-m3m-the-line-rental-income",
-    "title": "I Compared Dasnac ARC and M3M The Line for Rental Income Here's What I Found",
-    "description": "Dasnac ARC vs M3M The Line compared for rental income — real numbers on ROI and which studio investment comes out ahead.",
+    "title": "Dasnac ARC vs M3M The Line | Which Studio Gives Better Rental Income in Noida?",
+    "description": "Dasnac ARC (Sector 124) vs M3M The Line — honest comparison of studio apartment rental income, ROI, and which investment comes out ahead on Noida Expressway.",
+    "content": "Property Saraansh compares Dasnac ARC (Sector 124, Noida Expressway) and M3M The Line — two prominent studio apartment projects positioned for rental income. Dasnac ARC offers Presidential Suites and Pent Suites with managed rental returns. M3M The Line positions as a high-street hybrid. The video breaks down actual rental income potential, yield percentages, operator credibility, and exit liquidity for both projects. Verdict: one project clearly comes out ahead for genuine rental income investors. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "rbgRjoP2KIU",
     "thumbnail": "https://img.youtube.com/vi/rbgRjoP2KIU/maxresdefault.jpg",
-    "publishedAt": "2024-08-06",
+    "publishedAt": "2024-08-07",
     "duration": "PT7M5S",
-    "focusKeyword": "i compared dasnac arc and m3m ",
+    "focusKeyword": "dasnac arc vs m3m the line",
     "category": "Real Estate",
-    "views": "10K+ views"
+    "views": "17.5K views"
   },
   {
     "slug": "samridhi-daksh-avenue-vs-prateek-canary",
