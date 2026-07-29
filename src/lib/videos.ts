@@ -473,15 +473,16 @@ export const videos: Video[] = [
   },
   {
     "slug": "godrej-riverine-luxury-apartments-delhi",
-    "title": "Godrej Riverine – A Luxury Apartment Option Near Delhi",
-    "description": "Godrej Riverine — a luxury apartment option near Delhi reviewed, covering location advantages, pricing and investment potential.",
+    "title": "Godrej Riverine Sector 44 Noida HONEST Review | Price, Location & Investment Reality 2025",
+    "description": "Godrej Riverine Sector 44 Noida honest review — Noida's costliest project at ₹27,000/sqft, 4 towers, 3BHK (2700 sq ft) and 4BHK (3700 sq ft) with Servant Quarter. End-user only verdict.",
+    "content": "Property Saraansh reviews Godrej Riverine, Sector 44 Noida. Godrej Properties' most premium Noida launch — 6.45 acres, 4 towers (T1-3: 23 floors, T4: 38 floors), 416 units total. 3BHK at 2,700 sq ft and 4BHK at 3,700 sq ft, both with Servant Quarter. Price: ₹27,000/sqft — Noida's most expensive project. Botanical Garden Metro 1.4 km, Noida Golf Course 1.5 km, DND Flyway 1.9 km. RERA: UPRERAPRJ763929/11/2024. Verdict: end-users only at this price point. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "Dfba98En7rk",
     "thumbnail": "https://img.youtube.com/vi/Dfba98En7rk/maxresdefault.jpg",
-    "publishedAt": "2025-01-03",
-    "duration": "PT6M23S",
-    "focusKeyword": "godrej riverine – a luxury apa",
+    "publishedAt": "2025-01-04",
+    "duration": "PT6M24S",
+    "focusKeyword": "godrej riverine sector 44 noida",
     "category": "Real Estate",
-    "views": "10K+ views"
+    "views": "7.5K views"
   },
   {
     "slug": "prestige-city-ghaziabad-launch-guide",
