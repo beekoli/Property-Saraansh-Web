@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   /* Brand Colors from Logo */
@@ -125,6 +126,26 @@ section[id] {
 
   a:hover {
     color: var(--color-accent);
+  }
+
+  /* WordPress-injected rich text (dangerouslySetInnerHTML) contains bare <a> tags with
+     no utility classes, so the base rule above would paint them white — invisible on
+     the light content cards used by property overviews and blog/news article bodies.
+     Give links inside injected content a readable, underlined brand colour.
+     Scoped to skip anything inside .not-prose (e.g. the consultation CTA buttons) so
+     their own utility classes / base colour win — matching how the typography plugin
+     scopes prose. :where() keeps specificity 0 so utility classes still override. */
+  .prose :where(a):not(:where(.not-prose, .not-prose *)) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    font-weight: 600;
+  }
+
+  .prose :where(a):not(:where(.not-prose, .not-prose *)):hover {
+    color: var(--color-light);
+    text-decoration-color: currentColor;
   }
 }
 

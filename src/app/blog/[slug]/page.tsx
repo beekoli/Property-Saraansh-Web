@@ -17,17 +17,17 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Decode common WordPress HTML entities (e.g. &amp; -> &) so titles don't show raw entity codes.
+// Decode WordPress HTML entities (numeric + common named) so titles don't show raw entity codes.
 const decodeHtml = (str: string) =>
   str
-    .replace(/&#038;/g, '&')
     .replace(/&amp;/g, '&')
-    .replace(/&#8211;/g, '–')
-    .replace(/&#8212;/g, '—')
-    .replace(/&#8216;/g, '‘')
-    .replace(/&#8217;/g, '’')
-    .replace(/&#8220;/g, '“')
-    .replace(/&#8221;/g, '”');
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(parseInt(n, 10)));
 
 // Label a post by its actual WordPress category (prefer a specific one over the generic "Blog").
 const titleCaseCat = (s: string) => s.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
@@ -48,8 +48,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const fallbackTitle = `${blog.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh`;
-  const fallbackDesc = blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${blog.title.rendered}`;
+  const fallbackTitle = `${decodeHtml(blog.title.rendered)} | Property Saraansh`;
+  const fallbackDesc = decodeHtml(blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || '').slice(0, 150) || `Read ${decodeHtml(blog.title.rendered)}`;
 
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
@@ -208,7 +208,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": FRONTEND_URL },
       { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${FRONTEND_URL}/blog` },
-      { "@type": "ListItem", "position": 3, "name": blog.title.rendered.replace(/<[^>]*>/g, ''), "item": `${FRONTEND_URL}/blog/${slug}` }
+      { "@type": "ListItem", "position": 3, "name": decodeHtml(blog.title.rendered.replace(/<[^>]*>/g, '')), "item": `${FRONTEND_URL}/blog/${slug}` }
     ]
   };
 
@@ -352,7 +352,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   /* Blockquote fixes for mobile */
                   prose-blockquote:border-l-[4px] md:prose-blockquote:border-l-[6px] prose-blockquote:border-brand-accent prose-blockquote:pl-4 md:prose-blockquote:pl-8 prose-blockquote:text-[#34495E] prose-blockquote:italic prose-blockquote:font-serif prose-blockquote:text-lg md:prose-blockquote:text-xl lg:prose-blockquote:text-2xl prose-blockquote:my-8 md:prose-blockquote:my-10 prose-blockquote:bg-gradient-to-r prose-blockquote:from-brand-pale/50 prose-blockquote:to-transparent prose-blockquote:py-4 md:prose-blockquote:py-6 prose-blockquote:pr-4 md:prose-blockquote:pr-6 prose-blockquote:rounded-r-2xl md:prose-blockquote:rounded-r-3xl
 
-                  prose-a:text-brand-accent prose-a:font-semibold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-brand-primary hover:prose-a:decoration-brand-primary transition-all
+                  prose-a:text-brand-primary prose-a:font-semibold prose-a:underline prose-a:decoration-2 prose-a:underline-offset-4 hover:prose-a:text-brand-light hover:prose-a:decoration-brand-light transition-all
 
                   /* List formatting */
                   prose-ul:list-none prose-ul:pl-0 prose-ul:mb-6 md:prose-ul:mb-8 prose-ul:space-y-3 md:prose-ul:space-y-4

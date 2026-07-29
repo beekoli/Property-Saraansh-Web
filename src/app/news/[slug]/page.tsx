@@ -12,17 +12,17 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Decode common WordPress HTML entities (e.g. &amp; -> &).
+// Decode WordPress HTML entities (numeric + common named) e.g. &#8217; -> ’.
 const decodeHtml = (str: string) =>
   str
-    .replace(/&#038;/g, '&')
     .replace(/&amp;/g, '&')
-    .replace(/&#8211;/g, '–')
-    .replace(/&#8212;/g, '—')
-    .replace(/&#8216;/g, '‘')
-    .replace(/&#8217;/g, '’')
-    .replace(/&#8220;/g, '“')
-    .replace(/&#8221;/g, '”');
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(parseInt(n, 10)));
 
 const titleCaseCat = (s: string) =>
   s.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
@@ -42,9 +42,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Story Not Found' };
   }
 
-  const fallbackTitle = `${news.title.rendered.replace(/&#038;|&amp;/g, '&')} | Property Saraansh News`;
+  const fallbackTitle = `${decodeHtml(news.title.rendered)} | Property Saraansh News`;
   const fallbackDesc =
-    news.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').slice(0, 150) || `Read ${news.title.rendered}`;
+    decodeHtml(news.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || '').slice(0, 150) || `Read ${decodeHtml(news.title.rendered)}`;
 
   const seoJson = news.rank_math_json || news.yoast_head_json;
   const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
@@ -113,7 +113,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
       {
         '@type': 'ListItem',
         position: 3,
-        name: news.title.rendered.replace(/<[^>]*>/g, ''),
+        name: decodeHtml(news.title.rendered.replace(/<[^>]*>/g, '')),
         item: `${FRONTEND_URL}/news/${slug}`,
       },
     ],
