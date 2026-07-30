@@ -140,6 +140,13 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
     '/our-videos/eldeco-7-peaks-omicron-1',
   '/our-videos/max-105-vs-max-128-explained': '/our-videos/max-estates-105-vs-128',
 
+  // --- Duplicate WordPress posts ------------------------------------------
+  // The news script published this article twice seven minutes apart, so
+  // WordPress gave the second copy a "-2" slug. The duplicate has been
+  // trashed; this consolidates the URL rather than leaving it to 404.
+  '/news/yeidas-new-yamuna-city-vision-firms-up-consultant-tender-closes-august-5-2':
+    '/news/yeidas-new-yamuna-city-vision-firms-up-consultant-tender-closes-august-5',
+
   // --- Shorts -------------------------------------------------------------
   '/our-shorts/eldeco-7-peaks-residences-3-4-bhk-at-omicron-1a-eldeco-greater-noida':
     '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
