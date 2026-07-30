@@ -424,16 +424,17 @@ export const videos: Video[] = [
     "views": "17K views"
   },
   {
-    "slug": "ats-province-d-olympia-vs-ace-estate",
-    "title": "ATS Province D Olympia vs ACE Estate: Which Yamuna Expressway Township Is Better in 2025?",
-    "description": "ATS Province D Olympia vs Ace Estate — which Yamuna Expressway township is the better investment in 2025? A detailed comparison.",
+    "slug": "ats-province-d-olympia-vs-ace-estate-yamuna-expressway",
+    "title": "ATS Province D Olympia vs ACE Estate | Best Yamuna Expressway Plotted Township?",
+    "description": "ATS Province D Olympia (101 acres, Sector 22D) vs ACE Estate — honest comparison of plot sizes, greenery, clubhouse, pricing and Jewar Airport connectivity on Yamuna Expressway.",
+    "content": "Property Saraansh compares ATS Province D Olympia and ACE Estate — two major plotted townships in Sector 22D, Yamuna Expressway. ATS Province D Olympia: 101.2 acres purely plotted, plots 150-270 sq yd, 1.5 lakh sq ft clubhouse, 35 acres open greens + 13 acres landscaped, 2,400+ trees, biophilic design, 20 min to Jewar Airport, RERA UPRERAPRJ556048/03/2025. ACE Estate: 68 acres, plots 150-300 sq yd, ~₹1.30L/sq yd, RERA UPRERAPRJ442226/10/2024. Verdict: ATS Province D Olympia edges ahead on scale, green ratio, connectivity and early-phase appreciation potential. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "WGZZIqeLoaU",
     "thumbnail": "https://img.youtube.com/vi/WGZZIqeLoaU/maxresdefault.jpg",
-    "publishedAt": "2026-06-11",
-    "duration": "PT5M35S",
-    "focusKeyword": "ats province d",
+    "publishedAt": "2025-02-22",
+    "duration": "PT5M34S",
+    "focusKeyword": "ats province d olympia vs ace estate",
     "category": "Real Estate",
-    "views": "20K views"
+    "views": "21K views"
   },
   {
     "slug": "purvanchal-sunbliss-22d-yamuna-expressway",
