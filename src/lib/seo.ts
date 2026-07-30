@@ -97,6 +97,58 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
 
 export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
 
+export interface PageMetadataInput {
+  /** Route path beginning with "/" — use "/" for the homepage. */
+  path: string;
+  title: string;
+  description: string;
+  /** Set for utility pages (thank-you, etc.) that must stay out of the index. */
+  noIndex?: boolean;
+  /** Absolute or root-relative share image. Defaults to the site OG image. */
+  image?: string;
+}
+
+/**
+ * Build metadata for a static route: self-referencing canonical plus per-page
+ * OpenGraph/Twitter tags.
+ *
+ * Most routes previously returned only { title, description }. Everything else
+ * fell through to the static openGraph block in layout.tsx, so every page on
+ * the site shipped og:url = the homepage and the generic site-wide og:title.
+ * Search engines also had no canonical to disambiguate the apex/www duplicates.
+ */
+export function buildPageMetadata({
+  path,
+  title,
+  description,
+  noIndex = false,
+  image = '/logo.png',
+}: PageMetadataInput): Metadata {
+  const url = `${FRONTEND_URL}${path === '/' ? '' : path.replace(/\/$/, '')}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'website',
+      siteName: 'Property Saraansh',
+      locale: 'en_IN',
+      url,
+      title,
+      description,
+      images: [{ url: image, alt: 'Property Saraansh' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+    ...(noIndex ? { robots: { index: false, follow: true } } : {}),
+  };
+}
+
 export function getWPBaseUrl() {
   const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
   if (wpUrl) {

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { getPageBySlug } from '@/lib/wordpress';
 import ContactClient from './ContactClient';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -10,10 +11,11 @@ export async function generateMetadata(): Promise<Metadata> {
     return { title: 'Contact Us | Property Saraansh Noida' };
   }
 
-  return {
+  return buildPageMetadata({
+    path: '/contact',
     title: page.yoast_head_json.title || 'Contact Us | Property Saraansh Noida',
     description: page.yoast_head_json.description || 'Get in touch with Saraansh Seth today.',
-  };
+  });
 }
 
 export default async function Contact() {

@@ -15,6 +15,12 @@ interface PropertyCardProps {
   reraNumber?: string;
   possessionDate?: string;
   nearbyLine?: string;
+  /**
+   * Set on the first row of cards. next/image lazy-loads by default, which
+   * delays the LCP element on /properties and the homepage until after
+   * hydration; priority preloads it instead.
+   */
+  priority?: boolean;
 }
 
 // Brand green pill — all informational badges share one consistent style
@@ -49,6 +55,7 @@ export default function PropertyCard({
   reraNumber,
   possessionDate,
   nearbyLine,
+  priority = false,
 }: PropertyCardProps) {
   const statusBadge = getStatusBadge(possessionDate);
   const videoHref = getVideoHref(id, videoId);
@@ -71,6 +78,7 @@ export default function PropertyCard({
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={priority}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
 

@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: '/privacy-policy',
   title: 'Privacy Policy | Property Saraansh',
   description: 'Our Privacy Policy outlines how we collect, use, and protect your personal information.',
-};
+});
 
 export default function PrivacyPolicy() {
   return (

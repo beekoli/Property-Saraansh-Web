@@ -34,7 +34,7 @@ export default function FloorPlans({ floorPlans }: Props) {
       <div className="border border-gray-200 p-8 flex justify-center bg-gray-50">
         {floorPlans.map((fp) => activeFloorPlan === fp.id && (
           <div key={fp.id} className="text-center w-full max-w-2xl">
-            <img src={fp.image} alt={fp.title} className="w-full h-auto max-h-[600px] object-contain mb-6 shadow-md border border-gray-300 bg-white" />
+            <img src={fp.image} alt={fp.title} className="w-full h-auto max-h-[600px] object-contain mb-6 shadow-md border border-gray-300 bg-white"  loading="lazy" decoding="async" />
             <h3 className="text-2xl font-bold text-[#1e2333] mb-2">{fp.title}</h3>
             <p className="text-gray-600 text-lg">{fp.desc}</p>
             <button className="mt-6 bg-[#1e2333] text-white px-8 py-3 rounded hover:bg-gray-800 font-bold uppercase tracking-wider">

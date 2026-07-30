@@ -11,7 +11,7 @@ export default function GallerySection({ gallery }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {gallery.map((img, idx) => (
           <div key={idx} className="relative h-64 overflow-hidden shadow-md">
-            <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+            <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"  loading="lazy" decoding="async" />
           </div>
         ))}
       </div>

@@ -1,14 +1,16 @@
 import { Metadata } from 'next';
 import PropertyCard from '@/components/PropertyCard';
 import { getPropertiesByTypeTerm, getFeaturedImage, getCardData } from '@/lib/wordpress';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return buildPageMetadata({
+    path: '/commercial-properties',
     title: 'Commercial Properties in Noida | High ROI Investment | Property Saraansh',
     description: 'Explore high-yielding commercial properties in Noida and Greater Noida. Retail shops, office spaces, and food courts with maximum footfall and rental growth.',
-  };
+  });
 }
 
 export default async function CommercialProperties() {

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
-import { getBlogBySlug, getLatestBlogs, getFeaturedImage } from '@/lib/wordpress';
-import { notFound } from 'next/navigation';
+import { getBlogBySlug, getLatestBlogs, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import VideoPlayer from '@/components/VideoPlayer';
 import { getVideoByYoutubeId } from '@/lib/videos';
@@ -95,11 +95,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const blog = await getBlogBySlug(slug);
+  const resolved = await getPostBySlugWithSection(slug);
 
-  if (!blog) {
+  if (!resolved) {
     notFound();
   }
+
+  // A News-category post reached here only because /blog/[slug] and
+  // /news/[slug] used to serve the identical post. Send it to the route that
+  // owns it with a 308 instead of serving a duplicate.
+  if (resolved.section === 'news') {
+    permanentRedirect(`/news/${slug}`);
+  }
+
+  const blog = resolved.post;
 
   // Fetch related posts (exclude current)
   const allBlogs = await getLatestBlogs(4);
@@ -369,7 +378,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {/* Author Bio Card (End of Article) */}
               <div className="bg-brand-pale/30 border border-brand-light/10 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 mt-16 shadow-inner">
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-brand-accent shrink-0 shadow-md">
-                  <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover" />
+                  <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 </div>
                 <div className="text-center sm:text-left">
                   <h4 className="heading-playfair text-lg font-bold text-brand-dark leading-none mb-1.5">Saraansh Seth</h4>

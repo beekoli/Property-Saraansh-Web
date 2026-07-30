@@ -1,11 +1,15 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { CheckCircle2, ArrowRight, Play, Calendar, Eye } from 'lucide-react';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 
-export const metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: '/thank-you',
   title: 'Thank You | Property Saraansh',
   description: 'Thank you for your enquiry. We will get back to you shortly.',
-};
+  noIndex: true,
+});
 
 export default async function ThankYouPage() {
   const videos = await getVideosWithRealtimeStats();
@@ -110,7 +114,7 @@ export default async function ThankYouPage() {
                 src={latestVideo.thumbnail} 
                 alt={latestVideo.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-              />
+               loading="lazy" decoding="async" />
               <div className="absolute inset-0 bg-brand-dark/40 group-hover:bg-brand-dark/20 transition-colors duration-300" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-brand-accent text-brand-dark p-3.5 rounded-full shadow-lg transform group-hover:scale-110 transition-all duration-300">

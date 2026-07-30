@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { generateRankMathMetadata, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
-import { getNewsBySlug, getLatestNews, getFeaturedImage } from '@/lib/wordpress';
-import { notFound } from 'next/navigation';
+import { getNewsBySlug, getLatestNews, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
@@ -66,11 +66,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function NewsArticlePage({ params }: PageProps) {
   const { slug } = await params;
-  const news = await getNewsBySlug(slug);
+  const resolved = await getPostBySlugWithSection(slug);
 
-  if (!news) {
+  if (!resolved) {
     notFound();
   }
+
+  // Evergreen (non-News) posts belong to /blog. They used to render here too,
+  // producing a duplicate copy of every article. 308 them to the owning route.
+  if (resolved.section === 'blog') {
+    permanentRedirect(`/blog/${slug}`);
+  }
+
+  const news = resolved.post;
 
   // Related news (exclude current).
   const allNews = await getLatestNews(4);
@@ -167,7 +175,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
                   src={featuredImg}
                   alt={decodeHtml(news.title.rendered)}
                   className="w-full h-56 md:h-96 object-cover rounded-t-3xl"
-                />
+                 decoding="async" fetchPriority="high" />
               </div>
             )}
 

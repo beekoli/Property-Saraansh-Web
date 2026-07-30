@@ -1,14 +1,16 @@
 import { Metadata } from 'next';
 import PropertyCard from '@/components/PropertyCard';
 import { getPropertiesByTypeTerm, getFeaturedImage, getCardData } from '@/lib/wordpress';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return buildPageMetadata({
+    path: '/residential-properties',
     title: 'Luxury Residential Properties in Noida | Premium Living | Property Saraansh',
     description: 'Find your dream home with low-density residential towers, premium villas, and luxury sky condos in Noida Expressway and Sector 150. Honest reviews.',
-  };
+  });
 }
 
 export default async function ResidentialProperties() {

@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
+import Pagination from '@/components/Pagination';
 import { WPPost, getFeaturedImage } from '@/lib/wordpress';
 
 interface Props {
   initialBlogs: WPPost[];
+  page?: number;
+  totalPages?: number;
+  total?: number;
 }
 
 // Nicely capitalise a WordPress category name for display (e.g. "yamuna expressway" -> "Yamuna Expressway").
@@ -24,8 +28,14 @@ const decodeHtml = (str: string) =>
     .replace(/&#8220;/g, '“')
     .replace(/&#8221;/g, '”');
 
-export default function BlogClient({ initialBlogs }: Props) {
+export default function BlogClient({
+  initialBlogs,
+  page = 1,
+  totalPages = 1,
+  total = 0,
+}: Props) {
   const [activeCategory, setActiveCategory] = useState('All');
+  const isFirstPage = page <= 1;
 
   // Filter posts based on category
   // In mock data and WP post embedding, let's categorize them appropriately
@@ -45,11 +55,13 @@ export default function BlogClient({ initialBlogs }: Props) {
     ? initialBlogs
     : initialBlogs.filter(post => getPostCategory(post).toLowerCase() === activeCategory.toLowerCase());
 
-  // Use the first post in the full list as the featured article when 'All' is active
-  const featuredPost = initialBlogs[0];
-  const displayGridPosts = activeCategory === 'All'
+  // The featured hero only makes sense on page 1. On deeper pages every post
+  // goes into the grid, otherwise post #13, #25 ... would silently lose its card.
+  const featuredPost = isFirstPage ? initialBlogs[0] : undefined;
+  const displayGridPosts = activeCategory === 'All' && featuredPost
     ? filteredBlogs.slice(1) // exclude featured post from the grid
     : filteredBlogs;
+
 
   return (
     <div className="min-h-screen bg-brand-pale flex flex-col">
@@ -91,7 +103,7 @@ export default function BlogClient({ initialBlogs }: Props) {
                   src={getFeaturedImage(featuredPost)}
                   alt={decodeHtml(featuredPost.title.rendered)}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+                 decoding="async" fetchPriority="high" />
                 <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
                   {getPostCategory(featuredPost)}
                 </div>
@@ -112,7 +124,7 @@ export default function BlogClient({ initialBlogs }: Props) {
                 <div className="flex items-center justify-between mt-auto pt-6 border-t border-brand-pale">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-brand-pale border border-brand-light mr-3 overflow-hidden">
-                      <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover" />
+                      <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-brand-ink">Saraansh Seth</p>
@@ -170,6 +182,14 @@ export default function BlogClient({ initialBlogs }: Props) {
             <p className="text-lg">No articles found matching the &quot;{activeCategory}&quot; category.</p>
           </div>
         )}
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          basePath="/blog"
+          total={total}
+          itemLabel="articles"
+        />
       </div>
     </div>
   );

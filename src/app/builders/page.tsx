@@ -1,14 +1,16 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getBuilders } from '@/lib/wordpress';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
+  return buildPageMetadata({
+    path: '/builders',
     title: 'Builders & Developers in Noida | Property Saraansh',
     description: 'Explore trusted real estate developers and builders in Noida, Greater Noida and Yamuna Expressway — their track record, delivered projects, and current listings, reviewed by Property Saraansh.',
-  };
+  });
 }
 
 export default async function BuildersPage() {
@@ -53,7 +55,7 @@ export default async function BuildersPage() {
                   <div className="w-16 h-16 rounded-lg bg-brand-pale flex items-center justify-center flex-shrink-0 overflow-hidden">
                     {logo ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={logo} alt={builder.name} className="w-full h-full object-contain p-2" />
+                      <img src={logo} alt={builder.name} className="w-full h-full object-contain p-2"  loading="lazy" decoding="async" />
                     ) : (
                       <span className="text-brand-primary font-bold text-lg heading-playfair">
                         {builder.name.slice(0, 2).toUpperCase()}

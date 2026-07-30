@@ -1,13 +1,15 @@
 import { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import SlideUp from '@/components/animations/SlideUp';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: '/our-team',
   title: 'Our Team | Property Saraansh',
   description: 'Meet the expert real estate consultants and portfolio managers at Property Saraansh.',
-};
+});
 
 const teamMembers = [
   {
@@ -69,7 +71,7 @@ export default function OurTeam() {
                     src={member.image} 
                     alt={member.name} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
                 <div className="p-8 flex-grow flex flex-col">
                   <h3 className="heading-playfair text-2xl font-bold text-brand-dark mb-1">{member.name}</h3>

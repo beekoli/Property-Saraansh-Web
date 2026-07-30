@@ -70,3 +70,8 @@ maxcontent-deploy.bat
 descupd-deploy.bat
 robust-deploy.bat
 eldeco-deploy.bat
+
+# Local secrets for the news-to-WP script (never commit)
+scripts/news-to-wp/.env
+.env
+.env.local

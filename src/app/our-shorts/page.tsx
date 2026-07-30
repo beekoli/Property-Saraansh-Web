@@ -2,15 +2,17 @@ import { Metadata } from 'next';
 import { getChannelStats } from '@/lib/youtube';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import ShortsClient from './ShortsClient';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
 export async function generateMetadata(): Promise<Metadata> {
   const stats = await getChannelStats();
-  return {
+  return buildPageMetadata({
+    path: '/our-shorts',
     title: `Property Shorts & Real Estate Tips | Property Saraansh`,
     description: `Watch quick, under-60-second video walkthroughs, RERA alerts, and Noida property market updates by Saraansh Seth. Over ${stats.subscriberCount} subscribers on YouTube.`,
-  };
+  });
 }
 
 export default async function OurShorts() {

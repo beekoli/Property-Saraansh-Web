@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 import { videos } from '@/lib/videos';
 
 interface PageProps {
@@ -19,8 +19,8 @@ export default async function ShortUrlRedirectPage({ params }: PageProps) {
   );
 
   if (video) {
-    redirect(`/our-videos/${video.slug}`);
+    permanentRedirect(`/our-videos/${video.slug}`);
   } else {
-    redirect(`/our-videos`);
+    permanentRedirect(`/our-videos`);
   }
 }

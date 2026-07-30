@@ -86,10 +86,14 @@ export default function ShortsClient({ initialVideos, stats }: Props) {
         {/* Shorts Grid */}
         {initialVideos.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
-            {initialVideos.slice(0, visibleCount).map((video) => (
+            {/* Same reasoning as /our-videos: render every card so each short
+                keeps a crawlable internal link, and hide the overflow visually. */}
+            {initialVideos.map((video, index) => (
               <div 
                 key={video.id} 
-                className="group bg-white rounded-2xl overflow-hidden border border-brand-pale hover:shadow-xl transition-all duration-300 flex flex-col h-full relative"
+                className={`group bg-white rounded-2xl overflow-hidden border border-brand-pale hover:shadow-xl transition-all duration-300 flex-col h-full relative ${
+                  index >= visibleCount ? 'hidden' : 'flex'
+                }`}
               >
                 {/* 9:16 Portrait Thumbnail Container */}
                 <Link 
