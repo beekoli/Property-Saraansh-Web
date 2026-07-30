@@ -173,6 +173,19 @@ export const MOCK_PROPERTIES: WPProperty[] = propertiesData as WPProperty[];
 export const MOCK_NEWS: WPPost[] = newsData as WPPost[];
 
 async function fetchAPI(endpoint: string) {
+  const result = await fetchAPIWithMeta(endpoint);
+  return result ? result.data : null;
+}
+
+/**
+ * Same as fetchAPI, but also surfaces the WordPress pagination headers.
+ * WordPress returns the collection size in X-WP-Total and the number of
+ * available pages in X-WP-TotalPages; we need those to render real pagination
+ * links on /blog so that no post is left without an internal link.
+ */
+async function fetchAPIWithMeta(
+  endpoint: string
+): Promise<{ data: unknown; total: number; totalPages: number } | null> {
   if (!API_URL) {
     return null;
   }
@@ -206,7 +219,11 @@ async function fetchAPI(endpoint: string) {
       rewrittenText = rawText.replace(hostRegex, frontendHost);
     }
 
-    return JSON.parse(rewrittenText);
+    return {
+      data: JSON.parse(rewrittenText),
+      total: Number(res.headers.get('x-wp-total') || 0),
+      totalPages: Number(res.headers.get('x-wp-totalpages') || 0),
+    };
   } catch (err) {
     console.error("WordPress Fetch Error:", err);
     return null;
@@ -233,8 +250,63 @@ export async function getLatestBlogs(limit = 3): Promise<WPPost[]> {
   // exists, exclude it; otherwise behave exactly as before.
   const newsCatId = await getNewsCategoryId();
   const exclude = newsCatId ? `&categories_exclude=${newsCatId}` : '';
-  const data = await fetchAPI(`/posts?_embed&per_page=${limit}${exclude}`);
+  // orderby/order are pinned explicitly. Relying on the WordPress default made
+  // ordering vulnerable to sticky posts and plugin filters, which silently
+  // pushed recent articles off the listing and left them without any internal
+  // link (orphan pages Google then declines to index).
+  const data = await fetchAPI(
+    `/posts?_embed&per_page=${limit}&orderby=date&order=desc${exclude}`
+  );
   return data && data.length > 0 ? data : MOCK_BLOGS.slice(0, limit);
+}
+
+export interface BlogPage {
+  posts: WPPost[];
+  page: number;
+  perPage: number;
+  totalPages: number;
+  total: number;
+}
+
+/**
+ * One page of the evergreen blog feed, newest first.
+ *
+ * /blog previously rendered a fixed slice of 20 posts with no pagination, so
+ * every article past the 20th had zero inbound internal links. Paginating means
+ * each post stays reachable from a crawlable <a href>, no matter how much the
+ * archive grows.
+ */
+export async function getBlogsPage(page = 1, perPage = 12): Promise<BlogPage> {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  const newsCatId = await getNewsCategoryId();
+  const exclude = newsCatId ? `&categories_exclude=${newsCatId}` : '';
+
+  const result = await fetchAPIWithMeta(
+    `/posts?_embed&per_page=${perPage}&page=${safePage}&orderby=date&order=desc${exclude}`
+  );
+
+  const posts = (result?.data as WPPost[] | null) ?? null;
+
+  if (!posts || posts.length === 0) {
+    // Fall back to the bundled snapshot so the page still renders if WordPress
+    // is unreachable, paginating the local list the same way.
+    const start = (safePage - 1) * perPage;
+    return {
+      posts: MOCK_BLOGS.slice(start, start + perPage),
+      page: safePage,
+      perPage,
+      totalPages: Math.max(1, Math.ceil(MOCK_BLOGS.length / perPage)),
+      total: MOCK_BLOGS.length,
+    };
+  }
+
+  return {
+    posts,
+    page: safePage,
+    perPage,
+    totalPages: Math.max(1, result?.totalPages || 1),
+    total: result?.total || posts.length,
+  };
 }
 
 export async function getBlogBySlug(slug: string): Promise<WPPost | null> {
