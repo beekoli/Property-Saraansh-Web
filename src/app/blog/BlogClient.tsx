@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
+import Pagination from '@/components/Pagination';
 import { WPPost, getFeaturedImage } from '@/lib/wordpress';
 
 interface Props {
@@ -26,30 +27,6 @@ const decodeHtml = (str: string) =>
     .replace(/&#8217;/g, '’')
     .replace(/&#8220;/g, '“')
     .replace(/&#8221;/g, '”');
-
-// Build the compact page list: always show first and last, plus a window
-// around the current page, with gaps marked by null.
-function buildPageList(current: number, totalPages: number): Array<number | null> {
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
-  const pages = new Set<number>([1, totalPages, current]);
-  if (current - 1 > 1) pages.add(current - 1);
-  if (current + 1 < totalPages) pages.add(current + 1);
-
-  const sorted = Array.from(pages).sort((a, b) => a - b);
-  const withGaps: Array<number | null> = [];
-
-  sorted.forEach((p, i) => {
-    if (i > 0 && p - sorted[i - 1] > 1) withGaps.push(null);
-    withGaps.push(p);
-  });
-
-  return withGaps;
-}
-
-const pageHref = (p: number) => (p <= 1 ? '/blog' : `/blog?page=${p}`);
 
 export default function BlogClient({
   initialBlogs,
@@ -85,7 +62,6 @@ export default function BlogClient({
     ? filteredBlogs.slice(1) // exclude featured post from the grid
     : filteredBlogs;
 
-  const pageList = buildPageList(page, totalPages);
 
   return (
     <div className="min-h-screen bg-brand-pale flex flex-col">
@@ -207,72 +183,13 @@ export default function BlogClient({
           </div>
         )}
 
-        {/*
-          Pagination rendered as real <a href> links (not buttons) so that
-          Googlebot can follow them. Without this, every article past the first
-          page had no internal link anywhere on the site and ended up as an
-          orphan page stuck in "Crawled - currently not indexed".
-        */}
-        {totalPages > 1 && (
-          <nav
-            aria-label="Blog pagination"
-            className="mt-16 flex flex-col items-center gap-4"
-          >
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {page > 1 && (
-                <Link
-                  href={pageHref(page - 1)}
-                  rel="prev"
-                  className="px-4 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold bg-white text-brand-primary border border-brand-light/20 hover:border-brand-light transition-all shadow-sm"
-                >
-                  ← Previous
-                </Link>
-              )}
-
-              {pageList.map((p, i) =>
-                p === null ? (
-                  <span
-                    key={`gap-${i}`}
-                    className="px-2 text-brand-ink/40 select-none"
-                  >
-                    …
-                  </span>
-                ) : p === page ? (
-                  <span
-                    key={p}
-                    aria-current="page"
-                    className="px-4 py-2.5 rounded-full text-xs font-bold bg-brand-primary text-white shadow-md"
-                  >
-                    {p}
-                  </span>
-                ) : (
-                  <Link
-                    key={p}
-                    href={pageHref(p)}
-                    className="px-4 py-2.5 rounded-full text-xs font-bold bg-white text-brand-primary border border-brand-light/20 hover:border-brand-light transition-all shadow-sm"
-                  >
-                    {p}
-                  </Link>
-                )
-              )}
-
-              {page < totalPages && (
-                <Link
-                  href={pageHref(page + 1)}
-                  rel="next"
-                  className="px-4 py-2.5 rounded-full text-xs uppercase tracking-wider font-bold bg-white text-brand-primary border border-brand-light/20 hover:border-brand-light transition-all shadow-sm"
-                >
-                  Next →
-                </Link>
-              )}
-            </div>
-
-            <p className="text-xs text-brand-ink/50">
-              Page {page} of {totalPages}
-              {total > 0 && ` · ${total} articles`}
-            </p>
-          </nav>
-        )}
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          basePath="/blog"
+          total={total}
+          itemLabel="articles"
+        />
       </div>
     </div>
   );

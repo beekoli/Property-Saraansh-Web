@@ -1,11 +1,15 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import { CheckCircle2, ArrowRight, Play, Calendar, Eye } from 'lucide-react';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 
-export const metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: '/thank-you',
   title: 'Thank You | Property Saraansh',
   description: 'Thank you for your enquiry. We will get back to you shortly.',
-};
+  noIndex: true,
+});
 
 export default async function ThankYouPage() {
   const videos = await getVideosWithRealtimeStats();

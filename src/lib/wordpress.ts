@@ -324,6 +324,52 @@ export async function getBlogsPage(page = 1, perPage = 12): Promise<BlogPage> {
   };
 }
 
+/**
+ * True when a WordPress post is filed under the "News" category.
+ *
+ * /blog/[slug] and /news/[slug] used to run the exact same slug lookup with no
+ * category constraint, so EVERY post resolved under BOTH routes with a 200 and
+ * its own self-referencing canonical. That is duplicate content across the
+ * whole archive. Callers now use this to decide which route owns a post and
+ * redirect the other one.
+ */
+export function isNewsPost(post: WPPost, newsCatId: number | null): boolean {
+  if (!newsCatId) return false;
+
+  const terms = post._embedded?.['wp:term']?.[0] || [];
+  if (terms.length > 0) {
+    return terms.some((t) => t.id === newsCatId || t.slug === 'news');
+  }
+
+  // _embed missing (e.g. the bundled snapshot): fall back to the raw ids.
+  const categories = (post as WPPost & { categories?: number[] }).categories;
+  return Array.isArray(categories) ? categories.includes(newsCatId) : false;
+}
+
+export type PostSection = 'blog' | 'news';
+
+/**
+ * Resolve a post by slug together with the section that owns it, so the route
+ * handlers can 301 a request that arrived on the wrong path.
+ */
+export async function getPostBySlugWithSection(
+  slug: string
+): Promise<{ post: WPPost; section: PostSection } | null> {
+  const [data, newsCatId] = await Promise.all([
+    fetchAPI(`/posts?_embed&slug=${slug}`),
+    getNewsCategoryId(),
+  ]);
+
+  const post: WPPost | undefined =
+    data && data.length > 0
+      ? data[0]
+      : MOCK_BLOGS.find((b) => b.slug === slug) || MOCK_NEWS.find((n) => n.slug === slug);
+
+  if (!post) return null;
+
+  return { post, section: isNewsPost(post, newsCatId) ? 'news' : 'blog' };
+}
+
 export async function getBlogBySlug(slug: string): Promise<WPPost | null> {
   const data = await fetchAPI(`/posts?_embed&slug=${slug}`);
   if (data && data.length > 0) return data[0];
@@ -341,6 +387,44 @@ export async function getLatestNews(limit = 20): Promise<WPPost[]> {
   if (!newsCatId) return MOCK_NEWS.slice(0, limit);
   const data = await fetchAPI(`/posts?_embed&per_page=${limit}&categories=${newsCatId}&orderby=date&order=desc`);
   return data && data.length > 0 ? data : MOCK_NEWS.slice(0, limit);
+}
+
+/**
+ * One page of the News feed, newest first. Mirrors getBlogsPage — /news was
+ * capped at 24 items with no pagination, so older news articles had no inbound
+ * internal link once they fell off the listing.
+ */
+export async function getNewsPage(page = 1, perPage = 12): Promise<BlogPage> {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  const newsCatId = await getNewsCategoryId();
+
+  const emptyFallback = (): BlogPage => {
+    const start = (safePage - 1) * perPage;
+    return {
+      posts: MOCK_NEWS.slice(start, start + perPage),
+      page: safePage,
+      perPage,
+      totalPages: Math.max(1, Math.ceil(MOCK_NEWS.length / perPage)),
+      total: MOCK_NEWS.length,
+    };
+  };
+
+  if (!newsCatId) return emptyFallback();
+
+  const result = await fetchAPIWithMeta(
+    `/posts?_embed&per_page=${perPage}&page=${safePage}&categories=${newsCatId}&orderby=date&order=desc`
+  );
+
+  const posts = (result?.data as WPPost[] | null) ?? null;
+  if (!posts || posts.length === 0) return emptyFallback();
+
+  return {
+    posts,
+    page: safePage,
+    perPage,
+    totalPages: Math.max(1, result?.totalPages || 1),
+    total: result?.total || posts.length,
+  };
 }
 
 export async function getNewsBySlug(slug: string): Promise<WPPost | null> {

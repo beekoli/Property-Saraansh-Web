@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
-import { getLatestBlogs, getLatestNews, getProperties } from '@/lib/wordpress';
+import { getLatestBlogs, getLatestNews, getProperties, getBuilders } from '@/lib/wordpress';
+import { getCities } from '@/lib/property';
 import { videos } from '@/lib/videos';
 
 export const revalidate = 3600; // Revalidate sitemap every hour
@@ -38,12 +39,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/our-shorts',
     '/blog',
     '/news',
+    // Previously absent from the sitemap entirely: /builders is a hub linking
+    // 20 developer pages, and these two are legitimate indexable content.
+    '/builders',
+    '/our-team',
+    '/careers',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'daily',
     priority: route === '' ? 1.0 : 0.8,
   }));
+
+  // 1b. Builder detail pages — 20 URLs Google could previously only reach by
+  // crawling, with no sitemap signal at all.
+  let builderRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const builders = await getBuilders();
+    builderRoutes = builders.map((builder) => ({
+      url: `${baseUrl}/builders/${builder.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    }));
+  } catch (err) {
+    console.error('Error generating sitemap builder routes:', err);
+  }
+
+  // 1c. City landing pages (/property-in/[city]) — high-intent local pages that
+  // were also missing from the sitemap.
+  let cityRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const cities = await getCities();
+    cityRoutes = cities.map((city) => ({
+      url: `${baseUrl}/property-in/${city.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    }));
+  } catch (err) {
+    console.error('Error generating sitemap city routes:', err);
+  }
 
   // 2. Dynamic Property Routes
   let propertyRoutes: MetadataRoute.Sitemap = [];
@@ -111,6 +147,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...blogListingRoutes,
+    ...cityRoutes,
+    ...builderRoutes,
     ...propertyRoutes,
     ...blogRoutes,
     ...newsRoutes,

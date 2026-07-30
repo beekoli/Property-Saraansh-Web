@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
+import Pagination from '@/components/Pagination';
 import { WPPost, getFeaturedImage } from '@/lib/wordpress';
 
 interface Props {
   initialNews: WPPost[];
+  page?: number;
+  totalPages?: number;
+  total?: number;
 }
 
 // Nicely capitalise a WordPress term name for display.
@@ -35,7 +39,12 @@ const getItemCategory = (post: WPPost): string => {
   return titleCase(specific);
 };
 
-export default function NewsClient({ initialNews }: Props) {
+export default function NewsClient({
+  initialNews,
+  page = 1,
+  totalPages = 1,
+  total = 0,
+}: Props) {
   const [activeCategory, setActiveCategory] = useState('All');
 
   const hasNews = initialNews.length > 0;
@@ -52,7 +61,7 @@ export default function NewsClient({ initialNews }: Props) {
           (post) => getItemCategory(post).toLowerCase() === activeCategory.toLowerCase()
         );
 
-  const featuredPost = activeCategory === 'All' ? filteredNews[0] : undefined;
+  const featuredPost = activeCategory === 'All' && page <= 1 ? filteredNews[0] : undefined;
   const gridPosts =
     activeCategory === 'All' ? filteredNews.slice(1) : filteredNews;
 
@@ -237,6 +246,14 @@ export default function NewsClient({ initialNews }: Props) {
             )}
           </>
         )}
+
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          basePath="/news"
+          total={total}
+          itemLabel="stories"
+        />
       </div>
     </div>
   );

@@ -11,7 +11,17 @@ import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
-import { parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
+import { parseDateToISO8601, durationToISO8601, buildPageMetadata } from '@/lib/seo';
+import type { Metadata } from 'next';
+
+// The homepage had no metadata export, so it inherited layout.tsx and shipped
+// no canonical at all — leaving apex/www and trailing-slash variants to compete.
+export const metadata: Metadata = buildPageMetadata({
+  path: '/',
+  title: 'Property Saraansh | Real Estate Consultancy Noida',
+  description:
+    'Trusted real estate consultancy in Noida. Expert property advisory, investment guidance, and honest YouTube-based project reviews for Noida, Greater Noida and Yamuna Expressway.',
+});
 
 
 export const revalidate = 60; // Revalidate every minute

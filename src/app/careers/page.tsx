@@ -1,14 +1,16 @@
 import { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import SlideUp from '@/components/animations/SlideUp';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
+  path: '/careers',
   title: 'Careers | Property Saraansh',
   description: 'Join our team to transform the Noida real estate industry with transparency and data-driven insights.',
-};
+});
 
 const benefits = [
   "Competitive compensation structure",

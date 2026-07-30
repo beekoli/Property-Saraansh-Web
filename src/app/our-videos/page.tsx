@@ -2,15 +2,17 @@ import { Metadata } from 'next';
 import { getChannelStats } from '@/lib/youtube';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import VideosClient from './VideosClient';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
 export async function generateMetadata(): Promise<Metadata> {
   const stats = await getChannelStats();
-  return {
+  return buildPageMetadata({
+    path: '/our-videos',
     title: `Real Estate Videos & Property Reviews | Property Saraansh`,
     description: `Browse honest video walkthroughs, RERA analyses, and ground reports for Noida real estate. Over ${stats.subscriberCount} subscribers on YouTube.`,
-  };
+  });
 }
 
 export default async function OurVideos() {

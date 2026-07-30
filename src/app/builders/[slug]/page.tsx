@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
 import { getBuilders, getBuilderBySlug, getPropertiesByBuilder, getFeaturedImage, getCardData } from '@/lib/wordpress';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
 
@@ -20,10 +21,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const builder = await getBuilderBySlug(slug);
   if (!builder) return { title: 'Builder Not Found | Property Saraansh' };
 
-  return {
+  return buildPageMetadata({
+    path: `/builders/${slug}`,
     title: `${builder.name} Projects in Noida | Property Saraansh`,
     description: `Explore all ${builder.name} projects in Noida, Greater Noida and Yamuna Expressway — price, floor plans, possession status, and honest reviews from Property Saraansh.`,
-  };
+  });
 }
 
 export default async function BuilderProfilePage({ params }: Props) {

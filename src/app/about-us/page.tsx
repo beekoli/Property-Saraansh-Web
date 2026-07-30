@@ -1,15 +1,17 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getChannelStats } from '@/lib/youtube';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 60; // Revalidate every minute
 
 export async function generateMetadata(): Promise<Metadata> {
   const stats = await getChannelStats();
-  return {
+  return buildPageMetadata({
+    path: '/about-us',
     title: 'About Saraansh Seth | Property Saraansh',
     description: `Noida's most trusted real estate consultant and YouTube educator with over ${stats.subscriberCount} subscribers. Learn about our mission and transparency guidelines.`,
-  };
+  });
 }
 
 export default async function AboutUs() {
