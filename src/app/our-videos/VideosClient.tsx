@@ -86,10 +86,20 @@ export default function VideosClient({ initialVideos, stats }: Props) {
         {/* Video Grid */}
         {initialVideos.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {initialVideos.slice(0, visibleCount).map((video) => (
+            {/*
+              Every card is rendered into the HTML and the ones past
+              visibleCount are only visually hidden. "Load More" is a button, and
+              Googlebot does not click buttons — slicing the array here meant 46
+              of 55 video pages had no internal link anywhere on the site and were
+              discoverable via the sitemap alone. Thumbnails are lazy-loaded, so
+              rendering the full list costs nothing up front.
+            */}
+            {initialVideos.map((video, index) => (
               <div 
                 key={video.id} 
-                className="group bg-white rounded-xl overflow-hidden border border-brand-pale hover:shadow-xl transition-all duration-300 flex flex-col h-full relative"
+                className={`group bg-white rounded-xl overflow-hidden border border-brand-pale hover:shadow-xl transition-all duration-300 flex-col h-full relative ${
+                  index >= visibleCount ? 'hidden' : 'flex'
+                }`}
               >
                 {/* Thumbnail Container */}
                 <Link 
