@@ -172,9 +172,45 @@ export const MOCK_PROPERTIES: WPProperty[] = propertiesData as WPProperty[];
 // route still renders (an empty state) when the WordPress API is unreachable.
 export const MOCK_NEWS: WPPost[] = newsData as WPPost[];
 
+/**
+ * Rewrite the WordPress host -> frontend host for page/post links, but NEVER
+ * for media (/wp-content, /wp-includes). Media must keep pointing at
+ * WordPress: next.config's images.remotePatterns already allows that host,
+ * and the /wp-content proxy rewrite does not actually resolve — so a
+ * rewritten image URL 404s. The negative lookahead also tolerates
+ * JSON-escaped slashes (\/), which is how WordPress encodes URLs.
+ */
+function rewriteWordPressHost(rawText: string): string {
+  const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com';
+  const frontendUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
+
+  const wpHost = wpUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const frontendHost = frontendUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+  if (!wpHost || !frontendHost || wpHost === frontendHost) return rawText;
+
+  const wpHostEscaped = wpHost.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const hostRegex = new RegExp(
+    wpHostEscaped + '(?!\\\\?/wp-content|\\\\?/wp-includes)',
+    'g'
+  );
+  return rawText.replace(hostRegex, frontendHost);
+}
+
 async function fetchAPI(endpoint: string) {
-  const result = await fetchAPIWithMeta(endpoint);
-  return result ? result.data : null;
+  if (!API_URL) {
+    return null;
+  }
+  try {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return null;
+    return JSON.parse(rewriteWordPressHost(await res.text()));
+  } catch (err) {
+    console.error("WordPress Fetch Error:", err);
+    return null;
+  }
 }
 
 /**
@@ -182,6 +218,9 @@ async function fetchAPI(endpoint: string) {
  * WordPress returns the collection size in X-WP-Total and the number of
  * available pages in X-WP-TotalPages; we need those to render real pagination
  * links on /blog so that no post is left without an internal link.
+ *
+ * Kept separate from fetchAPI so that fetchAPI's loose return type (JSON.parse
+ * yields `any`) stays intact for its many existing callers.
  */
 async function fetchAPIWithMeta(
   endpoint: string
@@ -194,33 +233,9 @@ async function fetchAPIWithMeta(
       next: { revalidate: 60 },
     });
     if (!res.ok) return null;
-    const rawText = await res.text();
-
-    const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com';
-    const frontendUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
-
-    const wpHost = wpUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-    const frontendHost = frontendUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-
-    let rewrittenText = rawText;
-    if (wpHost && frontendHost && wpHost !== frontendHost) {
-      const wpHostEscaped = wpHost.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-      // Rewrite the WordPress host -> frontend host for page/post links, but NEVER
-      // for media (/wp-content, /wp-includes). Media must keep pointing at
-      // WordPress: next.config's images.remotePatterns already allows that host,
-      // and the /wp-content proxy rewrite does not actually resolve — so a
-      // rewritten image URL 404s. The negative lookahead also tolerates
-      // JSON-escaped slashes (\/), which is how WordPress encodes URLs.
-      const hostRegex = new RegExp(
-        wpHostEscaped + '(?!\\\\?/wp-content|\\\\?/wp-includes)',
-        'g'
-      );
-      rewrittenText = rawText.replace(hostRegex, frontendHost);
-    }
 
     return {
-      data: JSON.parse(rewrittenText),
+      data: JSON.parse(rewriteWordPressHost(await res.text())),
       total: Number(res.headers.get('x-wp-total') || 0),
       totalPages: Number(res.headers.get('x-wp-totalpages') || 0),
     };
