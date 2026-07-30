@@ -16,7 +16,7 @@ export default async function Footer() {
                 src="/logo.png"
                 alt="Property Saraansh Logo"
                 className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
+               loading="lazy" decoding="async" />
             </Link>
             <p className="text-sm leading-relaxed mb-6 font-light">
               Your trusted YouTube-based real estate consultancy in Noida. We provide expert property reviews, market insights & investment guidance — all on YouTube.

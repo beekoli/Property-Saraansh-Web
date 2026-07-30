@@ -114,7 +114,7 @@ export default async function ThankYouPage() {
                 src={latestVideo.thumbnail} 
                 alt={latestVideo.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-              />
+               loading="lazy" decoding="async" />
               <div className="absolute inset-0 bg-brand-dark/40 group-hover:bg-brand-dark/20 transition-colors duration-300" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-brand-accent text-brand-dark p-3.5 rounded-full shadow-lg transform group-hover:scale-110 transition-all duration-300">

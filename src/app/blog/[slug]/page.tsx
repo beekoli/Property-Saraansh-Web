@@ -378,7 +378,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {/* Author Bio Card (End of Article) */}
               <div className="bg-brand-pale/30 border border-brand-light/10 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center gap-6 mt-16 shadow-inner">
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-brand-accent shrink-0 shadow-md">
-                  <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover" />
+                  <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 </div>
                 <div className="text-center sm:text-left">
                   <h4 className="heading-playfair text-lg font-bold text-brand-dark leading-none mb-1.5">Saraansh Seth</h4>

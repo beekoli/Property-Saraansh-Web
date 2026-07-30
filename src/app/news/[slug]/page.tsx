@@ -175,7 +175,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
                   src={featuredImg}
                   alt={decodeHtml(news.title.rendered)}
                   className="w-full h-56 md:h-96 object-cover rounded-t-3xl"
-                />
+                 decoding="async" fetchPriority="high" />
               </div>
             )}
 

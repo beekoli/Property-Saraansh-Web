@@ -235,7 +235,7 @@ export default function PropertiesClient({ properties }: Props) {
             key={`${location}-${type}-${status}-${maxBudget}-${viewMode}-${filteredProjects.length}`}
             className={`grid gap-8 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
           >
-            {filteredProjects.map((project) => {
+            {filteredProjects.map((project, cardIndex) => {
               const card = getCardData(project);
               const imgUrl = getFeaturedImage(project);
 
@@ -249,7 +249,7 @@ export default function PropertiesClient({ properties }: Props) {
                           src={imgUrl}
                           alt={project.title.rendered}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                        />
+                         loading="lazy" decoding="async" />
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
                           <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
                             {card.type}
@@ -338,6 +338,7 @@ export default function PropertiesClient({ properties }: Props) {
                     price={card.price}
                     type={card.type}
                     imageUrl={imgUrl}
+                    priority={cardIndex < 3}
                     bhk={card.bhk}
                     videoId={card.videoId}
                     reraNumber={card.reraNumber}

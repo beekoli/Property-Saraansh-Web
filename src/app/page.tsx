@@ -194,7 +194,7 @@ export default async function Home() {
           </SlideUp>
           
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((project) => {
+            {properties.map((project, cardIndex) => {
               const card = getCardData(project);
               return (
                 <StaggerItem key={project.id}>
@@ -206,6 +206,7 @@ export default async function Home() {
                     price={card.price}
                     type={card.type}
                     imageUrl={getFeaturedImage(project)}
+                    priority={cardIndex < 3}
                     bhk={card.bhk}
                     videoId={card.videoId}
                   />

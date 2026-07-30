@@ -49,7 +49,7 @@ export default function HeroSection({ titleHtml, price, location, featuredImage,
           
           {/* Left Large Box (50%) */}
           <div className="w-full md:w-1/2 h-full relative group cursor-pointer overflow-hidden bg-black">
-            <img src={gridImages[0]} alt="Featured" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" />
+            <img src={gridImages[0]} alt="Featured" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"  decoding="async" fetchPriority="high" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             
             {/* Floating Navigation Pill */}
@@ -73,7 +73,7 @@ export default function HeroSection({ titleHtml, price, location, featuredImage,
           <div className="hidden md:grid w-1/2 h-full grid-cols-2 grid-rows-2 gap-2">
             {[1, 2, 3, 4].map((idx) => (
               <div key={idx} className="relative w-full h-full group cursor-pointer overflow-hidden bg-black">
-                <img src={gridImages[idx]} alt={`Gallery ${idx}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100" />
+                <img src={gridImages[idx]} alt={`Gallery ${idx}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"  loading="lazy" decoding="async" />
               </div>
             ))}
           </div>

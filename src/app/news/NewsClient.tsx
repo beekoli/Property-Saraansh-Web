@@ -152,7 +152,7 @@ export default function NewsClient({
                       src={getFeaturedImage(featuredPost)}
                       alt={decodeHtml(featuredPost.title.rendered)}
                       className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
-                    />
+                     decoding="async" fetchPriority="high" />
                     <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
                       {getItemCategory(featuredPost)}
                     </div>
@@ -173,7 +173,7 @@ export default function NewsClient({
                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-brand-pale">
                       <div className="flex items-center">
                         <div className="w-10 h-10 rounded-full bg-brand-pale border border-brand-light mr-3 overflow-hidden">
-                          <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover" />
+                          <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-brand-ink">Property Saraansh Desk</p>

@@ -452,7 +452,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                 <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f8f3e6]">
                   {builder.acf?.builder_logo ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={builder.acf.builder_logo} alt={builder.name} className="h-full w-full object-contain p-2" />
+                    <img src={builder.acf.builder_logo} alt={builder.name} className="h-full w-full object-contain p-2"  loading="lazy" decoding="async" />
                   ) : (
                     <span className="text-xl font-bold text-[#8a6a1e] heading-playfair">{builder.name.slice(0, 3).toUpperCase()}</span>
                   )}
@@ -585,7 +585,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
       {lightbox && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(8,18,30,.92)] p-6" onClick={() => setLightbox(null)} role="dialog" aria-label="Image preview">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={lightbox} alt="Expanded view" className="max-h-full max-w-full rounded-lg object-contain" />
+          <img src={lightbox} alt="Expanded view" className="max-h-full max-w-full rounded-lg object-contain"  loading="lazy" decoding="async" />
           <button className="absolute right-5 top-5 text-3xl text-white" aria-label="Close">✕</button>
         </div>
       )}
