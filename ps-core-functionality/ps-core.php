@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Property Saraansh Core
  * Description: Registers the Properties custom post type and Advanced Custom Fields for the Next.js frontend.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: Property Saraansh
  */
 
@@ -283,3 +283,43 @@ add_action('rest_api_init', function () {
         'schema' => null,
     ));
 });
+
+/**
+ * 5. Expose Rank Math's per-post SEO fields to the REST API.
+ *
+ * Rank Math keeps the SEO title, meta description and focus keyword in post
+ * meta, but does not register those keys for REST. WordPress silently drops
+ * writes to unregistered meta keys, so anything posting them through /wp-json
+ * — notably scripts/news-to-wp/create-news-drafts.js, which sends
+ * meta.rank_math_title / rank_math_description / rank_math_focus_keyword —
+ * appeared to succeed while the values were discarded.
+ *
+ * That is why script-created news posts had an empty SEO title (the frontend
+ * then fell back to "<post title> | Property Saraansh") while hand-edited posts
+ * carried the copy written in the Rank Math box. Registering the keys makes
+ * them both readable and writable over REST.
+ */
+if (!function_exists('ps_register_rank_math_meta')) {
+    function ps_register_rank_math_meta() {
+        $keys = array(
+            'rank_math_title',
+            'rank_math_description',
+            'rank_math_focus_keyword',
+        );
+
+        foreach (array('post', 'properties') as $post_type) {
+            foreach ($keys as $key) {
+                register_post_meta($post_type, $key, array(
+                    'type'          => 'string',
+                    'single'        => true,
+                    'default'       => '',
+                    'show_in_rest'  => true,
+                    'auth_callback' => function () {
+                        return current_user_can('edit_posts');
+                    },
+                ));
+            }
+        }
+    }
+    add_action('init', 'ps_register_rank_math_meta');
+}
