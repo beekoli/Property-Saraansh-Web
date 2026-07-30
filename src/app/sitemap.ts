@@ -63,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogRoutes: MetadataRoute.Sitemap = [];
   // 3a. Paginated /blog listing pages. These are the crawl paths that keep
   // older articles linked, so they belong in the sitemap alongside the posts.
-  let blogListingRoutes: MetadataRoute.Sitemap = [];
+  const blogListingRoutes: MetadataRoute.Sitemap = [];
   try {
     const blogs = await getLatestBlogs(BLOG_LIMIT);
     blogRoutes = blogs.map((blog) => ({
