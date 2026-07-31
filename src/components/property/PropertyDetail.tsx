@@ -421,18 +421,32 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         {p.timeline.length > 0 && (
           <section id="status" className="scroll-mt-24 pt-9">
             <SectionHead eyebrow="Track The Progress" title="Possession & Construction Status" />
-            <div className="rounded-2xl border border-[#e8ecf1] bg-white p-7 shadow-sm">
-              <div className="relative mx-2 mt-6 h-2 rounded bg-[#e8ecf1]">
-                <div className="absolute inset-y-0 left-0 rounded" style={{ width: `${Math.max(8, Math.min(progressPct, 100))}%`, background: GOLD }} />
-              </div>
-              <div className="mx-2 flex justify-between">
+            <div className="rounded-2xl border border-[#e8ecf1] bg-white p-5 sm:p-7 shadow-sm">
+              {/* Mobile: vertical timeline — avoids the label overlap of a horizontal row */}
+              <ol className="relative ml-1.5 border-l-2 border-[#e8ecf1] sm:hidden">
                 {p.timeline.map((t) => (
-                  <div key={t.stage} className="relative pt-4 text-center text-xs text-[#66788c]" style={{ width: `${100 / p.timeline.length}%` }}>
-                    <span className={`absolute -top-[15px] left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-[3px] ${t.done ? "border-[#a97e22]" : "border-[#cfd8e2] bg-white"}`}
+                  <li key={t.stage} className="relative mb-5 pl-5 last:mb-0">
+                    <span className={`absolute -left-[9px] top-0.5 h-4 w-4 rounded-full border-[3px] ${t.done ? "border-[#a97e22]" : "border-[#cfd8e2] bg-white"}`}
                       style={t.done ? { background: GOLD } : undefined} />
-                    <b className="block text-[12.5px] text-[#0f2137]">{t.stage}</b>{t.date}
-                  </div>
+                    <b className="block text-[13.5px] leading-snug text-[#0f2137]">{t.stage}</b>
+                    {t.date && <span className="text-xs text-[#66788c]">{t.date}</span>}
+                  </li>
                 ))}
+              </ol>
+              {/* Tablet / desktop: horizontal progress bar */}
+              <div className="hidden sm:block">
+                <div className="relative mx-2 mt-6 h-2 rounded bg-[#e8ecf1]">
+                  <div className="absolute inset-y-0 left-0 rounded" style={{ width: `${Math.max(8, Math.min(progressPct, 100))}%`, background: GOLD }} />
+                </div>
+                <div className="mx-2 flex justify-between">
+                  {p.timeline.map((t) => (
+                    <div key={t.stage} className="relative px-1 pt-4 text-center text-xs text-[#66788c]" style={{ width: `${100 / p.timeline.length}%` }}>
+                      <span className={`absolute -top-[15px] left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border-[3px] ${t.done ? "border-[#a97e22]" : "border-[#cfd8e2] bg-white"}`}
+                        style={t.done ? { background: GOLD } : undefined} />
+                      <b className="block text-[12.5px] leading-snug text-[#0f2137]">{t.stage}</b>{t.date}
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="mt-5 text-center">
                 <span className="rounded-2xl bg-[#e7f4ee] px-4 py-1.5 text-[12.5px] font-extrabold text-[#1e8e5a]">
