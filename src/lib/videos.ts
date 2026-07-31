@@ -388,14 +388,15 @@ export const videos: Video[] = [
     "views": "4.4K views"
   },
   {
-    "slug": "dasnac-yuva-studio-apartments-review",
-    "title": "Dasnac Yuva Studio Apartments Review | Rental Reality, ROI & Investment Analysis",
-    "description": "Dasnac Yuva studio apartments review — rental reality, ROI and investment analysis for this Noida Expressway studio option.",
+    "slug": "dasnac-yuva-sector-124-studio-apartments-review",
+    "title": "Dasnac Yuva Sector 124 HONEST Review | Studio ROI & Rental Reality Noida",
+    "description": "Dasnac Yuva Sector 124 Noida Expressway — 777 studios, ₹1.25 Crore all-inclusive. Honest rental ROI analysis: 5.75% yield, oversupply risk, and comparison with Dasnac ARC.",
+    "content": "Property Saraansh reviews Dasnac Yuva — a 33-floor commercial project in Sector 124, Noida Expressway. 1.85 acres, 1 tower (half-open book design). 777 studio apartments across 6th–27th floors: 259 units hotel-leased (Dasnac keeping rental), 518 units for sale via self-lease model. Studio: 450 sq ft super area / ~250 sq ft carpet. Price: ₹27,888/sq ft, all-inclusive ~₹1.25 Crore. Best-case rental: ₹60k/month = 5.75% annual ROI. Key concern: oversupply and internal competition among 518 owners on Day 1. Verdict: cautious. Dasnac ARC (Sector 72, ~200 hotel-managed studios) remains a stronger rental proposition. Free consultation: WhatsApp 8076178189 or propertysaraansh.com.",
     "youtubeId": "q37-HJHFhGc",
     "thumbnail": "https://img.youtube.com/vi/q37-HJHFhGc/maxresdefault.jpg",
-    "publishedAt": "2026-06-11",
-    "duration": "PT7M13S",
-    "focusKeyword": "dasnac yuva studio",
+    "publishedAt": "2025-04-03",
+    "duration": "PT7M12S",
+    "focusKeyword": "dasnac yuva sector 124",
     "category": "Real Estate",
     "views": "12K views"
   },
