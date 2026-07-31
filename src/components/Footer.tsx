@@ -6,7 +6,7 @@ export default async function Footer() {
   const latestVideos = videos.filter((v) => v.category !== 'Shorts').slice(0, 3);
 
   return (
-    <footer className="bg-brand-dark text-brand-pale py-16 border-t border-brand-light/30">
+    <footer className="bg-brand-dark text-brand-pale pt-16 pb-24 lg:py-16 border-t border-brand-light/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Column 1: Logo and Tagline */}
