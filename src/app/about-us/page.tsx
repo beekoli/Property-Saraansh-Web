@@ -39,9 +39,9 @@ export default async function AboutUs() {
           {/* Photo Column */}
           <div className="w-full md:w-5/12">
             <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 border-brand-accent bg-white">
-              <img 
-                src="/saraansh_seth.png" 
-                alt="Saraansh Seth" 
+              <img
+                src="/saraansh_seth.webp"
+                alt="Saraansh Seth"
                 className="w-full h-full object-cover" 
                 loading="lazy"
               />
