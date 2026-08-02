@@ -159,6 +159,18 @@ section[id] {
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Accessibility + anti-FOUC safety net: visitors who prefer reduced motion get no
+   fade animation. Because layout's inline critical CSS sets main.animate-fade-in to
+   opacity:0 before paint, we must force it back to fully visible here so these users
+   (and the case where the animation is otherwise suppressed) never get stuck on a
+   blank/hidden page. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 /* Premium Gold Glossy Text Utility */
 .gold-glossy-text {
   background: linear-gradient(

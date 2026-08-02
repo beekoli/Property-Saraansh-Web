@@ -8,11 +8,13 @@ import Script from "next/script";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com";
@@ -100,6 +102,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Anti-FOUC (flash of unstyled content).
+            This inline <style> is parsed before the external stylesheet, so it is
+            guaranteed to apply on the very first paint. It hides the main content
+            until the app's real CSS has loaded, preventing the brief flash of raw,
+            unstyled HTML / Tailwind class text that could otherwise appear on slow
+            connections. The <main> already carries `.animate-fade-in` (opacity 0 -> 1,
+            `forwards`), so once globals.css loads that animation reveals the content.
+            The @media (scripting: none) fallback ensures no-JS visitors and search
+            engine crawlers always see the content (never left hidden). */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              "main.animate-fade-in{opacity:0}" +
+              "@media (scripting: none){main.animate-fade-in{opacity:1;animation:none}}",
+          }}
+        />
         {/* LocalBusiness JSON-LD Schema */}
         <script
           type="application/ld+json"
