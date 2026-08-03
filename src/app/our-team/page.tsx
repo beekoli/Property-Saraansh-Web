@@ -16,22 +16,15 @@ const teamMembers = [
     name: "Saraansh Seth",
     role: "Founder & Principal Consultant",
     bio: "With years of deep-dive market analysis and physical project visits, Saraansh built this platform to bring radical transparency to Noida real estate.",
-    image: "/saraansh_seth.png",
+    image: "/saraansh_seth.webp",
     linkedin: "https://www.linkedin.com/in/saraansh-seth/"
   },
   {
-    name: "Placeholder Name",
-    role: "Senior Real Estate Analyst",
-    bio: "Specializes in commercial property investments and long-term portfolio growth. (This is a placeholder that you can update later).",
-    image: "https://ui-avatars.com/api/?name=Senior+Analyst&background=183630&color=dcb46a",
-    linkedin: "#"
-  },
-  {
-    name: "Placeholder Name",
-    role: "Client Success Manager",
-    bio: "Ensures that every buyer's journey from initial consultation to final registry is smooth and stress-free. (This is a placeholder).",
-    image: "https://ui-avatars.com/api/?name=Client+Success&background=183630&color=dcb46a",
-    linkedin: "#"
+    name: "Rahul Dubey",
+    role: "Co-Founder & Marketing Head",
+    bio: "Rahul brings over 15 years of marketing experience, with more than 6 years dedicated to real estate and ecommerce. A digital marketer turned entrepreneur, he specializes in performance marketing, content marketing, and brand building — the engine that carries Property Saraansh's research to buyers and investors across Noida and beyond. His focus is simple: make trustworthy, data-driven property guidance reach the people who need it most.",
+    image: "https://ui-avatars.com/api/?name=Rahul+Dubey&background=183630&color=dcb46a&size=512&bold=true",
+    linkedin: "https://www.linkedin.com/in/rahul-dubey-45381914/"
   }
 ];
 
