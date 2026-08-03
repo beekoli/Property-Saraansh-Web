@@ -23,7 +23,7 @@ const teamMembers = [
     name: "Rahul Dubey",
     role: "Co-Founder & Marketing Head",
     bio: "Rahul brings over 15 years of marketing experience, with more than 6 years dedicated to real estate and ecommerce. A digital marketer turned entrepreneur, he specializes in performance marketing, content marketing, and brand building — the engine that carries Property Saraansh's research to buyers and investors across Noida and beyond. His focus is simple: make trustworthy, data-driven property guidance reach the people who need it most.",
-    image: "https://ui-avatars.com/api/?name=Rahul+Dubey&background=183630&color=dcb46a&size=512&bold=true",
+    image: "/rahul_dubey.webp",
     linkedin: "https://www.linkedin.com/in/rahul-dubey-45381914/"
   }
 ];
