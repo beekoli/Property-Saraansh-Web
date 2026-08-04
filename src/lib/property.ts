@@ -157,7 +157,8 @@ export async function getBuilderProfile(slug: string): Promise<WPBuilderTerm | n
   const data = (await wpFetch(
     `/builder?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count,acf`
   )) as WPBuilderTerm[] | null;
-  return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
+  if (!data || !Array.isArray(data) || data.length === 0) return null;
+  return { ...data[0], name: decodeHtml(data[0].name) };
 }
 
 /**

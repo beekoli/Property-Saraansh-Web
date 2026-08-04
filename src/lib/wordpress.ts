@@ -115,12 +115,17 @@ export interface WPBuilderTerm {
 
 export async function getBuilders(): Promise<WPBuilderTerm[]> {
   const data = await fetchAPI(`/builder?per_page=100&_fields=id,name,slug,count,acf`);
-  return data && Array.isArray(data) ? (data as WPBuilderTerm[]) : [];
+  return data && Array.isArray(data)
+    ? (data as WPBuilderTerm[]).map((b) => ({ ...b, name: decodeHtml(b.name) }))
+    : [];
 }
 
 export async function getBuilderBySlug(slug: string): Promise<WPBuilderTerm | null> {
   const data = await fetchAPI(`/builder?slug=${slug}&_fields=id,name,slug,count,acf`);
-  if (data && Array.isArray(data) && data.length > 0) return data[0] as WPBuilderTerm;
+  if (data && Array.isArray(data) && data.length > 0) {
+    const b = data[0] as WPBuilderTerm;
+    return { ...b, name: decodeHtml(b.name) };
+  }
   return null;
 }
 
