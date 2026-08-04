@@ -283,7 +283,7 @@ export default async function Home() {
             <StaggerItem className="w-full md:w-5/12" yOffset={30}>
               <div className="relative aspect-[3/2] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
                 <img 
-                  src="/saraansh_seth.png" 
+                  src="/saraansh_seth.webp" 
                   alt="Saraansh Seth" 
                   className="w-full h-full object-cover" 
                   loading="lazy"
