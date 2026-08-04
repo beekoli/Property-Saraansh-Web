@@ -1,3 +1,5 @@
+import { decodeHtml } from '@/lib/decodeHtml';
+
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 export interface WPPost {
@@ -487,7 +489,7 @@ export function getCardData(prop: WPProperty) {
     '';
 
   return {
-    developer: term('ps_builder', 'builder') || acf.developer_name || acf.developer || '',
+    developer: decodeHtml(term('ps_builder', 'builder') || acf.developer_name || acf.developer || ''),
     location: acf.address || acf.location || term('location') || 'Noida',
     price: acf.price_display || acf.price || 'Price on Request',
     type: term('ps_property_type', 'property_type') || acf.property_type || 'Residential',

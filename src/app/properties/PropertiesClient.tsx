@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { decodeHtml } from '@/lib/decodeHtml';
 import PropertyCard from '@/components/PropertyCard';
 import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import Link from 'next/link';
@@ -247,7 +248,7 @@ export default function PropertiesClient({ properties }: Props) {
                       <div className="md:w-1/3 relative h-56 md:h-auto overflow-hidden bg-brand-pale">
                         <img
                           src={imgUrl}
-                          alt={project.title.rendered}
+                          alt={decodeHtml(project.title.rendered)}
                           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                          loading="lazy" decoding="async" />
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
@@ -277,7 +278,7 @@ export default function PropertiesClient({ properties }: Props) {
                           <div className="flex justify-between items-start mb-2 gap-4">
                             <div>
                               <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{card.developer}</p>
-                              <h3 className="text-xl font-bold heading-playfair text-brand-ink">{project.title.rendered}</h3>
+                              <h3 className="text-xl font-bold heading-playfair text-brand-ink">{decodeHtml(project.title.rendered)}</h3>
                             </div>
                             <div className="text-lg font-bold text-brand-accent text-right whitespace-nowrap">{card.price}</div>
                           </div>
@@ -307,7 +308,7 @@ export default function PropertiesClient({ properties }: Props) {
                             View Details
                           </Link>
                           <a
-                            href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${project.title.rendered}. Please share more details.`)}`}
+                            href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${decodeHtml(project.title.rendered)}. Please share more details.`)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"
@@ -332,7 +333,7 @@ export default function PropertiesClient({ properties }: Props) {
                 <StaggerItem key={project.id} yOffset={20}>
                   <PropertyCard
                     id={project.slug}
-                    title={project.title.rendered}
+                    title={decodeHtml(project.title.rendered)}
                     developer={card.developer}
                     location={card.location}
                     price={card.price}
