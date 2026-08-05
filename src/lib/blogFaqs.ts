@@ -285,7 +285,7 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
     },
     {
       question: "How does Max Estates 105 compare to Max Estates 128?",
-      answer: "Max 128 is fully sold out and delivers approximately 3 years earlier (~2028), making it better for investors needing rental income sooner. Max 105 has a more investor-friendly payment plan (20% now, nothing till 2027), improved layouts, and a newer design standard. Resale at Max 128 (~₹26,500) vs new at Max 105 (₹27,300) is a ~3% premium for a fresh unit and the deferred payment benefit."
+      answer: "Max 128 is fully sold out and delivers approximately 3 years earlier (2028), making it better for investors needing rental income sooner. Max 105 has a more investor-friendly payment plan (20% now, nothing till 2027), improved layouts, and a newer design standard. Resale at Max 128 (₹26,500) vs new at Max 105 (₹27,300) is a 3% premium for a fresh unit and the deferred payment benefit."
     },
     {
       question: "Is Max Estates 105 a good investment in 2026?",
@@ -303,15 +303,15 @@ export const blogFAQs: Record<string, BlogFAQ[]> = {
     },
     {
       question: "Which commercial areas in Noida give the best rental yield in 2026?",
-      answer: "Sector 72 (Central Noida) leads on rental yield in 2026. Dasnac Arc studios bought at resale (₹15,500/sq ft, all-in ₹75–78 lakh) generate approximately ₹55,000/month rental — translating to ~8.5% annual yield. Sector 140 (Noida Expressway) via Fairfox EON offers ~6.4% yield on studio units: resale at ₹9,800–9,900/sq ft, all-in ~₹75 lakh, rental ~₹42,000/month. Office campus retail zones in Sectors 62, 90, 132, and 140 also perform well for self-leased investors due to consistent daily footfall from IT offices. Avoid luxury high-street commercial — footfall dependency makes yields unpredictable."
+      answer: "Sector 72 (Central Noida) leads on rental yield in 2026. Dasnac Arc studios bought at resale (₹15,500/sq ft, all-in ₹75–78 lakh) generate approximately ₹55,000/month rental — translating to 8.5% annual yield. Sector 140 (Noida Expressway) via Fairfox EON offers 6.4% yield on studio units: resale at ₹9,800–9,900/sq ft, all-in ₹75 lakh, rental ₹42,000/month. Office campus retail zones in Sectors 62, 90, 132, and 140 also perform well for self-leased investors due to consistent daily footfall from IT offices. Avoid luxury high-street commercial — footfall dependency makes yields unpredictable."
     },
     {
       question: "Should I buy fresh or resale commercial property in Noida in 2026?",
-      answer: "For yield-focused investors in 2026, resale is the smarter entry in most commercial projects. At Dasnac Arc, fresh units are priced at ~₹18,500/sq ft while resale units are available at ~₹15,500/sq ft — that's ₹12 lakh saved on a standard 400 sq ft studio with identical rental income potential. At Fairfox EON, fresh studio pricing is around ₹13,500/sq ft while resale offers ₹9,800–9,900/sq ft — a ~28% saving. Both deliver the same monthly rental. The only scenario where fresh makes sense: projects with no resale market yet, where you want a specific floor/unit or where the builder is offering a below-market launch price on verified demand."
+      answer: "For yield-focused investors in 2026, resale is the smarter entry in most commercial projects. At Dasnac Arc, fresh units are priced at ₹18,500/sq ft while resale units are available at ₹15,500/sq ft — that's ₹12 lakh saved on a standard 400 sq ft studio with identical rental income potential. At Fairfox EON, fresh studio pricing is around ₹13,500/sq ft while resale offers ₹9,800–9,900/sq ft — a 28% saving. Both deliver the same monthly rental. The only scenario where fresh makes sense: projects with no resale market yet, where you want a specific floor/unit or where the builder is offering a below-market launch price on verified demand."
     },
     {
       question: "What is the minimum investment for commercial property in Noida?",
-      answer: "Commercial studio apartments in Noida's top projects start from approximately ₹60–75 lakh all-inclusive on a resale basis. Dasnac Arc (Sector 72) studios are available at ~₹77 lakh all-in (including registration and stamp duty). Fairfox EON (Sector 140) studios enter at ~₹75 lakh. These are the lowest viable entry points for a genuine income-generating commercial asset with a confirmed operator or working ecosystem. Below ₹60 lakh, you are typically looking at raw shell units in projects without operational operators — which carry higher vacancy risk and lower yield predictability."
+      answer: "Commercial studio apartments in Noida's top projects start from approximately ₹60–75 lakh all-inclusive on a resale basis. Dasnac Arc (Sector 72) studios are available at ₹77 lakh all-in (including registration and stamp duty). Fairfox EON (Sector 140) studios enter at ₹75 lakh. These are the lowest viable entry points for a genuine income-generating commercial asset with a confirmed operator or working ecosystem. Below ₹60 lakh, you are typically looking at raw shell units in projects without operational operators — which carry higher vacancy risk and lower yield predictability."
     }
   ]
 };
