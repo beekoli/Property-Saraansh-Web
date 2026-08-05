@@ -1,3 +1,5 @@
+import { decodeHtml } from '@/lib/decodeHtml';
+
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
 
 export interface WPPost {
@@ -113,12 +115,17 @@ export interface WPBuilderTerm {
 
 export async function getBuilders(): Promise<WPBuilderTerm[]> {
   const data = await fetchAPI(`/builder?per_page=100&_fields=id,name,slug,count,acf`);
-  return data && Array.isArray(data) ? (data as WPBuilderTerm[]) : [];
+  return data && Array.isArray(data)
+    ? (data as WPBuilderTerm[]).map((b) => ({ ...b, name: decodeHtml(b.name) }))
+    : [];
 }
 
 export async function getBuilderBySlug(slug: string): Promise<WPBuilderTerm | null> {
   const data = await fetchAPI(`/builder?slug=${slug}&_fields=id,name,slug,count,acf`);
-  if (data && Array.isArray(data) && data.length > 0) return data[0] as WPBuilderTerm;
+  if (data && Array.isArray(data) && data.length > 0) {
+    const b = data[0] as WPBuilderTerm;
+    return { ...b, name: decodeHtml(b.name) };
+  }
   return null;
 }
 
@@ -487,7 +494,7 @@ export function getCardData(prop: WPProperty) {
     '';
 
   return {
-    developer: term('ps_builder', 'builder') || acf.developer_name || acf.developer || '',
+    developer: decodeHtml(term('ps_builder', 'builder') || acf.developer_name || acf.developer || ''),
     location: acf.address || acf.location || term('location') || 'Noida',
     price: acf.price_display || acf.price || 'Price on Request',
     type: term('ps_property_type', 'property_type') || acf.property_type || 'Residential',

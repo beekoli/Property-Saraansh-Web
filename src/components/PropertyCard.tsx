@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
+import { decodeHtml } from '@/lib/decodeHtml';
 
 interface PropertyCardProps {
   id: string;
@@ -59,6 +60,8 @@ export default function PropertyCard({
 }: PropertyCardProps) {
   const statusBadge = getStatusBadge(possessionDate);
   const videoHref = getVideoHref(id, videoId);
+  const displayTitle = decodeHtml(title);
+  const displayDeveloper = decodeHtml(developer || '');
 
   return (
     <div className="group isolate bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
@@ -67,7 +70,7 @@ export default function PropertyCard({
           fall through to this overlay; the action buttons re-enable pointer events. */}
       <Link
         href={`/properties/${id}`}
-        aria-label={`View details for ${title}`}
+        aria-label={`View details for ${displayTitle}`}
         className="absolute inset-0 z-0"
       />
 
@@ -75,7 +78,7 @@ export default function PropertyCard({
       <div className="relative aspect-video overflow-hidden w-full bg-brand-pale pointer-events-none">
         <Image
           src={imageUrl}
-          alt={title}
+          alt={displayTitle}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={priority}
@@ -115,8 +118,8 @@ export default function PropertyCard({
       {/* Body */}
       <div className="p-5 flex-grow flex flex-col justify-between pointer-events-none">
         <div>
-          <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{developer}</p>
-          <h3 className="text-base font-bold heading-playfair text-brand-ink mb-2 line-clamp-1">{title}</h3>
+          <p className="text-[11px] text-brand-primary font-bold uppercase tracking-wider mb-1 leading-none">{displayDeveloper}</p>
+          <h3 className="text-base font-bold heading-playfair text-brand-ink mb-2 line-clamp-1">{displayTitle}</h3>
 
           <div className="flex items-center text-brand-dark/70 mb-3 text-xs">
             <svg className="w-4 h-4 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +150,7 @@ export default function PropertyCard({
         <div className="border-t border-brand-pale pt-4 mt-2">
           <div className="pointer-events-auto relative z-10 flex gap-2">
             <a
-              href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${title}. Please share more details.`)}`}
+              href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${displayTitle}. Please share more details.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"

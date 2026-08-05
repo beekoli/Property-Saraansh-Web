@@ -10,6 +10,7 @@
  */
 
 import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
+import { decodeHtml } from "@/lib/decodeHtml";
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
@@ -156,7 +157,8 @@ export async function getBuilderProfile(slug: string): Promise<WPBuilderTerm | n
   const data = (await wpFetch(
     `/builder?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count,acf`
   )) as WPBuilderTerm[] | null;
-  return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
+  if (!data || !Array.isArray(data) || data.length === 0) return null;
+  return { ...data[0], name: decodeHtml(data[0].name) };
 }
 
 /**
@@ -201,7 +203,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
   const media = await resolveMedia(rawImgs.map(collectId).filter((n): n is number => !!n));
 
   const heroUrl: string | null = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? null;
-  const title: string = p.title?.rendered ?? "";
+  const title: string = decodeHtml(p.title?.rendered ?? "");
 
   // fallbacks to old flat fields keep the page rendering even before a
   // property is fully migrated to the new structure
@@ -230,7 +232,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     configuration: a.configuration || "",
     city: cityTerm?.name || termName(p, "location") || a.location_city || "Noida",
     sector: sectorTerm?.name || a.location_sector || "",
-    builder: termName(p, "ps_builder") || termName(p, "builder") || a.developer_name || a.developer || "",
+    builder: decodeHtml(termName(p, "ps_builder") || termName(p, "builder") || a.developer_name || a.developer || ""),
     builderSlug: termSlug(p, "ps_builder") || termSlug(p, "builder") || "",
     type: termName(p, "ps_property_type") || termName(p, "property_type") || a.property_type || "",
     status: termName(p, "ps_project_status") || termName(p, "project_status") || a.property_status || "",
