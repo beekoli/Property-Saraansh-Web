@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
@@ -78,12 +78,52 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+// Parse simple markdown links [label](/path) inside the content field so that
+// internal links (blog post, property listing) are real crawlable anchors
+// instead of plain text. Internal paths use next/link; external URLs open in
+// a new tab.
+function renderRichText(text: string) {
+  const parts: (string | JSX.Element)[] = [];
+  const re = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  let k = 0;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parts.push(text.slice(last, m.index));
+    const label = m[1];
+    const href = m[2];
+    if (href.startsWith('/')) {
+      parts.push(
+        <Link key={`l${k++}`} href={href} className="text-brand-primary font-medium underline hover:no-underline">
+          {label}
+        </Link>
+      );
+    } else {
+      parts.push(
+        <a key={`a${k++}`} href={href} target="_blank" rel="noopener noreferrer" className="text-brand-primary font-medium underline hover:no-underline">
+          {label}
+        </a>
+      );
+    }
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
   const video = (await getHydratedVideoBySlug(slug)) ?? (await resolveVideo(slug));
 
   if (!video) {
     notFound();
+  }
+
+  // Canonical URL enforcement: if the visitor arrived on a non-canonical slug
+  // (e.g. the YouTube-id fallback URL), 308-redirect to the video's clean slug
+  // so search engines and users only ever see one URL per video.
+  if (video.slug && slug !== video.slug) {
+    permanentRedirect(`/our-videos/${video.slug}`);
   }
 
   // Fetch stats and filter related videos
@@ -292,7 +332,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </h2>
                   <div className="text-sm text-brand-ink/80 leading-relaxed space-y-4">
                     {video.content.split('||').map((para, i) => (
-                      <p key={i}>{para}</p>
+                      <p key={i}>{renderRichText(para)}</p>
                     ))}
                   </div>
                 </div>
