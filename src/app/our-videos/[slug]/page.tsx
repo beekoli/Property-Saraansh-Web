@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
+import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
@@ -20,9 +21,25 @@ export async function generateStaticParams() {
   }));
 }
 
+/**
+ * A watch page is served for every video in the curated list, and — for
+ * uploads that are too new to have a hand-written entry in videos.ts yet — for
+ * any slug ending in a YouTube id belonging to this channel, resolved live from
+ * the API. That is what lets a card on /our-videos always open the full watch
+ * page here (player + lead form + schema) instead of 404ing or bouncing the
+ * visitor out to YouTube.
+ */
+async function resolveVideo(slug: string) {
+  const curated = getVideoBySlug(slug);
+  if (curated) return curated;
+
+  const youtubeId = youtubeIdFromSlug(slug);
+  return youtubeId ? await getLiveVideoById(youtubeId) : null;
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const video = getVideoBySlug(slug);
+  const video = await resolveVideo(slug);
 
   if (!video) {
     return {
@@ -63,7 +80,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
-  const video = await getHydratedVideoBySlug(slug);
+  const video = (await getHydratedVideoBySlug(slug)) ?? (await resolveVideo(slug));
 
   if (!video) {
     notFound();

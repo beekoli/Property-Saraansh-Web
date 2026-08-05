@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import Link from 'next/link';
 interface ClientVideo {
   id: string;
@@ -12,6 +12,26 @@ interface ClientVideo {
   category: string;
   views: string;
   slug: string;
+  // Set for auto-fetched YouTube uploads that don't have an internal detail
+  // page yet — the card links straight to YouTube instead of /our-videos/[slug].
+  watchUrl?: string;
+}
+
+// Links to the internal detail page for curated videos, or out to YouTube for
+// freshly fetched uploads that don't have an SEO detail page yet.
+function CardLink({ video, className, children }: { video: ClientVideo; className?: string; children: ReactNode }) {
+  if (video.watchUrl) {
+    return (
+      <a href={video.watchUrl} target="_blank" rel="noopener noreferrer" className={className}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={`/our-videos/${video.slug}`} className={className}>
+      {children}
+    </Link>
+  );
 }
 
 interface Props {
@@ -102,8 +122,8 @@ export default function VideosClient({ initialVideos, stats }: Props) {
                 }`}
               >
                 {/* Thumbnail Container */}
-                <Link 
-                  href={`/our-videos/${video.slug}`}
+                <CardLink
+                  video={video}
                   className="relative aspect-video overflow-hidden bg-brand-dark block"
                 >
                   <img 
@@ -126,14 +146,14 @@ export default function VideosClient({ initialVideos, stats }: Props) {
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
                     </svg>
                   </div>
-                </Link>
-                
+                </CardLink>
+
                 <div className="p-5 flex-grow flex flex-col justify-between">
-                  <Link href={`/our-videos/${video.slug}`} className="block group">
+                  <CardLink video={video} className="block group">
                     <h3 className="text-sm font-semibold text-brand-ink line-clamp-2 leading-relaxed group-hover:text-brand-primary transition-colors cursor-pointer">
                       {video.title}
                     </h3>
-                  </Link>
+                  </CardLink>
                   <div className="flex items-center justify-between text-brand-light text-[11px] mt-4 pt-3 border-t border-brand-pale font-light">
                     <span className="flex items-center">
                       <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

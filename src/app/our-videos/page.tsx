@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { getChannelStats } from '@/lib/youtube';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
+import { getLatestLongVideos } from '@/lib/latestLongVideos';
 import VideosClient from './VideosClient';
 import { buildPageMetadata } from '@/lib/seo';
 
@@ -15,25 +16,39 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
+const formatDuration = (duration: string) =>
+  duration.replace('PT', '').replace('H', ' Hrs ').replace('M', ' Mins ').replace('S', ' Secs');
+
 export default async function OurVideos() {
-  const [stats, videos] = await Promise.all([
+  const [stats, videos, latest] = await Promise.all([
     getChannelStats(),
-    getVideosWithRealtimeStats()
+    getVideosWithRealtimeStats(),
+    // Newest uploads straight from the channel. Long-form only — see
+    // src/lib/latestLongVideos.ts for how Shorts are excluded.
+    getLatestLongVideos(15),
   ]);
 
   // Exclude Shorts from the long videos directory page
   const longVideos = videos.filter((video) => video.category !== 'Shorts');
 
-  const formattedVideos = longVideos.map((v) => ({
+  // Anything already hand-curated in videos.ts wins: it has the written SEO
+  // copy, so we keep that version and drop the auto-fetched duplicate.
+  const curatedIds = new Set(videos.map((v) => v.youtubeId));
+  const newUploads = latest.filter((v) => !curatedIds.has(v.youtubeId));
+
+  // Newest uploads first, then the curated (already newest-first) list. Both
+  // link to the same internal watch page — /our-videos/[slug] falls back to a
+  // live YouTube lookup for videos that aren't in videos.ts yet.
+  const formattedVideos = [...newUploads, ...longVideos].map((v) => ({
     id: v.youtubeId,
     title: v.title,
     description: v.description,
     thumbnail: v.thumbnail,
     publishedAt: v.publishedAt,
-    duration: v.duration.replace('PT', '').replace('M', ' Mins ').replace('S', ' Secs').replace('H', ' Hrs '),
+    duration: formatDuration(v.duration),
     category: v.category,
     views: v.views,
-    slug: v.slug
+    slug: v.slug,
   }));
 
   return <VideosClient initialVideos={formattedVideos} stats={stats} />;
