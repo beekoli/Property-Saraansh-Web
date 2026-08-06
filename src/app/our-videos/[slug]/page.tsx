@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
 import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
+import { getManagedVideo, preferWP } from '@/lib/managedContent';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
@@ -37,25 +39,56 @@ async function resolveVideo(slug: string) {
   return youtubeId ? await getLiveVideoById(youtubeId) : null;
 }
 
+/**
+ * Lays the WordPress "Videos" entry for this slug over the video's copy, field
+ * by field: anything written in WordPress wins, anything left blank keeps what
+ * src/lib/videos.ts (or the live YouTube lookup) already provides. `metaTitle`
+ * is returned separately because editors write the complete SEO title in
+ * WordPress, so it must not get " | Property Saraansh" appended to it.
+ */
+async function resolveVideoWithManagedCopy(slug: string) {
+  const video = await resolveVideo(slug);
+  if (!video) return null;
+
+  const managed = await getManagedVideo(slug);
+  if (!managed) return { video, metaTitle: undefined as string | undefined };
+
+  return {
+    video: {
+      ...video,
+      title: preferWP(managed.title, video.title),
+      description: preferWP(managed.shortDescription, video.description),
+      content: preferWP(managed.aboutThisVideo, video.content || ''),
+    },
+    metaTitle: managed.metaTitle,
+    metaDescription: managed.metaDescription,
+  };
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const video = await resolveVideo(slug);
+  const resolved = await resolveVideoWithManagedCopy(slug);
 
-  if (!video) {
+  if (!resolved) {
     return {
       title: 'Video Not Found | Property Saraansh',
     };
   }
 
+  const { video, metaTitle, metaDescription } = resolved;
+
   return {
-    title: `${video.title} | Property Saraansh`,
-    description: video.description || `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`,
+    title: preferWP(metaTitle, `${video.title} | Property Saraansh`),
+    description: preferWP(
+      metaDescription,
+      video.description || `Watch honest real estate project reviews, construction updates, and investment guides from Saraansh Seth on YouTube.`
+    ),
     alternates: {
       canonical: `${FRONTEND_URL}/our-videos/${video.slug}`,
     },
     openGraph: {
-      title: `${video.title} | Property Saraansh`,
-      description: video.description || `Watch honest real estate project reviews on YouTube.`,
+      title: preferWP(metaTitle, `${video.title} | Property Saraansh`),
+      description: preferWP(metaDescription, video.description || `Watch honest real estate project reviews on YouTube.`),
       images: [
         {
           url: video.thumbnail,
@@ -68,8 +101,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: "summary_large_image",
-      title: video.title,
-      description: video.description,
+      title: preferWP(metaTitle, video.title),
+      description: preferWP(metaDescription, video.description),
       images: [video.thumbnail],
     },
     other: {
@@ -83,7 +116,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // instead of plain text. Internal paths use next/link; external URLs open in
 // a new tab.
 function renderRichText(text: string) {
-  const parts: (string | JSX.Element)[] = [];
+  // ReactNode, not JSX.Element: React 19's types no longer expose a global JSX
+  // namespace, so `JSX.Element` fails the production type check.
+  const parts: ReactNode[] = [];
   const re = /\[([^\]]+)\]\(([^)]+)\)/g;
   let last = 0;
   let m: RegExpExecArray | null;
@@ -113,7 +148,17 @@ function renderRichText(text: string) {
 
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
-  const video = (await getHydratedVideoBySlug(slug)) ?? (await resolveVideo(slug));
+  // Views and duration come from YouTube (getHydratedVideoBySlug); the words on
+  // the page come from WordPress where they have been written there.
+  const base = (await getHydratedVideoBySlug(slug)) ?? (await resolveVideo(slug));
+  const managed = base ? await getManagedVideo(slug) : null;
+
+  const video = base && {
+    ...base,
+    title: preferWP(managed?.title, base.title),
+    description: preferWP(managed?.shortDescription, base.description),
+    content: preferWP(managed?.aboutThisVideo, base.content || ''),
+  };
 
   if (!video) {
     notFound();
