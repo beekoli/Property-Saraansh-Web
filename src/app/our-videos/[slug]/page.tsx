@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
@@ -115,7 +116,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 // instead of plain text. Internal paths use next/link; external URLs open in
 // a new tab.
 function renderRichText(text: string) {
-  const parts: (string | JSX.Element)[] = [];
+  // ReactNode, not JSX.Element: React 19's types no longer expose a global JSX
+  // namespace, so `JSX.Element` fails the production type check.
+  const parts: ReactNode[] = [];
   const re = /\[([^\]]+)\]\(([^)]+)\)/g;
   let last = 0;
   let m: RegExpExecArray | null;
