@@ -40,9 +40,16 @@ interface Props {
     subscriberCount: string;
     videoCount: string;
   };
+  /**
+   * Heading and intro copy, resolved on the server: WordPress first, then the
+   * wording that used to be hard-coded here. Always supplied, so this component
+   * never needs to know where the words came from.
+   */
+  heading: string;
+  intro: string;
 }
 
-export default function VideosClient({ initialVideos, stats }: Props) {
+export default function VideosClient({ initialVideos, stats, heading, intro }: Props) {
   const [visibleCount, setVisibleCount] = useState(9);
 
   return (
@@ -64,11 +71,11 @@ export default function VideosClient({ initialVideos, stats }: Props) {
             {stats.subscriberCount} Subscribers
           </div>
           <h1 className="heading-playfair text-4xl md:text-5xl text-brand-accent mb-4 font-bold">
-            Property Insights on YouTube
+            {heading}
           </h1>
           <div className="w-24 h-0.5 bg-brand-accent mx-auto rounded"></div>
           <p className="text-brand-pale/80 mt-6 text-base md:text-lg font-light leading-relaxed max-w-2xl mx-auto">
-            Honest reviews, ground reality checks, and expert advice for your next real estate investment in Noida.
+            {intro}
           </p>
         </div>
       </section>
