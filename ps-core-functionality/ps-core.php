@@ -307,7 +307,12 @@ if (!function_exists('ps_register_rank_math_meta')) {
             'rank_math_focus_keyword',
         );
 
-        foreach (array('post', 'properties') as $post_type) {
+        // 'page' and 'ps_video' were added when page-level copy and meta moved
+        // to WordPress: the frontend reads meta.rank_math_title /
+        // rank_math_description off the Page whose slug matches the route
+        // (e.g. the "our-videos" Page drives /our-videos), and WordPress only
+        // returns meta keys over REST once they are registered here.
+        foreach (array('post', 'page', 'properties', 'ps_video') as $post_type) {
             foreach ($keys as $key) {
                 register_post_meta($post_type, $key, array(
                     'type'          => 'string',
