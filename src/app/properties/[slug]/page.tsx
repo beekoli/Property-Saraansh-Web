@@ -41,6 +41,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   metadata.alternates = { ...(metadata.alternates ?? {}), canonical: url };
+  // Explicit robots directive for consistency with blog/video pages (property
+  // pages previously emitted no robots meta and relied on the crawler default).
+  metadata.robots = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
   if (p.hero) {
     metadata.openGraph = {
       ...(metadata.openGraph ?? {}),

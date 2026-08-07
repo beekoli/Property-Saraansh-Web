@@ -87,6 +87,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: `${FRONTEND_URL}/our-videos/${video.slug}`,
     },
     openGraph: {
+      type: 'video.other',
       title: preferWP(metaTitle, `${video.title} | Property Saraansh`),
       description: preferWP(metaDescription, video.description || `Watch honest real estate project reviews on YouTube.`),
       images: [
