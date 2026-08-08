@@ -92,7 +92,7 @@ export default async function AboutUs() {
               <h2 className="heading-playfair text-3xl md:text-4xl text-brand-dark mb-6 leading-tight font-bold">
                 Empowering homebuyers through transparent insights.
               </h2>
-              <div className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base text-justify space-y-4">
+              <div className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base md:text-justify space-y-4">
                 <p>
                   I started Property Saraansh with a simple mission: to demystify the complex real estate market of Noida and Greater Noida for the common homebuyer. Before investing life savings, buyers deserve to know the ground reality, not just the glossy brochures.
                 </p>
@@ -107,7 +107,7 @@ export default async function AboutUs() {
               <h3 className="heading-playfair text-2xl text-brand-dark mb-4 font-bold border-b border-brand-accent/20 pb-2">
                 Expertise You Can Trust
               </h3>
-              <p className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base text-justify">
+              <p className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base md:text-justify">
                 Backed by a team of seasoned real estate professionals, we have a proven track record of success in the ever-evolving real estate market. Whether you are buying, selling, or investing, our expertise and insights will guide you toward optimal outcomes.
               </p>
             </div>
@@ -117,7 +117,7 @@ export default async function AboutUs() {
               <h3 className="heading-playfair text-2xl text-brand-dark mb-4 font-bold border-b border-brand-accent/20 pb-2">
                 Our Mission
               </h3>
-              <p className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base text-justify mb-6">
+              <p className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base md:text-justify mb-6">
                 At Property Saraansh, our mission is to empower our clients with the knowledge and expertise needed to make informed real estate decisions. We strive to deliver unparalleled service, ensuring a seamless and rewarding experience in every transaction.
               </p>
               {/* Mission Statement Pull Quote */}
@@ -133,7 +133,7 @@ export default async function AboutUs() {
               <h3 className="heading-playfair text-2xl text-brand-dark mb-4 font-bold border-b border-brand-accent/20 pb-2">
                 Why Choose Property Saraansh
               </h3>
-              <div className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base text-justify space-y-4">
+              <div className="prose prose-lg text-brand-dark/80 font-light leading-relaxed text-sm md:text-base md:text-justify space-y-4">
                 <p>
                   At Property Saraansh, we believe real estate decisions should be informed, strategic, and stress-free. That&apos;s why we combine our expertise in property portfolio management with the power of engaging YouTube content to help investors, homeowners, and first-time buyers make smart choices.
                 </p>

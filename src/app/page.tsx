@@ -159,11 +159,14 @@ export default async function Home() {
             <StaggerItem className="w-full lg:w-2/5 text-brand-ink" yOffset={20}>
               <span className="text-brand-primary uppercase tracking-widest text-xs font-bold block mb-2">Our Latest Video</span>
               <Link href={`/our-videos/${featuredVideo.slug}`} className="text-black hover:text-brand-primary transition-colors group block">
-                <h2 className="heading-playfair text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight text-justify text-black group-hover:text-brand-primary transition-colors cursor-pointer">
+                {/* Headings are never justified: a two-line title stretched to a
+                    straight edge leaves large gaps between words. The body copy
+                    below justifies from md up via the rule in globals.css. */}
+                <h2 className="heading-playfair text-xl md:text-2xl lg:text-3xl font-bold mb-4 leading-tight text-black group-hover:text-brand-primary transition-colors cursor-pointer">
                   {featuredVideo.title}
                 </h2>
               </Link>
-              <p className="text-zinc-600 text-justify mb-6 leading-relaxed text-sm font-light">
+              <p className="text-zinc-600 md:text-justify mb-6 leading-relaxed text-sm font-light">
                 {featuredVideo.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
@@ -230,7 +233,7 @@ export default async function Home() {
               Why Property Saraansh?
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-4"></span>
             </h2>
-            <p className="text-brand-dark/80 text-lg max-w-4xl mx-auto font-light leading-relaxed text-justify md:text-center">
+            <p className="text-brand-dark/80 text-lg max-w-4xl mx-auto font-light leading-relaxed md:text-center">
               Experience the art of Property Portfolio Management, where exclusivity meets precision. We curate premium real estate assets tailored to your lifestyle and investment goals, ensuring unmatched growth and prestige. With our bespoke strategies, your portfolio becomes more than an investment—it becomes a legacy of luxury and lasting value.
             </p>
           </SlideUp>
