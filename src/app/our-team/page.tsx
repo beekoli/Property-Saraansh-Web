@@ -69,7 +69,7 @@ export default function OurTeam() {
                 <div className="p-8 flex-grow flex flex-col">
                   <h3 className="heading-playfair text-2xl font-bold text-brand-dark mb-1">{member.name}</h3>
                   <p className="text-brand-primary uppercase tracking-wider text-xs font-bold mb-4">{member.role}</p>
-                  <p className="text-brand-dark/70 font-light leading-relaxed text-sm flex-grow mb-6">
+                  <p className="text-brand-dark/70 font-light leading-relaxed text-sm flex-grow mb-6 md:text-justify">
                     {member.bio}
                   </p>
                   
