@@ -376,7 +376,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
                     About This Video
                   </h2>
-                  <div className="text-sm text-brand-ink/80 leading-relaxed space-y-4">
+                  <div className="text-justified text-sm text-brand-ink/80 leading-relaxed space-y-4">
                     {video.content.split('||').map((para, i) => (
                       <p key={i}>{renderRichText(para)}</p>
                     ))}
