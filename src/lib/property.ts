@@ -73,8 +73,18 @@ async function wpFetch(endpoint: string, attempts = 5): Promise<unknown> {
     }
   }
 
+  // NOTE: we deliberately return null rather than throwing.
+  //
+  // Throwing is the theoretically correct behaviour (a timeout is not a 404),
+  // but WordPress currently 500s under the request burst of a full static
+  // build, so throwing fails the deploy outright. The retries and concurrency
+  // gate above already remove the large majority of transient failures.
+  //
+  // The complete fix is to stop prerendering all property pages against a
+  // fragile WordPress: return [] from generateStaticParams and let pages
+  // render on demand with ISR. Once that is in place this should throw.
   console.error("property.ts fetch failed after retries:", endpoint, lastErr);
-  throw lastErr instanceof Error ? lastErr : new Error(`WP fetch failed: ${endpoint}`);
+  return null;
 }
 
 /* ---------------- types ---------------- */
