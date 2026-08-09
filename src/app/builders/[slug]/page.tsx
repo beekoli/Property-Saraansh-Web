@@ -126,6 +126,7 @@ export default async function BuilderProfilePage({ params }: Props) {
                   id={prop.slug}
                   title={prop.title.rendered}
                   developer={card.developer || builder.name}
+                  isWalkthrough={card.isWalkthrough}
                   location={card.location}
                   price={card.price}
                   type={card.type}
