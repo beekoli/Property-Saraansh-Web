@@ -16,20 +16,45 @@ const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.property
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
 
 /**
- * Fetch from WordPress with retries.
+ * WordPress cannot cope with the burst of parallel requests a full static
+ * build produces — it starts returning 500s. Historically those 500s were
+ * swallowed and the page was baked as a 404, which is the root cause of the
+ * intermittent missing listings.
  *
- * A transport failure (timeout, 5xx, network blip) is NOT the same as "this
- * post does not exist". Returning null for both made healthy pages serve hard
- * 404s. On a genuine 404 we return null so the caller can call notFound(); on
- * any other failure we throw, so Next.js serves a 500 and retries instead of
- * telling Google the page is gone.
+ * Two mitigations here:
+ *   1. A small concurrency gate so we never hit WP with more than a handful
+ *      of requests at once.
+ *   2. Patient retries with exponential backoff and jitter.
+ *
+ * A genuine 404 from WordPress still returns null so the caller can call
+ * notFound(). Anything else throws, so we never silently serve a 404 for a
+ * page that actually exists.
  */
-async function wpFetch(endpoint: string, attempts = 3): Promise<unknown> {
+const MAX_CONCURRENT_WP_REQUESTS = 4;
+let activeWpRequests = 0;
+const wpQueue: (() => void)[] = [];
+
+async function withWpLimit<T>(fn: () => Promise<T>): Promise<T> {
+  if (activeWpRequests >= MAX_CONCURRENT_WP_REQUESTS) {
+    await new Promise<void>((resolve) => wpQueue.push(resolve));
+  }
+  activeWpRequests++;
+  try {
+    return await fn();
+  } finally {
+    activeWpRequests--;
+    wpQueue.shift()?.();
+  }
+}
+
+async function wpFetch(endpoint: string, attempts = 5): Promise<unknown> {
   let lastErr: unknown = null;
 
   for (let i = 0; i < attempts; i++) {
     try {
-      const res = await fetch(`${API}${endpoint}`, { next: { revalidate: 300 } });
+      const res = await withWpLimit(() =>
+        fetch(`${API}${endpoint}`, { next: { revalidate: 300 } })
+      );
 
       // WordPress positively says it is not there — a real 404.
       if (res.status === 404) return null;
@@ -42,7 +67,9 @@ async function wpFetch(endpoint: string, attempts = 3): Promise<unknown> {
     }
 
     if (i < attempts - 1) {
-      await new Promise((r) => setTimeout(r, 300 * Math.pow(3, i)));
+      // 400ms, 1.2s, 3.6s, 10.8s (+ jitter) — WP recovers given a moment
+      const backoff = 400 * Math.pow(3, i);
+      await new Promise((r) => setTimeout(r, backoff + Math.random() * 300));
     }
   }
 
@@ -132,22 +159,13 @@ interface WPMedia { id: number; source_url: string; alt_text?: string; media_det
 async function resolveMedia(ids: number[]): Promise<Record<number, Img>> {
   if (!ids.length) return {};
   const uniq = [...new Set(ids)];
+  const items = (await wpFetch(
+    `/media?include=${uniq.join(",")}&per_page=${uniq.length}&_fields=id,source_url,alt_text,media_details`
+  )) as WPMedia[] | null;
   const map: Record<number, Img> = {};
-
-  // Images are not worth failing a page over. WordPress can 500 on a large
-  // media batch under load (this is what broke the first build of this branch),
-  // so degrade to "no images" rather than throwing and killing the render.
-  try {
-    const items = (await wpFetch(
-      `/media?include=${uniq.join(",")}&per_page=${uniq.length}&_fields=id,source_url,alt_text,media_details`
-    )) as WPMedia[] | null;
-    for (const m of items ?? []) {
-      map[m.id] = { url: m.source_url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
-    }
-  } catch (err) {
-    console.error("resolveMedia failed, continuing without images:", err);
+  for (const m of items ?? []) {
+    map[m.id] = { url: m.source_url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
   }
-
   return map;
 }
 
