@@ -13,6 +13,8 @@ interface PropertyCardProps {
   imageUrl: string;
   bhk?: string[];
   videoId?: string;
+  /** True when the embedded video is the developer's walkthrough, not a Property Saraansh review. */
+  isWalkthrough?: boolean;
   reraNumber?: string;
   possessionDate?: string;
   nearbyLine?: string;
@@ -53,6 +55,7 @@ export default function PropertyCard({
   imageUrl,
   bhk = [],
   videoId,
+  isWalkthrough = false,
   reraNumber,
   possessionDate,
   nearbyLine,
@@ -110,7 +113,7 @@ export default function PropertyCard({
             rel="noopener noreferrer"
             className="pointer-events-auto absolute bottom-3 right-3 z-10 bg-red-600/90 hover:bg-red-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-md flex items-center gap-1 transition-colors"
           >
-            ▶ Video Review
+            ▶ {isWalkthrough ? 'Walkthrough' : 'Video Review'}
           </a>
         )}
       </div>
