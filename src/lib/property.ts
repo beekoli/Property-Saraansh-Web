@@ -15,15 +15,39 @@ import { decodeHtml } from "@/lib/decodeHtml";
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
 
-async function wpFetch(endpoint: string): Promise<unknown> {
-  try {
-    const res = await fetch(`${API}${endpoint}`, { next: { revalidate: 300 } });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (err) {
-    console.error("property.ts fetch error:", err);
-    return null;
+/**
+ * Fetch from WordPress with retries.
+ *
+ * A transport failure (timeout, 5xx, network blip) is NOT the same as "this
+ * post does not exist". Returning null for both made healthy pages serve hard
+ * 404s. On a genuine 404 we return null so the caller can call notFound(); on
+ * any other failure we throw, so Next.js serves a 500 and retries instead of
+ * telling Google the page is gone.
+ */
+async function wpFetch(endpoint: string, attempts = 3): Promise<unknown> {
+  let lastErr: unknown = null;
+
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const res = await fetch(`${API}${endpoint}`, { next: { revalidate: 300 } });
+
+      // WordPress positively says it is not there — a real 404.
+      if (res.status === 404) return null;
+
+      if (res.ok) return await res.json();
+
+      lastErr = new Error(`WP responded ${res.status} for ${endpoint}`);
+    } catch (err) {
+      lastErr = err;
+    }
+
+    if (i < attempts - 1) {
+      await new Promise((r) => setTimeout(r, 300 * Math.pow(3, i)));
+    }
   }
+
+  console.error("property.ts fetch failed after retries:", endpoint, lastErr);
+  throw lastErr instanceof Error ? lastErr : new Error(`WP fetch failed: ${endpoint}`);
 }
 
 /* ---------------- types ---------------- */
@@ -143,8 +167,12 @@ const CITY_SLUGS = new Set([
 /* ---------------- fetch + normalize ---------------- */
 
 export async function getAllPropertySlugs(): Promise<string[]> {
-  const posts = (await wpFetch(`/properties?per_page=100&_fields=slug`)) as { slug: string }[] | null;
-  return (posts ?? []).map((p) => p.slug);
+  try {
+    const posts = (await wpFetch(`/properties?per_page=100&_fields=slug`)) as { slug: string }[] | null;
+    return (posts ?? []).map((p) => p.slug);
+  } catch {
+    return []; // build-time listing — never fail the whole build on a blip
+  }
 }
 
 /**
@@ -154,11 +182,15 @@ export async function getAllPropertySlugs(): Promise<string[]> {
  */
 export async function getBuilderProfile(slug: string): Promise<WPBuilderTerm | null> {
   if (!slug) return null;
-  const data = (await wpFetch(
-    `/builder?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count,acf`
-  )) as WPBuilderTerm[] | null;
-  if (!data || !Array.isArray(data) || data.length === 0) return null;
-  return { ...data[0], name: decodeHtml(data[0].name) };
+  try {
+    const data = (await wpFetch(
+      `/builder?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count,acf`
+    )) as WPBuilderTerm[] | null;
+    if (!data || !Array.isArray(data) || data.length === 0) return null;
+    return { ...data[0], name: decodeHtml(data[0].name) };
+  } catch {
+    return null; // builder card is optional — never fail the page for it
+  }
 }
 
 /**
@@ -166,20 +198,32 @@ export async function getBuilderProfile(slug: string): Promise<WPBuilderTerm | n
  * city — used to build the /property-in/[city] landing pages.
  */
 export async function getCities(): Promise<CityTerm[]> {
-  const data = (await wpFetch(`/location?per_page=100&_fields=id,name,slug,count`)) as CityTerm[] | null;
-  return (data ?? []).filter((t) => CITY_SLUGS.has(t.slug));
+  try {
+    const data = (await wpFetch(`/location?per_page=100&_fields=id,name,slug,count`)) as CityTerm[] | null;
+    return (data ?? []).filter((t) => CITY_SLUGS.has(t.slug));
+  } catch {
+    return [];
+  }
 }
 
 export async function getCityBySlug(slug: string): Promise<CityTerm | null> {
   if (!slug) return null;
-  const data = (await wpFetch(`/location?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count`)) as CityTerm[] | null;
-  return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
+  try {
+    const data = (await wpFetch(`/location?slug=${encodeURIComponent(slug)}&_fields=id,name,slug,count`)) as CityTerm[] | null;
+    return data && Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch {
+    return null;
+  }
 }
 
 /** Raw properties (with _embed) tagged with a given ps_location term id. */
 export async function getPropertiesInCity(termId: number, limit = 50): Promise<WPProperty[]> {
-  const data = (await wpFetch(`/properties?_embed&per_page=${limit}&location=${termId}`)) as WPProperty[] | null;
-  return data && Array.isArray(data) ? data : [];
+  try {
+    const data = (await wpFetch(`/properties?_embed&per_page=${limit}&location=${termId}`)) as WPProperty[] | null;
+    return data && Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
 }
 
 export async function getProperty(slug: string): Promise<Property | null> {
@@ -312,7 +356,12 @@ export function buildSchemas(prop: Property) {
     ...(prop.builder ? { brand: { "@type": "Organization", name: prop.builder } } : {}),
   };
 
-  const product = prop.priceMin || prop.priceMax ? {
+  // Product is emitted for every listing so all projects are eligible for a
+  // Product rich result. The offers block is included only when the developer
+  // has actually published a price — we never assert a price we do not have.
+  const hasPrice = Boolean(prop.priceMin || prop.priceMax);
+
+  const product = {
     "@context": "https://schema.org",
     "@type": "Product",
     "@id": `${url}#offer`,
@@ -320,16 +369,26 @@ export function buildSchemas(prop: Property) {
     image: prop.hero?.url,
     description: prop.tagline || prop.metaDescription,
     brand: { "@type": "Brand", name: prop.builder || "Property Saraansh" },
-    offers: {
-      "@type": "AggregateOffer",
-      priceCurrency: "INR",
-      ...(prop.priceMin ? { lowPrice: prop.priceMin } : {}),
-      ...(prop.priceMax ? { highPrice: prop.priceMax } : {}),
-      offerCount: prop.priceList.length || 1,
-      availability: "https://schema.org/InStock",
-      url,
-    },
-  } : null;
+    category: prop.type || "Residential",
+    ...(prop.rera ? {
+      additionalProperty: {
+        "@type": "PropertyValue",
+        name: "RERA Registration Number",
+        value: prop.rera,
+      },
+    } : {}),
+    ...(hasPrice ? {
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "INR",
+        ...(prop.priceMin ? { lowPrice: prop.priceMin } : {}),
+        ...(prop.priceMax ? { highPrice: prop.priceMax } : {}),
+        offerCount: prop.priceList.length || 1,
+        availability: "https://schema.org/InStock",
+        url,
+      },
+    } : {}),
+  };
 
   const faqPage = prop.faqs.length ? {
     "@context": "https://schema.org",
@@ -354,8 +413,11 @@ export function buildSchemas(prop: Property) {
   const video = prop.youtubeId ? {
     "@context": "https://schema.org",
     "@type": "VideoObject",
-    name: `${prop.title} — Property Saraansh Review`,
-    description: prop.verdict.slice(0, 300) || `${prop.title} on-ground video review by Property Saraansh`,
+    name: prop.verdict
+      ? `${prop.title} — Property Saraansh Review`
+      : `${prop.title} — Project Walkthrough`,
+    description: prop.verdict.slice(0, 300)
+      || `${prop.title} project walkthrough provided by the developer`,
     thumbnailUrl: `https://i.ytimg.com/vi/${prop.youtubeId}/hqdefault.jpg`,
     uploadDate: prop.publishedDate,
     embedUrl: `https://www.youtube.com/embed/${prop.youtubeId}`,
