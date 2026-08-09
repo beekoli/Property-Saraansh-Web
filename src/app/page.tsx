@@ -205,6 +205,7 @@ export default async function Home() {
                     id={project.slug}
                     title={project.title.rendered}
                     developer={card.developer}
+                  isWalkthrough={card.isWalkthrough}
                     location={card.location}
                     price={card.price}
                     type={card.type}

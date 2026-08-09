@@ -48,6 +48,7 @@ export default async function CommercialProperties() {
                   id={prop.slug}
                   title={prop.title.rendered}
                   developer={card.developer}
+                  isWalkthrough={card.isWalkthrough}
                   location={card.location}
                   price={card.price}
                   type={card.type}
