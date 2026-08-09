@@ -499,6 +499,9 @@ export function getCardData(prop: WPProperty) {
     price: acf.price_display || acf.price || 'Price on Request',
     type: term('ps_property_type', 'property_type') || acf.property_type || 'Residential',
     videoId,
+    // No Saraansh Verdict means the video is the developer's walkthrough,
+    // not our review — the card badge must say so.
+    isWalkthrough: !String(acf.video_review_text || "").trim(),
     bhk: acf.configuration ? String(acf.configuration).split(', ') : [],
     reraNumber: (acf.rera_number as string) || '',
     possessionDate: (acf.possession_date as string) || '',

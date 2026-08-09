@@ -268,7 +268,7 @@ export default function PropertiesClient({ properties }: Props) {
                             rel="noopener noreferrer"
                             className="absolute bottom-3 right-3 bg-red-600/90 hover:bg-red-600 text-white px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide shadow-md flex items-center gap-1 transition-colors"
                           >
-                            ▶ Video Review
+                            ▶ {String(project.acf?.video_review_text || "").trim() ? "Video Review" : "Walkthrough"}
                           </a>
                         )}
                       </div>

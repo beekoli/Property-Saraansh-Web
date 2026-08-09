@@ -60,6 +60,12 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [galleryCount, setGalleryCount] = useState(6);
 
+  // When Property Saraansh has not made its own video, the embed is the
+  // developer's walkthrough. The verdict is the signal: no verdict means it is
+  // not our review, so it must never be labelled one.
+  const isWalkthrough = !p.verdict;
+  const videoLabel = isWalkthrough ? "Walkthrough" : "Video Review";
+
   const wa = WHATSAPP + encodeURIComponent(`Hi, I am interested in ${p.title}. Please share details.`);
   const doneCount = p.timeline.filter((t) => t.done).length;
   const progressPct = p.timeline.length > 1 ? ((doneCount - 0.5) / p.timeline.length) * 100 : 10;
@@ -139,7 +145,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                   tabIndex={isDup ? -1 : undefined}
                   className={`whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]${isDup ? " hidden lg:block" : ""}`}
                 >
-                  {label}
+                  {id === "video" ? videoLabel : label}
                 </a>
               );
             })}
@@ -196,12 +202,15 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         {/* ================= VIDEO REVIEW ================= */}
         {p.youtubeId && (
           <section id="video" className="scroll-mt-24 pt-9">
-            <SectionHead eyebrow="Watch Before You Buy" title={`${p.title} — Property Saraansh Review`} />
+            <SectionHead
+              eyebrow={isWalkthrough ? "Project Walkthrough" : "Watch Before You Buy"}
+              title={isWalkthrough ? `${p.title} — Walkthrough` : `${p.title} — Property Saraansh Review`}
+            />
             <div className="overflow-hidden rounded-xl bg-[#0d1b2a]">
               <div className="relative aspect-video">
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${p.youtubeId}?rel=0`}
-                  title={`${p.title} video review by Property Saraansh`}
+                  title={isWalkthrough ? `${p.title} project walkthrough` : `${p.title} video review by Property Saraansh`}
                   className="absolute inset-0 h-full w-full"
                   loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -209,10 +218,12 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                 />
               </div>
             </div>
-            {p.verdict && (
+            {p.verdict ? (
               <blockquote className="mt-4 rounded-r-xl border-l-4 border-[#c9a24b] bg-[#fff7e0] p-4 text-[14.5px] italic text-[#4a3a12]">
                 <b className="not-italic text-[#8a6a1e]">Saraansh Verdict: </b>{p.verdict}
               </blockquote>
+            ) : (
+              <p className="mt-3 text-xs text-[#66788c]">Walkthrough provided by the developer.</p>
             )}
           </section>
         )}
