@@ -132,13 +132,22 @@ interface WPMedia { id: number; source_url: string; alt_text?: string; media_det
 async function resolveMedia(ids: number[]): Promise<Record<number, Img>> {
   if (!ids.length) return {};
   const uniq = [...new Set(ids)];
-  const items = (await wpFetch(
-    `/media?include=${uniq.join(",")}&per_page=${uniq.length}&_fields=id,source_url,alt_text,media_details`
-  )) as WPMedia[] | null;
   const map: Record<number, Img> = {};
-  for (const m of items ?? []) {
-    map[m.id] = { url: m.source_url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
+
+  // Images are not worth failing a page over. WordPress can 500 on a large
+  // media batch under load (this is what broke the first build of this branch),
+  // so degrade to "no images" rather than throwing and killing the render.
+  try {
+    const items = (await wpFetch(
+      `/media?include=${uniq.join(",")}&per_page=${uniq.length}&_fields=id,source_url,alt_text,media_details`
+    )) as WPMedia[] | null;
+    for (const m of items ?? []) {
+      map[m.id] = { url: m.source_url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
+    }
+  } catch (err) {
+    console.error("resolveMedia failed, continuing without images:", err);
   }
+
   return map;
 }
 
