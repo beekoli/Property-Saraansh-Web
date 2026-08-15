@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
@@ -298,12 +299,19 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <StaggerContainer className="flex flex-col md:flex-row items-center gap-16" staggerChildren={0.2}>
             <StaggerItem className="w-full md:w-5/12" yOffset={30}>
-              <div className="relative aspect-[3/2] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
-                <img 
-                  src="/saraansh_seth.webp" 
-                  alt="Saraansh Seth" 
-                  className="w-full h-full object-cover" 
-                  loading="lazy"
+              {/* The photo is 1400x1875 — portrait. The frame was aspect-[3/2],
+                  landscape, so object-cover threw away roughly half the image
+                  height and cut Saraansh off at the waist. 3/4 matches the
+                  source almost exactly (0.75 against 0.747), so nothing is
+                  cropped; object-top keeps the face safe if the frame ever
+                  changes again. */}
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-brand-accent/30 shadow-2xl bg-brand-pale/10">
+                <Image
+                  src="/saraansh_seth.webp"
+                  alt="Saraansh Seth, founder of Property Saraansh"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                  className="object-cover object-top"
                 />
               </div>
             </StaggerItem>
