@@ -182,8 +182,8 @@ export default function NewsListing({
 
                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-brand-pale">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-brand-pale border border-brand-light mr-3 overflow-hidden">
-                          <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
+                        <div className="w-10 h-10 rounded-full bg-white border border-brand-light mr-3 overflow-hidden flex items-center justify-center">
+                          <img src="/logo.png" alt="Property Saraansh" className="w-full h-full object-contain p-1"  loading="lazy" decoding="async" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-brand-ink">Property Saraansh Desk</p>

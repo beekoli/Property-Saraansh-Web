@@ -53,9 +53,9 @@ export default function BlogCard({ id, title, excerpt, category, author, date, r
 
         <div className="flex items-center justify-between border-t border-brand-pale pt-4 mt-auto">
           <div className="flex items-center">
-            {/* Author Avatar Placeholder */}
-            <div className="w-8 h-8 rounded-full bg-brand-pale border border-brand-light mr-2 flex items-center justify-center overflow-hidden">
-              <svg className="w-4 h-4 text-brand-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            {/* Author avatar — Property Saraansh logo */}
+            <div className="w-8 h-8 rounded-full bg-white border border-brand-light mr-2 flex items-center justify-center overflow-hidden">
+              <img src="/logo.png" alt="Property Saraansh" className="w-full h-full object-contain p-0.5" loading="lazy" decoding="async" />
             </div>
             <div>
               <p className="text-xs font-semibold text-brand-ink">{author}</p>
