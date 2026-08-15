@@ -22,7 +22,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
 
   const baseTitle = 'Pune Real Estate News — Daily Market Updates | Property Saraansh';
   const description =
-    'Daily real estate news for Pune, PCMC, Hinjewadi & the Pune metropolitan region — new launches, price movements, RERA & policy updates, and infrastructure, tracked by Property Saraansh.';
+    'Daily Pune real estate news — new project launches, price movements, RERA & policy updates, and infrastructure across Pune, PCMC, Hinjewadi & the Pune metropolitan region.';
 
   const canonical =
     page > 1 ? `${FRONTEND_URL}/pune-news?page=${page}` : `${FRONTEND_URL}/pune-news`;
@@ -55,7 +55,7 @@ export default async function PuneNews({ searchParams }: PageProps) {
       totalPages={totalPages}
       total={total}
       heading="Pune Real Estate News"
-      intro="Daily updates on new launches, price movements, RERA & policy changes, and infrastructure across Pune, PCMC, Hinjewadi & the wider Pune metropolitan region."
+      intro="Your daily briefing on the Pune property market — new project launches, price movements, RERA & policy updates, and the infrastructure shaping Pune, PCMC, Hinjewadi & the wider metropolitan region."
       paginationBasePath="/pune-news"
     />
   );

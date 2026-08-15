@@ -20,9 +20,9 @@ function parsePage(raw?: string): number {
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const page = parsePage((await searchParams).page);
 
-  const baseTitle = 'Noida Real Estate News — Daily Market Updates | Property Saraansh';
+  const baseTitle = 'Noida & Greater Noida Real Estate News — Daily Updates | Property Saraansh';
   const description =
-    'Daily real estate news for Noida, Greater Noida, Noida Extension & the Yamuna Expressway — new launches, price movements, RERA & policy updates, and infrastructure, tracked by Property Saraansh.';
+    'Daily Noida real estate news — new project launches, price and circle-rate moves, RERA & policy updates, and infrastructure across Noida, Greater Noida & the Yamuna Expressway.';
 
   const canonical =
     page > 1 ? `${FRONTEND_URL}/noida-news?page=${page}` : `${FRONTEND_URL}/noida-news`;
@@ -54,8 +54,8 @@ export default async function NoidaNews({ searchParams }: PageProps) {
       page={page}
       totalPages={totalPages}
       total={total}
-      heading="Noida Real Estate News"
-      intro="Daily updates on new launches, price movements, RERA & policy changes, and infrastructure across Noida, Greater Noida, Noida Extension & the Yamuna Expressway."
+      heading="Noida & Greater Noida Real Estate News"
+      intro="Your daily briefing on the Noida property market — new project launches, price and rate movements, RERA & policy updates, and the infrastructure shaping Noida, Greater Noida, Noida Extension & the Yamuna Expressway."
       paginationBasePath="/noida-news"
     />
   );
