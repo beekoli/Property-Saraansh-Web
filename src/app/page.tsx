@@ -6,6 +6,8 @@ import NewsCard from '@/components/NewsCard';
 import { getChannelStats } from '@/lib/youtube';
 import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import type { WPPost } from '@/lib/wordpress';
+import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+import { partitionPreLaunch } from '@/lib/prelaunch';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
@@ -40,12 +42,22 @@ const newsItemCategory = (post: WPPost): string => {
 export default async function Home() {
   // Concurrent fetching of server-side data
   const [properties, latestBlogs, latestNews, channelStats, videos] = await Promise.all([
-    getProperties(3),
+    // Fetch the whole catalogue, not the first three. WordPress returns them in
+    // its own order, so asking for 3 gave whichever three happened to be first
+    // — which is why the homepage led with ACE Divino, delivered in 2022.
+    getProperties(100),
     getLatestBlogs(3),
     getLatestNews(3),
     getChannelStats(),
     getVideosWithRealtimeStats()
   ]);
+
+  // The three most recently launched projects, matching the order on
+  // /properties. Pre-launch projects are excluded: they carry no RERA
+  // registration, so they should never headline the homepage.
+  const featuredProjects = partitionPreLaunch(
+    sortByLaunchDate(properties, rawLaunchDate)
+  ).registered.slice(0, 3);
 
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
   const featuredVideo = longVideos[0] || {
@@ -197,7 +209,7 @@ export default async function Home() {
           </SlideUp>
           
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((project, cardIndex) => {
+            {featuredProjects.map((project, cardIndex) => {
               const card = getCardData(project);
               return (
                 <StaggerItem key={project.id}>
@@ -213,6 +225,7 @@ export default async function Home() {
                     priority={cardIndex < 3}
                     bhk={card.bhk}
                     videoId={card.videoId}
+                    launchLine={launchLabel(rawLaunchDate(project))}
                   />
                 </StaggerItem>
               );
