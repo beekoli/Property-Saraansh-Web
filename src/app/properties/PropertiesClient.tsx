@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { decodeHtml } from '@/lib/decodeHtml';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
 import PropertyCard from '@/components/PropertyCard';
 import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import Link from 'next/link';
@@ -25,6 +26,14 @@ export default function PropertiesClient({ properties }: Props) {
   const orderedProperties = useMemo(
     () => sortByLaunchDate(properties, rawLaunchDate),
     [properties]
+  );
+
+  // Pre-launch projects are held out of the main listing entirely — they have
+  // no registration, no launch date and no quotable price, so they would only
+  // dilute an order built on exactly those things.
+  const { registered, preLaunch } = useMemo(
+    () => partitionPreLaunch(orderedProperties),
+    [orderedProperties]
   );
 
   // Filter States
@@ -77,14 +86,20 @@ export default function PropertiesClient({ properties }: Props) {
     return true;
   };
 
-  const filteredProjects = orderedProperties.filter((project) => {
+  const filteredProjects = registered.filter((project) => {
     if (!matchesBase(project)) return false;
     if (status !== 'All' && !matchesStatus(project, status.toLowerCase())) return false;
     return true;
   });
 
+  // Pre-launch obeys location, type and budget, but not the status chips —
+  // "Ready to Move" and "Under Construction" describe registered construction
+  // stages, so an unregistered project cannot honestly answer them. Picking any
+  // status therefore hides the section rather than guessing.
+  const filteredPreLaunch = status === 'All' ? preLaunch.filter(matchesBase) : [];
+
   // Counts per status chip (computed against location/type/budget filters, ignoring the status filter itself)
-  const preStatusFiltered = orderedProperties.filter(matchesBase);
+  const preStatusFiltered = registered.filter(matchesBase);
 
   const chipCount = (chip: string) => {
     if (chip === 'All') return preStatusFiltered.length;
@@ -372,6 +387,58 @@ export default function PropertiesClient({ properties }: Props) {
           <div className="text-center py-20 text-brand-ink/60">
             <p className="text-lg">No projects match your search criteria. Please adjust filters and try again.</p>
           </div>
+        )}
+
+        {/* Pre-Launch — projects an editor has flagged that carry no RERA
+            registration yet. Kept below the main listing deliberately: the
+            registered inventory is the primary offer. A project leaves this
+            section automatically the moment a RERA number is entered. */}
+        {filteredPreLaunch.length > 0 && (
+          <section className="mt-20 pt-12 border-t border-brand-light/20">
+            <div className="mb-8">
+              <div className="flex flex-wrap items-center gap-3 mb-2">
+                <h2 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-ink">
+                  Pre-Launch Projects
+                </h2>
+                <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
+                  {filteredPreLaunch.length} Tracking
+                </span>
+              </div>
+              <p className="text-sm text-brand-dark/70 max-w-3xl leading-relaxed">
+                Projects we are tracking ahead of their formal launch. These are not yet
+                registered with UP RERA, so pricing, layouts and timelines are indicative
+                and subject to change. Register your interest and we will share verified
+                details the moment registration comes through.
+              </p>
+            </div>
+
+            <StaggerContainer
+              key={`prelaunch-${location}-${type}-${maxBudget}-${filteredPreLaunch.length}`}
+              className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            >
+              {filteredPreLaunch.map((project) => {
+                const card = getCardData(project);
+                return (
+                  <StaggerItem key={project.id} yOffset={20}>
+                    <PropertyCard
+                      id={project.slug}
+                      title={decodeHtml(project.title.rendered)}
+                      developer={card.developer}
+                      isWalkthrough={card.isWalkthrough}
+                      location={card.location}
+                      price={card.price}
+                      type={card.type}
+                      imageUrl={getFeaturedImage(project)}
+                      bhk={card.bhk}
+                      videoId={card.videoId}
+                      launchLine={expectedLaunchLine(project)}
+                      preLaunch
+                    />
+                  </StaggerItem>
+                );
+              })}
+            </StaggerContainer>
+          </section>
         )}
       </div>
     </div>

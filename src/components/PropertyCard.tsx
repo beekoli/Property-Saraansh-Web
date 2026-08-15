@@ -23,6 +23,13 @@ interface PropertyCardProps {
    * line rather than printing something the data does not support.
    */
   launchLine?: string | null;
+  /**
+   * Renders the pre-launch variant: a PRE-LAUNCH badge, the expected-launch
+   * line in place of a launch date, price withheld, and the WhatsApp button
+   * reframed as Register Interest. Used only for projects with no RERA
+   * registration, so the card must not assert a price or a firm date.
+   */
+  preLaunch?: boolean;
   nearbyLine?: string;
   /**
    * Set on the first row of cards. next/image lazy-loads by default, which
@@ -65,13 +72,21 @@ export default function PropertyCard({
   reraNumber,
   possessionDate,
   launchLine,
+  preLaunch = false,
   nearbyLine,
   priority = false,
 }: PropertyCardProps) {
-  const statusBadge = getStatusBadge(possessionDate);
+  // A pre-launch project has no registration, so possession-derived status
+  // ("Ready to Move", "Under Construction") would be misleading.
+  const statusBadge = preLaunch ? { label: 'PRE-LAUNCH' } : getStatusBadge(possessionDate);
   const videoHref = getVideoHref(id, videoId);
   const displayTitle = decodeHtml(title);
   const displayDeveloper = decodeHtml(developer || '');
+  // Nothing about an unregistered project is firm enough to quote a price on.
+  const displayPrice = preLaunch ? 'Price on Request' : price;
+  const enquiryText = preLaunch
+    ? `Hi, I would like to register my interest in ${displayTitle}. Please keep me updated on the launch.`
+    : `Hi, I am interested in ${displayTitle}. Please share more details.`;
 
   return (
     <div className="group isolate bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
@@ -139,7 +154,7 @@ export default function PropertyCard({
             <span className="line-clamp-1">{location}</span>
           </div>
 
-          <div className="text-base font-bold text-brand-accent mb-3">{price}</div>
+          <div className="text-base font-bold text-brand-accent mb-3">{displayPrice}</div>
 
           {launchLine && (
             <div className="flex items-center text-brand-dark/60 mb-3 text-[11px]">
@@ -169,14 +184,14 @@ export default function PropertyCard({
         <div className="border-t border-brand-pale pt-4 mt-2">
           <div className="pointer-events-auto relative z-10 flex gap-2">
             <a
-              href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${displayTitle}. Please share more details.`)}`}
+              href={`https://wa.me/918076178189?text=${encodeURIComponent(enquiryText)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"
-              aria-label="Chat on WhatsApp"
+              aria-label={preLaunch ? `Register interest in ${displayTitle}` : 'Chat on WhatsApp'}
             >
               <WhatsAppIcon className="w-4 h-4" />
-              WhatsApp
+              {preLaunch ? 'Register Interest' : 'WhatsApp'}
             </a>
             <a
               href="tel:+918076178189"
