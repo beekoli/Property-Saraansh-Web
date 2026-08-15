@@ -14,7 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Properties() {
-  const properties = await getProperties(50); // Fetch up to 50 projects
+  // 100 is the WordPress REST per_page ceiling. This was 50, which silently
+  // dropped the 4 oldest-published projects — including two 2026 launches —
+  // once the catalogue grew past 50.
+  const properties = await getProperties(100);
 
   return <PropertiesClient properties={properties} />;
 }

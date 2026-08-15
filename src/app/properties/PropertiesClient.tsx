@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { decodeHtml } from '@/lib/decodeHtml';
+import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
 import PropertyCard from '@/components/PropertyCard';
 import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import Link from 'next/link';
@@ -18,6 +19,13 @@ const STATUS_CHIPS = ['All', 'New Launch', 'Under Construction', 'Ready to Move'
 
 export default function PropertiesClient({ properties }: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Newest launch first. Sorted once, ahead of filtering, so every filter and
+  // status chip keeps this order rather than each needing to re-sort.
+  const orderedProperties = useMemo(
+    () => sortByLaunchDate(properties, rawLaunchDate),
+    [properties]
+  );
 
   // Filter States
   const [location, setLocation] = useState('All');
@@ -69,14 +77,14 @@ export default function PropertiesClient({ properties }: Props) {
     return true;
   };
 
-  const filteredProjects = properties.filter((project) => {
+  const filteredProjects = orderedProperties.filter((project) => {
     if (!matchesBase(project)) return false;
     if (status !== 'All' && !matchesStatus(project, status.toLowerCase())) return false;
     return true;
   });
 
   // Counts per status chip (computed against location/type/budget filters, ignoring the status filter itself)
-  const preStatusFiltered = properties.filter(matchesBase);
+  const preStatusFiltered = orderedProperties.filter(matchesBase);
 
   const chipCount = (chip: string) => {
     if (chip === 'All') return preStatusFiltered.length;
@@ -291,6 +299,15 @@ export default function PropertiesClient({ properties }: Props) {
                             {card.location}
                           </div>
 
+                          {launchLabel(rawLaunchDate(project)) && (
+                            <div className="flex items-center text-brand-dark/60 mb-4 text-[11px]">
+                              <svg className="w-3.5 h-3.5 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              {launchLabel(rawLaunchDate(project))}
+                            </div>
+                          )}
+
                           <div className="flex flex-wrap gap-1.5 mb-6">
                             {card.bhk.map((item, index) => (
                               <span key={index} className="bg-brand-pale text-brand-primary text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
@@ -345,6 +362,7 @@ export default function PropertiesClient({ properties }: Props) {
                     videoId={card.videoId}
                     reraNumber={card.reraNumber}
                     possessionDate={card.possessionDate}
+                    launchLine={launchLabel(rawLaunchDate(project))}
                   />
                 </StaggerItem>
               );

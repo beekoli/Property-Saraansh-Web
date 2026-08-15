@@ -17,6 +17,12 @@ interface PropertyCardProps {
   isWalkthrough?: boolean;
   reraNumber?: string;
   possessionDate?: string;
+  /**
+   * Pre-formatted "Launched Oct 2025". Null whenever the WordPress value is
+   * missing or is prose rather than a clean date — the card simply omits the
+   * line rather than printing something the data does not support.
+   */
+  launchLine?: string | null;
   nearbyLine?: string;
   /**
    * Set on the first row of cards. next/image lazy-loads by default, which
@@ -58,6 +64,7 @@ export default function PropertyCard({
   isWalkthrough = false,
   reraNumber,
   possessionDate,
+  launchLine,
   nearbyLine,
   priority = false,
 }: PropertyCardProps) {
@@ -133,6 +140,15 @@ export default function PropertyCard({
           </div>
 
           <div className="text-base font-bold text-brand-accent mb-3">{price}</div>
+
+          {launchLine && (
+            <div className="flex items-center text-brand-dark/60 mb-3 text-[11px]">
+              <svg className="w-3.5 h-3.5 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>{launchLine}</span>
+            </div>
+          )}
 
           <div className="flex flex-wrap gap-1.5 mb-3">
             {bhk.map((item, index) => (
