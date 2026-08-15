@@ -10,6 +10,8 @@
  */
 
 import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
+import { formatReraDate } from "@/lib/formatDate";
+
 import { decodeHtml } from "@/lib/decodeHtml";
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
@@ -102,6 +104,8 @@ export interface Property {
   rera: string;
   launchDate: string;
   possessionDate: string;
+  /** Proposed completion date from the UP RERA registration, stored as YYYY-MM-DD. */
+  reraCompletionDate: string;
   basePrice: string;
   priceDisplay: string;
   priceMin: number | null;
@@ -306,6 +310,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     rera: a.rera_number || "",
     launchDate: a.launch_date || "",
     possessionDate: a.possession_date || "",
+    reraCompletionDate: a.rera_completion_date || "",
     basePrice: a.base_price || "",
     priceDisplay: a.price_display || a.price || "",
     priceMin: a.price_min_numeric ? Number(a.price_min_numeric) : null,
@@ -328,6 +333,10 @@ export async function getProperty(slug: string): Promise<Property | null> {
       ["Configuration", a.configuration],
       ["Launch", a.launch_date],
       ["Possession", a.possession_date],
+      // The regulator's own date, shown beside our possession wording rather
+      // than replacing it — the two are different claims and a buyer benefits
+      // from seeing both.
+      ["RERA Completion", formatReraDate(a.rera_completion_date)],
       ["RERA No.", a.rera_number],
       ["Base Price", a.base_price],
     ] as [string, string | undefined][]).filter(([, v]) => v).map(([label, value]) => ({ label, value: value as string })),
