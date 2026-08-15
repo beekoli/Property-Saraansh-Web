@@ -9,6 +9,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNewsDropdownOpen, setIsNewsDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
@@ -50,6 +51,7 @@ export default function Navbar() {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setIsDropdownOpen(false);
+    setIsNewsDropdownOpen(false);
   };
 
   const isLightPage = mounted && (
@@ -116,7 +118,32 @@ export default function Navbar() {
               </div>
             </div>
 
-            <Link href="/news" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">News</Link>
+            {/* News Dropdown */}
+            <div
+              className="relative group py-2"
+              onMouseEnter={() => setIsNewsDropdownOpen(true)}
+              onMouseLeave={() => setIsNewsDropdownOpen(false)}
+            >
+              <Link
+                href="/noida-news"
+                className="text-white hover:text-brand-accent transition-colors font-medium text-sm flex items-center gap-1 focus:outline-none"
+              >
+                News
+                <svg className={`w-4 h-4 transition-transform duration-200 ${isNewsDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </Link>
+
+              <div
+                className={`absolute left-0 mt-2 w-48 bg-brand-dark border border-brand-light/30 rounded-lg shadow-xl py-2 z-50 transition-all duration-200 origin-top-left ${
+                  isNewsDropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
+                }`}
+              >
+                <Link href="/noida-news" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Noida News</Link>
+                <Link href="/pune-news" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Pune News</Link>
+              </div>
+            </div>
+
             <Link href="/blog" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Blog</Link>
             <Link href="/contact" className="text-white hover:text-brand-accent transition-colors font-medium text-sm">Contact</Link>
           </div>
@@ -163,7 +190,12 @@ export default function Navbar() {
               <Link href="/builders" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Builders</Link>
             </div>
 
-            <Link href="/news" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">News</Link>
+            <div className="text-white block py-2 text-base font-medium">News</div>
+            <div className="pl-2 border-l border-brand-light/30 space-y-1">
+              <Link href="/noida-news" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Noida News</Link>
+              <Link href="/pune-news" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Pune News</Link>
+            </div>
+
             <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Blog</Link>
             <Link href="/contact" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Contact</Link>
             <Link href="/contact" onClick={closeMobileMenu} className="btn-primary block text-center py-3 rounded font-bold mt-4 shadow-md">Free Consultation</Link>

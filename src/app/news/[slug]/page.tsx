@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { generateRankMathMetadata, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
-import { getNewsBySlug, getLatestNews, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
+import { getNewsBySlug, getLatestNews, getLatestNewsByCity, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
@@ -27,11 +27,31 @@ const decodeHtml = (str: string) =>
 const titleCaseCat = (s: string) =>
   s.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 
+const NON_LABEL_TERMS = ['news', 'blog', 'noida news', 'pune news'];
+
 function getItemCategory(post: { _embedded?: { 'wp:term'?: Array<Array<{ name: string }>> } }): string {
   const terms = post._embedded?.['wp:term']?.[0] || [];
   const names = terms.map((t) => t.name).filter(Boolean);
-  const specific = names.find((n) => !['news', 'blog'].includes(n.toLowerCase())) || 'News';
+  const specific = names.find((n) => !NON_LABEL_TERMS.includes(n.toLowerCase())) || 'News';
   return titleCaseCat(specific);
+}
+
+/**
+ * Which city listing owns this article, from its category terms. News posts
+ * carry a city category (slug noida-news | pune-news); default to Noida (the
+ * primary market) when none is present — e.g. pre-split legacy posts.
+ */
+function getCity(post: { _embedded?: { 'wp:term'?: Array<Array<{ slug?: string; name?: string }>> } }): {
+  label: string;
+  path: string;
+} {
+  const terms = post._embedded?.['wp:term']?.[0] || [];
+  const isPune = terms.some(
+    (t) => t.slug === 'pune-news' || (t.name || '').toLowerCase() === 'pune news'
+  );
+  return isPune
+    ? { label: 'Pune', path: '/pune-news' }
+    : { label: 'Noida', path: '/noida-news' };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -79,10 +99,14 @@ export default async function NewsArticlePage({ params }: PageProps) {
   }
 
   const news = resolved.post;
+  const city = getCity(news);
 
-  // Related news (exclude current).
-  const allNews = await getLatestNews(4);
-  const relatedNews = allNews.filter((n) => n.slug !== slug).slice(0, 3);
+  // Related news — prefer the same city, fall back to the all-news feed so the
+  // rail is never empty (exclude the current article).
+  const citySlug = city.path === '/pune-news' ? 'pune-news' : 'noida-news';
+  const cityNews = await getLatestNewsByCity(citySlug, 4);
+  const relatedPool = cityNews.length > 1 ? cityNews : await getLatestNews(4);
+  const relatedNews = relatedPool.filter((n) => n.slug !== slug).slice(0, 3);
 
   const featuredImg = getFeaturedImage(news);
   const displayDate = new Date(news.date).toLocaleDateString('en-IN', {
@@ -117,7 +141,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: FRONTEND_URL },
-      { '@type': 'ListItem', position: 2, name: 'News', item: `${FRONTEND_URL}/news` },
+      { '@type': 'ListItem', position: 2, name: `${city.label} News`, item: `${FRONTEND_URL}${city.path}` },
       {
         '@type': 'ListItem',
         position: 3,
@@ -163,10 +187,10 @@ export default async function NewsArticlePage({ params }: PageProps) {
           <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-brand-light/10">
             {/* Back to all news */}
             <Link
-              href="/news"
+              href={city.path}
               className="inline-flex items-center gap-1.5 text-brand-primary hover:text-brand-accent text-xs font-bold uppercase tracking-wider mb-8 transition-colors"
             >
-              <span aria-hidden="true">←</span> All News
+              <span aria-hidden="true">←</span> All {city.label} News
             </Link>
 
             {featuredImg && (
@@ -238,7 +262,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
         {relatedNews.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 pt-16 border-t border-brand-light/20">
             <h2 className="heading-playfair text-2xl md:text-3xl font-bold mb-10 text-brand-dark text-center">
-              More Noida Real Estate News
+              More {city.label} Real Estate News
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {relatedNews.map((post) => (

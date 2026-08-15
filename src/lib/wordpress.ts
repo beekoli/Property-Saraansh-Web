@@ -441,6 +441,70 @@ export async function getNewsBySlug(slug: string): Promise<WPPost | null> {
   return local || null;
 }
 
+/* -----------------------------------------------------------------------
+ * City-scoped News (Noida / Pune)
+ * -----------------------------------------------------------------------
+ * News is split into two city pages — /noida-news and /pune-news — each
+ * fetching its own WordPress category (slug: noida-news | pune-news). Every
+ * news post still carries the parent "News" category too, so /blog exclusion,
+ * isNewsPost() and the shared /news/[slug] article route keep working; the city
+ * category is an ADDITIONAL tag used only to route the listing.
+ * --------------------------------------------------------------------- */
+
+/** City category slug -> WordPress term id (noida-news | pune-news). */
+export async function getCityNewsCategoryId(citySlug: string): Promise<number | null> {
+  const data = await fetchAPI(`/categories?slug=${encodeURIComponent(citySlug)}&_fields=id`);
+  if (data && Array.isArray(data) && data.length > 0 && typeof data[0]?.id === 'number') {
+    return data[0].id as number;
+  }
+  return null;
+}
+
+/** Latest news for one city, newest first (empty when the category is absent). */
+export async function getLatestNewsByCity(citySlug: string, limit = 20): Promise<WPPost[]> {
+  const catId = await getCityNewsCategoryId(citySlug);
+  if (!catId) return [];
+  const data = await fetchAPI(
+    `/posts?_embed&per_page=${limit}&categories=${catId}&orderby=date&order=desc`
+  );
+  return data && data.length > 0 ? data : [];
+}
+
+/** One page of a city's News feed, newest first. Mirrors getNewsPage, scoped. */
+export async function getNewsPageByCity(
+  citySlug: string,
+  page = 1,
+  perPage = 12
+): Promise<BlogPage> {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  const catId = await getCityNewsCategoryId(citySlug);
+
+  const emptyFallback = (): BlogPage => ({
+    posts: [],
+    page: safePage,
+    perPage,
+    totalPages: 1,
+    total: 0,
+  });
+
+  if (!catId) return emptyFallback();
+
+  const result = await fetchAPIWithMeta(
+    `/posts?_embed&per_page=${perPage}&page=${safePage}&categories=${catId}&orderby=date&order=desc`
+  );
+
+  const posts = (result?.data as WPPost[] | null) ?? null;
+  if (!posts || posts.length === 0) return emptyFallback();
+
+  return {
+    posts,
+    page: safePage,
+    perPage,
+    totalPages: Math.max(1, result?.totalPages || 1),
+    total: result?.total || posts.length,
+  };
+}
+
 export async function getProperties(limit = 10, propertyType?: string): Promise<WPProperty[]> {
   const data = await fetchAPI(`/properties?_embed&per_page=${limit}`);
   const list = data && data.length > 0 ? data : MOCK_PROPERTIES;

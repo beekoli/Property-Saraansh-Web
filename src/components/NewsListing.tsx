@@ -11,6 +11,12 @@ interface Props {
   page?: number;
   totalPages?: number;
   total?: number;
+  /** Big page heading, e.g. "Noida Real Estate News". */
+  heading: string;
+  /** Intro paragraph under the heading. */
+  intro: string;
+  /** Base path for pagination links, e.g. "/noida-news". */
+  paginationBasePath: string;
 }
 
 // Nicely capitalise a WordPress term name for display.
@@ -29,21 +35,26 @@ const decodeHtml = (str: string) =>
     .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => String.fromCodePoint(parseInt(h, 16)))
     .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(parseInt(n, 10)));
 
-// Label a news item by its most specific WordPress category (prefer something
-// other than the generic "News"/"Blog" buckets, e.g. "Launches", "Policy").
+// City buckets and the generic parents are never useful as a card label — we
+// want the topical sub-category (e.g. "Launches", "Prices", "Infrastructure").
+const NON_LABEL_TERMS = ['news', 'blog', 'noida news', 'pune news'];
+
 const getItemCategory = (post: WPPost): string => {
   const terms = post._embedded?.['wp:term']?.[0] || [];
   const names = terms.map((t) => decodeHtml(t.name)).filter(Boolean);
   const specific =
-    names.find((n) => !['news', 'blog'].includes(n.toLowerCase())) || 'News';
+    names.find((n) => !NON_LABEL_TERMS.includes(n.toLowerCase())) || 'News';
   return titleCase(specific);
 };
 
-export default function NewsClient({
+export default function NewsListing({
   initialNews,
   page = 1,
   totalPages = 1,
   total = 0,
+  heading,
+  intro,
+  paginationBasePath,
 }: Props) {
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -94,12 +105,11 @@ export default function NewsClient({
             Updated Daily
           </span>
           <h1 className="heading-playfair text-4xl md:text-5xl text-brand-accent mb-4 font-bold">
-            Noida Real Estate News
+            {heading}
           </h1>
           <div className="w-24 h-0.5 bg-brand-accent mx-auto rounded"></div>
           <p className="text-brand-pale/80 mt-6 text-base md:text-lg font-light leading-relaxed max-w-2xl mx-auto">
-            Daily updates on new launches, price movements, RERA &amp; policy changes, and
-            infrastructure across Noida, Greater Noida, Noida Extension &amp; the Yamuna Expressway.
+            {intro}
           </p>
           {latestDate && (
             <p className="text-brand-pale/50 mt-3 text-xs uppercase tracking-wider">
@@ -122,7 +132,7 @@ export default function NewsClient({
               Daily news is on its way
             </h2>
             <p className="text-brand-ink/70 leading-relaxed mb-8">
-              We&apos;re preparing today&apos;s Noida real-estate briefing — new launches, price
+              We&apos;re preparing today&apos;s real-estate briefing — new launches, price
               movements and policy updates. Check back shortly, or explore our in-depth analysis in
               the meantime.
             </p>
@@ -173,7 +183,7 @@ export default function NewsClient({
                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-brand-pale">
                       <div className="flex items-center">
                         <div className="w-10 h-10 rounded-full bg-brand-pale border border-brand-light mr-3 overflow-hidden">
-                          <img src="/saraansh_seth.webp" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
+                          <img src="/saraansh_seth.png" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-brand-ink">Property Saraansh Desk</p>
@@ -250,7 +260,7 @@ export default function NewsClient({
         <Pagination
           page={page}
           totalPages={totalPages}
-          basePath="/news"
+          basePath={paginationBasePath}
           total={total}
           itemLabel="stories"
         />
