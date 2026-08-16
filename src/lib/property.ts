@@ -334,12 +334,13 @@ export async function getProperty(slug: string): Promise<Property | null> {
       ["Units / Floor", a.quick_facts?.units_per_floor || a.units_per_floor],
       ["Lifts / Floor", a.quick_facts?.lifts_per_floor || a.lifts_per_floor],
       ["Configuration", a.configuration],
-      ["Launch", a.launch_date],
+      // The launch date IS the UP RERA registration date, so this reads as
+      // "RERA Received". A separate Launch tile would repeat the same value.
+      ["RERA Received", formatReraDate(a.launch_date)],
       ["Possession", a.possession_date],
       // The regulator's own date, shown beside our possession wording rather
       // than replacing it — the two are different claims and a buyer benefits
       // from seeing both.
-      ["Proposed Start", formatReraDate(a.rera_start_date)],
       ["RERA Completion", formatReraDate(a.rera_completion_date)],
       ["RERA No.", a.rera_number],
       ["Base Price", a.base_price],

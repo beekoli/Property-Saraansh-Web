@@ -25,7 +25,7 @@ const CAT_LABELS: Record<string, string> = {
 const FACT_ICONS: Record<string, string> = {
   "Total Land": "📐", "Towers": "🏙️", "Total Units": "🏢", "Total Floors": "🏗️",
   "Units / Floor": "🚪", "Lifts / Floor": "🛗", "Configuration": "🛏️",
-  "Launch": "🚀", "Possession": "🔑", "RERA No.": "✅", "Base Price": "💰",
+  "RERA Received": "🚀", "RERA Completion": "🏁", "Possession": "🔑", "RERA No.": "✅", "Base Price": "💰",
 };
 
 const SECTIONS = [
