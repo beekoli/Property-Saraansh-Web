@@ -3,9 +3,10 @@ import Image from 'next/image';
 import PropertyCard from '@/components/PropertyCard';
 import VideoPlayer from '@/components/VideoPlayer';
 import BlogCard from '@/components/BlogCard';
-import NewsCard from '@/components/NewsCard';
+import HomeNewsTabs from '@/components/HomeNewsTabs';
+import type { HomeNewsItem } from '@/components/HomeNewsTabs';
 import { getChannelStats } from '@/lib/youtube';
-import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
+import { getProperties, getLatestBlogs, getLatestNewsByCity, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import type { WPPost } from '@/lib/wordpress';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
 import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
@@ -42,13 +43,15 @@ const newsItemCategory = (post: WPPost): string => {
 
 export default async function Home() {
   // Concurrent fetching of server-side data
-  const [properties, latestBlogs, latestNews, channelStats, videos] = await Promise.all([
+  const [properties, latestBlogs, noidaNews, puneNews, channelStats, videos] = await Promise.all([
     // Fetch the whole catalogue, not the first three. WordPress returns them in
     // its own order, so asking for 3 gave whichever three happened to be first
     // — which is why the homepage led with ACE Divino, delivered in 2022.
     getProperties(100),
     getLatestBlogs(3),
-    getLatestNews(3),
+    // Both city feeds are fetched here so the tab switch is instant.
+    getLatestNewsByCity('noida-news', 3),
+    getLatestNewsByCity('pune-news', 3),
     getChannelStats(),
     getVideosWithRealtimeStats()
   ]);
@@ -61,6 +64,16 @@ export default async function Home() {
   // Pre-launch gets its own band below, capped at three so it never outweighs
   // the registered inventory above it.
   const preLaunchProjects = ordered.preLaunch.slice(0, 3);
+
+  const toNewsItem = (post: WPPost): HomeNewsItem => ({
+    id: post.id,
+    slug: post.slug,
+    title: post.title.rendered,
+    excerpt: post.excerpt.rendered.replace(/<[^>]*>?/gm, ''),
+    category: newsItemCategory(post),
+    date: post.date,
+    thumbnail: getFeaturedImage(post),
+  });
 
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
   const featuredVideo = longVideos[0] || {
@@ -388,55 +401,11 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 7. Real Estate News */}
-      {latestNews.length > 0 && (
-        <section className="py-12 md:py-20 bg-white border-t border-brand-light/20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SlideUp className="flex justify-between items-end mb-12">
-              <div>
-                <span className="inline-flex items-center gap-2 text-brand-primary uppercase tracking-widest text-[10px] font-bold mb-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span>
-                  Updated Daily
-                </span>
-                <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold">
-                  Real Estate News
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
-                </h2>
-              </div>
-              <Link href="/news" className="hidden md:flex text-brand-primary font-bold hover:text-brand-accent transition-colors items-center gap-1 group">
-                All news
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                </svg>
-              </Link>
-            </SlideUp>
-
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {latestNews.map((item) => (
-                <StaggerItem key={item.id}>
-                  <NewsCard
-                    slug={item.slug}
-                    title={item.title.rendered}
-                    excerpt={item.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
-                    category={newsItemCategory(item)}
-                    date={item.date}
-                    thumbnail={getFeaturedImage(item)}
-                  />
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-
-            <SlideUp className="md:hidden text-center mt-8">
-              <Link href="/news" className="text-brand-primary font-bold hover:text-brand-accent transition-colors flex items-center justify-center gap-1 group">
-                All news
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                </svg>
-              </Link>
-            </SlideUp>
-          </div>
-        </section>
-      )}
+      {/* 7. Real Estate News — Noida / Pune */}
+      <HomeNewsTabs
+        noida={noidaNews.map(toNewsItem)}
+        pune={puneNews.map(toNewsItem)}
+      />
 
       {/* 8. Latest Insights */}
       <section className="py-12 md:py-20 bg-brand-pale border-t border-brand-light/20">
