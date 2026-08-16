@@ -16,7 +16,13 @@ interface Props {
   properties: WPProperty[];
 }
 
-const STATUS_CHIPS = ['All', 'New Launch', 'Under Construction', 'Ready to Move'] as const;
+// Cards carry exactly three flags: PRE-LAUNCH, UNDER CONSTRUCTION, READY TO
+// MOVE. Pre-launch is not offered as a filter here because those projects are
+// held out of this grid entirely and shown in their own band below, so a chip
+// for them would filter an empty set. "New Launch" is gone: it matched any
+// possession text containing a recent year, which overlapped Under Construction
+// and no longer corresponds to any badge.
+const STATUS_CHIPS = ['All', 'Under Construction', 'Ready to Move'] as const;
 
 export default function PropertiesClient({ properties }: Props) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -78,11 +84,15 @@ export default function PropertiesClient({ properties }: Props) {
     return true;
   };
 
+  // Mirrors the card badge exactly: pre-launch is already excluded from this
+  // grid, so a project is either delivered or still being built. The old
+  // version tested for the substring "202", which matched a possession date of
+  // "December 2028" and also "2022", putting delivered projects under
+  // construction.
   const matchesStatus = (project: WPProperty, statusKey: string) => {
-    const projectStatus = (getCardData(project).possessionDate || '').toLowerCase();
-    if (statusKey === 'ready to move') return projectStatus.includes('ready');
-    if (statusKey === 'under construction') return projectStatus.includes('construction') || projectStatus.includes('202');
-    if (statusKey === 'new launch') return projectStatus.includes('launch') || projectStatus.includes('2025') || projectStatus.includes('2026');
+    const ready = /ready|deliver/i.test(getCardData(project).possessionDate || '');
+    if (statusKey === 'ready to move') return ready;
+    if (statusKey === 'under construction') return !ready;
     return true;
   };
 
@@ -181,7 +191,6 @@ export default function PropertiesClient({ properties }: Props) {
               <option value="All" className="bg-brand-dark text-white">All Statuses</option>
               <option value="Ready to Move" className="bg-brand-dark text-white">Ready to Move</option>
               <option value="Under Construction" className="bg-brand-dark text-white">Under Construction</option>
-              <option value="New Launch" className="bg-brand-dark text-white">New Launch</option>
             </select>
           </div>
 

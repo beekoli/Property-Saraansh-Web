@@ -42,13 +42,21 @@ interface PropertyCardProps {
 // Brand green pill — all informational badges share one consistent style
 const BADGE_CLS = 'bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase';
 
-function getStatusBadge(possessionDate?: string): { label: string } | null {
-  if (!possessionDate) return null;
-  const p = possessionDate.toLowerCase();
-  if (p.includes('ready')) return { label: 'READY TO MOVE' };
-  if (p.includes('launch')) return { label: 'NEW LAUNCH' };
-  if (/20\d{2}/.test(p) || p.includes('construction')) return { label: 'UNDER CONSTRUCTION' };
-  return null;
+/**
+ * Every card carries exactly one of three flags: PRE-LAUNCH, UNDER
+ * CONSTRUCTION, or READY TO MOVE. There is no fourth state and no card without
+ * one — a blank badge previously appeared whenever the possession text did not
+ * match any pattern, which read as an oversight rather than a fact.
+ *
+ * Pre-launch wins outright: a project with no RERA registration has not
+ * launched, so no construction stage applies to it. Otherwise possession text
+ * decides, and under construction is the default, because a project that is
+ * neither unregistered nor delivered is by definition still being built.
+ */
+function getStatusBadge(possessionDate: string | undefined, preLaunch: boolean): { label: string } {
+  if (preLaunch) return { label: 'PRE-LAUNCH' };
+  if (/ready|deliver/i.test(possessionDate || '')) return { label: 'READY TO MOVE' };
+  return { label: 'UNDER CONSTRUCTION' };
 }
 
 function getVideoHref(id: string, videoId?: string): string {
@@ -76,9 +84,7 @@ export default function PropertyCard({
   nearbyLine,
   priority = false,
 }: PropertyCardProps) {
-  // A pre-launch project has no registration, so possession-derived status
-  // ("Ready to Move", "Under Construction") would be misleading.
-  const statusBadge = preLaunch ? { label: 'PRE-LAUNCH' } : getStatusBadge(possessionDate);
+  const statusBadge = getStatusBadge(possessionDate, preLaunch);
   const videoHref = getVideoHref(id, videoId);
   const displayTitle = decodeHtml(title);
   const displayDeveloper = decodeHtml(developer || '');
@@ -115,11 +121,9 @@ export default function PropertyCard({
           <span className={BADGE_CLS}>
             {type}
           </span>
-          {statusBadge && (
-            <span className={BADGE_CLS}>
-              {statusBadge.label}
-            </span>
-          )}
+          <span className={BADGE_CLS}>
+            {statusBadge.label}
+          </span>
           {reraNumber && (
             <span className={BADGE_CLS}>
               RERA ✓

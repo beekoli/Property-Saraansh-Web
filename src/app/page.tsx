@@ -8,7 +8,7 @@ import { getChannelStats } from '@/lib/youtube';
 import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import type { WPPost } from '@/lib/wordpress';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
-import { partitionPreLaunch } from '@/lib/prelaunch';
+import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
@@ -56,9 +56,11 @@ export default async function Home() {
   // The three most recently launched projects, matching the order on
   // /properties. Pre-launch projects are excluded: they carry no RERA
   // registration, so they should never headline the homepage.
-  const featuredProjects = partitionPreLaunch(
-    sortByLaunchDate(properties, rawLaunchDate)
-  ).registered.slice(0, 3);
+  const ordered = partitionPreLaunch(sortByLaunchDate(properties, rawLaunchDate));
+  const featuredProjects = ordered.registered.slice(0, 3);
+  // Pre-launch gets its own band below, capped at three so it never outweighs
+  // the registered inventory above it.
+  const preLaunchProjects = ordered.preLaunch.slice(0, 3);
 
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
   const featuredVideo = longVideos[0] || {
@@ -232,6 +234,49 @@ export default async function Home() {
               );
             })}
           </StaggerContainer>
+
+          {/* Pre-Launch — projects with no RERA registration yet. Kept in its
+              own band below the registered projects, mirroring /properties, and
+              it disappears entirely when nothing qualifies. */}
+          {preLaunchProjects.length > 0 && (
+            <div className="mt-20 pt-12 border-t border-brand-light/30">
+              <div className="mb-8 text-center">
+                <h3 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-ink mb-3">
+                  Pre-Launch Projects
+                </h3>
+                <p className="text-sm text-brand-dark/70 max-w-2xl mx-auto leading-relaxed">
+                  Projects we are tracking ahead of their formal launch. These are not yet
+                  registered with UP RERA, so pricing and timelines are indicative. Register
+                  your interest and we will share verified details as soon as registration
+                  comes through.
+                </p>
+              </div>
+              <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {preLaunchProjects.map((project) => {
+                  const card = getCardData(project);
+                  return (
+                    <StaggerItem key={project.id}>
+                      <PropertyCard
+                        id={project.slug}
+                        title={project.title.rendered}
+                        developer={card.developer}
+                        isWalkthrough={card.isWalkthrough}
+                        location={card.location}
+                        price={card.price}
+                        type={card.type}
+                        imageUrl={getFeaturedImage(project)}
+                        bhk={card.bhk}
+                        videoId={card.videoId}
+                        launchLine={expectedLaunchLine(project)}
+                        preLaunch
+                      />
+                    </StaggerItem>
+                  );
+                })}
+              </StaggerContainer>
+            </div>
+          )}
+
           <SlideUp className="text-center mt-12" delay={0.2}>
             <Link href="/properties" className="btn-primary px-8 py-3 rounded shadow-md inline-block">
               View All Projects
