@@ -1,28 +1,27 @@
 /**
- * prelaunch — which projects are still pre-launch, and what they may say.
+ * Project status — the single flag every property card carries.
  *
- * The rule, in the owner's words: **no RERA number means the project is in its
- * pre-launch phase.** A project cannot legally be registered before it exists,
- * so the absence of a registration number is the cleanest available signal that
- * it has not formally launched. A launch date in the future says the same thing
- * and is treated identically.
+ * Exactly three values exist: PRE-LAUNCH, UNDER CONSTRUCTION, READY TO MOVE.
+ * Every project has one; none is ever blank.
  *
- * One guard sits on top of that, and it earns its place.
+ * The order of decision, highest priority first:
  *
- * A blank `rera_number` in WordPress can mean two different things: the project
- * genuinely has no registration, or nobody has typed the number in. Four
- * projects are in that state today, and three of them — ACE Golfshire, ACE
- * Platinum, ACE Aspire — are Delivered or Ready to Move. None of the three
- * appears in UP RERA's registered-projects list, which is expected: a
- * registration lapses once a project completes and moves to the completed list.
- * So for those three the blank field means "finished years ago", the exact
- * opposite of pre-launch.
+ *   1. `status_override` in WordPress. A person has said what this project is,
+ *      and a person beats a formula. "Auto" (or empty) means fall through.
+ *   2. Possession says delivered or ready to move → READY TO MOVE. That is a
+ *      statement of fact about a finished building; no date arithmetic should
+ *      be able to contradict it.
+ *   3. Within three months of the launch date → PRE-LAUNCH. The launch date is
+ *      the UP RERA project registration date, so a freshly registered project
+ *      reads as pre-launch for its first quarter and then moves on by itself.
+ *   4. Everything else → UNDER CONSTRUCTION. This is also where projects with
+ *      no launch date land, which is deliberate: a missing date is not evidence
+ *      of a new launch, and under construction is the safe assumption for a
+ *      registered project that is neither new nor delivered.
  *
- * Rendering PRE-LAUNCH on an occupied tower would be a false claim on a page
- * that generates leads. So a project whose possession says it is delivered or
- * ready to move is never treated as pre-launch, whatever its RERA field says —
- * being delivered is itself proof that it launched. Remove `looksDelivered`
- * from `isPreLaunch` if you ever want the raw rule with no guard.
+ * Note that the RERA number no longer drives this. It did briefly, and it
+ * misfired: a blank number can equally mean a project finished long ago and
+ * dropped off the registered list, which was true of three delivered towers.
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -33,18 +32,26 @@ import { parseLaunchDate } from "./launchDate";
 
 type WithAcf = { acf?: any };
 
-/** ACF checkboxes arrive as true, 1, "1" or "yes" depending on how the field is configured. */
-function isTicked(value: unknown): boolean {
-  if (value === true || value === 1) return true;
-  if (typeof value === "string") {
-    const v = value.trim().toLowerCase();
-    return v === "1" || v === "true" || v === "yes" || v === "on";
-  }
-  return false;
-}
+export type ProjectStatus = "pre-launch" | "under-construction" | "ready-to-move";
+
+export const STATUS_LABELS: Record<ProjectStatus, string> = {
+  "pre-launch": "PRE-LAUNCH",
+  "under-construction": "UNDER CONSTRUCTION",
+  "ready-to-move": "READY TO MOVE",
+};
+
+/** How long a project reads as pre-launch after its registration date. */
+export const PRE_LAUNCH_WINDOW_MONTHS = 3;
 
 function text(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
+}
+
+/** ACF checkboxes arrive as true, 1, "1" or "yes" depending on configuration. */
+function isTicked(value: unknown): boolean {
+  if (value === true || value === 1) return true;
+  const v = text(value).toLowerCase();
+  return v === "1" || v === "true" || v === "yes" || v === "on";
 }
 
 /** True once a RERA registration number has been recorded. */
@@ -52,35 +59,66 @@ export function hasReraNumber(prop: WithAcf): boolean {
   return text(prop?.acf?.rera_number) !== "";
 }
 
-/**
- * The possession field is marketing prose, and when it says delivered or ready
- * to move that is a definitive statement that the project launched. Used only
- * to veto a pre-launch label, never to apply one.
- */
+/** Possession prose that states the building is finished. */
 export function looksDelivered(prop: WithAcf): boolean {
   return /deliver|ready to move|ready-to-move/i.test(text(prop?.acf?.possession_date));
 }
 
-/** A launch date still in the future means the project has not launched yet. */
-export function launchesInFuture(prop: WithAcf, now: number = Date.now()): boolean {
-  const parsed = parseLaunchDate(text(prop?.acf?.launch_date));
-  return parsed ? parsed.time > now : false;
+/**
+ * The editor's explicit choice, or null for automatic. Accepts the values the
+ * WordPress select offers plus a few obvious spellings, so a hand-typed
+ * "Ready to move" is not silently ignored.
+ */
+export function statusOverride(prop: WithAcf): ProjectStatus | null {
+  const raw = text(prop?.acf?.status_override).toLowerCase().replace(/[\s_]+/g, "-");
+  if (!raw || raw === "auto" || raw === "automatic") {
+    // The older boolean field, kept working for anything already ticked.
+    return isTicked(prop?.acf?.is_prelaunch) ? "pre-launch" : null;
+  }
+  if (raw === "pre-launch" || raw === "prelaunch") return "pre-launch";
+  if (raw === "under-construction") return "under-construction";
+  if (raw === "ready-to-move" || raw === "ready") return "ready-to-move";
+  return null;
+}
+
+/** Adds whole months to a timestamp, keeping the day of month where possible. */
+function addMonths(time: number, months: number): number {
+  const d = new Date(time);
+  const day = d.getUTCDate();
+  const target = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + months, 1));
+  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
+  target.setUTCDate(Math.min(day, lastDay));
+  return target.getTime();
 }
 
 /**
- * Pre-launch when there is no RERA registration, or the launch date is still
- * ahead of us — unless the project has already been delivered, or an editor has
- * ticked `is_prelaunch` to force the label on.
+ * True while the project is inside its pre-launch window — from the launch date
+ * until three months later. A launch date still in the future counts too: the
+ * project has not launched at all yet.
  */
+export function withinPreLaunchWindow(prop: WithAcf, now: number = Date.now()): boolean {
+  const parsed = parseLaunchDate(text(prop?.acf?.launch_date));
+  if (!parsed) return false;
+  return now < addMonths(parsed.time, PRE_LAUNCH_WINDOW_MONTHS);
+}
+
+/** The one flag this project carries. */
+export function projectStatus(prop: WithAcf, now: number = Date.now()): ProjectStatus {
+  const override = statusOverride(prop);
+  if (override) return override;
+  if (looksDelivered(prop)) return "ready-to-move";
+  if (withinPreLaunchWindow(prop, now)) return "pre-launch";
+  return "under-construction";
+}
+
+/** Convenience for the places that only care whether it is pre-launch. */
 export function isPreLaunch(prop: WithAcf, now: number = Date.now()): boolean {
-  if (isTicked(prop?.acf?.is_prelaunch)) return true;
-  if (looksDelivered(prop)) return false;
-  return !hasReraNumber(prop) || launchesInFuture(prop, now);
+  return projectStatus(prop, now) === "pre-launch";
 }
 
 /**
  * The editor's own words for when the project is expected to open — "Q1 2027".
- * Free text on purpose: nothing about an unregistered project is firm enough to
+ * Free text on purpose: nothing about an unlaunched project is firm enough to
  * deserve a date picker, and we never compute or infer this value.
  */
 export function expectedLaunch(prop: WithAcf): string {
@@ -94,7 +132,7 @@ export function expectedLaunchLine(prop: WithAcf): string | null {
 }
 
 /**
- * Split a listing into registered projects and pre-launch ones. Input order is
+ * Split a listing into pre-launch projects and everything else. Input order is
  * preserved within each group, so an already launch-date-sorted list stays
  * sorted.
  */

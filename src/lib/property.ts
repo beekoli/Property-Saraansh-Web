@@ -106,6 +106,8 @@ export interface Property {
   possessionDate: string;
   /** Proposed completion date from the UP RERA registration, stored as YYYY-MM-DD. */
   reraCompletionDate: string;
+  /** Proposed start of construction from the UP RERA registration, YYYY-MM-DD. */
+  reraStartDate: string;
   basePrice: string;
   priceDisplay: string;
   priceMin: number | null;
@@ -311,6 +313,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     launchDate: a.launch_date || "",
     possessionDate: a.possession_date || "",
     reraCompletionDate: a.rera_completion_date || "",
+    reraStartDate: a.rera_start_date || "",
     basePrice: a.base_price || "",
     priceDisplay: a.price_display || a.price || "",
     priceMin: a.price_min_numeric ? Number(a.price_min_numeric) : null,
@@ -336,6 +339,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
       // The regulator's own date, shown beside our possession wording rather
       // than replacing it — the two are different claims and a buyer benefits
       // from seeing both.
+      ["Proposed Start", formatReraDate(a.rera_start_date)],
       ["RERA Completion", formatReraDate(a.rera_completion_date)],
       ["RERA No.", a.rera_number],
       ["Base Price", a.base_price],

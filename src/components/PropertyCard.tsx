@@ -30,6 +30,13 @@ interface PropertyCardProps {
    * registration, so the card must not assert a price or a firm date.
    */
   preLaunch?: boolean;
+  /**
+   * The computed flag — PRE-LAUNCH, UNDER CONSTRUCTION or READY TO MOVE.
+   * Passed by pages that run the full status rules (the WordPress override and
+   * the three-month window). Omitted elsewhere, where possession text is a good
+   * enough fallback.
+   */
+  statusLabel?: string;
   nearbyLine?: string;
   /**
    * Set on the first row of cards. next/image lazy-loads by default, which
@@ -48,12 +55,16 @@ const BADGE_CLS = 'bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-
  * one — a blank badge previously appeared whenever the possession text did not
  * match any pattern, which read as an oversight rather than a fact.
  *
- * Pre-launch wins outright: a project with no RERA registration has not
- * launched, so no construction stage applies to it. Otherwise possession text
- * decides, and under construction is the default, because a project that is
- * neither unregistered nor delivered is by definition still being built.
+ * Callers that know the project's status pass it in via statusLabel — that is
+ * the authoritative answer, including the editor's WordPress override. The
+ * fallback below is for pages that render a card without running the rules.
  */
-function getStatusBadge(possessionDate: string | undefined, preLaunch: boolean): { label: string } {
+function getStatusBadge(
+  possessionDate: string | undefined,
+  preLaunch: boolean,
+  statusLabel?: string
+): { label: string } {
+  if (statusLabel) return { label: statusLabel };
   if (preLaunch) return { label: 'PRE-LAUNCH' };
   if (/ready|deliver/i.test(possessionDate || '')) return { label: 'READY TO MOVE' };
   return { label: 'UNDER CONSTRUCTION' };
@@ -81,10 +92,11 @@ export default function PropertyCard({
   possessionDate,
   launchLine,
   preLaunch = false,
+  statusLabel,
   nearbyLine,
   priority = false,
 }: PropertyCardProps) {
-  const statusBadge = getStatusBadge(possessionDate, preLaunch);
+  const statusBadge = getStatusBadge(possessionDate, preLaunch, statusLabel);
   const videoHref = getVideoHref(id, videoId);
   const displayTitle = decodeHtml(title);
   const displayDeveloper = decodeHtml(developer || '');

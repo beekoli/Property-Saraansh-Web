@@ -8,7 +8,7 @@ import { getChannelStats } from '@/lib/youtube';
 import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import type { WPPost } from '@/lib/wordpress';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
-import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
+import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
@@ -229,6 +229,7 @@ export default async function Home() {
                     bhk={card.bhk}
                     videoId={card.videoId}
                     launchLine={launchLabel(rawLaunchDate(project))}
+                    statusLabel={STATUS_LABELS[projectStatus(project)]}
                   />
                 </StaggerItem>
               );
@@ -268,6 +269,7 @@ export default async function Home() {
                         bhk={card.bhk}
                         videoId={card.videoId}
                         launchLine={expectedLaunchLine(project)}
+                        statusLabel={STATUS_LABELS['pre-launch']}
                         preLaunch
                       />
                     </StaggerItem>

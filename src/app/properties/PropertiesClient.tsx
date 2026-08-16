@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { decodeHtml } from '@/lib/decodeHtml';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
-import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
+import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
 import PropertyCard from '@/components/PropertyCard';
 import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
 import Link from 'next/link';
@@ -90,9 +90,9 @@ export default function PropertiesClient({ properties }: Props) {
   // "December 2028" and also "2022", putting delivered projects under
   // construction.
   const matchesStatus = (project: WPProperty, statusKey: string) => {
-    const ready = /ready|deliver/i.test(getCardData(project).possessionDate || '');
-    if (statusKey === 'ready to move') return ready;
-    if (statusKey === 'under construction') return !ready;
+    const s = projectStatus(project);
+    if (statusKey === 'ready to move') return s === 'ready-to-move';
+    if (statusKey === 'under construction') return s === 'under-construction';
     return true;
   };
 
@@ -387,6 +387,7 @@ export default function PropertiesClient({ properties }: Props) {
                     reraNumber={card.reraNumber}
                     possessionDate={card.possessionDate}
                     launchLine={launchLabel(rawLaunchDate(project))}
+                    statusLabel={STATUS_LABELS[projectStatus(project)]}
                   />
                 </StaggerItem>
               );
@@ -441,6 +442,7 @@ export default function PropertiesClient({ properties }: Props) {
                       bhk={card.bhk}
                       videoId={card.videoId}
                       launchLine={expectedLaunchLine(project)}
+                      statusLabel={STATUS_LABELS['pre-launch']}
                       preLaunch
                     />
                   </StaggerItem>
