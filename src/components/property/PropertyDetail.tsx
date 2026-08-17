@@ -220,7 +220,16 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
             </div>
             {p.verdict ? (
               <blockquote className="mt-4 rounded-r-xl border-l-4 border-[#c9a24b] bg-[#fff7e0] p-4 text-[14.5px] italic text-[#4a3a12]">
-                <b className="not-italic text-[#8a6a1e]">Saraansh Verdict: </b>{p.verdict}
+                {p.verdict
+                  .split(/\n\s*\n/)
+                  .map((para) => para.trim())
+                  .filter(Boolean)
+                  .map((para, i) => (
+                    <p key={i} className={`hyphens-auto text-justify ${i > 0 ? "mt-3" : ""}`}>
+                      {i === 0 && <b className="not-italic text-[#8a6a1e]">Saraansh Verdict: </b>}
+                      {para}
+                    </p>
+                  ))}
               </blockquote>
             ) : (
               <p className="mt-3 text-xs text-[#66788c]">Walkthrough provided by the developer.</p>
