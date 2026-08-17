@@ -126,7 +126,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
     ...(featuredImg ? { image: [featuredImg] } : {}),
     datePublished: parseDateToISO8601(news.date),
     dateModified: parseDateToISO8601(news.modified || news.date),
-    author: { '@type': 'Organization', name: 'Property Saraansh', url: FRONTEND_URL },
+    author: { '@type': 'Person', name: 'Saraansh Seth', url: `${FRONTEND_URL}/about-us` },
     publisher: {
       '@type': 'Organization',
       name: 'Property Saraansh',
