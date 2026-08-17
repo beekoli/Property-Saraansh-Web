@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { generateRankMathMetadata } from '@/lib/seo';
-import { getProperty, getAllPropertySlugs, buildSchemas, SITE, getBuilderProfile } from '@/lib/property';
+import { getProperty, buildSchemas, SITE, getBuilderProfile } from '@/lib/property';
 import PropertyDetail from '@/components/property/PropertyDetail';
 
 export const revalidate = 300;
@@ -10,9 +10,20 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+/**
+ * Deliberately empty.
+ *
+ * Prerendering every property at build time meant one WordPress hiccup during
+ * a build baked that property as a static 404, served to users and Googlebot
+ * until the next deploy. SOBHA Aurum did exactly that: correct on one deploy,
+ * a hard 404 on the next, while still linked from /properties.
+ *
+ * Pages now render on first request and are then ISR-cached (see revalidate
+ * above), so a transient WordPress failure costs one slow request instead of a
+ * persistent 404. dynamicParams defaults to true, which is what allows this.
+ */
 export async function generateStaticParams() {
-  const slugs = await getAllPropertySlugs();
-  return slugs.map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
