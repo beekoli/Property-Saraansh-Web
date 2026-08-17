@@ -298,12 +298,38 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         {p.amenities.length > 0 && (
           <section id="amenities" className="scroll-mt-24 pt-9">
             <SectionHead eyebrow="Lifestyle" title="Premium Amenities" />
+            {p.amenities.some((m) => m.image) && (
+              <div className="mb-3 grid grid-cols-2 gap-2.5 lg:grid-cols-3">
+                {p.amenities
+                  .filter((m) => m.image)
+                  .map((m) => (
+                    <button
+                      key={m.name}
+                      onClick={() => setLightbox(m.image!.url)}
+                      className="group relative block overflow-hidden rounded-xl border border-[#e8ecf1] text-left"
+                    >
+                      <Image
+                        src={m.image!.url}
+                        alt={m.image!.alt}
+                        width={800}
+                        height={560}
+                        className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-48"
+                      />
+                      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(15,33,55,.88)] to-transparent px-3 pb-2.5 pt-8 text-[13px] font-medium text-white">
+                        {m.name}
+                      </span>
+                    </button>
+                  ))}
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
-              {p.amenities.map((m) => (
-                <div key={m.name} className="rounded-xl border border-[#e8ecf1] bg-white px-3 py-4 text-center text-[12.5px]">
-                  <span className="mb-1.5 block text-[22px]">{m.icon}</span>{m.name}
-                </div>
-              ))}
+              {p.amenities
+                .filter((m) => !m.image)
+                .map((m) => (
+                  <div key={m.name} className="rounded-xl border border-[#e8ecf1] bg-white px-3 py-4 text-center text-[12.5px]">
+                    <span className="mb-1.5 block text-[22px]">{m.icon}</span>{m.name}
+                  </div>
+                ))}
             </div>
           </section>
         )}
