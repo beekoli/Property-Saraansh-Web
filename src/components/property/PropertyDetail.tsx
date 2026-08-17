@@ -298,9 +298,6 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
         {p.amenities.length > 0 && (
           <section id="amenities" className="scroll-mt-24 pt-9">
             <SectionHead eyebrow="Lifestyle" title="Premium Amenities" />
-            {/* Amenities that have a photo render as image cards. The rest keep
-                the original icon + name chips, so listings with no amenity
-                images are completely unaffected. */}
             {p.amenities.some((m) => m.image) && (
               <div className="mb-3 grid grid-cols-2 gap-2.5 lg:grid-cols-3">
                 {p.amenities
