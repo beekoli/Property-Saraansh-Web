@@ -128,7 +128,7 @@ export interface Property {
   sitePlan: Img | null;
   floorPlans: { title: string; description: string; image: Img | null; pdf: string }[];
   floorPlanNote: string;
-  amenities: { icon: string; name: string }[];
+  amenities: { icon: string; name: string; image: Img | null }[];
   priceList: { type: string; size: string; base: string; total: string }[];
   priceNote: string;
   priceListPdf: string;
@@ -286,6 +286,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
     a.master_plan, a.site_plan, a.logo_image,
     ...(Array.isArray(a.gallery) ? a.gallery : []),
     ...(Array.isArray(a.floor_plans) ? a.floor_plans.map((f: any) => f.image) : []),
+    ...(Array.isArray(a.amenities) ? a.amenities.map((m: any) => m.image) : []),
   ];
   const media = await resolveMedia(rawImgs.map(collectId).filter((n): n is number => !!n));
 
@@ -355,7 +356,12 @@ export async function getProperty(slug: string): Promise<Property | null> {
       image: toImg(f.image, media, `${title} floor plan — ${f.title}`), pdf: f.pdf || "",
     })),
     floorPlanNote: a.floor_plan_note || a.floor_plan_footer_text || "",
-    amenities: (Array.isArray(a.amenities) ? a.amenities : []).map((m: any) => ({ icon: m.icon || "✨", name: m.name || "" })),
+    amenities: (Array.isArray(a.amenities) ? a.amenities : []).map((m: any) => ({
+      icon: m.icon || "✨",
+      name: m.name || "",
+      // Optional photo for the amenity. Listings without one keep rendering as icon + name.
+      image: toImg(m.image, media, `${title} — ${m.name || "amenity"}`),
+    })),
     priceList: Array.isArray(a.price_list) ? a.price_list : [],
     priceNote: a.price_note || a.price_list_desc || "",
     priceListPdf: a.price_list_pdf || "",
