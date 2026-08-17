@@ -6,7 +6,7 @@
  * Client component (renders to HTML on the server too — SEO-safe).
  */
 
-import { useState, type ReactNode, type FormEvent } from "react";
+import { useMemo, useState, type ReactNode, type FormEvent } from "react";
 import Image from "next/image";
 import type { Property } from "@/lib/property";
 import type { WPBuilderTerm } from "@/lib/wordpress";
@@ -65,6 +65,29 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
   // not our review, so it must never be labelled one.
   const isWalkthrough = !p.verdict;
   const videoLabel = isWalkthrough ? "Walkthrough" : "Video Review";
+
+  // The jump nav must only advertise sections that actually render. Every
+  // section below is conditional on its data, but SECTIONS was a fixed list of
+  // twelve, so a project with no gallery still showed a Gallery link that
+  // scrolled nowhere. These conditions mirror the section guards exactly.
+  const sections = useMemo(() => {
+    const shown: Record<string, boolean> = {
+      overview: true,
+      video: Boolean(p.youtubeId),
+      highlights: p.highlights.length > 0,
+      layout: Boolean(p.masterPlan || p.sitePlan),
+      "floor-plans": p.floorPlans.length > 0,
+      amenities: p.amenities.length > 0,
+      price: p.priceList.length > 0,
+      payment:
+        p.paymentSteps.length > 0 || p.paymentMilestones.length > 0 || Boolean(p.eoiNote),
+      location: p.locationAdv.length > 0 || Boolean(p.mapEmbedSrc),
+      gallery: p.gallery.length > 0,
+      status: p.timeline.length > 0,
+      builder: Boolean(builder),
+    };
+    return SECTIONS.filter(([id]) => shown[id]);
+  }, [p, builder]);
 
   const wa = WHATSAPP + encodeURIComponent(`Hi, I am interested in ${p.title}. Please share details.`);
   const doneCount = p.timeline.filter((t) => t.done).length;
@@ -135,8 +158,8 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
       <div className="ps-marquee sticky top-0 z-40 border-b border-white/10" style={{ background: BRAND_GREEN }}>
         <div className="ps-marquee-viewport mx-auto max-w-6xl px-5">
           <div className="ps-marquee-track flex h-[50px] w-max items-center gap-7">
-            {[...SECTIONS, ...SECTIONS].map(([id, label], i) => {
-              const isDup = i >= SECTIONS.length;
+            {[...sections, ...sections].map(([id, label], i) => {
+              const isDup = i >= sections.length;
               return (
                 <a
                   key={`${id}-${i}`}
