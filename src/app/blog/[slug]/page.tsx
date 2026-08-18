@@ -117,31 +117,15 @@ export default async function BlogPostPage({ params }: PageProps) {
   // Dynamically resolve video ID from post ACF field, falling back to slug-based or a signature review video
   // Video ID priority: WordPress backend field (ps_video_id) → ACF field → slug rule → default.
   const acfVideoId = blog.ps_video_id?.trim().replace(/[?&].*$/, '') || blog.acf?.video_id?.trim().replace(/[?&].*$/, '');
-  let relatedVideoId = acfVideoId || "xicR-MeU77g"; // Noida Property Market 2025 as fallback
-  // Slug-based overrides — always apply to correct known-wrong ACF values
+  let relatedVideoId = acfVideoId || "";
   if (slug.includes('noida-residents') || slug.includes('nobody-talks')) {
-    relatedVideoId = "z-nxbCBtffY"; // Things Nobody Talks About Noida Residents
+    relatedVideoId = "z-nxbCBtffY";
   } else if (slug === 'noida-real-estate-2026-dasnac-arc-fairfox-eon') {
-    relatedVideoId = "LJo0YtPpTnY"; // Commercial: Builder Lease vs Self Lease
+    relatedVideoId = "LJo0YtPpTnY";
   } else if (slug.includes('godrej-arden-detailed-review')) {
-    relatedVideoId = "tWk2i0WUqiY"; // Godrej Arden Sigma 3 Review
-  } else if (!acfVideoId) {
-    if (slug.includes('noida-real-estate-market-2026-slowdown') || slug.includes('slowdown-investment-opportunities') || slug === 'noida-real-estate-slowdown-2026') {
-      relatedVideoId = "g2dN6stL3i0"; // Noida Market Slowdown 2026
-    } else if (slug.includes('yamuna-expressway')) {
-      relatedVideoId = "qWAgkIW6Mj0"; // Yamuna Expressway Investment 2030
-    } else if (slug.includes('commercial')) {
-      relatedVideoId = "41xfVmmczUA"; // Commercial: Builder Lease vs Self Lease
-    } else if (slug.includes('eldeco')) {
-      relatedVideoId = "hCyx0D2_RzE"; // Eldeco 7 Peaks Residences
-    } else if (slug.includes('why-exit') || slug.includes('exit-has-become')) {
-      relatedVideoId = "9iAnowOVwjo"; // Exit Advice: Ace Terra, Godrej Tropical Isle, Ace Hanei
-    } else if (slug.includes('2025-conclusion') || slug.includes('reality-check')) {
-      relatedVideoId = "xicR-MeU77g"; // Noida Property Market 2025: What Worked & What Failed
-    } else if (slug.includes('dasnac') || slug.includes('fairfox')) {
-      relatedVideoId = "YKWtYdh_4dQ"; // Noida Property Market Reality
-    }
+    relatedVideoId = "tWk2i0WUqiY";
   }
+  const hasVideo = !!relatedVideoId;
 
   // Resolve the canonical watch page for the embedded video (if it exists in
   // our video library) so we can add an internal link to its canonical home.
@@ -239,10 +223,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
-      />
+      {hasVideo && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -316,6 +302,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
             {/* Video Guide — placed FIRST (above TOC) so the video is the
                 prominent lead element for engagement and video SEO */}
+            {hasVideo && (
             <div className="mb-10 bg-brand-dark text-white rounded-3xl p-6 md:p-8 shadow-xl border border-brand-primary">
               <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
                 <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
@@ -339,6 +326,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 )}
               </div>
             </div>
+            )}
 
             {/* Table of Contents — below the video */}
             <TableOfContents htmlContent={blog.content.rendered} />
