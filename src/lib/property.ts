@@ -13,6 +13,7 @@ import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
 import { formatReraDate } from "@/lib/formatDate";
 
 import { decodeHtml } from "@/lib/decodeHtml";
+import { getVideoByYoutubeId } from "@/lib/videos";
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
@@ -392,6 +393,15 @@ export async function getProperty(slug: string): Promise<Property | null> {
 export function buildSchemas(prop: Property) {
   const url = `${SITE}/properties/${prop.slug}`;
   const citySlug = prop.city.toLowerCase().replace(/\s+/g, "-");
+  const fact = (label: string): string => prop.quickFacts.find((f) => f.label === label)?.value ?? "";
+  const unitCount = parseInt(fact("Total Units").replace(/[^0-9]/g, ""), 10) || null;
+  // A launch that has not been handed over is not "in stock" — it is a pre-order.
+  const readyToMove = /ready\s*to\s*move|possession|completed|delivered/i.test(
+    `${prop.status} ${prop.currentPhase}`
+  );
+  const availability = readyToMove
+    ? "https://schema.org/InStock"
+    : "https://schema.org/PreOrder";
 
   const apartmentComplex = {
     "@context": "https://schema.org",
@@ -410,6 +420,7 @@ export function buildSchemas(prop: Property) {
     },
     ...(prop.lat && prop.lng ? { geo: { "@type": "GeoCoordinates", latitude: prop.lat, longitude: prop.lng } } : {}),
     amenityFeature: prop.amenities.map((m) => ({ "@type": "LocationFeatureSpecification", name: m.name, value: true })),
+    ...(unitCount ? { numberOfAvailableAccommodationUnits: { "@type": "QuantitativeValue", value: unitCount } } : {}),
     ...(prop.builder ? { brand: { "@type": "Organization", name: prop.builder } } : {}),
   };
 
@@ -421,19 +432,22 @@ export function buildSchemas(prop: Property) {
   const product = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "@id": `${url}#offer`,
+    "@id": `${url}#product`,
     name: `${prop.title} — ${prop.configuration}`.trim(),
     image: prop.hero?.url,
     description: prop.tagline || prop.metaDescription,
     brand: { "@type": "Brand", name: prop.builder || "Property Saraansh" },
     category: prop.type || "Residential",
-    ...(prop.rera ? {
-      additionalProperty: {
-        "@type": "PropertyValue",
-        name: "RERA Registration Number",
-        value: prop.rera,
-      },
-    } : {}),
+    ...(prop.rera ? { sku: prop.rera } : {}),
+    additionalProperty: ([
+      ["RERA Registration Number", prop.rera],
+      ["Possession", prop.possessionDate],
+      ["Total Land", fact("Total Land")],
+      ["Towers", fact("Towers")],
+      ["Total Units", fact("Total Units")],
+    ] as [string, string][])
+      .filter(([, v]) => v)
+      .map(([name, value]) => ({ "@type": "PropertyValue", name, value })),
     ...(hasPrice ? {
       offers: {
         "@type": "AggregateOffer",
@@ -441,7 +455,7 @@ export function buildSchemas(prop: Property) {
         ...(prop.priceMin ? { lowPrice: prop.priceMin } : {}),
         ...(prop.priceMax ? { highPrice: prop.priceMax } : {}),
         offerCount: prop.priceList.length || 1,
-        availability: "https://schema.org/InStock",
+        availability,
         url,
       },
     } : {}),
@@ -467,6 +481,8 @@ export function buildSchemas(prop: Property) {
     ],
   };
 
+  const vid = prop.youtubeId ? getVideoByYoutubeId(prop.youtubeId) : null;
+
   const video = prop.youtubeId ? {
     "@context": "https://schema.org",
     "@type": "VideoObject",
@@ -476,7 +492,9 @@ export function buildSchemas(prop: Property) {
     description: prop.verdict.slice(0, 300)
       || `${prop.title} project walkthrough provided by the developer`,
     thumbnailUrl: `https://i.ytimg.com/vi/${prop.youtubeId}/hqdefault.jpg`,
-    uploadDate: prop.publishedDate,
+    uploadDate: vid?.publishedAt || prop.publishedDate,
+    ...(vid?.duration ? { duration: vid.duration } : {}),
+    contentUrl: `https://www.youtube.com/watch?v=${prop.youtubeId}`,
     embedUrl: `https://www.youtube.com/embed/${prop.youtubeId}`,
     publisher: { "@type": "Organization", name: "Property Saraansh", logo: { "@type": "ImageObject", url: `${SITE}/logo.png` } },
   } : null;
