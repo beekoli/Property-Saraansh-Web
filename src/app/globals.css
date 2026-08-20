@@ -148,25 +148,27 @@ section[id] {
     text-decoration-color: currentColor;
   }
 
-  /* Justified body copy.
-     Long-form paragraphs get a clean straight right edge from tablet width up.
-     Phones are deliberately left ragged: at roughly 35 characters per line
-     justification stretches the word spacing into visible white "rivers", and
-     most of our visitors are on mobile. Hyphenation is on so the browser can
-     break long words (Expressway, infrastructure) instead of padding the gaps.
+  /* Justified body copy, at every width including phones.
+     Long-form paragraphs get a clean straight right edge on all screens.
+
+     Hyphenation does the heavy lifting on mobile. At roughly 35 characters a
+     line, justification on its own stretches word spacing into visible white
+     "rivers", so the browser is allowed to break long words (Expressway,
+     infrastructure) rather than pad the gaps. overflow-wrap is the safety net
+     for unbreakable tokens such as a RERA number, which would otherwise blow
+     a hole in a narrow justified line.
 
      Scoped to paragraphs and list items inside long-form containers only, so
      headings, buttons, cards, form labels and navigation are untouched.
      :where() keeps specificity at 0 — any text-center / text-left utility on
      an individual element still wins. */
-  @media (min-width: 768px) {
-    .prose :where(p, li):not(:where(.not-prose, .not-prose *)),
-    .text-justified :where(p, li) {
-      text-align: justify;
-      text-justify: inter-word;
-      hyphens: auto;
-      -webkit-hyphens: auto;
-    }
+  .prose :where(p, li):not(:where(.not-prose, .not-prose *)),
+  .text-justified :where(p, li) {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    overflow-wrap: break-word;
   }
 }
 
