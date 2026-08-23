@@ -16,6 +16,18 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "4-bhk-apartments-noida-expressway-comparison",
+    "title": "4 BHK Apartments in Noida: Godrej Riverine vs Experion Elements vs Max 128 vs M3M Cullinan",
+    "description": "Which 4 BHK in Noida wins? Godrej Riverine, Experion Elements, Max Estate 128 and M3M Cullinan compared on size, loading, price and honest verdict.",
+    "youtubeId": "-dPXsv61mPI",
+    "thumbnail": "https://img.youtube.com/vi/-dPXsv61mPI/maxresdefault.jpg",
+    "publishedAt": "2026-08-23",
+    "duration": "PT20M",
+    "focusKeyword": "4 bhk apartments in noida",
+    "category": "Real Estate",
+    "views": "1K views"
+  },
+  {
     "slug": "property-saraansh-now-on-instagram",
     "title": "New content dropping on Instagram #reels #propertycontent #shorts",
     "description": "Property Saraansh is now on Instagram \u2014 the same honest Noida property market analysis in a new short-form format, with latest updates, new project launches and sector-wise price and investment breakdowns.",
