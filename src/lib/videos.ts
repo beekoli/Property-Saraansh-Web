@@ -1,4 +1,5 @@
 import { parseIsoDuration, formatViewCount } from '@/lib/youtube';
+import { rawViewCount, publishedDate } from '@/lib/videoStats';
 
 export interface Video {
   slug: string;
@@ -12,6 +13,14 @@ export interface Video {
   focusKeyword: string;
   category: string;
   views: string;
+  /**
+   * The raw view count straight from YouTube, present only on a hydrated
+   * video. `views` is a display string ("7K views"), which is lossy — reading a
+   * number back out of it inflates 6,694 into 7,000 and "741 views" into
+   * 741,000. Schema needs the real integer, so it is carried separately rather
+   * than reverse-engineered.
+   */
+  viewCount?: number;
 }
 
 export const videos: Video[] = [
@@ -128,19 +137,6 @@ export const videos: Video[] = [
     "focusKeyword": "noida property market",
     "category": "Real Estate",
     "views": "6.5K views"
-  },
-  {
-    "slug": "eldeco-7-peaks-omicron-1",
-    "title": "Eldeco 7 Peaks Residences Omicron 1 Greater Noida | 3BHK Layout Analysis + Investment Potential",
-    "description": "Eldeco 7 Peaks, Omicron 1A Greater Noida — Aedas-designed luxury from ₹2.37 Cr. Saraansh Seth reviews floor plans, ₹13,000/sq ft pricing and the investment case.",
-    "content": "Eldeco 7 Peaks Residences in Omicron 1A, Greater Noida is one of the most discussed luxury residential launches of 2026 — and for good reason. Designed by Aedas Hong Kong, the same architectural firm behind Marina Bay Sands Singapore, this project brings genuine international design DNA to the Greater Noida market at a starting price of ₹2.37 Crore.||In this Property Saraansh review, Saraansh Seth covers every angle a serious buyer or investor needs before making a decision. The video breaks down the floor plan efficiency across all 3 BHK variants — 1825, 1850, 1950 and 2100 sq.ft — and reveals why the 25 sq.ft difference between the 1825 and 1850 variants matters far more than it looks on paper. The 4 BHK configurations (2100–2850 sq.ft with servant room) and the 24 exclusive duplex penthouses are also analysed in detail.||On pricing, the review explains the real all-inclusive cost at ₹13,000/sq.ft BSP — including PLC, lease rent and GST — and what the construction-linked payment plan means for both end-users and investors. The Jewar International Airport thesis, Eastern Peripheral Expressway connectivity and HDFC Capital Fund-III backing are assessed as part of the long-term investment case.||The project is RERA registered (UPRERAPRJ106523/01/2026) with possession declared for December 2030. Spread across 7.5 acres with only 4 apartments per floor, a 1,00,000 sq.ft clubhouse, 4 swimming pools and a 100-metre-wide adjacent green belt, Eldeco 7 Peaks is compared directly with Godrej Arden and Experion Satori to show where it stands in the Greater Noida premium segment.",
-    "youtubeId": "hCyx0D2_RzE",
-    "thumbnail": "https://img.youtube.com/vi/hCyx0D2_RzE/maxresdefault.jpg",
-    "publishedAt": "2026-06-11",
-    "duration": "PT14M2S",
-    "focusKeyword": "eldeco 7 peaks",
-    "category": "Real Estate",
-    "views": "18K views"
   },
   {
     "slug": "commercial-property-in-noida",
@@ -1091,12 +1087,12 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
 
   try {
     const videoIds = videos.map(v => v.youtubeId);
-    const detailsMap: Record<string, { views: string; duration: string }> = {};
+    const detailsMap: Record<string, { views: string; viewCount?: number; publishedAt?: string; duration: string }> = {};
 
     // Fetch in batches of 50
     for (let i = 0; i < videoIds.length; i += 50) {
       const batch = videoIds.slice(i, i + 50);
-      const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${batch.join(',')}&part=contentDetails,statistics`;
+      const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${batch.join(',')}&part=snippet,contentDetails,statistics`;
 
       const res = await fetch(url, { next: { revalidate: 3600 } });
       if (res.ok) {
@@ -1110,6 +1106,8 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
 
             detailsMap[item.id] = {
               views: formatViewCount(viewsStr),
+              viewCount: rawViewCount(viewsStr),
+              publishedAt: publishedDate(item.snippet?.publishedAt),
               duration: formatted || "0:00"
             };
           });
@@ -1123,6 +1121,8 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
         return {
           ...video,
           views: stats.views,
+          viewCount: stats.viewCount,
+          publishedAt: stats.publishedAt ?? video.publishedAt,
           // Only update duration if it wasn't already hardcoded correctly,
           // or just always use the real one:
           duration: stats.duration.includes(':') ? stats.duration : video.duration
@@ -1144,7 +1144,7 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
   if (!YOUTUBE_API_KEY) return staticVideo;
 
   try {
-    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=contentDetails,statistics`;
+    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=snippet,contentDetails,statistics`;
     const res = await fetch(url, { next: { revalidate: 3600 } });
     if (res.ok) {
       const data = await res.json();
@@ -1156,6 +1156,8 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
         return {
           ...staticVideo,
           views: formatViewCount(viewsStr),
+          viewCount: rawViewCount(viewsStr),
+          publishedAt: publishedDate(item.snippet?.publishedAt) ?? staticVideo.publishedAt,
           duration: formatted || staticVideo.duration
         };
       }

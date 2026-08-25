@@ -197,11 +197,20 @@ export default async function VideoWatchPage({ params }: PageProps) {
     "contentUrl": `https://www.youtube.com/watch?v=${video.youtubeId}`,
     "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,
     "url": `${FRONTEND_URL}/our-videos/${video.slug}`,
-    "interactionStatistic": {
-      "@type": "InteractionCounter",
-      "interactionType": "https://schema.org/WatchAction",
-      "userInteractionCount": parseInt((video.views || '0').replace(/[^0-9]/g, '')) * 1000 || 15000
-    },
+    // The real integer from YouTube. The previous expression multiplied the
+    // digits of the display string by 1000, which turned "6.1K views" into
+    // 61,000 and "741 views" into 741,000 — a claim to Google that the channel
+    // could not support. When the API is unreachable there is no honest number
+    // to state, so the property is omitted rather than guessed.
+    ...(typeof video.viewCount === 'number' && video.viewCount > 0
+      ? {
+          "interactionStatistic": {
+            "@type": "InteractionCounter",
+            "interactionType": "https://schema.org/WatchAction",
+            "userInteractionCount": video.viewCount
+          }
+        }
+      : {}),
     "publisher": {
       "@type": "Organization",
       "name": "Property Saraansh",

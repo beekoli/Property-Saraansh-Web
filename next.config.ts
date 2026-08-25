@@ -52,6 +52,13 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
   '/top-3-flats-on-expressway':
     '/our-videos/top-3-ready-to-move-flats-on-noida-expressway',
 
+  // Two watch pages were built on the same YouTube video (hCyx0D2_RzE),
+  // splitting the link equity for "Eldeco 7 Peaks" between them and putting
+  // the site in competition with itself. The stale one folds into the current
+  // one, which carries the right upload date and the current title.
+  '/our-videos/eldeco-7-peaks-omicron-1':
+    '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
+
   // --- Property pages (Houzez CPT lived at /property/) ---------------------
   '/property': '/properties',
   '/property/eldeco-7-peaks-residence': '/properties/eldeco-7-peaks-residences',
