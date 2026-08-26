@@ -25,6 +25,54 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "godrej-riverine-4-bhk-honest-truth",
+    "title": "Godrej Riverine 4 BHK — The Honest Truth",
+    "description": "Godrej Riverine 4 BHK in Sector 44 Noida — the lowest loading of the premium cluster at 40%, a master bedroom with a running deck and golf-course view, and the catches worth knowing before you buy.",
+    "youtubeId": "3POf9uIHfLY",
+    "thumbnail": "https://i.ytimg.com/vi/3POf9uIHfLY/hqdefault.jpg",
+    "publishedAt": "2026-08-26",
+    "duration": "PT0M48S",
+    "focusKeyword": "godrej riverine 4 bhk",
+    "category": "Shorts",
+    "views": "40 views"
+  },
+  {
+    "slug": "next-video-presenter-reveal",
+    "title": "Humari next video ka presenter kaun? Ek surprise hai",
+    "description": "Saraansh thoda unwell hain, toh is baar nayi long video ke liye sales team ke do log — Sandeep aur Vikas — presenter ki kursi ke liye aamne-saamne hain.",
+    "youtubeId": "mbihXm6oBZY",
+    "thumbnail": "https://i.ytimg.com/vi/mbihXm6oBZY/hqdefault.jpg",
+    "publishedAt": "2026-08-17",
+    "duration": "PT1M27S",
+    "focusKeyword": "property saraansh presenter",
+    "category": "Shorts",
+    "views": "372 views"
+  },
+  {
+    "slug": "property-saraansh-channel-update",
+    "title": "An update from Property Saraansh",
+    "description": "A quick update from Saraansh Seth on what is coming next on the Property Saraansh channel.",
+    "youtubeId": "9wZRNRnYY9Q",
+    "thumbnail": "https://i.ytimg.com/vi/9wZRNRnYY9Q/hqdefault.jpg",
+    "publishedAt": "2026-07-26",
+    "duration": "PT0M24S",
+    "focusKeyword": "property saraansh update",
+    "category": "Shorts",
+    "views": "872 views"
+  },
+  {
+    "slug": "20-80-payment-plan-roi-comparison",
+    "title": "20:80 Plan vs \u092c\u093e\u0915\u0940 \u0938\u092c \u2014 \u0915\u094c\u0928 \u091c\u0940\u0924\u093e?",
+    "description": "Har buyer sunta hai ki 20:80 payment plan pure gold hai — lekin actual ROI maths alag kahani kehti hai. 20x5 vs 20:80 ka real comparison, builder ka 30-35% premium, aur kab lena chahiye kab nahi.",
+    "youtubeId": "eFurALkZYJo",
+    "thumbnail": "https://i.ytimg.com/vi/eFurALkZYJo/hqdefault.jpg",
+    "publishedAt": "2026-07-21",
+    "duration": "PT0M51S",
+    "focusKeyword": "20 80 payment plan noida",
+    "category": "Shorts",
+    "views": "2.3K views"
+  },
+  {
     "slug": "4-bhk-apartments-noida-expressway-comparison",
     "title": "4 BHK Apartments in Noida: Godrej Riverine vs Experion Elements vs Max 128 vs M3M Cullinan",
     "description": "Which 4 BHK in Noida wins? Godrej Riverine, Experion Elements, Max Estate 128 and M3M Cullinan compared on size, loading, price and honest verdict.",
