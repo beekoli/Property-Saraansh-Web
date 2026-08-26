@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
-import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
+import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos, channelFor } from '@/lib/videos';
+import { subscribeUrl } from '@/lib/channels';
 import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
 import { getManagedVideo, preferWP } from '@/lib/managedContent';
 import { getChannelStats } from '@/lib/youtube';
@@ -26,8 +27,10 @@ export async function generateStaticParams() {
 /**
  * A watch page is served for every video in the curated list, and — for
  * uploads that are too new to have a hand-written entry in videos.ts yet — for
- * any slug ending in a YouTube id belonging to this channel, resolved live from
- * the API. That is what lets a card on /our-videos always open the full watch
+ * any slug ending in a YouTube id belonging to either Property Saraansh
+ * channel, resolved live from the API. That is what lets a card on
+ * /our-videos (including a project review from the Reviews channel, which has
+ * no curated entry yet) always open the full watch
  * page here (player + lead form + schema) instead of 404ing or bouncing the
  * visitor out to YouTube.
  */
@@ -172,6 +175,10 @@ export default async function VideoWatchPage({ params }: PageProps) {
     permanentRedirect(`/our-videos/${video.slug}`);
   }
 
+  // Which of the two channels published this video — drives the attribution
+  // and subscribe link under the player.
+  const sourceChannel = channelFor(video);
+
   // Fetch stats and filter related videos
   const [stats, videos] = await Promise.all([
     getChannelStats(),
@@ -221,6 +228,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
       },
       "sameAs": [
         "https://www.youtube.com/@PropertySaraansh",
+        "https://www.youtube.com/@PropertySaraanshReviews",
         "https://instagram.com/propertysaraansh",
         "https://www.facebook.com/PropertySaraansh",
         "https://www.linkedin.com/company/propertysaraansh/"
@@ -368,7 +376,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </p>
                 )}
 
-                <div className="flex items-center gap-6 text-xs text-brand-light pt-2 border-t border-brand-pale font-light">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-brand-light pt-2 border-t border-brand-pale font-light">
                   <span className="flex items-center gap-1.5">
                     <Calendar size={14} className="text-brand-primary" />
                     {video.publishedAt}
@@ -377,6 +385,23 @@ export default async function VideoWatchPage({ params }: PageProps) {
                     <Eye size={14} className="text-brand-primary" />
                     {video.views}
                   </span>
+                  {/* Property Saraansh publishes from two channels. Naming the
+                      one this video came from — and offering its subscribe
+                      link rather than a generic one — means a visitor who came
+                      for a project review can follow the channel that actually
+                      publishes project reviews. */}
+                  <a
+                    href={subscribeUrl(sourceChannel)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 hover:text-brand-primary transition-colors"
+                  >
+                    <Video size={14} className="text-brand-primary" />
+                    <span>
+                      {sourceChannel.name}
+                      <span className="ml-1.5 font-bold text-brand-primary">Subscribe</span>
+                    </span>
+                  </a>
                 </div>
               </div>
                           {/* Rich Content Section */}

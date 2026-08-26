@@ -27,9 +27,24 @@ export default async function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 className="text-brand-accent hover:text-brand-accent-light transition-colors"
-                aria-label="YouTube"
+                aria-label="Property Saraansh on YouTube"
+                title="Property Saraansh — market analysis and comparisons"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+              {/* The Reviews channel is a second YouTube icon rather than a
+                  differently-shaped one: both are YouTube, and the label is
+                  what distinguishes them for anyone reading or hovering. */}
+              <a
+                href="https://www.youtube.com/@PropertySaraanshReviews"
+                target="_blank"
+                rel="noreferrer"
+                className="text-brand-accent hover:text-brand-accent-light transition-colors relative"
+                aria-label="Property Saraansh Reviews on YouTube"
+                title="Property Saraansh Reviews — project-by-project reviews"
+              >
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <span className="absolute -bottom-1 -right-1 text-[8px] font-bold bg-brand-accent text-brand-ink rounded px-0.5 leading-tight">R</span>
               </a>
               <a
                 href="https://instagram.com/propertysaraansh"
