@@ -1,6 +1,5 @@
 import type { Video } from './videos';
 import { getVideoSlug, parseIsoDuration, formatViewCount } from './youtube';
-import { CHANNELS, isOwnChannel, uploadsPlaylistId } from './channels';
 
 /**
  * Live "newest uploads" helpers for /our-videos.
@@ -24,6 +23,8 @@ import { CHANNELS, isOwnChannel, uploadsPlaylistId } from './channels';
  */
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+const YOUTUBE_CHANNEL_ID =
+  process.env.YOUTUBE_CHANNEL_ID || process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'UC5eDcgQ_bYCzNrJUm34C4_w';
 
 const SHORTS_MAX_SECONDS = 60;
 
@@ -100,16 +101,22 @@ async function fetchDetails(ids: string[]): Promise<Record<string, VideoDetails>
 }
 
 /**
- * The newest LONG-FORM uploads from ONE channel. Kept separate from the
- * public helper below so a failure on one channel cannot empty the other.
+ * The channel's newest LONG-FORM uploads, shaped exactly like a curated Video
+ * so /our-videos and /our-videos/[slug] can render them with no special cases.
+ * Returns [] when the API key is missing or the API call fails.
  */
-async function latestFromChannel(channelId: string, limit: number): Promise<Video[]> {
+export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
   if (!YOUTUBE_API_KEY) return [];
 
+  const uploadsPlaylistId = YOUTUBE_CHANNEL_ID.startsWith('UC')
+    ? 'UU' + YOUTUBE_CHANNEL_ID.substring(2)
+    : YOUTUBE_CHANNEL_ID;
+
   try {
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${YOUTUBE_API_KEY}&playlistId=${uploadsPlaylistId(
-      channelId
-    )}&part=snippet&maxResults=${Math.min(limit, 50)}`;
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${YOUTUBE_API_KEY}&playlistId=${uploadsPlaylistId}&part=snippet&maxResults=${Math.min(
+      limit,
+      50
+    )}`;
     const res = await fetch(url, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
 
@@ -160,40 +167,11 @@ async function latestFromChannel(channelId: string, limit: number): Promise<Vide
         focusKeyword: v.title,
         category: 'Real Estate',
         views: details[v.id].views,
-        channelId,
       }));
   } catch (err) {
-    console.error(`Failed to fetch latest long videos for channel ${channelId}`, err);
+    console.error('Failed to fetch latest long videos from YouTube', err);
     return [];
   }
-}
-
-/**
- * The newest LONG-FORM uploads across every Property Saraansh channel, shaped
- * exactly like a curated Video so /our-videos and /our-videos/[slug] can render
- * them with no special cases. Returns [] when the API key is missing.
- *
- * The channels are fetched in parallel and merged newest-first, so a project
- * review published on the Reviews channel sits in the same feed as a market
- * update from the main channel, in date order. `limit` applies to the merged
- * result; each channel is asked for the full limit so one quiet channel cannot
- * hold back the other.
- */
-export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
-  if (!YOUTUBE_API_KEY) return [];
-
-  const perChannel = await Promise.all(CHANNELS.map((c) => latestFromChannel(c.id, limit)));
-
-  const seen = new Set<string>();
-  return perChannel
-    .flat()
-    .filter((v) => {
-      if (seen.has(v.youtubeId)) return false;
-      seen.add(v.youtubeId);
-      return true;
-    })
-    .sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : 0))
-    .slice(0, limit);
 }
 
 /**
@@ -214,9 +192,8 @@ export async function getLiveVideoById(id: string): Promise<Video | null> {
     if (!data.items || data.items.length === 0) return null;
 
     const item = data.items[0];
-    // Only the brand's own uploads get a page here — either channel qualifies,
-    // anything else does not.
-    if (item.snippet?.channelId && !isOwnChannel(item.snippet.channelId)) return null;
+    // Only this channel's own uploads get a page here.
+    if (item.snippet?.channelId && item.snippet.channelId !== YOUTUBE_CHANNEL_ID) return null;
 
     const title = item.snippet?.title || '';
     const description = item.snippet?.description || '';
@@ -247,7 +224,6 @@ export async function getLiveVideoById(id: string): Promise<Video | null> {
       focusKeyword: title,
       category: isShort ? 'Shorts' : 'Real Estate',
       views: formatViewCount(item.statistics?.viewCount || ''),
-      channelId: item.snippet?.channelId || undefined,
     };
   } catch (err) {
     console.error('Failed to fetch live video by id', err);

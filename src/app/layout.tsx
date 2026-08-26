@@ -77,10 +77,7 @@ const localBusinessSchema = {
     },
   ],
   sameAs: [
-    // Both YouTube channels are listed so Google reads them as one brand
-    // rather than as unrelated accounts that happen to cover the same market.
     "https://www.youtube.com/@PropertySaraansh",
-    "https://www.youtube.com/@PropertySaraanshReviews",
     "https://www.facebook.com/PropertySaraansh",
     "https://instagram.com/propertysaraansh",
     "https://www.linkedin.com/company/propertysaraansh/",

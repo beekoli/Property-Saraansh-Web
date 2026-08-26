@@ -1,16 +1,5 @@
 import { parseIsoDuration, formatViewCount } from '@/lib/youtube';
 import { rawViewCount, publishedDate } from '@/lib/videoStats';
-import { MAIN_CHANNEL, channelById, type Channel } from '@/lib/channels';
-
-/**
- * The channel a video came from. Everything in the curated list below predates
- * the Reviews channel, so an entry with no channelId is the main channel's —
- * that stays true because hydration stamps the real channel on every video it
- * touches, and only an un-hydrated older entry can reach the fallback.
- */
-export function channelFor(video: { channelId?: string }): Channel {
-  return channelById(video.channelId) ?? MAIN_CHANNEL;
-}
 
 export interface Video {
   slug: string;
@@ -32,12 +21,6 @@ export interface Video {
    * than reverse-engineered.
    */
   viewCount?: number;
-  /**
-   * Which Property Saraansh channel published this video. Absent on older
-   * curated entries, which all predate the second channel and are therefore
-   * the main channel's — `channelFor()` in this file resolves that.
-   */
-  channelId?: string;
 }
 
 export const videos: Video[] = [
@@ -1104,7 +1087,7 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
 
   try {
     const videoIds = videos.map(v => v.youtubeId);
-    const detailsMap: Record<string, { views: string; viewCount?: number; publishedAt?: string; channelId?: string; duration: string }> = {};
+    const detailsMap: Record<string, { views: string; viewCount?: number; publishedAt?: string; duration: string }> = {};
 
     // Fetch in batches of 50
     for (let i = 0; i < videoIds.length; i += 50) {
@@ -1125,7 +1108,6 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
               views: formatViewCount(viewsStr),
               viewCount: rawViewCount(viewsStr),
               publishedAt: publishedDate(item.snippet?.publishedAt),
-              channelId: item.snippet?.channelId,
               duration: formatted || "0:00"
             };
           });
@@ -1141,7 +1123,6 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
           views: stats.views,
           viewCount: stats.viewCount,
           publishedAt: stats.publishedAt ?? video.publishedAt,
-          channelId: stats.channelId ?? video.channelId,
           // Only update duration if it wasn't already hardcoded correctly,
           // or just always use the real one:
           duration: stats.duration.includes(':') ? stats.duration : video.duration
@@ -1177,7 +1158,6 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
           views: formatViewCount(viewsStr),
           viewCount: rawViewCount(viewsStr),
           publishedAt: publishedDate(item.snippet?.publishedAt) ?? staticVideo.publishedAt,
-          channelId: item.snippet?.channelId || staticVideo.channelId,
           duration: formatted || staticVideo.duration
         };
       }
