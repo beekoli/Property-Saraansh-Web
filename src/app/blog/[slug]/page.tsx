@@ -132,34 +132,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const watchPageVideo = getVideoByYoutubeId(relatedVideoId);
   const watchPageHref = watchPageVideo ? `/our-videos/${watchPageVideo.slug}` : null;
 
-  // VideoObject schema for the embedded video guide so Google can surface a
-  // video rich result (thumbnail) for this blog. We build it from our video
-  // library when the video exists there (real title/description/duration),
-  // and fall back to blog + YouTube data otherwise.
-  const videoThumb = watchPageVideo?.thumbnail || `https://i.ytimg.com/vi/${relatedVideoId}/maxresdefault.jpg`;
-  const videoJsonLd: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": watchPageVideo?.title || decodeHtml(blog.title.rendered),
-    "description":
-      watchPageVideo?.description ||
-      blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim().slice(0, 200) ||
-      decodeHtml(blog.title.rendered),
-    "thumbnailUrl": [videoThumb],
-    "uploadDate": parseDateToISO8601(watchPageVideo?.publishedAt || blog.date),
-    ...(watchPageVideo?.duration ? { "duration": durationToISO8601(watchPageVideo.duration) } : {}),
-    "contentUrl": `https://www.youtube.com/watch?v=${relatedVideoId}`,
-    "embedUrl": `https://www.youtube.com/embed/${relatedVideoId}`,
-    "url": `${FRONTEND_URL}/blog/${slug}`,
-    "publisher": {
-      "@type": "Organization",
-      "name": "Property Saraansh",
-      "url": FRONTEND_URL,
-      "logo": { "@type": "ImageObject", "url": `${FRONTEND_URL}/logo.png` }
-    },
-    "author": { "@type": "Person", "name": "Saraansh Seth", "url": `${FRONTEND_URL}/about-us` }
-  };
-
+  
   // BlogPosting (Article) schema — signals editorial authorship, date, publisher.
   const featuredImg = getFeaturedImage(blog);
   const articleJsonLd: Record<string, unknown> = {
@@ -223,12 +196,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {hasVideo && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
-        />
-      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
