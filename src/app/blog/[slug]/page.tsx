@@ -271,14 +271,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 prominent lead element for engagement and video SEO */}
             {hasVideo && (
             <div className="mb-10 bg-brand-dark text-white rounded-3xl p-6 md:p-8 shadow-xl border border-brand-primary">
-              <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
-                <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
-                ▶ Watch the Video Guide
-              </h2>
-              <div className="bg-[#09221D] p-2 rounded-xl shadow-inner border border-brand-primary/30 overflow-hidden">
-                <VideoPlayer videoId={relatedVideoId} title={blog.title.rendered} />
-              </div>
-              <div className="mt-5 bg-brand-primary/40 border-l-4 border-brand-accent p-4 rounded-r-xl">
+                            <div className="mt-5 bg-brand-primary/40 border-l-4 border-brand-accent p-4 rounded-r-xl">
                 <p className="text-brand-pale text-xs md:text-sm font-light italic leading-relaxed">
                   Watch the full site analysis and ground reality review. Subscribe to Property Saraansh for more project walk-throughs in Noida.
                 </p>
