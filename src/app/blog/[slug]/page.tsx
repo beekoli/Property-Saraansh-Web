@@ -132,34 +132,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const watchPageVideo = getVideoByYoutubeId(relatedVideoId);
   const watchPageHref = watchPageVideo ? `/our-videos/${watchPageVideo.slug}` : null;
 
-  // VideoObject schema for the embedded video guide so Google can surface a
-  // video rich result (thumbnail) for this blog. We build it from our video
-  // library when the video exists there (real title/description/duration),
-  // and fall back to blog + YouTube data otherwise.
-  const videoThumb = watchPageVideo?.thumbnail || `https://i.ytimg.com/vi/${relatedVideoId}/maxresdefault.jpg`;
-  const videoJsonLd: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": watchPageVideo?.title || decodeHtml(blog.title.rendered),
-    "description":
-      watchPageVideo?.description ||
-      blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim().slice(0, 200) ||
-      decodeHtml(blog.title.rendered),
-    "thumbnailUrl": [videoThumb],
-    "uploadDate": parseDateToISO8601(watchPageVideo?.publishedAt || blog.date),
-    ...(watchPageVideo?.duration ? { "duration": durationToISO8601(watchPageVideo.duration) } : {}),
-    "contentUrl": `https://www.youtube.com/watch?v=${relatedVideoId}`,
-    "embedUrl": `https://www.youtube.com/embed/${relatedVideoId}`,
-    "url": `${FRONTEND_URL}/blog/${slug}`,
-    "publisher": {
-      "@type": "Organization",
-      "name": "Property Saraansh",
-      "url": FRONTEND_URL,
-      "logo": { "@type": "ImageObject", "url": `${FRONTEND_URL}/logo.png` }
-    },
-    "author": { "@type": "Person", "name": "Saraansh Seth", "url": `${FRONTEND_URL}/about-us` }
-  };
-
+  
   // BlogPosting (Article) schema — signals editorial authorship, date, publisher.
   const featuredImg = getFeaturedImage(blog);
   const articleJsonLd: Record<string, unknown> = {
@@ -223,12 +196,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {hasVideo && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }}
-        />
-      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -262,72 +229,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 py-12 relative z-20">
           <div className="bg-white rounded-3xl p-6 md:p-12 shadow-xl border border-brand-light/10">
 
-            {/* Conversion CTA Banner (Above the Fold) */}
-            <div className="mb-8 p-6 md:p-8 rounded-2xl bg-gradient-to-br from-brand-dark to-brand-primary border border-brand-accent/30 shadow-lg text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-accent/5 rounded-full blur-2xl pointer-events-none"></div>
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                  <span className="inline-block bg-brand-accent text-brand-dark px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mb-2">
-                    Free Strategy Session
-                  </span>
-                  <h3 className="heading-playfair text-lg md:text-xl font-bold text-white mb-2">
-                    Confused About Noida Real Estate?
-                  </h3>
-                  <p className="text-xs md:text-sm text-brand-pale/90 max-w-xl font-light leading-relaxed">
-                    Get unbiased, RERA-backed advice directly from Noida&apos;s real estate expert, Saraansh Seth.
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                  <a
-                    href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I%20read%20your%20blog%20about%20${encodeURIComponent(blog.title.rendered)}%20and%20want%20to%20book%20a%20free%20consultation.`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-glossy-whatsapp px-5 py-3 text-center rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"
-                  >
-                    <WhatsAppIcon className="w-4 h-4" />
-                    WhatsApp Chat
-                  </a>
-                  <a
-                    href="tel:+918076178189"
-                    className="px-5 py-3 text-center border border-brand-accent/60 hover:bg-brand-accent hover:text-brand-dark rounded-xl text-xs font-bold uppercase tracking-wider transition-colors duration-200 flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    Call Now
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Video Guide — placed FIRST (above TOC) so the video is the
-                prominent lead element for engagement and video SEO */}
-            {hasVideo && (
-            <div className="mb-10 bg-brand-dark text-white rounded-3xl p-6 md:p-8 shadow-xl border border-brand-primary">
-              <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-accent mb-6 flex items-center gap-2.5 border-b border-brand-light/20 pb-3 uppercase tracking-wide">
-                <span className="w-1.5 h-6 bg-brand-accent rounded-full"></span>
-                ▶ Watch the Video Guide
-              </h2>
-              <div className="bg-[#09221D] p-2 rounded-xl shadow-inner border border-brand-primary/30 overflow-hidden">
-                <VideoPlayer videoId={relatedVideoId} title={blog.title.rendered} />
-              </div>
-              <div className="mt-5 bg-brand-primary/40 border-l-4 border-brand-accent p-4 rounded-r-xl">
-                <p className="text-brand-pale text-xs md:text-sm font-light italic leading-relaxed">
-                  Watch the full site analysis and ground reality review. Subscribe to Property Saraansh for more project walk-throughs in Noida.
-                </p>
-                {watchPageHref && (
-                  <Link
-                    href={watchPageHref}
-                    className="inline-flex items-center gap-1.5 mt-3 text-brand-accent hover:text-white font-semibold text-xs md:text-sm uppercase tracking-wider transition-colors"
-                  >
-                    Watch the full review on its page
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                )}
-              </div>
-            </div>
-            )}
-
+                        
             {/* Table of Contents — below the video */}
             <TableOfContents htmlContent={blog.content.rendered} />
 
