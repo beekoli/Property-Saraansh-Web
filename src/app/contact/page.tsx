@@ -7,8 +7,16 @@ export const revalidate = 60; // Revalidate every minute
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPageBySlug('contact');
+  // Previously this early return skipped buildPageMetadata entirely, so /contact
+  // shipped with no canonical tag at all whenever WordPress had no Yoast data
+  // for it — which is the state it has been in. Go through the same builder so
+  // the canonical is always present and only the words differ.
   if (!page || !page.yoast_head_json) {
-    return { title: 'Contact Us | Property Saraansh Noida' };
+    return buildPageMetadata({
+      path: '/contact',
+      title: 'Contact Us | Property Saraansh Noida',
+      description: 'Get in touch with Saraansh Seth for honest, RERA-backed property guidance in Noida, Greater Noida and Noida Extension.',
+    });
   }
 
   return buildPageMetadata({

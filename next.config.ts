@@ -210,6 +210,21 @@ const nextConfig: NextConfig = {
         destination: 'https://www.propertysaraansh.com/:path*',
         permanent: true,
       },
+      // The apex .com served every page alongside www with no redirect between
+      // them, so Google saw two copies of the whole site and split the
+      // homepage's clicks across both. Every canonical tag, the sitemap and
+      // robots.txt all name www, so www is the host that wins.
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'propertysaraansh.com',
+          },
+        ],
+        destination: 'https://www.propertysaraansh.com/:path*',
+        permanent: true,
+      },
       {
         source: '/our-videos/experion-saatori-sector-151-noida-premium-3-4-bhk-review',
         destination: '/our-videos/experion-saatori-sector-151-noida',

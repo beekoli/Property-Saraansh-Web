@@ -221,6 +221,61 @@ async function fetchAPI(endpoint: string) {
 }
 
 /**
+ * Thrown when WordPress could not be reached at all — a network failure, a
+ * timeout, a 5xx or a rate limit. Distinct from "WordPress answered, and the
+ * post does not exist".
+ */
+export class WordPressUnavailableError extends Error {
+  constructor(detail: string) {
+    super(`WordPress unavailable: ${detail}`);
+    this.name = "WordPressUnavailableError";
+  }
+}
+
+/**
+ * Look a post up by slug, telling a real miss apart from an unreachable API.
+ *
+ * fetchAPI() returns null for both cases, and every by-slug route turned that
+ * null into notFound(). Next then CACHES that 404 for the revalidate window, so
+ * a single momentary WordPress hiccup while Googlebot happened to be crawling
+ * left a live article recorded as "Not found (404)" in Search Console — pages
+ * that render perfectly on the next request. That is the difference between a
+ * page Google drops and a page Google comes back for.
+ *
+ * A transient failure now throws, which Next serves as a 500: uncached, and
+ * read by crawlers as "try again", not "this is gone". Only a genuine empty
+ * answer from WordPress returns null and becomes a 404.
+ *
+ * The slug is interpolated raw, exactly as before — some news slugs are stored
+ * in WordPress already percent-encoded, and re-encoding them breaks the match.
+ */
+async function fetchPostBySlugStrict(slug: string): Promise<WPPost | null> {
+  if (!API_URL) return null;
+
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}/posts?_embed&slug=${slug}`, {
+      next: { revalidate: 60 },
+    });
+  } catch (err) {
+    throw new WordPressUnavailableError(`request failed for slug "${slug}": ${String(err)}`);
+  }
+
+  // 5xx and 429 are the API having a bad moment, not a verdict on this slug.
+  if (res.status >= 500 || res.status === 429) {
+    throw new WordPressUnavailableError(`status ${res.status} for slug "${slug}"`);
+  }
+  if (!res.ok) return null;
+
+  try {
+    const data = JSON.parse(rewriteWordPressHost(await res.text()));
+    return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  } catch (err) {
+    throw new WordPressUnavailableError(`unparseable response for slug "${slug}": ${String(err)}`);
+  }
+}
+
+/**
  * Same as fetchAPI, but also surfaces the WordPress pagination headers.
  * WordPress returns the collection size in X-WP-Total and the number of
  * available pages in X-WP-TotalPages; we need those to render real pagination
@@ -362,15 +417,14 @@ export type PostSection = 'blog' | 'news';
 export async function getPostBySlugWithSection(
   slug: string
 ): Promise<{ post: WPPost; section: PostSection } | null> {
-  const [data, newsCatId] = await Promise.all([
-    fetchAPI(`/posts?_embed&slug=${slug}`),
+  const [found, newsCatId] = await Promise.all([
+    fetchPostBySlugStrict(slug),
     getNewsCategoryId(),
   ]);
 
   const post: WPPost | undefined =
-    data && data.length > 0
-      ? data[0]
-      : MOCK_BLOGS.find((b) => b.slug === slug) || MOCK_NEWS.find((n) => n.slug === slug);
+    found ??
+    (MOCK_BLOGS.find((b) => b.slug === slug) || MOCK_NEWS.find((n) => n.slug === slug));
 
   if (!post) return null;
 
@@ -378,8 +432,8 @@ export async function getPostBySlugWithSection(
 }
 
 export async function getBlogBySlug(slug: string): Promise<WPPost | null> {
-  const data = await fetchAPI(`/posts?_embed&slug=${slug}`);
-  if (data && data.length > 0) return data[0];
+  const post = await fetchPostBySlugStrict(slug);
+  if (post) return post;
   const local = MOCK_BLOGS.find(b => b.slug === slug);
   return local || null;
 }
@@ -435,8 +489,8 @@ export async function getNewsPage(page = 1, perPage = 12): Promise<BlogPage> {
 }
 
 export async function getNewsBySlug(slug: string): Promise<WPPost | null> {
-  const data = await fetchAPI(`/posts?_embed&slug=${slug}`);
-  if (data && data.length > 0) return data[0];
+  const post = await fetchPostBySlugStrict(slug);
+  if (post) return post;
   const local = MOCK_NEWS.find(n => n.slug === slug);
   return local || null;
 }
