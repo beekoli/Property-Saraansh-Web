@@ -25,6 +25,30 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "m3m-cullinan-sector-94-luxury-review",
+    "title": "M3M The Cullinan Sector 94 \u2014 Is This Noida's Ultimate Luxury Address?",
+    "description": "M3M The Cullinan in Sector 94 sits at the gateway of the Noida\u2013Greater Noida Expressway, zero km from the South Delhi border. An honest walkthrough of one of Noida's most talked-about ultra-luxury projects.",
+    "youtubeId": "7IDJljbtdy0",
+    "thumbnail": "https://i.ytimg.com/vi/7IDJljbtdy0/hqdefault.jpg",
+    "publishedAt": "2026-08-31",
+    "duration": "PT0M53S",
+    "focusKeyword": "m3m cullinan sector 94 noida",
+    "category": "Shorts",
+    "views": "2 views"
+  },
+  {
+    "slug": "max-estates-128-4-bhk-floor-plan-review",
+    "title": "Max Estates 128 Noida \u2014 Honest 4 BHK Floor Plan Review",
+    "description": "An on-ground review of Max Estates 128 in Sector 128 Noida \u2014 one of the most talked-about luxury launches on the Noida\u2013Greater Noida Expressway, reportedly sold out on day one. Floor plan, unit layout and site plan, honestly assessed.",
+    "youtubeId": "uqlNsv6t7mo",
+    "thumbnail": "https://i.ytimg.com/vi/uqlNsv6t7mo/hqdefault.jpg",
+    "publishedAt": "2026-08-29",
+    "duration": "PT0M53S",
+    "focusKeyword": "max estates 128 floor plan",
+    "category": "Shorts",
+    "views": "737 views"
+  },
+  {
     "slug": "godrej-riverine-4-bhk-honest-truth",
     "title": "Godrej Riverine 4 BHK — The Honest Truth",
     "description": "Godrej Riverine 4 BHK in Sector 44 Noida — the lowest loading of the premium cluster at 40%, a master bedroom with a running deck and golf-course view, and the catches worth knowing before you buy.",
