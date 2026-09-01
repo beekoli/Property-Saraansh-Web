@@ -361,9 +361,20 @@ export default async function BlogPostPage({ params }: PageProps) {
   );
 }
 
+/**
+ * Nothing is prerendered at build time; every article is rendered on first
+ * request and then cached by ISR (same approach as /properties/[slug]).
+ *
+ * Prerendering these was actively dangerous. A by-slug lookup now throws when
+ * WordPress is unreachable rather than reporting "not found" — the right answer
+ * at request time, because Next serves an uncached 500 that a crawler retries
+ * instead of baking a 404 for a live article. At BUILD time the same throw kills
+ * the whole deployment: one WordPress 500 during prerender took production down
+ * with "Export encountered an error on /blog/[slug]".
+ *
+ * Building nothing means a momentary WordPress hiccup can no longer block a
+ * deploy, and the first visitor to each article pays one render.
+ */
 export async function generateStaticParams() {
-  const blogs = await getLatestBlogs(100);
-  return blogs.map((post) => ({
-    slug: post.slug,
-  }));
+  return [];
 }

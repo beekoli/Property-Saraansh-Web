@@ -287,7 +287,11 @@ export default async function NewsArticlePage({ params }: PageProps) {
   );
 }
 
+/**
+ * Rendered on demand, not prerendered — see the note on /blog/[slug]. A news
+ * article whose WordPress lookup throws during a build would otherwise fail the
+ * entire deployment, and news is the section that changes most often.
+ */
 export async function generateStaticParams() {
-  const news = await getLatestNews(100);
-  return news.map((post) => ({ slug: post.slug }));
+  return [];
 }
