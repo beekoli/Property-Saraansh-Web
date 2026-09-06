@@ -146,6 +146,8 @@ export interface WPVideo {
     meta_title?: string;
     meta_description?: string;
     youtube_id?: string;
+    /** One "MM:SS Title" per line. Drives Key Moments — see videoChapters.ts. */
+    chapters?: string;
   };
 }
 
