@@ -84,6 +84,12 @@ export interface ManagedVideo {
   aboutThisVideo?: string;
   metaTitle?: string;
   metaDescription?: string;
+  /**
+   * Chapter list, one "MM:SS Title" per line — pasteable straight out of the
+   * YouTube description. Drives the on-page key-moments list and the
+   * schema.org Clip markup. See src/lib/videoChapters.ts.
+   */
+  chapters?: string;
 }
 
 /**
@@ -103,7 +109,21 @@ export async function getManagedVideo(slug: string): Promise<ManagedVideo | null
     aboutThisVideo: clean(video.acf?.about_this_video),
     metaTitle: clean(video.acf?.meta_title),
     metaDescription: clean(video.acf?.meta_description),
+    // Not run through clean(): chapters are line-based and must keep newlines.
+    chapters: rawText(video.acf?.chapters),
   };
+}
+
+/**
+ * Multi-line ACF text kept verbatim apart from HTML entities and <br> tags,
+ * which WordPress inserts when the field is edited in a rich-text context.
+ */
+function rawText(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const text = decodeHtml(
+    stripHtml(value.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>\s*<p>/gi, '\n'))
+  ).trim();
+  return text || undefined;
 }
 
 /**

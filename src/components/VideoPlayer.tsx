@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { parseTimeParam } from '@/lib/videoChapters';
 
 /**
  * YouTube "facade": render the thumbnail + a play button instead of the real
@@ -14,10 +15,51 @@ import { useState, useEffect } from 'react';
  * default to `hqdefault.jpg`, which always exists at real resolution (480x360),
  * then upgrade to `maxresdefault.jpg` only after confirming it's genuine HD.
  */
-export default function VideoPlayer({ videoId, title, isShort = false }: { videoId: string; title?: string; isShort?: boolean }) {
+export default function VideoPlayer({
+  videoId,
+  title,
+  isShort = false,
+  startSeconds,
+}: {
+  videoId: string;
+  title?: string;
+  isShort?: boolean;
+  /** Start position in seconds. Overridden by a ?t= value in the URL. */
+  startSeconds?: number;
+}) {
   const [playing, setPlaying] = useState(false);
+  const [start, setStart] = useState(startSeconds ?? 0);
   const [thumb, setThumb] = useState(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`);
   const label = title || 'YouTube video player';
+
+  /**
+   * Key-moments support. The Clip markup on the watch page points each chapter
+   * at /our-videos/<slug>?t=<seconds>, and Google requires those URLs to
+   * genuinely seek — a clip URL that lands at 0:00 makes the markup
+   * non-compliant. So on mount we read ?t= and open the player there directly,
+   * skipping the click-to-play facade.
+   *
+   * Read from window rather than useSearchParams() on purpose: this page is
+   * statically generated with ISR, and useSearchParams() would force the route
+   * to render dynamically on every request.
+   */
+  useEffect(() => {
+    const apply = (seconds: number | undefined) => {
+      if (seconds === undefined || seconds < 0) return;
+      setStart(seconds);
+      setPlaying(true);
+    };
+
+    apply(parseTimeParam(new URLSearchParams(window.location.search).get('t') ?? undefined));
+
+    // Chapter buttons on the page seek without a reload.
+    const onSeek = (event: Event) => {
+      const detail = (event as CustomEvent<{ seconds?: number }>).detail;
+      apply(detail?.seconds);
+    };
+    window.addEventListener('ps:seek', onSeek);
+    return () => window.removeEventListener('ps:seek', onSeek);
+  }, [videoId]);
 
   useEffect(() => {
     // Reset to the always-present thumbnail when the video changes.
@@ -41,7 +83,8 @@ export default function VideoPlayer({ videoId, title, isShort = false }: { video
       {playing ? (
         <iframe
           className="w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0${start > 0 ? `&start=${Math.floor(start)}` : ''}`}
+          key={start}
           title={label}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

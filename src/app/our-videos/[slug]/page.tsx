@@ -7,8 +7,10 @@ import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, vid
 import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
 import { getManagedVideo, preferWP } from '@/lib/managedContent';
 import { getRelatedToVideo } from '@/lib/relatedToVideo';
-import { getChannelStats } from '@/lib/youtube';
+import { getChannelStats, parseIsoDuration } from '@/lib/youtube';
+import { parseChapters, toClips, FALLBACK_CHAPTERS } from '@/lib/videoChapters';
 import VideoPlayer from '@/components/VideoPlayer';
+import VideoChapters from './VideoChapters';
 import WatchSidebarForm from './WatchSidebarForm';
 import { FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
 
@@ -148,6 +150,17 @@ function renderRichText(text: string) {
   return parts;
 }
 
+/**
+ * Hand-written keyword sets for the VideoObject schema. Only a handful of
+ * videos have these; everything else relies on the title and description.
+ */
+const VIDEO_KEYWORDS: Record<string, string> = {
+  'noida-market-slowdown-2026':
+    'Noida real estate slowdown 2026, Noida property market crash, builder strategy slow market, resale seller investor Noida, buyer tips Noida property, real estate India 2026',
+  'godrej-arden-sigma-3-review':
+    'godrej arden, godrej arden greater noida, godrej arden sigma 3, godrej arden price, godrej arden floor plan, godrej arden review, greater noida real estate 2026, godrej arden investment',
+};
+
 export default async function VideoWatchPage({ params }: PageProps) {
   const { slug } = await params;
   // Views and duration come from YouTube (getHydratedVideoBySlug); the words on
@@ -189,7 +202,17 @@ export default async function VideoWatchPage({ params }: PageProps) {
     .slice(0, 3);
 
   const isNoidaSlowdown = video.slug === 'noida-market-slowdown-2026';
-  const isGodrejArden = video.slug === 'godrej-arden-sigma-3-review';
+  const keywords = VIDEO_KEYWORDS[video.slug];
+
+  // Key moments. WordPress (ps_video.chapters) is the source of truth; the
+  // fallback map only covers videos whose chapters were hardcoded here before
+  // the field existed. endOffset for the final chapter needs the runtime.
+  const durationSeconds = video.duration ? parseIsoDuration(video.duration).seconds : undefined;
+  const chapters = parseChapters(
+    managed?.chapters || FALLBACK_CHAPTERS[video.slug],
+    durationSeconds
+  );
+  const clips = toClips(chapters, `${FRONTEND_URL}/our-videos/${video.slug}`);
 
   const videoJsonLd = {
     "@context": "https://schema.org",
@@ -236,27 +259,11 @@ export default async function VideoWatchPage({ params }: PageProps) {
       "name": "Saraansh Seth",
       "url": `${FRONTEND_URL}/about-us`
     },
-    ...(isNoidaSlowdown && {
-      "keywords": "Noida real estate slowdown 2026, Noida property market crash, builder strategy slow market, resale seller investor Noida, buyer tips Noida property, real estate India 2026",
-      "inLanguage": "hi-IN",
-      "hasPart": [
-        { "@type": "Clip", "name": "Crash vs Slowdown Explained", "startOffset": 45, "endOffset": 96, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=45s` },
-        { "@type": "Clip", "name": "Builder Strategy: Payment Plans & Unit Sizes", "startOffset": 96, "endOffset": 371, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=96s` },
-        { "@type": "Clip", "name": "Seller & Investor Strategy: Hold or Sell?", "startOffset": 371, "endOffset": 509, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=371s` },
-        { "@type": "Clip", "name": "Buyer Strategy in Slow Noida Property Market", "startOffset": 509, "endOffset": 651, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=509s` }
-      ]
-    }),
-    ...(isGodrejArden && {
-      "keywords": "godrej arden, godrej arden greater noida, godrej arden sigma 3, godrej arden price, godrej arden floor plan, godrej arden review, greater noida real estate 2026, godrej arden investment",
-      "hasPart": [
-        { "@type": "Clip", "name": "Introduction & Reality Check", "startOffset": 0, "endOffset": 139, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=0s` },
-        { "@type": "Clip", "name": "Godrej Arden Location Analysis — Sigma 3, Greater Noida", "startOffset": 139, "endOffset": 237, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=139s` },
-        { "@type": "Clip", "name": "Project Planning & Layout Review", "startOffset": 237, "endOffset": 455, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=237s` },
-        { "@type": "Clip", "name": "Godrej Arden Price & Payment Plan", "startOffset": 455, "endOffset": 521, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=521s` },
-        { "@type": "Clip", "name": "Competition: Godrej Arden vs Experion 151 vs Sobha", "startOffset": 521, "endOffset": 647, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=521s` },
-        { "@type": "Clip", "name": "Should You Buy Godrej Arden? — Property Saraansh Verdict", "startOffset": 647, "endOffset": 743, "url": `https://www.youtube.com/watch?v=${video.youtubeId}&t=647s` }
-      ]
-    })
+    ...(keywords ? { "keywords": keywords } : {}),
+    ...(isNoidaSlowdown && { "inLanguage": "hi-IN" }),
+    // Google "Key Moments". Each clip URL must genuinely seek — the watch page
+    // reads ?t= and passes start= to the embed, so these are compliant.
+    ...(clips.length > 0 && { "hasPart": clips })
   };
 
   const breadcrumbJsonLd = {
@@ -348,7 +355,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
             {/* Left Column: Player and Video Details */}
             <div className="w-full lg:w-8/12 space-y-8">
               {/* Responsive 16:9 Video Player Card */}
-              <div className="bg-brand-dark p-3 rounded-2xl shadow-xl border border-brand-primary">
+              <div id="video-player" className="bg-brand-dark p-3 rounded-2xl shadow-xl border border-brand-primary scroll-mt-28">
                 <VideoPlayer videoId={video.youtubeId} title={video.title} isShort={video.category === 'Shorts'} />
               </div>
 
@@ -384,6 +391,9 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </span>
                 </div>
               </div>
+              {/* Key Moments — mirrors the Clip markup above */}
+              <VideoChapters chapters={chapters} slug={video.slug} />
+
                           {/* Rich Content Section */}
               {video.content && (
                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
