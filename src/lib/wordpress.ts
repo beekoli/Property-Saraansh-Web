@@ -275,6 +275,30 @@ async function fetchPostBySlugStrict(slug: string): Promise<WPPost | null> {
   }
 }
 
+/** The subset of a WordPress item that a slim, _fields-limited query returns. */
+export interface SlimItem {
+  slug?: string;
+  title?: string | { rendered?: string };
+  ps_video_id?: string;
+  acf?: Record<string, unknown>;
+}
+
+/**
+ * A read for callers that need a few fields across MANY items.
+ *
+ * The full /properties collection is over 2MB, which is past the size Next will
+ * cache — so a caller wanting only slugs and video ids would refetch the whole
+ * lot on every render. Pass an endpoint with _fields already narrowed and this
+ * stays small enough to cache properly.
+ *
+ * Returns [] rather than throwing: every current caller is enriching a page,
+ * not building it, so a failure here should cost a link, not the page.
+ */
+export async function fetchSlim(endpoint: string): Promise<SlimItem[]> {
+  const data = await fetchAPI(endpoint);
+  return Array.isArray(data) ? (data as SlimItem[]) : [];
+}
+
 /**
  * Same as fetchAPI, but also surfaces the WordPress pagination headers.
  * WordPress returns the collection size in X-WP-Total and the number of

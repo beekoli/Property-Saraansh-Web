@@ -13,7 +13,6 @@ import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
 import { formatReraDate } from "@/lib/formatDate";
 
 import { decodeHtml } from "@/lib/decodeHtml";
-import { getVideoByYoutubeId } from "@/lib/videos";
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
@@ -481,23 +480,21 @@ export function buildSchemas(prop: Property) {
     ],
   };
 
-  const vid = prop.youtubeId ? getVideoByYoutubeId(prop.youtubeId) : null;
+  // NO VideoObject here, deliberately.
+  //
+  // Every property with a youtubeId used to emit one, which meant the property
+  // page and the /our-videos watch page both claimed the same video. Google
+  // then has to pick a winner for that video, and the page it should pick is
+  // the watch page — that one exists for the video, carries its transcript and
+  // description, and is what the video sitemap points at.
+  //
+  // The blog template was cleaned up for exactly this reason (PR #54); this is
+  // the same fix at the property template, so it applies to all 60 properties
+  // rather than the one that was corrected by hand.
+  //
+  // The video itself still plays on the property page. Only the competing
+  // structured-data claim is gone, and the watch page is linked from here so
+  // the relationship stays legible to a crawler.
 
-  const video = prop.youtubeId ? {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    name: prop.verdict
-      ? `${prop.title} — Property Saraansh Review`
-      : `${prop.title} — Project Walkthrough`,
-    description: prop.verdict.slice(0, 300)
-      || `${prop.title} project walkthrough provided by the developer`,
-    thumbnailUrl: `https://i.ytimg.com/vi/${prop.youtubeId}/hqdefault.jpg`,
-    uploadDate: vid?.publishedAt || prop.publishedDate,
-    ...(vid?.duration ? { duration: vid.duration } : {}),
-    contentUrl: `https://www.youtube.com/watch?v=${prop.youtubeId}`,
-    embedUrl: `https://www.youtube.com/embed/${prop.youtubeId}`,
-    publisher: { "@type": "Organization", name: "Property Saraansh", logo: { "@type": "ImageObject", url: `${SITE}/logo.png` } },
-  } : null;
-
-  return [apartmentComplex, product, faqPage, breadcrumbs, video].filter(Boolean);
+  return [apartmentComplex, product, faqPage, breadcrumbs].filter(Boolean);
 }

@@ -6,6 +6,7 @@ import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
 import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
 import { getManagedVideo, preferWP } from '@/lib/managedContent';
+import { getRelatedToVideo } from '@/lib/relatedToVideo';
 import { getChannelStats } from '@/lib/youtube';
 import VideoPlayer from '@/components/VideoPlayer';
 import WatchSidebarForm from './WatchSidebarForm';
@@ -172,11 +173,15 @@ export default async function VideoWatchPage({ params }: PageProps) {
     permanentRedirect(`/our-videos/${video.slug}`);
   }
 
-  // Fetch stats and filter related videos
-  const [stats, videos] = await Promise.all([
+  // Fetch stats, the video list, and the pages that cover this same video.
+  const [stats, videos, related] = await Promise.all([
     getChannelStats(),
-    getVideosWithRealtimeStats()
+    getVideosWithRealtimeStats(),
+    getRelatedToVideo(video.youtubeId)
   ]);
+  const relatedLinks = [related.property, related.blog].filter(
+    (l): l is NonNullable<typeof l> => Boolean(l)
+  );
 
   const isCurrentShort = video.category === 'Shorts';
   const relatedVideos = videos
@@ -466,9 +471,40 @@ export default async function VideoWatchPage({ params }: PageProps) {
             </div>
           </div>
 
+          {/* Outbound links. A watch page receives internal links from the
+              property page and the blog post, and used to return none — the
+              shape Google reads as a low-value orphan. These send authority
+              back to the two pages that actually convert. */}
+          {relatedLinks.length > 0 && (
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
+              <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-2">
+                Related to this project
+              </h2>
+              <p className="text-sm text-brand-ink/60 mb-5">
+                Everything else on the site about what this video covers.
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {relatedLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="group block rounded-xl border border-brand-pale hover:border-brand-light bg-brand-pale/30 hover:bg-brand-pale/60 transition-colors p-4"
+                  >
+                    <span className="block text-sm font-bold text-brand-ink group-hover:text-brand-primary transition-colors leading-snug">
+                      {link.title}
+                    </span>
+                    <span className="block text-[11px] text-brand-ink/60 mt-1.5 leading-relaxed">
+                      {link.blurb}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Related Videos Section */}
           {relatedVideos.length > 0 && (
-            <div className="mt-20 pt-10 border-t border-brand-light/10">
+                          <div className="mt-20 pt-10 border-t border-brand-light/10">
               <h2 className="heading-playfair text-2xl md:text-3xl text-brand-ink font-bold mb-10 text-center inline-block relative left-1/2 -translate-x-1/2">
                 Related Video Reviews
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-2"></span>
