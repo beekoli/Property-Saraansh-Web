@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     decodeHtml(news.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || '').slice(0, 150) || `Read ${decodeHtml(news.title.rendered)}`;
 
   const seoJson = news.rank_math_json || news.yoast_head_json;
-  const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
+  const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc, getFeaturedImage(news));
 
   if (!meta.openGraph) {
     meta.openGraph = { title: fallbackTitle, description: fallbackDesc, siteName: 'Property Saraansh', locale: 'en_IN' };
@@ -193,15 +193,12 @@ export default async function NewsArticlePage({ params }: PageProps) {
               <span aria-hidden="true">←</span> All {city.label} News
             </Link>
 
-            {featuredImg && (
-              <div className="mb-10 -mx-6 md:-mx-12 -mt-6 md:-mt-12">
-                <img
-                  src={featuredImg}
-                  alt={decodeHtml(news.title.rendered)}
-                  className="w-full h-56 md:h-96 object-cover rounded-t-3xl"
-                 decoding="async" fetchPriority="high" />
-              </div>
-            )}
+            {/* The featured image is a title card with the headline typeset
+                into it, so rendering it here printed the same sentence twice —
+                once as the H1 above, once as a picture. It still does the jobs
+                it is good at: the listing thumbnail, the NewsArticle schema
+                image, and the og:image for shares. Matches /blog/[slug], which
+                has never rendered it inline. */}
 
             <article className="prose prose-lg max-w-none text-brand-ink leading-relaxed">
               <div

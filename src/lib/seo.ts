@@ -97,6 +97,21 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
 
 export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
 
+/**
+ * Google shows only a small thumbnail unless a page explicitly allows a large
+ * one. Discover, Top Stories and the image-rich result formats all depend on
+ * it, so every indexable page opts in.
+ *
+ * The directive has to be repeated on every route that sets `robots` at all:
+ * Next.js replaces the parent's robots object rather than merging into it, so
+ * a page that only declared index/follow was silently downgrading itself.
+ */
+export const LARGE_PREVIEW_ROBOTS = {
+  'max-image-preview': 'large',
+  'max-snippet': -1,
+  'max-video-preview': -1,
+} as const;
+
 export interface PageMetadataInput {
   /** Route path beginning with "/" — use "/" for the homepage. */
   path: string;
@@ -145,7 +160,9 @@ export function buildPageMetadata({
       description,
       images: [image],
     },
-    ...(noIndex ? { robots: { index: false, follow: true } } : {}),
+    robots: noIndex
+      ? { index: false, follow: true }
+      : { index: true, follow: true, googleBot: { index: true, follow: true, ...LARGE_PREVIEW_ROBOTS } },
   };
 }
 
@@ -223,7 +240,24 @@ function decodeWPEntities(str: string): string {
  * Generates a Next.js Metadata object from RankMath/Yoast JSON data.
  * The raw JSON object is usually exposed in the REST API as `yoast_head_json` or `rank_math_json`.
  */
-export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fallbackTitle: string, fallbackDescription: string): Metadata {
+/**
+ * @param fallbackImage the post's featured image, used when Rank Math has no
+ *   OG image of its own. Without it a shared article is a bare text link:
+ *   Rank Math's `og_image` is empty on almost every post here, and nothing was
+ *   falling back to the image the article already has.
+ */
+export function generateRankMathMetadata(
+  seoJson: SEOJson | null | undefined,
+  fallbackTitle: string,
+  fallbackDescription: string,
+  fallbackImage?: string
+): Metadata {
+  const robots = {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, ...LARGE_PREVIEW_ROBOTS },
+  };
+
   if (!seoJson) {
     // No SEO plugin data — still emit full OG/Twitter so social shares work
     return {
@@ -235,12 +269,15 @@ export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fa
         siteName: 'Property Saraansh',
         locale: 'en_IN',
         type: 'article',
+        ...(fallbackImage ? { images: [{ url: fallbackImage }] } : {}),
       },
       twitter: {
         card: 'summary_large_image',
         title: fallbackTitle,
         description: fallbackDescription,
+        ...(fallbackImage ? { images: [fallbackImage] } : {}),
       },
+      robots,
     };
   }
 
@@ -259,12 +296,13 @@ export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fa
       description: ogDescription,
       url: seoJson.og_url ? rewriteUrlToFrontend(seoJson.og_url) : undefined,
       siteName: seoJson.og_site_name || 'Property Saraansh',
-      images: seoJson.og_image?.map((img) => ({
-        url: rewriteUrlToFrontend(img.url),
-        width: img.width,
-        height: img.height,
-        type: img.type,
-      })) || [],
+      images:
+        seoJson.og_image?.map((img) => ({
+          url: rewriteUrlToFrontend(img.url),
+          width: img.width,
+          height: img.height,
+          type: img.type,
+        })) || (fallbackImage ? [{ url: fallbackImage }] : []),
       locale: seoJson.og_locale || 'en_IN',
       type: (seoJson.og_type as "website" | "article") || 'website',
     },
@@ -272,7 +310,11 @@ export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fa
       card: (seoJson.twitter_card as "summary_large_image" | "summary" | "player" | "app") || 'summary_large_image',
       title: twitterTitle,
       description: twitterDescription,
-      images: seoJson.twitter_image ? [rewriteUrlToFrontend(seoJson.twitter_image)] : undefined,
+      images: seoJson.twitter_image
+        ? [rewriteUrlToFrontend(seoJson.twitter_image)]
+        : fallbackImage
+          ? [fallbackImage]
+          : undefined,
     },
     alternates: {
       canonical: seoJson.canonical ? rewriteUrlToFrontend(seoJson.canonical) : undefined,
@@ -280,6 +322,15 @@ export function generateRankMathMetadata(seoJson: SEOJson | null | undefined, fa
     robots: {
       index: seoJson.robots?.index !== 'noindex',
       follow: seoJson.robots?.follow !== 'nofollow',
+      googleBot: {
+        index: seoJson.robots?.index !== 'noindex',
+        follow: seoJson.robots?.follow !== 'nofollow',
+        ...LARGE_PREVIEW_ROBOTS,
+        // Rank Math's own value wins where an editor has set one.
+        ...(seoJson.robots?.['max-image-preview']
+          ? { 'max-image-preview': seoJson.robots['max-image-preview'] as 'large' | 'standard' | 'none' }
+          : {}),
+      },
     }
   };
 }

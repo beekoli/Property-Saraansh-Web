@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Prefer RankMath JSON, fallback to Yoast
   const seoJson = blog.rank_math_json || blog.yoast_head_json;
 
-  const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc);
+  const meta = generateRankMathMetadata(seoJson, fallbackTitle, fallbackDesc, getFeaturedImage(blog));
 
   // Force og:type = "article" for all blog posts (SEO plugins sometimes return "website")
   // Also initialise openGraph if generateRankMathMetadata returned none (e.g. rank_math_json is null)
