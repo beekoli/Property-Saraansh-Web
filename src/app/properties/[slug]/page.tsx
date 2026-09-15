@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { generateRankMathMetadata } from '@/lib/seo';
 import { getProperty, buildSchemas, SITE, getBuilderProfile } from '@/lib/property';
+import { getPropertyVideoCta } from '@/lib/propertyVideoCta';
 import PropertyDetail from '@/components/property/PropertyDetail';
 
 export const revalidate = 300;
@@ -73,7 +74,12 @@ export default async function PropertyPage({ params }: PageProps) {
 
   // Builder profile (logo, description, trust stats) from the ps_builder tag,
   // used for the "Meet the Builder" section + link to /builders/[slug].
-  const builder = await getBuilderProfile(property.builderSlug);
+  // videoCta is null for the 39 projects we have not reviewed, and for the
+  // three that embed a developer walkthrough — the card then renders nothing.
+  const [builder, videoCta] = await Promise.all([
+    getBuilderProfile(property.builderSlug),
+    getPropertyVideoCta(property.youtubeId),
+  ]);
 
   return (
     <>
@@ -84,7 +90,7 @@ export default async function PropertyPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <PropertyDetail p={property} builder={builder} />
+      <PropertyDetail p={property} builder={builder} videoCta={videoCta} />
     </>
   );
 }

@@ -10,6 +10,8 @@ import { useMemo, useState, type ReactNode, type FormEvent } from "react";
 import Image from "next/image";
 import type { Property } from "@/lib/property";
 import type { WPBuilderTerm } from "@/lib/wordpress";
+import VideoReviewCard from './VideoReviewCard';
+import type { PropertyVideoCta } from '@/lib/propertyVideoCta';
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 
 const GOLD = "linear-gradient(115deg,#b8913c 0%,#d9b25e 55%,#c9a24b 100%)";
@@ -54,7 +56,15 @@ function GoldBtn({ href, children, onClick }: { href?: string; children: ReactNo
     : <button onClick={onClick} className={cls} style={{ background: BRAND_GREEN }}>{children}</button>;
 }
 
-export default function PropertyDetail({ p, builder }: { p: Property; builder?: WPBuilderTerm | null }) {
+export default function PropertyDetail({
+  p,
+  builder,
+  videoCta = null,
+}: {
+  p: Property;
+  builder?: WPBuilderTerm | null;
+  videoCta?: PropertyVideoCta | null;
+}) {
   const [fpTab, setFpTab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -218,6 +228,13 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
             )}
           </div>
         </section>
+
+        {/* ================= WATCH THE REVIEW =================
+            Sits straight after the Overview: the visitor has just read what
+            the project is and seen the quick facts, which is the moment an
+            honest review is most worth offering. Renders nothing when we have
+            not reviewed this project. */}
+        <VideoReviewCard cta={videoCta} />
 
         {/* ================= HIGHLIGHTS ================= */}
         {p.highlights.length > 0 && (
