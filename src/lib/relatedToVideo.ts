@@ -35,6 +35,13 @@ export interface RelatedLink {
 export interface RelatedToVideo {
   property: RelatedLink | null;
   blog: RelatedLink | null;
+  /**
+   * The Saraansh Verdict for the project this video reviews, from the
+   * property's `video_review_text` field. It is the opinion the video gives,
+   * so it belongs on the watch page rather than on the property page, where it
+   * used to sit under a second copy of the same embed.
+   */
+  verdict: string | null;
 }
 
 /** WordPress returns titles HTML-encoded; the watch page renders plain text. */
@@ -47,6 +54,22 @@ function plainTitle(raw: unknown): string {
     .replace(/&#8217;/g, '’')
     .replace(/&#8211;/g, '–')
     .replace(/<[^>]*>/g, '')
+    .trim();
+}
+
+/**
+ * The verdict is written as plain paragraphs in WordPress, but the field has
+ * carried stray HTML in the past. Reduce it to text and drop anything empty.
+ */
+function verdictText(raw: unknown): string {
+  if (typeof raw !== 'string') return '';
+  return raw
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>\s*<p>/gi, '\n\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/[ \t]+/g, ' ')
     .trim();
 }
 
@@ -65,7 +88,7 @@ function idFrom(acf: Record<string, unknown> | undefined, direct?: unknown): str
  * that fails to render, so any failure degrades to "no block shown".
  */
 export async function getRelatedToVideo(youtubeId: string): Promise<RelatedToVideo> {
-  const empty: RelatedToVideo = { property: null, blog: null };
+  const empty: RelatedToVideo = { property: null, blog: null, verdict: null };
   if (!youtubeId) return empty;
 
   const [properties, posts] = await Promise.all([
@@ -95,5 +118,6 @@ export async function getRelatedToVideo(youtubeId: string): Promise<RelatedToVid
           blurb: 'The written analysis behind this video',
         }
       : null,
+    verdict: verdictText(property?.acf?.video_review_text) || null,
   };
 }

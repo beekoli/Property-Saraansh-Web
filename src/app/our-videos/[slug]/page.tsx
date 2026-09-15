@@ -7,8 +7,8 @@ import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, vid
 import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
 import { getManagedVideo, preferWP } from '@/lib/managedContent';
 import { getRelatedToVideo } from '@/lib/relatedToVideo';
-import { getChannelStats, parseIsoDuration } from '@/lib/youtube';
-import { parseChapters, toClips, FALLBACK_CHAPTERS } from '@/lib/videoChapters';
+import { getChannelStats } from '@/lib/youtube';
+import { parseChapters, toClips, extractChapterLines, durationToSeconds, FALLBACK_CHAPTERS } from '@/lib/videoChapters';
 import VideoPlayer from '@/components/VideoPlayer';
 import VideoChapters from './VideoChapters';
 import WatchSidebarForm from './WatchSidebarForm';
@@ -204,12 +204,17 @@ export default async function VideoWatchPage({ params }: PageProps) {
   const isNoidaSlowdown = video.slug === 'noida-market-slowdown-2026';
   const keywords = VIDEO_KEYWORDS[video.slug];
 
-  // Key moments. WordPress (ps_video.chapters) is the source of truth; the
-  // fallback map only covers videos whose chapters were hardcoded here before
-  // the field existed. endOffset for the final chapter needs the runtime.
-  const durationSeconds = video.duration ? parseIsoDuration(video.duration).seconds : undefined;
+  // Key moments, in order of precedence:
+  //   1. WordPress (ps_video.chapters) — an editor overriding the wording
+  //   2. the video's own YouTube description, where the timestamps already are
+  //   3. the fallback map, for the two videos hardcoded before either existed
+  // Reading YouTube by default is what makes this self-maintaining: a new
+  // upload gets Key Moments without anyone touching WordPress.
+  const durationSeconds = durationToSeconds(video.duration);
   const chapters = parseChapters(
-    managed?.chapters || FALLBACK_CHAPTERS[video.slug],
+    managed?.chapters ||
+      extractChapterLines(video.youtubeDescription) ||
+      FALLBACK_CHAPTERS[video.slug],
     durationSeconds
   );
   const clips = toClips(chapters, `${FRONTEND_URL}/our-videos/${video.slug}`);
@@ -391,6 +396,38 @@ export default async function VideoWatchPage({ params }: PageProps) {
                   </span>
                 </div>
               </div>
+              {/* Saraansh Verdict — the opinion this video gives on the
+                  project. It lives here rather than on the property page so
+                  the judgement sits with the review that produced it. */}
+              {related.verdict && (
+                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
+                  <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
+                    Saraansh Verdict
+                  </h2>
+                  <blockquote className="rounded-r-xl border-l-4 border-[#c9a24b] bg-[#fff7e0] p-5 text-[14.5px] italic text-[#4a3a12]">
+                    {related.verdict
+                      .split(/\n\s*\n/)
+                      .map((para) => para.trim())
+                      .filter(Boolean)
+                      .map((para, i) => (
+                        <p key={i} className={`hyphens-auto text-justify ${i > 0 ? 'mt-3' : ''}`}>
+                          {para}
+                        </p>
+                      ))}
+                    {related.property && (
+                      <p className="mt-4 not-italic text-[13px]">
+                        <Link
+                          href={related.property.href}
+                          className="font-semibold text-brand-primary hover:underline"
+                        >
+                          See {related.property.title} — price, floor plans and RERA details →
+                        </Link>
+                      </p>
+                    )}
+                  </blockquote>
+                </div>
+              )}
+
               {/* Key Moments — mirrors the Clip markup above */}
               <VideoChapters chapters={chapters} slug={video.slug} />
 

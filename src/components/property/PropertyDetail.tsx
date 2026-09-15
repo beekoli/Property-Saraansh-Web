@@ -29,7 +29,7 @@ const FACT_ICONS: Record<string, string> = {
 };
 
 const SECTIONS = [
-  ["overview", "Overview"], ["video", "Video Review"], ["highlights", "Highlights"],
+  ["overview", "Overview"], ["highlights", "Highlights"],
   ["layout", "Layout"], ["floor-plans", "Floor Plans"], ["amenities", "Amenities"],
   ["price", "Price"], ["payment", "Payment Plan"], ["location", "Location"],
   ["gallery", "Gallery"], ["status", "Possession & Construction"], ["builder", "Builder"],
@@ -60,11 +60,9 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
   const [lightbox, setLightbox] = useState<string | null>(null);
   const [galleryCount, setGalleryCount] = useState(6);
 
-  // When Property Saraansh has not made its own video, the embed is the
-  // developer's walkthrough. The verdict is the signal: no verdict means it is
-  // not our review, so it must never be labelled one.
-  const isWalkthrough = !p.verdict;
-  const videoLabel = isWalkthrough ? "Walkthrough" : "Video Review";
+  // The video and the Saraansh Verdict now live on the watch page at
+  // /our-videos/<slug>, so a project's review is not split across two indexed
+  // URLs. p.youtubeId is still read elsewhere to pair the two pages up.
 
   // The jump nav must only advertise sections that actually render. Every
   // section below is conditional on its data, but SECTIONS was a fixed list of
@@ -73,7 +71,6 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
   const sections = useMemo(() => {
     const shown: Record<string, boolean> = {
       overview: true,
-      video: Boolean(p.youtubeId),
       highlights: p.highlights.length > 0,
       layout: Boolean(p.masterPlan || p.sitePlan),
       "floor-plans": p.floorPlans.length > 0,
@@ -168,7 +165,7 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
                   tabIndex={isDup ? -1 : undefined}
                   className={`whitespace-nowrap text-[13.5px] font-semibold tracking-wide text-white/85 transition hover:text-[#f0d894]${isDup ? " hidden lg:block" : ""}`}
                 >
-                  {id === "video" ? videoLabel : label}
+                  {label}
                 </a>
               );
             })}
@@ -221,44 +218,6 @@ export default function PropertyDetail({ p, builder }: { p: Property; builder?: 
             )}
           </div>
         </section>
-
-        {/* ================= VIDEO REVIEW ================= */}
-        {p.youtubeId && (
-          <section id="video" className="scroll-mt-24 pt-9">
-            <SectionHead
-              eyebrow={isWalkthrough ? "Project Walkthrough" : "Watch Before You Buy"}
-              title={isWalkthrough ? `${p.title} — Walkthrough` : `${p.title} — Property Saraansh Review`}
-            />
-            <div className="overflow-hidden rounded-xl bg-[#0d1b2a]">
-              <div className="relative aspect-video">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${p.youtubeId}?rel=0`}
-                  title={isWalkthrough ? `${p.title} project walkthrough` : `${p.title} video review by Property Saraansh`}
-                  className="absolute inset-0 h-full w-full"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-            {p.verdict ? (
-              <blockquote className="mt-4 rounded-r-xl border-l-4 border-[#c9a24b] bg-[#fff7e0] p-4 text-[14.5px] italic text-[#4a3a12]">
-                {p.verdict
-                  .split(/\n\s*\n/)
-                  .map((para) => para.trim())
-                  .filter(Boolean)
-                  .map((para, i) => (
-                    <p key={i} className={`hyphens-auto text-justify ${i > 0 ? "mt-3" : ""}`}>
-                      {i === 0 && <b className="not-italic text-[#8a6a1e]">Saraansh Verdict: </b>}
-                      {para}
-                    </p>
-                  ))}
-              </blockquote>
-            ) : (
-              <p className="mt-3 text-xs text-[#66788c]">Walkthrough provided by the developer.</p>
-            )}
-          </section>
-        )}
 
         {/* ================= HIGHLIGHTS ================= */}
         {p.highlights.length > 0 && (

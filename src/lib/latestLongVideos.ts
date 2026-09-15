@@ -2,12 +2,17 @@ import type { Video } from './videos';
 import { getVideoSlug, parseIsoDuration, formatViewCount } from './youtube';
 
 /**
- * Live "newest uploads" helpers for /our-videos.
+ * Live "newest uploads" helpers for /our-videos and /our-shorts.
  *
  * src/lib/videos.ts is a hand-curated list, so a freshly published video never
  * appeared on the site until someone edited that file. These helpers pull the
  * channel's newest uploads straight from the YouTube Data API so they show up
- * automatically, and — critically — they only ever return LONG-FORM videos.
+ * automatically.
+ *
+ * The two exported functions are opposite halves of the SAME classification:
+ * getLatestLongVideos keeps everything that is not a Short, getLatestShorts
+ * keeps everything that is. Sharing one test is the point — a video can never
+ * land on both pages, or on neither.
  *
  * Shorts are excluded with three independent checks, because any single one of
  * them can be wrong:
@@ -100,12 +105,19 @@ async function fetchDetails(ids: string[]): Promise<Record<string, VideoDetails>
   return map;
 }
 
+interface Candidate {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  publishedAt: string;
+}
+
 /**
- * The channel's newest LONG-FORM uploads, shaped exactly like a curated Video
- * so /our-videos and /our-videos/[slug] can render them with no special cases.
- * Returns [] when the API key is missing or the API call fails.
+ * The channel's newest uploads, unclassified. Shared by both exported helpers
+ * so the long-video page and the Shorts page always see the same list.
  */
-export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
+async function fetchRecentUploads(limit: number): Promise<Candidate[]> {
   if (!YOUTUBE_API_KEY) return [];
 
   const uploadsPlaylistId = YOUTUBE_CHANNEL_ID.startsWith('UC')
@@ -123,7 +135,7 @@ export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
     const data = await res.json();
     if (!data.items || data.items.length === 0) return [];
 
-    const candidates = data.items
+    return data.items
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((item: any) => ({
         id: item.snippet?.resourceId?.videoId || '',
@@ -139,39 +151,95 @@ export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
       .filter(
         (v: { id: string; title: string }) =>
           v.id && v.title && v.title !== 'Private video' && v.title !== 'Deleted video'
-      )
-      // Check 2: an explicit Shorts hashtag anywhere in the title or description.
-      .filter((v: { title: string; description: string }) => !hasShortsTag(`${v.title} ${v.description}`));
-
-    const details = await fetchDetails(candidates.map((v: { id: string }) => v.id));
-
-    // Check 1: a REAL duration over 60s. No details means no card — we never
-    // fall back to a guessed duration on this page.
-    const longEnough = candidates.filter(
-      (v: { id: string }) => details[v.id] && details[v.id].seconds > SHORTS_MAX_SECONDS
-    );
-
-    // Check 3: YouTube's own verdict, for Shorts that run longer than 60s.
-    const shortsFlags = await Promise.all(longEnough.map((v: { id: string }) => isShortsUrl(v.id)));
-
-    return longEnough
-      .filter((_: unknown, i: number) => !shortsFlags[i])
-      .map((v: { id: string; title: string; description: string; thumbnail: string; publishedAt: string }) => ({
-        slug: getVideoSlug({ id: v.id, title: v.title }),
-        title: v.title,
-        description: v.description.split('\n')[0] || v.title,
-        youtubeId: v.id,
-        thumbnail: v.thumbnail,
-        publishedAt: toDateOnly(v.publishedAt),
-        duration: details[v.id].durationIso,
-        focusKeyword: v.title,
-        category: 'Real Estate',
-        views: details[v.id].views,
-      }));
+      );
   } catch (err) {
-    console.error('Failed to fetch latest long videos from YouTube', err);
+    console.error('Failed to fetch recent uploads from YouTube', err);
     return [];
   }
+}
+
+/** A candidate paired with the verdict on whether it is a Short. */
+interface Classified {
+  video: Candidate;
+  details: VideoDetails;
+  isShort: boolean;
+}
+
+/**
+ * Decide, for each recent upload, whether it is a Short.
+ *
+ * Three independent checks, because any one of them can be wrong:
+ *   1. a #short / #shorts tag in the title or description
+ *   2. a REAL duration of 60s or less, straight from the API
+ *   3. youtube.com/shorts/<id> serving without a redirect — YouTube's own
+ *      answer, and the only one that catches a Short running over 60 seconds
+ *
+ * Check 3 costs a request each, so it only runs for uploads the first two
+ * checks did not already settle.
+ *
+ * Anything with no API details is dropped entirely. Both pages show a duration,
+ * and a guessed duration is worse than an absent card.
+ */
+async function classifyUploads(candidates: Candidate[]): Promise<Classified[]> {
+  const details = await fetchDetails(candidates.map((v) => v.id));
+  const withDetails = candidates.filter((v) => details[v.id]);
+
+  const settled = withDetails.map((video) => {
+    const tagged = hasShortsTag(`${video.title} ${video.description}`);
+    const brief = details[video.id].seconds <= SHORTS_MAX_SECONDS;
+    return { video, details: details[video.id], known: tagged || brief };
+  });
+
+  const undecided = settled.filter((s) => !s.known);
+  const probes = await Promise.all(undecided.map((s) => isShortsUrl(s.video.id)));
+  const probedShort = new Set(
+    undecided.filter((_, i) => probes[i]).map((s) => s.video.id)
+  );
+
+  return settled.map((s) => ({
+    video: s.video,
+    details: s.details,
+    isShort: s.known || probedShort.has(s.video.id),
+  }));
+}
+
+/** Shape a classified upload like a curated Video so pages need no special cases. */
+function toVideo(c: Classified): Video {
+  return {
+    slug: getVideoSlug({ id: c.video.id, title: c.video.title }),
+    title: c.video.title,
+    description: c.video.description.split('\n')[0] || c.video.title,
+    youtubeId: c.video.id,
+    thumbnail: c.video.thumbnail,
+    publishedAt: toDateOnly(c.video.publishedAt),
+    duration: c.details.durationIso,
+    focusKeyword: c.video.title,
+    category: c.isShort ? 'Shorts' : 'Real Estate',
+    views: c.details.views,
+  };
+}
+
+/**
+ * The channel's newest LONG-FORM uploads, shaped exactly like a curated Video
+ * so /our-videos and /our-videos/[slug] can render them with no special cases.
+ * Returns [] when the API key is missing or the API call fails.
+ */
+export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
+  const classified = await classifyUploads(await fetchRecentUploads(limit));
+  return classified.filter((c) => !c.isShort).map(toVideo);
+}
+
+/**
+ * The channel's newest SHORTS, shaped the same way — the mirror of the helper
+ * above, and the reason /our-shorts no longer needs a hand-written entry for
+ * every upload. Six Shorts had piled up unpublished before this existed.
+ *
+ * The default limit is higher than the long-video one because Shorts are posted
+ * more often, so they fall out of a 15-upload window faster.
+ */
+export async function getLatestShorts(limit = 30): Promise<Video[]> {
+  const classified = await classifyUploads(await fetchRecentUploads(limit));
+  return classified.filter((c) => c.isShort).map(toVideo);
 }
 
 /**
@@ -224,6 +292,8 @@ export async function getLiveVideoById(id: string): Promise<Video | null> {
       focusKeyword: title,
       category: isShort ? 'Shorts' : 'Real Estate',
       views: formatViewCount(item.statistics?.viewCount || ''),
+      // Chapters are read out of this on the watch page.
+      youtubeDescription: description || undefined,
     };
   } catch (err) {
     console.error('Failed to fetch live video by id', err);

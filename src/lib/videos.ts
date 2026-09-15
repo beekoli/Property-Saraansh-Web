@@ -21,6 +21,12 @@ export interface Video {
    * than reverse-engineered.
    */
   viewCount?: number;
+  /**
+   * The video's YouTube description, kept only so the watch page can read the
+   * chapter timestamps out of it. Never rendered — the on-page copy comes from
+   * WordPress and from `content` below.
+   */
+  youtubeDescription?: string;
 }
 
 export const videos: Video[] = [
@@ -1230,7 +1236,8 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
           views: formatViewCount(viewsStr),
           viewCount: rawViewCount(viewsStr),
           publishedAt: publishedDate(item.snippet?.publishedAt) ?? staticVideo.publishedAt,
-          duration: formatted || staticVideo.duration
+          duration: formatted || staticVideo.duration,
+          youtubeDescription: item.snippet?.description || undefined
         };
       }
     }

@@ -135,6 +135,53 @@ export function parseChapters(
   });
 }
 
+/**
+ * Pull the chapter list out of a free-form YouTube description.
+ *
+ * This is what makes the feature self-maintaining: the timestamps are already
+ * written in every description, so a video gets Key Moments the moment it is
+ * published, with no data entry. A `chapters` value in WordPress still wins,
+ * for the cases where the SERP wording should differ from YouTube's.
+ *
+ * Only lines that START with a timestamp are kept, so prose that happens to
+ * mention a time is ignored. Emoji are stripped — they read as noise in a
+ * search result — as are the "-", "–" and ":" separators editors put between
+ * the timestamp and the title.
+ */
+export function extractChapterLines(description: string | undefined | null): string {
+  if (!description) return '';
+  const lines: string[] = [];
+  for (const raw of description.split(/\r?\n/)) {
+    // Emoji, variation selectors and ZWJ: decoration, not chapter titles.
+    const line = raw.replace(/\p{Extended_Pictographic}|\uFE0F|\u200D/gu, '').replace(/\s+/g, ' ').trim();
+    const m = line.match(LINE_RE);
+    if (!m) continue;
+    const name = m[2].trim();
+    // Rebuild through the same shape parseChapters reads, so the separator an
+    // editor typed ("0:00 - Title") never survives into the chapter name.
+    if (name) lines.push(`${m[1]} ${name}`);
+  }
+  return lines.join('\n');
+}
+
+/**
+ * Runtime in seconds from either shape the video registry stores.
+ *
+ * `videos.ts` holds ISO 8601 ("PT11M47S"); the YouTube hydration overwrites it
+ * with a display string ("11:47"). Both reach this module, and reading only
+ * one of them silently disabled the "chapter starts after the video ends"
+ * guard and made every final chapter a flat 60 seconds long.
+ */
+export function durationToSeconds(value: string | undefined | null): number | undefined {
+  if (!value) return undefined;
+  const iso = value.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/i);
+  if (iso && (iso[1] || iso[2] || iso[3])) {
+    return Number(iso[1] || 0) * 3600 + Number(iso[2] || 0) * 60 + Number(iso[3] || 0);
+  }
+  if (value.includes(':')) return timestampToSeconds(value.trim());
+  return undefined;
+}
+
 export interface ClipJsonLd {
   '@type': 'Clip';
   name: string;

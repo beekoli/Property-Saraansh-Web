@@ -12,6 +12,8 @@ import {
   parseTimeParam,
   timestampToSeconds,
   secondsToTimestamp,
+  extractChapterLines,
+  durationToSeconds,
   toClips,
   FALLBACK_CHAPTERS,
 } from '../src/lib/videoChapters';
@@ -70,6 +72,37 @@ check(
   parseChapters('0:30 A\n1:00 B\n20:00 Stale', 600).map((c) => c.startOffset),
   [30, 60]
 );
+
+// --- reading chapters straight out of a YouTube description ---
+const DESCRIPTION = [
+  'Godrej Arden review by Property Saraansh. Prices as of 2026.',
+  '',
+  'Chapters:',
+  '00:00 \u{1F3E0} Introduction & Reality Check',
+  '02:19 - Location Analysis \u2014 Sigma 3',
+  '10:47 Should You Buy? \u2014 Verdict',
+  '',
+  'Call us at 8076178189 between 10:00 and 19:00.',
+].join('\n');
+
+check(
+  'timestamped lines only, emoji stripped',
+  extractChapterLines(DESCRIPTION),
+  '00:00 Introduction & Reality Check\n02:19 Location Analysis \u2014 Sigma 3\n10:47 Should You Buy? \u2014 Verdict'
+);
+check('empty description', extractChapterLines(undefined), '');
+check(
+  'a description with no chapters yields nothing',
+  parseChapters(extractChapterLines('Just prose, no timestamps at all.'), 600),
+  []
+);
+
+// --- runtime, in both shapes the registry stores ---
+check('ISO duration', durationToSeconds('PT11M47S'), 707);
+check('ISO with hours', durationToSeconds('PT1H2M30S'), 3750);
+check('display duration', durationToSeconds('11:47'), 707);
+check('missing duration', durationToSeconds(undefined), undefined);
+check('junk duration', durationToSeconds('unknown'), undefined);
 
 // --- clip URLs must point at our own watch page and carry ?t= ---
 const clips = toClips(noida, 'https://www.propertysaraansh.com/our-videos/noida-market-slowdown-2026');
