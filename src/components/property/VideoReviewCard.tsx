@@ -27,11 +27,14 @@ export default function VideoReviewCard({ cta }: { cta: PropertyVideoCta | null 
       <Link
         href={cta.href}
         aria-label={`Watch our review: ${cta.title}`}
-        className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:shadow-lg sm:flex-row"
+        className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:shadow-lg sm:flex-row sm:items-center"
         style={{ background: BRAND_GREEN }}
       >
         <div className="relative w-full shrink-0 overflow-hidden sm:w-[42%]">
-          <div className="relative aspect-video w-full sm:h-full">
+          {/* Always 16:9. Stretching this to the card's height cropped the
+              sides, and a YouTube thumbnail carries its title text there — so
+              the crop ate the words the thumbnail was designed around. */}
+          <div className="relative aspect-video w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={cta.thumbnail}
