@@ -60,7 +60,7 @@ export default async function NewLaunchesPage() {
       : null;
 
   return (
-    <main className="min-h-screen bg-[#f6f3ee] px-4 pb-16 pt-10 sm:pt-14">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -72,24 +72,32 @@ export default async function NewLaunchesPage() {
         />
       )}
 
-      <div className="mx-auto w-full max-w-[680px]">
-        <p className="heading-playfair text-[15px] font-semibold text-brand-accent">
-          Property Saraansh
-        </p>
-        <h1 className="heading-playfair mt-2.5 text-[34px] font-semibold leading-[1.1] tracking-[-0.01em] text-brand-dark">
-          {heading}
-        </h1>
-        <p className="mt-2 max-w-[52ch] text-[15px] text-[#66788c]">{intro}</p>
-
-        <div className="mt-7">
-          <NewLaunchesClient alerts={alerts} />
+      {/* Dark header band. The site nav is position:fixed and transparent over
+          the top of the page, so a light page leaves its white links invisible
+          and the first 88px of content underneath it. Every other route solves
+          this the same way — see /builders, /careers, /privacy-policy. */}
+      <section className="bg-brand-dark px-4 pb-12 pt-32 sm:px-6">
+        <div className="mx-auto w-full max-w-[680px]">
+          <p className="heading-playfair text-[15px] font-semibold text-brand-accent">
+            Property Saraansh
+          </p>
+          <h1 className="heading-playfair mt-2.5 text-[32px] font-semibold leading-[1.1] tracking-[-0.01em] text-white sm:text-[38px]">
+            {heading}
+          </h1>
+          <p className="mt-3 max-w-[52ch] text-[15px] leading-relaxed text-white/70">{intro}</p>
         </div>
+      </section>
 
-        <p className="mt-6 text-center text-[12px] italic text-[#9aa4b0]">
-          Prices and dates are as filed or as advertised on the date shown. Always verify against the
-          RERA filing before booking.
-        </p>
+      <div className="min-h-[40vh] bg-[#f6f3ee] px-4 pb-16 pt-9 sm:px-6">
+        <div className="mx-auto w-full max-w-[680px]">
+          <NewLaunchesClient alerts={alerts} />
+
+          <p className="mt-6 text-center text-[12px] italic text-[#9aa4b0]">
+            Prices and dates are as filed or as advertised on the date shown. Always verify against
+            the RERA filing before booking.
+          </p>
+        </div>
       </div>
-    </main>
+    </>
   );
 }
