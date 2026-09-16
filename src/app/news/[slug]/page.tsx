@@ -48,8 +48,6 @@ function getCity(post: { _embedded?: { 'wp:term'?: Array<Array<{ slug?: string; 
   const terms = post._embedded?.['wp:term']?.[0] || [];
   const has = (slug: string, name: string) =>
     terms.some((t) => t.slug === slug || (t.name || '').toLowerCase() === name);
-  if (has('abu-dhabi-news', 'abu dhabi news')) return { label: 'Abu Dhabi', path: '/abu-dhabi-news' };
-  if (has('dubai-news', 'dubai news')) return { label: 'Dubai', path: '/dubai-news' };
   if (has('pune-news', 'pune news')) return { label: 'Pune', path: '/pune-news' };
   return { label: 'Noida', path: '/noida-news' };
 }
