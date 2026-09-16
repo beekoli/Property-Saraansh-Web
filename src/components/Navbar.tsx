@@ -111,6 +111,7 @@ export default function Navbar() {
                   isDropdownOpen ? 'opacity-100 scale-100 visible' : 'opacity-0 scale-95 invisible'
                 }`}
               >
+                <Link href="/new-launches" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">New Launches</Link>
                 <Link href="/properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">All Projects</Link>
                 <Link href="/commercial-properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Commercial</Link>
                 <Link href="/residential-properties" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Residential</Link>
@@ -184,6 +185,7 @@ export default function Navbar() {
             <Link href="/our-shorts" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Shorts</Link>
 
             <div className="pl-2 border-l border-brand-light/30 space-y-1">
+              <Link href="/new-launches" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">New Launches</Link>
               <Link href="/properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">All Projects</Link>
               <Link href="/commercial-properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Commercial Projects</Link>
               <Link href="/residential-properties" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Residential Projects</Link>

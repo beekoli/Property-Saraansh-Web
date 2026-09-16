@@ -82,6 +82,7 @@ export default async function Footer() {
                 <li><Link href="/blog" className="hover:text-brand-accent transition-colors">Blogs</Link></li>
               </ul>
               <ul className="space-y-3 text-sm font-light">
+                <li><Link href="/new-launches" className="hover:text-brand-accent transition-colors">New Launches</Link></li>
                 <li><Link href="/properties" className="hover:text-brand-accent transition-colors">All Projects</Link></li>
                 <li><Link href="/commercial-properties" className="hover:text-brand-accent transition-colors">Commercial</Link></li>
                 <li><Link href="/residential-properties" className="hover:text-brand-accent transition-colors">Residential</Link></li>

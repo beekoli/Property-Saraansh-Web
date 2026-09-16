@@ -35,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/properties',
     '/commercial-properties',
     '/residential-properties',
+    '/new-launches',
     '/our-videos',
     '/our-shorts',
     '/blog',
