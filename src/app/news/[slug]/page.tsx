@@ -46,12 +46,12 @@ function getCity(post: { _embedded?: { 'wp:term'?: Array<Array<{ slug?: string; 
   path: string;
 } {
   const terms = post._embedded?.['wp:term']?.[0] || [];
-  const isPune = terms.some(
-    (t) => t.slug === 'pune-news' || (t.name || '').toLowerCase() === 'pune news'
-  );
-  return isPune
-    ? { label: 'Pune', path: '/pune-news' }
-    : { label: 'Noida', path: '/noida-news' };
+  const has = (slug: string, name: string) =>
+    terms.some((t) => t.slug === slug || (t.name || '').toLowerCase() === name);
+  if (has('abu-dhabi-news', 'abu dhabi news')) return { label: 'Abu Dhabi', path: '/abu-dhabi-news' };
+  if (has('dubai-news', 'dubai news')) return { label: 'Dubai', path: '/dubai-news' };
+  if (has('pune-news', 'pune news')) return { label: 'Pune', path: '/pune-news' };
+  return { label: 'Noida', path: '/noida-news' };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -103,7 +103,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
 
   // Related news — prefer the same city, fall back to the all-news feed so the
   // rail is never empty (exclude the current article).
-  const citySlug = city.path === '/pune-news' ? 'pune-news' : 'noida-news';
+  const citySlug = city.path.replace(/^\//, '');
   const cityNews = await getLatestNewsByCity(citySlug, 4);
   const relatedPool = cityNews.length > 1 ? cityNews : await getLatestNews(4);
   const relatedNews = relatedPool.filter((n) => n.slug !== slug).slice(0, 3);
