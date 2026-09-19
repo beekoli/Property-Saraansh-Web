@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
 import Pagination from '@/components/Pagination';
-import { WPPost, getFeaturedImage } from '@/lib/wordpress';
+import { WPPost, getFeaturedImage } from '@/lhib/wordpress';
 
 interface Props {
   initialBlogs: WPPost[];
@@ -117,7 +117,7 @@ export default function BlogClient({
                     </h3>
                   </Link>
                   <p className="text-brand-dark/70 text-sm md:text-base mb-8 leading-relaxed font-light">
-                    {featuredPost.excerpt.rendered.replace(/<[^>]*>?/gm, '').slice(0, 250)}...
+                    {decodeHtml(featuredPost.excerpt.rendered.replace(/<[^>]*>?/gm, '')).slice(0, 250)}...
                   </p>
                 </div>
 
