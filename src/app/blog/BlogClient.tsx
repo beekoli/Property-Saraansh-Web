@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
 import Pagination from '@/components/Pagination';
-import { WPPost, getFeaturedImage } from '@/lhib/wordpress';
+import { WPPost, getFeaturedImage } from '@/lib/wordpress';
 
 interface Props {
   initialBlogs: WPPost[];

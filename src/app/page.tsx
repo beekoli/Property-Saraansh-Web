@@ -11,6 +11,7 @@ import type { WPPost } from '@/lib/wordpress';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
 import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
+import { getLatestLongVideos } from '@/lib/latestLongVideos';
 import SlideUp from '@/components/animations/SlideUp';
 import FadeIn from '@/components/animations/FadeIn';
 import StaggerContainer from '@/components/animations/StaggerContainer';
@@ -43,7 +44,7 @@ const newsItemCategory = (post: WPPost): string => {
 
 export default async function Home() {
   // Concurrent fetching of server-side data
-  const [properties, latestBlogs, noidaNews, puneNews, channelStats, videos] = await Promise.all([
+  const [properties, latestBlogs, noidaNews, puneNews, channelStats, videos, latestUploads] = await Promise.all([
     // Fetch the whole catalogue, not the first three. WordPress returns them in
     // its own order, so asking for 3 gave whichever three happened to be first
     // — which is why the homepage led with ACE Divino, delivered in 2022.
@@ -53,7 +54,11 @@ export default async function Home() {
     getLatestNewsByCity('noida-news', 3),
     getLatestNewsByCity('pune-news', 3),
     getChannelStats(),
-    getVideosWithRealtimeStats()
+    getVideosWithRealtimeStats(),
+    // The newest long-form upload, straight from the channel. Without this the
+    // homepage headlines whatever sits first in videos.ts, which only moves
+    // when someone edits that file by hand.
+    getLatestLongVideos(5)
   ]);
 
   // The three most recently launched projects, matching the order on
@@ -76,7 +81,16 @@ export default async function Home() {
   });
 
   const longVideos = videos.filter((v) => v.category !== 'Shorts');
-  const featuredVideo = longVideos[0] || {
+
+  // Feature the channel's newest long-form upload. Where that video is already
+  // written up in videos.ts we show the curated version, because its title and
+  // description are written for this page rather than for YouTube search; a
+  // brand-new upload uses YouTube's own copy until someone writes it up.
+  // Falls back to the curated list if the YouTube call is unavailable.
+  const curatedById = new Map(longVideos.map((v) => [v.youtubeId, v]));
+  const newestUpload = latestUploads[0];
+  const featuredVideo = (newestUpload && (curatedById.get(newestUpload.youtubeId) || newestUpload)) ||
+    longVideos[0] || {
     slug: "yamuna-expressway-investment-2030",
     youtubeId: "qWAgkIW6Mj0",
     title: "Yamuna Expressway Noida Investment 2030: Should You Buy Property Near Jewar Airport?",
