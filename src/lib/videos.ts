@@ -31,6 +31,18 @@ export interface Video {
 
 export const videos: Video[] = [
   {
+    "slug": "rise-and-fall-of-supertech-twin-towers",
+    "title": "Rise and Fall of Supertech: The Twin Tower Story",
+    "description": "The full rise and fall of Supertech - the Noida Twin Tower story, RK Arora, Supernova, NBCC and the 50,000 families still waiting for their homes.",
+    "youtubeId": "zhXSWOzPrAs",
+    "thumbnail": "https://img.youtube.com/vi/zhXSWOzPrAs/maxresdefault.jpg",
+    "publishedAt": "2026-09-23",
+    "duration": "PT19M",
+    "focusKeyword": "rise and fall of supertech",
+    "category": "Real Estate",
+    "views": "1K views"
+  },
+  {
     "slug": "m3m-cullinan-sector-94-luxury-review",
     "title": "M3M The Cullinan Sector 94 \u2014 Is This Noida's Ultimate Luxury Address?",
     "description": "M3M The Cullinan in Sector 94 sits at the gateway of the Noida\u2013Greater Noida Expressway, zero km from the South Delhi border. An honest walkthrough of one of Noida's most talked-about ultra-luxury projects.",
