@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { LeadHoneypot, useLeadGuard } from '@/components/LeadGuard';
 import { useRouter } from 'next/navigation';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 
@@ -14,15 +15,18 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const { guardFields, honeypotRef } = useLeadGuard();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone) return;
 
+    setError('');
     setSubmitted(true);
 
     try {
-      await fetch('/api/leads', {
+      const res = await fetch('/api/leads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,8 +37,16 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           phone,
           message,
           videoTitle,
+          ...guardFields(),
         }),
       });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.error || 'Please check your details and try again.');
+        setSubmitted(false);
+        return;
+      }
     } catch (apiError) {
       console.error('Failed to forward lead to API:', apiError);
     }
@@ -63,7 +75,11 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
           </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 relative">
+          <LeadHoneypot inputRef={honeypotRef} />
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+          )}
           <div>
             <label htmlFor="name" className="block text-[10px] uppercase tracking-wider font-bold text-brand-primary mb-1">
               Your Name *

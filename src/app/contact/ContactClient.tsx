@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { LeadHoneypot, useLeadGuard } from '@/components/LeadGuard';
 import { useRouter } from 'next/navigation';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
@@ -14,6 +15,8 @@ interface Props {
 export default function ContactClient({ address, phone, email }: Props) {
   const router = useRouter();
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
+  const { guardFields, honeypotRef } = useLeadGuard();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -27,10 +30,11 @@ export default function ContactClient({ address, phone, email }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone || !formData.email) return;
+    setFormError('');
     setFormSubmitted(true);
 
     try {
-      await fetch('/api/leads', {
+      const res = await fetch('/api/leads', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,8 +48,16 @@ export default function ContactClient({ address, phone, email }: Props) {
           budget: formData.budget,
           type: formData.propertyType,
           message: formData.message,
+          ...guardFields(),
         }),
       });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setFormError(data?.error || 'Please check your details and try again.');
+        setFormSubmitted(false);
+        return;
+      }
     } catch (apiError) {
       console.error('Failed to forward lead to API:', apiError);
     }
@@ -89,7 +101,13 @@ export default function ContactClient({ address, phone, email }: Props) {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5 relative">
+                <LeadHoneypot inputRef={honeypotRef} />
+                {formError && (
+                  <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {formError}
+                  </p>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-xs font-bold text-brand-primary uppercase tracking-wider mb-2">Full Name</label>

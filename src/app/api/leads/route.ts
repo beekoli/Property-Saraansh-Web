@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { screenLead, isRateLimited, escapeHtml as esc } from '@/lib/leadGuard';
 
 export async function POST(request: Request) {
   try {
@@ -8,6 +9,36 @@ export async function POST(request: Request) {
     
     if (!name || !phone) {
       return NextResponse.json({ success: false, error: 'Name and Phone are required fields.' }, { status: 400 });
+    }
+
+    // Spam screen. Bots get a success-shaped response and nothing is forwarded,
+    // so they see no signal to adapt against; real mistakes get a 400 they can fix.
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      '';
+    const silentOk = NextResponse.json({
+      success: true,
+      loggedToSheet: false,
+      loggedToCRM: false,
+      emailed: false,
+    });
+
+    if (isRateLimited(ip)) {
+      console.warn('Lead dropped: rate limit', { ip, source });
+      return silentOk;
+    }
+
+    const verdict = screenLead(body, request.headers);
+    if (!verdict.ok) {
+      if (verdict.action === 'drop') {
+        console.warn('Lead dropped as spam:', verdict.reason, { ip, source });
+        return silentOk;
+      }
+      return NextResponse.json(
+        { success: false, error: verdict.reason, field: verdict.field },
+        { status: 400 }
+      );
     }
 
     // 1. Forward lead data to the Google Sheets Apps Script
@@ -105,15 +136,15 @@ export async function POST(request: Request) {
               <tbody>
                 <tr>
                   <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; width: 140px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Source</td>
-                  <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${source || 'Website Contact'}</td>
+                  <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${esc(source || 'Website Contact')}</td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Name</td>
-                  <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;"><strong>${name}</strong></td>
+                  <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;"><strong>${esc(name)}</strong></td>
                 </tr>
                 <tr>
                   <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Phone</td>
-                  <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;"><a href="tel:${phone}">${phone}</a></td>
+                  <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;"><a href="tel:${esc(phone)}">${esc(phone)}</a></td>
                 </tr>
         `;
 
@@ -121,7 +152,7 @@ export async function POST(request: Request) {
           htmlContent += `
             <tr>
               <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Email</td>
-              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;"><a href="mailto:${email}">${email}</a></td>
+              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;"><a href="mailto:${esc(email)}">${esc(email)}</a></td>
             </tr>
           `;
         }
@@ -130,14 +161,14 @@ export async function POST(request: Request) {
           htmlContent += `
             <tr>
               <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Project</td>
-              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px; font-weight: bold;">${project}</td>
+              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px; font-weight: bold;">${esc(project)}</td>
             </tr>
           `;
         } else if (videoTitle) {
           htmlContent += `
             <tr>
               <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Video</td>
-              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${videoTitle}</td>
+              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${esc(videoTitle)}</td>
             </tr>
           `;
         }
@@ -146,7 +177,7 @@ export async function POST(request: Request) {
           htmlContent += `
             <tr>
               <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">BHK / Interest</td>
-              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${type}</td>
+              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${esc(type)}</td>
             </tr>
           `;
         }
@@ -155,7 +186,7 @@ export async function POST(request: Request) {
           htmlContent += `
             <tr>
               <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;">Budget</td>
-              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${budget}</td>
+              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px;">${esc(budget)}</td>
             </tr>
           `;
         }
@@ -164,7 +195,7 @@ export async function POST(request: Request) {
           htmlContent += `
             <tr>
               <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-weight: bold; color: #124C57; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; vertical-align: top;">Message</td>
-              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px; white-space: pre-wrap;">${message}</td>
+              <td style="padding: 10px 8px; border-bottom: 1px solid #EAF4F6; font-size: 14px; white-space: pre-wrap;">${esc(message)}</td>
             </tr>
           `;
         }
@@ -181,7 +212,7 @@ export async function POST(request: Request) {
         await transporter.sendMail({
           from: `Property Saraansh Leads <${user}>`,
           to,
-          subject: `New Lead: ${name} (${source || 'Website Contact'})`,
+          subject: `New Lead: ${String(name).replace(/[\r\n]+/g, ' ').slice(0, 80)} (${String(source || 'Website Contact').replace(/[\r\n]+/g, ' ').slice(0, 40)})`,
           html: htmlContent,
         });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from 'react';
+import { LeadHoneypot, useLeadGuard } from '@/components/LeadGuard';
 import Link from 'next/link';
 import { CITIES, type LaunchAlert, type CityKey } from '@/lib/launchAlerts';
 
@@ -67,6 +68,8 @@ export default function NewLaunchesClient({ alerts }: { alerts: LaunchAlert[] })
   const [city, setCity] = useState<CityKey | 'all'>('all');
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+  const { guardFields, honeypotRef } = useLeadGuard();
 
   const shown = city === 'all' ? alerts : alerts.filter((a) => a.city === city);
 
@@ -76,9 +79,10 @@ export default function NewLaunchesClient({ alerts }: { alerts: LaunchAlert[] })
     setSending(true);
     const fd = new FormData(e.currentTarget);
     const wanted = String(fd.get('city') || 'Any city');
+    setError('');
 
     try {
-      await fetch('/api/leads', {
+      const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,8 +92,16 @@ export default function NewLaunchesClient({ alerts }: { alerts: LaunchAlert[] })
           type: fd.get('type') || '',
           budget: fd.get('budget') || '',
           message: `Wants new launch alerts for ${wanted}.`,
+          ...guardFields(),
         }),
       });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setError(data?.error || 'Please check your details and try again.');
+        setSending(false);
+        return;
+      }
     } catch (err) {
       console.error('Failed to submit alert subscription:', err);
     }
@@ -161,7 +173,11 @@ export default function NewLaunchesClient({ alerts }: { alerts: LaunchAlert[] })
             <p className="mb-5 mt-1.5 text-[13.5px] text-[#aebccb]">
               WhatsApp updates &middot; choose your city, budget and property type
             </p>
-            <form onSubmit={subscribe} className="mx-auto grid max-w-md gap-2.5 text-left">
+            <form onSubmit={subscribe} className="relative mx-auto grid max-w-md gap-2.5 text-left">
+            <LeadHoneypot inputRef={honeypotRef} />
+            {error && (
+              <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+            )}
               <input name="name" required placeholder="Your name" className={inputCls} />
               <input
                 name="phone"
