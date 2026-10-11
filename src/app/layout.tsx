@@ -126,9 +126,14 @@ export default function RootLayout({
           }}
         />
         {/* Google Tag Manager */}
+        {/* Deferred to lazyOnload: the container pulls in Taboola and the Meta
+            pixel, which attach delegated click listeners on <body>. On
+            afterInteractive they competed with hydration and blocked the first
+            interaction (~320ms INP). GA4 below stays afterInteractive so
+            pageviews are still recorded for visitors who leave quickly. */}
         <Script
           id="gtm-script"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
