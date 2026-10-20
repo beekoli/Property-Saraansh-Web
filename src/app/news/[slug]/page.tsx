@@ -38,7 +38,7 @@ function getItemCategory(post: { _embedded?: { 'wp:term'?: Array<Array<{ name: s
 
 /**
  * Which city listing owns this article, from its category terms. News posts
- * carry a city category (slug noida-news | pune-news); default to Noida (the
+ * carry a city category (slug noida-news | pune-news | real-estate-news); default to Noida (the
  * primary market) when none is present — e.g. pre-split legacy posts.
  */
 function getCity(post: { _embedded?: { 'wp:term'?: Array<Array<{ slug?: string; name?: string }>> } }): {
@@ -48,6 +48,7 @@ function getCity(post: { _embedded?: { 'wp:term'?: Array<Array<{ slug?: string; 
   const terms = post._embedded?.['wp:term']?.[0] || [];
   const has = (slug: string, name: string) =>
     terms.some((t) => t.slug === slug || (t.name || '').toLowerCase() === name);
+  if (has('real-estate-news', 'real estate news')) return { label: 'Real Estate', path: '/real-estate-news' };
   if (has('pune-news', 'pune news')) return { label: 'Pune', path: '/pune-news' };
   return { label: 'Noida', path: '/noida-news' };
 }

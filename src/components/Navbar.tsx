@@ -142,6 +142,7 @@ export default function Navbar() {
               >
                 <Link href="/noida-news" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Noida News</Link>
                 <Link href="/pune-news" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Pune News</Link>
+                <Link href="/real-estate-news" onClick={closeMobileMenu} className="block px-4 py-2 text-sm text-brand-pale hover:bg-brand-light hover:text-white transition-colors">Real Estate News</Link>
               </div>
             </div>
 
@@ -196,6 +197,7 @@ export default function Navbar() {
             <div className="pl-2 border-l border-brand-light/30 space-y-1">
               <Link href="/noida-news" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Noida News</Link>
               <Link href="/pune-news" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Pune News</Link>
+              <Link href="/real-estate-news" onClick={closeMobileMenu} className="text-brand-pale hover:text-brand-accent block py-1 text-sm">Real Estate News</Link>
             </div>
 
             <Link href="/blog" onClick={closeMobileMenu} className="text-white hover:text-brand-accent block py-2 text-base font-medium">Blog</Link>

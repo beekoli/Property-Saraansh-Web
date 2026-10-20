@@ -39,10 +39,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/our-videos',
     '/our-shorts',
     '/blog',
-    // News is split into two city listings (/news itself 308-redirects to
+    // News is split into city listings (/news itself 308-redirects to
     // /noida-news, so it is intentionally omitted here).
     '/noida-news',
     '/pune-news',
+    '/real-estate-news',
     // Previously absent from the sitemap entirely: /builders is a hub linking
     // 20 developer pages, and these two are legitimate indexable content.
     '/builders',
