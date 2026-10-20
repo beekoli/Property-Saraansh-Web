@@ -5,6 +5,7 @@ import { LeadHoneypot, useLeadGuard } from '@/components/LeadGuard';
 import { useRouter } from 'next/navigation';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
+import { waGeneralLink, waTracking } from '@/lib/whatsapp';
 
 interface Props {
   address: string;
@@ -274,7 +275,8 @@ export default function ContactClient({ address, phone, email }: Props) {
               <div>
                 <h3 className="text-white font-bold text-xs uppercase tracking-widest mb-3">WhatsApp Directly</h3>
                 <a
-                  href="https://wa.me/918076178189?text=Hi%20Saraansh,%20I'm%20looking%20for%20a%20property%20consultation."
+                  href={waGeneralLink()}
+                  {...waTracking("content_cta")}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:!text-white font-bold px-6 py-2.5 rounded-lg text-xs hover:bg-[#1ebd59] transition-all shadow-md"

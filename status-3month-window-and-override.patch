@@ -1,0 +1,508 @@
+From 136b6e8e046c109096c4b4bdfadb324dd6b1995b Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 16 Aug 2026 05:18:16 +0000
+Subject: [PATCH] feat(properties): status from a 3-month window, with a
+ WordPress override
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Replaces the RERA-number rule. A project's flag is now decided in this
+order:
+
+  1. status_override in WordPress — a person beats a formula. Auto falls
+     through. This is the manual control that was asked for.
+  2. Possession says delivered or ready to move -> READY TO MOVE. A
+     statement of fact about a finished building; no date arithmetic
+     should be able to contradict it.
+  3. Within three months of the launch date -> PRE-LAUNCH. The launch
+     date is the UP RERA project registration date, so a freshly
+     registered project reads as pre-launch for its first quarter and
+     moves on by itself, with nothing to remember.
+  4. Otherwise -> UNDER CONSTRUCTION. Projects with no launch date land
+     here deliberately: a missing date is not evidence of a new launch.
+
+The RERA number no longer decides anything. It misfired: a blank number
+can equally mean a project finished years ago and dropped off the
+registered list, which was true of three delivered towers.
+
+Property pages now show all three registration dates from UP RERA —
+Proposed Start, RERA Completion, and the registration date itself as
+Launch — via the new rera_start_date field.
+
+Data written to WordPress alongside this: launch_date and rera_start_date
+for 42 projects, taken from the registered-projects table. ACE Arte is
+registration 2026-07-28, start 2026-08-15, completion 2031-02-15, exactly
+as specified.
+---
+ scripts/verify-prelaunch.ts             |  94 +++++++++--------
+ src/app/page.tsx                        |   4 +-
+ src/app/properties/PropertiesClient.tsx |  10 +-
+ src/components/PropertyCard.tsx         |  24 +++--
+ src/lib/prelaunch.ts                    | 130 +++++++++++++++---------
+ src/lib/property.ts                     |   4 +
+ 6 files changed, 168 insertions(+), 98 deletions(-)
+
+diff --git a/scripts/verify-prelaunch.ts b/scripts/verify-prelaunch.ts
+index acb090c..1c65512 100644
+--- a/scripts/verify-prelaunch.ts
++++ b/scripts/verify-prelaunch.ts
+@@ -1,15 +1,19 @@
+ /**
+- * Verifies the pre-launch rule and the three-flag classification.
++ * Verifies the project-status rules.
+  *
+- * The rule: no RERA number means pre-launch, and so does a launch date still in
+- * the future. The one guard is that a delivered project is never pre-launch,
+- * because a blank RERA field can equally mean "finished years ago and dropped
+- * off the registered list" — which is the case for three real projects today.
++ * Three flags, one per project: PRE-LAUNCH, UNDER CONSTRUCTION, READY TO MOVE.
++ * Priority: the WordPress override, then delivered possession, then the
++ * three-month window from the launch (RERA registration) date, then under
++ * construction.
+  *
+  * Run with:
+  *   npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-prelaunch.ts
+  */
+-import { isPreLaunch, hasReraNumber, looksDelivered, launchesInFuture, expectedLaunchLine, partitionPreLaunch } from '../src/lib/prelaunch';
++import {
++  projectStatus, isPreLaunch, statusOverride, looksDelivered,
++  withinPreLaunchWindow, expectedLaunchLine, partitionPreLaunch,
++  STATUS_LABELS, PRE_LAUNCH_WINDOW_MONTHS,
++} from '../src/lib/prelaunch';
+ 
+ const NOW = Date.UTC(2026, 7, 16); // 16 Aug 2026
+ const p = (acf: Record<string, unknown>) => ({ acf });
+@@ -21,53 +25,61 @@ function check(name: string, actual: unknown, expected: unknown) {
+   else console.log(`  ok   ${name}`);
+ }
+ 
+-console.log('1. The rule — no RERA number means pre-launch');
+-check('no rera', isPreLaunch(p({ rera_number: '' }), NOW), true);
+-check('rera absent entirely', isPreLaunch(p({}), NOW), true);
+-check('whitespace-only rera', isPreLaunch(p({ rera_number: '   ' }), NOW), true);
+-check('has rera', isPreLaunch(p({ rera_number: 'UPRERAPRJ683816' }), NOW), false);
++console.log(`1. The ${PRE_LAUNCH_WINDOW_MONTHS}-month window from the launch date`);
++// ACE Arte registered 28 Jul 2026 — pre-launch until 28 Oct 2026.
++check('registered 19 days ago', projectStatus(p({ launch_date: '28 July 2026' }), NOW), 'pre-launch');
++check('registered 2 months ago', projectStatus(p({ launch_date: '20 June 2026' }), NOW), 'pre-launch');
++check('registered 4 months ago', projectStatus(p({ launch_date: '10 April 2026' }), NOW), 'under-construction');
++check('registered years ago', projectStatus(p({ launch_date: 'August 2017' }), NOW), 'under-construction');
++check('launch still in the future', projectStatus(p({ launch_date: 'March 2027' }), NOW), 'pre-launch');
+ 
+-console.log('\n2. A future launch date also means pre-launch');
+-check('launches 2027', isPreLaunch(p({ rera_number: 'X1', launch_date: 'March 2027' }), NOW), true);
+-check('launched 2025', isPreLaunch(p({ rera_number: 'X1', launch_date: 'March 2025' }), NOW), false);
+-check('launched last month', isPreLaunch(p({ rera_number: 'X1', launch_date: '28 July 2026' }), NOW), false);
+-check('launchesInFuture direct', launchesInFuture(p({ launch_date: 'January 2028' }), NOW), true);
++console.log('\n2. The window boundary is exact');
++check('one day before the window closes', withinPreLaunchWindow(p({ launch_date: '2026-05-17' }), NOW), true);
++check('the day the window closes', withinPreLaunchWindow(p({ launch_date: '2026-05-16' }), NOW), false);
++check('a 31st rolls safely into a shorter month', withinPreLaunchWindow(p({ launch_date: '2026-05-31' }), NOW), true);
+ 
+-console.log('\n3. The guard — delivered projects are never pre-launch');
+-// ACE Golfshire, ACE Platinum, ACE Aspire: no RERA number in WordPress, absent
+-// from the registered list because they completed, all Delivered/Ready to Move.
+-check('ace-golfshire', isPreLaunch(p({ rera_number: '', possession_date: 'Delivered. Ready to move' }), NOW), false);
+-check('ace-platinum', isPreLaunch(p({ rera_number: '', possession_date: 'Delivered. Ready to move' }), NOW), false);
+-check('ace-aspire', isPreLaunch(p({ rera_number: '', possession_date: 'Delivered' }), NOW), false);
+-check('looksDelivered', looksDelivered(p({ possession_date: 'Delivered. Possession from December 2022' })), true);
+-check('not delivered', looksDelivered(p({ possession_date: 'December 2028 (Expected)' })), false);
++console.log('\n3. Delivered beats the date maths');
++check('delivered with a recent launch date', projectStatus(p({ launch_date: '28 July 2026', possession_date: 'Delivered. Ready to move' }), NOW), 'ready-to-move');
++check('ready to move', projectStatus(p({ possession_date: 'Delivered. Possession from December 2022' }), NOW), 'ready-to-move');
++check('looksDelivered false on an expected date', looksDelivered(p({ possession_date: 'December 2028 (Expected)' })), false);
+ 
+-console.log('\n4. The checkbox can still force the label on');
+-check('ticked overrides everything', isPreLaunch(p({ is_prelaunch: true, rera_number: 'X1', possession_date: 'Delivered' }), NOW), true);
+-for (const v of [false, 0, '0', '', null, undefined]) {
+-  check(`unticked as ${JSON.stringify(v)} falls through to the rule`, isPreLaunch(p({ is_prelaunch: v, rera_number: 'X1' }), NOW), false);
+-}
++console.log('\n4. No launch date falls to under construction, never pre-launch');
++check('blank launch date', projectStatus(p({ rera_number: 'X1' }), NOW), 'under-construction');
++check('unparseable launch date', projectStatus(p({ launch_date: 'TBA' }), NOW), 'under-construction');
++check('blank everything', projectStatus(p({}), NOW), 'under-construction');
++
++console.log('\n5. The WordPress override wins outright');
++check('force pre-launch on a delivered project', projectStatus(p({ status_override: 'Pre-Launch', possession_date: 'Delivered' }), NOW), 'pre-launch');
++check('force ready on a new registration', projectStatus(p({ status_override: 'Ready to Move', launch_date: '28 July 2026' }), NOW), 'ready-to-move');
++check('force under construction', projectStatus(p({ status_override: 'Under Construction', launch_date: '28 July 2026' }), NOW), 'under-construction');
++check('Auto falls through', projectStatus(p({ status_override: 'Auto', launch_date: '28 July 2026' }), NOW), 'pre-launch');
++check('blank override falls through', projectStatus(p({ status_override: '', possession_date: 'Delivered' }), NOW), 'ready-to-move');
++check('underscores and case tolerated', statusOverride(p({ status_override: 'ready_to_move' })), 'ready-to-move');
++check('unknown value ignored', statusOverride(p({ status_override: 'something else' })), null);
++check('legacy is_prelaunch checkbox still honoured', projectStatus(p({ is_prelaunch: true, launch_date: 'August 2017' }), NOW), 'pre-launch');
+ 
+-console.log('\n5. hasReraNumber');
+-check('present', hasReraNumber(p({ rera_number: 'UPRERAPRJ1' })), true);
+-check('blank', hasReraNumber(p({ rera_number: '' })), false);
+-check('no acf', hasReraNumber({}), false);
++console.log('\n6. Labels');
++check('pre-launch', STATUS_LABELS['pre-launch'], 'PRE-LAUNCH');
++check('under-construction', STATUS_LABELS['under-construction'], 'UNDER CONSTRUCTION');
++check('ready-to-move', STATUS_LABELS['ready-to-move'], 'READY TO MOVE');
+ 
+-console.log('\n6. Expected launch line');
++console.log('\n7. Expected launch line');
+ check('set', expectedLaunchLine(p({ expected_launch: 'Q1 2027' })), 'Expected launch — Q1 2027');
+ check('blank omits', expectedLaunchLine(p({ expected_launch: '' })), null);
+ 
+-console.log('\n7. Partition against the live shape of the catalogue');
++console.log('\n8. Partition against the live catalogue shape');
+ const live = [
+-  { id: 'ace-terra', acf: { rera_number: 'UPRERAPRJ683816', possession_date: 'December 2028 (Expected)' } },
++  { id: 'ace-arte', acf: { launch_date: '28 July 2026' } },
++  { id: 'ace-terra', acf: { launch_date: '4 April 2024', possession_date: 'December 2028 (Expected)' } },
+   { id: 'ace-golfshire', acf: { rera_number: '', possession_date: 'Delivered. Ready to move' } },
+-  { id: 'ace-platinum', acf: { rera_number: '', possession_date: 'Delivered. Ready to move' } },
+-  { id: 'ace-aspire', acf: { rera_number: '', possession_date: 'Delivered' } },
+-  { id: 'aspire-leisure-park', acf: { rera_number: '', possession_date: 'Under Construction' } },
++  { id: 'gaur-alaris', acf: { launch_date: '28 July 2026' } },
++  { id: 'crc-flagship', acf: { launch_date: 'February 2023' } },
+ ];
+ const { registered, preLaunch } = partitionPreLaunch(live, NOW);
+-check('registered', registered.map((x) => x.id), ['ace-terra', 'ace-golfshire', 'ace-platinum', 'ace-aspire']);
+-check('preLaunch — only the genuinely unlaunched one', preLaunch.map((x) => x.id), ['aspire-leisure-park']);
++check('preLaunch', preLaunch.map((x) => x.id), ['ace-arte', 'gaur-alaris']);
++check('registered', registered.map((x) => x.id), ['ace-terra', 'ace-golfshire', 'crc-flagship']);
++check('isPreLaunch agrees', isPreLaunch(live[0], NOW), true);
++check('nothing lost', registered.length + preLaunch.length, live.length);
+ 
+ console.log(failures === 0 ? '\nAll checks passed.' : `\n${failures} check(s) failed.`);
+ process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index eaa485f..95c5be5 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -8,7 +8,7 @@ import { getChannelStats } from '@/lib/youtube';
+ import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
+ import type { WPPost } from '@/lib/wordpress';
+ import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+-import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
++import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
+ import { getVideosWithRealtimeStats } from '@/lib/videos';
+ import SlideUp from '@/components/animations/SlideUp';
+ import FadeIn from '@/components/animations/FadeIn';
+@@ -229,6 +229,7 @@ export default async function Home() {
+                     bhk={card.bhk}
+                     videoId={card.videoId}
+                     launchLine={launchLabel(rawLaunchDate(project))}
++                    statusLabel={STATUS_LABELS[projectStatus(project)]}
+                   />
+                 </StaggerItem>
+               );
+@@ -268,6 +269,7 @@ export default async function Home() {
+                         bhk={card.bhk}
+                         videoId={card.videoId}
+                         launchLine={expectedLaunchLine(project)}
++                        statusLabel={STATUS_LABELS['pre-launch']}
+                         preLaunch
+                       />
+                     </StaggerItem>
+diff --git a/src/app/properties/PropertiesClient.tsx b/src/app/properties/PropertiesClient.tsx
+index c8f8f1f..972ad72 100644
+--- a/src/app/properties/PropertiesClient.tsx
++++ b/src/app/properties/PropertiesClient.tsx
+@@ -3,7 +3,7 @@
+ import { useState, useMemo } from 'react';
+ import { decodeHtml } from '@/lib/decodeHtml';
+ import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+-import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
++import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
+ import PropertyCard from '@/components/PropertyCard';
+ import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
+ import Link from 'next/link';
+@@ -90,9 +90,9 @@ export default function PropertiesClient({ properties }: Props) {
+   // "December 2028" and also "2022", putting delivered projects under
+   // construction.
+   const matchesStatus = (project: WPProperty, statusKey: string) => {
+-    const ready = /ready|deliver/i.test(getCardData(project).possessionDate || '');
+-    if (statusKey === 'ready to move') return ready;
+-    if (statusKey === 'under construction') return !ready;
++    const s = projectStatus(project);
++    if (statusKey === 'ready to move') return s === 'ready-to-move';
++    if (statusKey === 'under construction') return s === 'under-construction';
+     return true;
+   };
+ 
+@@ -387,6 +387,7 @@ export default function PropertiesClient({ properties }: Props) {
+                     reraNumber={card.reraNumber}
+                     possessionDate={card.possessionDate}
+                     launchLine={launchLabel(rawLaunchDate(project))}
++                    statusLabel={STATUS_LABELS[projectStatus(project)]}
+                   />
+                 </StaggerItem>
+               );
+@@ -441,6 +442,7 @@ export default function PropertiesClient({ properties }: Props) {
+                       bhk={card.bhk}
+                       videoId={card.videoId}
+                       launchLine={expectedLaunchLine(project)}
++                      statusLabel={STATUS_LABELS['pre-launch']}
+                       preLaunch
+                     />
+                   </StaggerItem>
+diff --git a/src/components/PropertyCard.tsx b/src/components/PropertyCard.tsx
+index 32ec62d..218a78c 100644
+--- a/src/components/PropertyCard.tsx
++++ b/src/components/PropertyCard.tsx
+@@ -30,6 +30,13 @@ interface PropertyCardProps {
+    * registration, so the card must not assert a price or a firm date.
+    */
+   preLaunch?: boolean;
++  /**
++   * The computed flag — PRE-LAUNCH, UNDER CONSTRUCTION or READY TO MOVE.
++   * Passed by pages that run the full status rules (the WordPress override and
++   * the three-month window). Omitted elsewhere, where possession text is a good
++   * enough fallback.
++   */
++  statusLabel?: string;
+   nearbyLine?: string;
+   /**
+    * Set on the first row of cards. next/image lazy-loads by default, which
+@@ -48,12 +55,16 @@ const BADGE_CLS = 'bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-
+  * one — a blank badge previously appeared whenever the possession text did not
+  * match any pattern, which read as an oversight rather than a fact.
+  *
+- * Pre-launch wins outright: a project with no RERA registration has not
+- * launched, so no construction stage applies to it. Otherwise possession text
+- * decides, and under construction is the default, because a project that is
+- * neither unregistered nor delivered is by definition still being built.
++ * Callers that know the project's status pass it in via statusLabel — that is
++ * the authoritative answer, including the editor's WordPress override. The
++ * fallback below is for pages that render a card without running the rules.
+  */
+-function getStatusBadge(possessionDate: string | undefined, preLaunch: boolean): { label: string } {
++function getStatusBadge(
++  possessionDate: string | undefined,
++  preLaunch: boolean,
++  statusLabel?: string
++): { label: string } {
++  if (statusLabel) return { label: statusLabel };
+   if (preLaunch) return { label: 'PRE-LAUNCH' };
+   if (/ready|deliver/i.test(possessionDate || '')) return { label: 'READY TO MOVE' };
+   return { label: 'UNDER CONSTRUCTION' };
+@@ -81,10 +92,11 @@ export default function PropertyCard({
+   possessionDate,
+   launchLine,
+   preLaunch = false,
++  statusLabel,
+   nearbyLine,
+   priority = false,
+ }: PropertyCardProps) {
+-  const statusBadge = getStatusBadge(possessionDate, preLaunch);
++  const statusBadge = getStatusBadge(possessionDate, preLaunch, statusLabel);
+   const videoHref = getVideoHref(id, videoId);
+   const displayTitle = decodeHtml(title);
+   const displayDeveloper = decodeHtml(developer || '');
+diff --git a/src/lib/prelaunch.ts b/src/lib/prelaunch.ts
+index cd49ffc..86cccdc 100644
+--- a/src/lib/prelaunch.ts
++++ b/src/lib/prelaunch.ts
+@@ -1,28 +1,27 @@
+ /**
+- * prelaunch — which projects are still pre-launch, and what they may say.
++ * Project status — the single flag every property card carries.
+  *
+- * The rule, in the owner's words: **no RERA number means the project is in its
+- * pre-launch phase.** A project cannot legally be registered before it exists,
+- * so the absence of a registration number is the cleanest available signal that
+- * it has not formally launched. A launch date in the future says the same thing
+- * and is treated identically.
++ * Exactly three values exist: PRE-LAUNCH, UNDER CONSTRUCTION, READY TO MOVE.
++ * Every project has one; none is ever blank.
+  *
+- * One guard sits on top of that, and it earns its place.
++ * The order of decision, highest priority first:
+  *
+- * A blank `rera_number` in WordPress can mean two different things: the project
+- * genuinely has no registration, or nobody has typed the number in. Four
+- * projects are in that state today, and three of them — ACE Golfshire, ACE
+- * Platinum, ACE Aspire — are Delivered or Ready to Move. None of the three
+- * appears in UP RERA's registered-projects list, which is expected: a
+- * registration lapses once a project completes and moves to the completed list.
+- * So for those three the blank field means "finished years ago", the exact
+- * opposite of pre-launch.
++ *   1. `status_override` in WordPress. A person has said what this project is,
++ *      and a person beats a formula. "Auto" (or empty) means fall through.
++ *   2. Possession says delivered or ready to move → READY TO MOVE. That is a
++ *      statement of fact about a finished building; no date arithmetic should
++ *      be able to contradict it.
++ *   3. Within three months of the launch date → PRE-LAUNCH. The launch date is
++ *      the UP RERA project registration date, so a freshly registered project
++ *      reads as pre-launch for its first quarter and then moves on by itself.
++ *   4. Everything else → UNDER CONSTRUCTION. This is also where projects with
++ *      no launch date land, which is deliberate: a missing date is not evidence
++ *      of a new launch, and under construction is the safe assumption for a
++ *      registered project that is neither new nor delivered.
+  *
+- * Rendering PRE-LAUNCH on an occupied tower would be a false claim on a page
+- * that generates leads. So a project whose possession says it is delivered or
+- * ready to move is never treated as pre-launch, whatever its RERA field says —
+- * being delivered is itself proof that it launched. Remove `looksDelivered`
+- * from `isPreLaunch` if you ever want the raw rule with no guard.
++ * Note that the RERA number no longer drives this. It did briefly, and it
++ * misfired: a blank number can equally mean a project finished long ago and
++ * dropped off the registered list, which was true of three delivered towers.
+  */
+ 
+ /* eslint-disable @typescript-eslint/no-explicit-any */
+@@ -33,54 +32,93 @@ import { parseLaunchDate } from "./launchDate";
+ 
+ type WithAcf = { acf?: any };
+ 
+-/** ACF checkboxes arrive as true, 1, "1" or "yes" depending on how the field is configured. */
+-function isTicked(value: unknown): boolean {
+-  if (value === true || value === 1) return true;
+-  if (typeof value === "string") {
+-    const v = value.trim().toLowerCase();
+-    return v === "1" || v === "true" || v === "yes" || v === "on";
+-  }
+-  return false;
+-}
++export type ProjectStatus = "pre-launch" | "under-construction" | "ready-to-move";
++
++export const STATUS_LABELS: Record<ProjectStatus, string> = {
++  "pre-launch": "PRE-LAUNCH",
++  "under-construction": "UNDER CONSTRUCTION",
++  "ready-to-move": "READY TO MOVE",
++};
++
++/** How long a project reads as pre-launch after its registration date. */
++export const PRE_LAUNCH_WINDOW_MONTHS = 3;
+ 
+ function text(value: unknown): string {
+   return typeof value === "string" ? value.trim() : "";
+ }
+ 
++/** ACF checkboxes arrive as true, 1, "1" or "yes" depending on configuration. */
++function isTicked(value: unknown): boolean {
++  if (value === true || value === 1) return true;
++  const v = text(value).toLowerCase();
++  return v === "1" || v === "true" || v === "yes" || v === "on";
++}
++
+ /** True once a RERA registration number has been recorded. */
+ export function hasReraNumber(prop: WithAcf): boolean {
+   return text(prop?.acf?.rera_number) !== "";
+ }
+ 
+-/**
+- * The possession field is marketing prose, and when it says delivered or ready
+- * to move that is a definitive statement that the project launched. Used only
+- * to veto a pre-launch label, never to apply one.
+- */
++/** Possession prose that states the building is finished. */
+ export function looksDelivered(prop: WithAcf): boolean {
+   return /deliver|ready to move|ready-to-move/i.test(text(prop?.acf?.possession_date));
+ }
+ 
+-/** A launch date still in the future means the project has not launched yet. */
+-export function launchesInFuture(prop: WithAcf, now: number = Date.now()): boolean {
+-  const parsed = parseLaunchDate(text(prop?.acf?.launch_date));
+-  return parsed ? parsed.time > now : false;
++/**
++ * The editor's explicit choice, or null for automatic. Accepts the values the
++ * WordPress select offers plus a few obvious spellings, so a hand-typed
++ * "Ready to move" is not silently ignored.
++ */
++export function statusOverride(prop: WithAcf): ProjectStatus | null {
++  const raw = text(prop?.acf?.status_override).toLowerCase().replace(/[\s_]+/g, "-");
++  if (!raw || raw === "auto" || raw === "automatic") {
++    // The older boolean field, kept working for anything already ticked.
++    return isTicked(prop?.acf?.is_prelaunch) ? "pre-launch" : null;
++  }
++  if (raw === "pre-launch" || raw === "prelaunch") return "pre-launch";
++  if (raw === "under-construction") return "under-construction";
++  if (raw === "ready-to-move" || raw === "ready") return "ready-to-move";
++  return null;
++}
++
++/** Adds whole months to a timestamp, keeping the day of month where possible. */
++function addMonths(time: number, months: number): number {
++  const d = new Date(time);
++  const day = d.getUTCDate();
++  const target = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + months, 1));
++  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
++  target.setUTCDate(Math.min(day, lastDay));
++  return target.getTime();
+ }
+ 
+ /**
+- * Pre-launch when there is no RERA registration, or the launch date is still
+- * ahead of us — unless the project has already been delivered, or an editor has
+- * ticked `is_prelaunch` to force the label on.
++ * True while the project is inside its pre-launch window — from the launch date
++ * until three months later. A launch date still in the future counts too: the
++ * project has not launched at all yet.
+  */
++export function withinPreLaunchWindow(prop: WithAcf, now: number = Date.now()): boolean {
++  const parsed = parseLaunchDate(text(prop?.acf?.launch_date));
++  if (!parsed) return false;
++  return now < addMonths(parsed.time, PRE_LAUNCH_WINDOW_MONTHS);
++}
++
++/** The one flag this project carries. */
++export function projectStatus(prop: WithAcf, now: number = Date.now()): ProjectStatus {
++  const override = statusOverride(prop);
++  if (override) return override;
++  if (looksDelivered(prop)) return "ready-to-move";
++  if (withinPreLaunchWindow(prop, now)) return "pre-launch";
++  return "under-construction";
++}
++
++/** Convenience for the places that only care whether it is pre-launch. */
+ export function isPreLaunch(prop: WithAcf, now: number = Date.now()): boolean {
+-  if (isTicked(prop?.acf?.is_prelaunch)) return true;
+-  if (looksDelivered(prop)) return false;
+-  return !hasReraNumber(prop) || launchesInFuture(prop, now);
++  return projectStatus(prop, now) === "pre-launch";
+ }
+ 
+ /**
+  * The editor's own words for when the project is expected to open — "Q1 2027".
+- * Free text on purpose: nothing about an unregistered project is firm enough to
++ * Free text on purpose: nothing about an unlaunched project is firm enough to
+  * deserve a date picker, and we never compute or infer this value.
+  */
+ export function expectedLaunch(prop: WithAcf): string {
+@@ -94,7 +132,7 @@ export function expectedLaunchLine(prop: WithAcf): string | null {
+ }
+ 
+ /**
+- * Split a listing into registered projects and pre-launch ones. Input order is
++ * Split a listing into pre-launch projects and everything else. Input order is
+  * preserved within each group, so an already launch-date-sorted list stays
+  * sorted.
+  */
+diff --git a/src/lib/property.ts b/src/lib/property.ts
+index 0704da5..7d1ea13 100644
+--- a/src/lib/property.ts
++++ b/src/lib/property.ts
+@@ -106,6 +106,8 @@ export interface Property {
+   possessionDate: string;
+   /** Proposed completion date from the UP RERA registration, stored as YYYY-MM-DD. */
+   reraCompletionDate: string;
++  /** Proposed start of construction from the UP RERA registration, YYYY-MM-DD. */
++  reraStartDate: string;
+   basePrice: string;
+   priceDisplay: string;
+   priceMin: number | null;
+@@ -311,6 +313,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
+     launchDate: a.launch_date || "",
+     possessionDate: a.possession_date || "",
+     reraCompletionDate: a.rera_completion_date || "",
++    reraStartDate: a.rera_start_date || "",
+     basePrice: a.base_price || "",
+     priceDisplay: a.price_display || a.price || "",
+     priceMin: a.price_min_numeric ? Number(a.price_min_numeric) : null,
+@@ -336,6 +339,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
+       // The regulator's own date, shown beside our possession wording rather
+       // than replacing it — the two are different claims and a buyer benefits
+       // from seeing both.
++      ["Proposed Start", formatReraDate(a.rera_start_date)],
+       ["RERA Completion", formatReraDate(a.rera_completion_date)],
+       ["RERA No.", a.rera_number],
+       ["Base Price", a.base_price],
+-- 
+2.43.0
+

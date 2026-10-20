@@ -13,11 +13,12 @@ import type { WPBuilderTerm } from "@/lib/wordpress";
 import VideoReviewCard from './VideoReviewCard';
 import type { PropertyVideoCta } from '@/lib/propertyVideoCta';
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
+import { waLink, waProjectLink, waTracking } from "@/lib/whatsapp";
+import { WhatsAppPageContext } from "@/components/whatsapp/WhatsAppContext";
 
 const GOLD = "linear-gradient(115deg,#b8913c 0%,#d9b25e 55%,#c9a24b 100%)";
 const BRAND_GREEN = "#0B3038"; // site header button + footer color
-const PHONE = process.env.NEXT_PUBLIC_PHONE || "+918076178189";
-const WHATSAPP = `https://api.whatsapp.com/send?phone=${PHONE.replace("+", "")}&text=`;
+const PHONE = process.env.NEXT_PUBLIC_PHONE || "+918076178189"; // calls only — WhatsApp uses its own number
 
 const CAT_LABELS: Record<string, string> = {
   metro: "🚇 Metro & Transit", airport: "✈️ Airport & Roads", school: "🏫 Schools",
@@ -96,7 +97,7 @@ export default function PropertyDetail({
     return SECTIONS.filter(([id]) => shown[id]);
   }, [p, builder]);
 
-  const wa = WHATSAPP + encodeURIComponent(`Hi, I am interested in ${p.title}. Please share details.`);
+  const wa = waProjectLink(p.title);
   const doneCount = p.timeline.filter((t) => t.done).length;
   const progressPct = p.timeline.length > 1 ? ((doneCount - 0.5) / p.timeline.length) * 100 : 10;
 
@@ -115,7 +116,7 @@ export default function PropertyDetail({
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const msg = `Hi, I am ${fd.get("name")} (${fd.get("phone")})${fd.get("buyer_type") ? ", " + fd.get("buyer_type") : ""}. I am interested in ${p.title}. Please share the brochure & price list.`;
-    window.open(WHATSAPP + encodeURIComponent(msg), "_blank");
+    window.open(waLink(msg), "_blank");
     if (p.brochurePdf) window.open(p.brochurePdf, "_blank");
   }
 
@@ -123,6 +124,7 @@ export default function PropertyDetail({
 
   return (
     <div className="bg-[#fafbfc] text-[#1c2733]">
+      <WhatsAppPageContext kind="project" title={p.title} />
 
       {/* ================= HERO ================= */}
       <div className="relative flex h-[420px] items-end overflow-hidden bg-[#1d3550]">
@@ -616,9 +618,10 @@ export default function PropertyDetail({
               <button type="submit" className="mt-1 w-full rounded-[10px] py-3 text-sm font-extrabold text-white shadow-[0_2px_10px_rgba(11,48,56,.35)] transition hover:brightness-125" style={{ background: BRAND_GREEN }}>
                 Get Brochure & Price List
               </button>
-              <a href={wa} target="_blank" rel="noopener" className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#25D366] py-3 text-center text-[13.5px] font-extrabold text-white transition hover:bg-[#1ebd59]"><WhatsAppIcon className="h-4 w-4" /> Chat on WhatsApp</a>
+              <a href={wa} target="_blank" rel="noopener" {...waTracking("project_cta", p.title)} className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#25D366] py-3 text-center text-[13.5px] font-extrabold text-white transition hover:bg-[#1ebd59]"><WhatsAppIcon className="h-4 w-4" /> Get Details on WhatsApp</a>
               <a href={`tel:${PHONE}`} className="mt-2.5 block w-full rounded-[10px] border-[1.5px] border-[#0f2137] py-3 text-center text-[13.5px] font-extrabold text-[#0f2137]">📞 {PHONE.replace("+91", "+91 ")}</a>
               <p className="mt-2.5 text-center text-[11px] text-[#66788c]">Our expert will call you back shortly</p>
+              <a href={wa} target="_blank" rel="noopener" {...waTracking("below_form", p.title)} className="mt-2 block text-center text-[11.5px] font-semibold text-[#128C7E] underline underline-offset-2 hover:text-[#0f6f63]">Or get the brochure instantly on WhatsApp</a>
             </form>
             {p.builder && (
               <div className="mt-4 rounded-2xl border border-[#e8ecf1] bg-white p-5 text-[13px] shadow-sm">
@@ -635,7 +638,7 @@ export default function PropertyDetail({
       {/* ================= MOBILE BOTTOM BAR — WhatsApp + phone number ================= */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e8ecf1] bg-white/95 backdrop-blur lg:hidden">
         <div className="flex">
-          <a href={wa} target="_blank" rel="noopener" className="flex flex-1 items-center justify-center gap-2 bg-[#25D366] py-4 text-center text-sm font-extrabold text-white"><WhatsAppIcon className="h-4 w-4" /> WhatsApp</a>
+          <a href={wa} target="_blank" rel="noopener" {...waTracking("project_cta", p.title)} className="flex flex-1 items-center justify-center gap-2 bg-[#25D366] py-4 text-center text-sm font-extrabold text-white"><WhatsAppIcon className="h-4 w-4" /> WhatsApp</a>
           <a href={`tel:${PHONE}`} className="flex-1 py-4 text-center text-sm font-extrabold text-white" style={{ background: GOLD }}>📞 {PHONE.replace("+91", "+91 ")}</a>
         </div>
       </div>

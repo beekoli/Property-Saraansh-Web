@@ -1,0 +1,14 @@
+{
+  "name": "ps-news-to-wp",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Turns the daily Noida news shortlist into WordPress News drafts (with cover images) for Property Saraansh.",
+  "scripts": {
+    "start": "node create-news-drafts.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "@napi-rs/canvas": "^0.1.65"
+  }
+}

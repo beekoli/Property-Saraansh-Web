@@ -1,0 +1,363 @@
+From 094b569e318e924335e787205d1370e0d42c32db Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 16 Aug 2026 08:35:54 +0000
+Subject: [PATCH 1/2] feat(home): split the news section into Noida and Pune
+ tabs
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The homepage showed three items from the combined feed, which is how a
+run of Pune stories ended up under a heading that reads as Noida news to
+anyone scanning the page.
+
+It now carries a pill switch between the two cities. Both feeds are
+fetched on the server and handed to the client together, so switching is
+instant — no request, no spinner, no layout shift. That matters here
+because the section sits well down the page and a tab that stalls is
+worse than no tab.
+
+The 'All news' link follows the active tab to /noida-news or /pune-news
+rather than the combined listing, so the section leads somewhere specific.
+The switch only renders when both feeds have items; a lone tab is
+decoration, not a control. Re-keying the stagger container on the active
+city replays the entrance animation, so the change reads as a transition
+rather than a flicker.
+
+HomeNewsItem is a plain shape rather than a WPPost — only what the card
+renders crosses the client boundary.
+---
+ src/app/page.tsx                |  75 +++++------------
+ src/components/HomeNewsTabs.tsx | 141 ++++++++++++++++++++++++++++++++
+ 2 files changed, 163 insertions(+), 53 deletions(-)
+ create mode 100644 src/components/HomeNewsTabs.tsx
+
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index 95c5be5..8dcd9a7 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -3,9 +3,10 @@ import Image from 'next/image';
+ import PropertyCard from '@/components/PropertyCard';
+ import VideoPlayer from '@/components/VideoPlayer';
+ import BlogCard from '@/components/BlogCard';
+-import NewsCard from '@/components/NewsCard';
++import HomeNewsTabs from '@/components/HomeNewsTabs';
++import type { HomeNewsItem } from '@/components/HomeNewsTabs';
+ import { getChannelStats } from '@/lib/youtube';
+-import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
++import { getProperties, getLatestBlogs, getLatestNewsByCity, getFeaturedImage, getCardData } from '@/lib/wordpress';
+ import type { WPPost } from '@/lib/wordpress';
+ import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+ import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
+@@ -42,13 +43,15 @@ const newsItemCategory = (post: WPPost): string => {
+ 
+ export default async function Home() {
+   // Concurrent fetching of server-side data
+-  const [properties, latestBlogs, latestNews, channelStats, videos] = await Promise.all([
++  const [properties, latestBlogs, noidaNews, puneNews, channelStats, videos] = await Promise.all([
+     // Fetch the whole catalogue, not the first three. WordPress returns them in
+     // its own order, so asking for 3 gave whichever three happened to be first
+     // — which is why the homepage led with ACE Divino, delivered in 2022.
+     getProperties(100),
+     getLatestBlogs(3),
+-    getLatestNews(3),
++    // Both city feeds are fetched here so the tab switch is instant.
++    getLatestNewsByCity('noida-news', 3),
++    getLatestNewsByCity('pune-news', 3),
+     getChannelStats(),
+     getVideosWithRealtimeStats()
+   ]);
+@@ -62,6 +65,16 @@ export default async function Home() {
+   // the registered inventory above it.
+   const preLaunchProjects = ordered.preLaunch.slice(0, 3);
+ 
++  const toNewsItem = (post: WPPost): HomeNewsItem => ({
++    id: post.id,
++    slug: post.slug,
++    title: post.title.rendered,
++    excerpt: post.excerpt.rendered.replace(/<[^>]*>?/gm, ''),
++    category: newsItemCategory(post),
++    date: post.date,
++    thumbnail: getFeaturedImage(post),
++  });
++
+   const longVideos = videos.filter((v) => v.category !== 'Shorts');
+   const featuredVideo = longVideos[0] || {
+     slug: "yamuna-expressway-investment-2030",
+@@ -388,55 +401,11 @@ export default async function Home() {
+         </div>
+       </section>
+ 
+-      {/* 7. Real Estate News */}
+-      {latestNews.length > 0 && (
+-        <section className="py-12 md:py-20 bg-white border-t border-brand-light/20">
+-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+-            <SlideUp className="flex justify-between items-end mb-12">
+-              <div>
+-                <span className="inline-flex items-center gap-2 text-brand-primary uppercase tracking-widest text-[10px] font-bold mb-3">
+-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span>
+-                  Updated Daily
+-                </span>
+-                <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink inline-block relative font-bold">
+-                  Real Estate News
+-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
+-                </h2>
+-              </div>
+-              <Link href="/news" className="hidden md:flex text-brand-primary font-bold hover:text-brand-accent transition-colors items-center gap-1 group">
+-                All news
+-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+-                </svg>
+-              </Link>
+-            </SlideUp>
+-
+-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
+-              {latestNews.map((item) => (
+-                <StaggerItem key={item.id}>
+-                  <NewsCard
+-                    slug={item.slug}
+-                    title={item.title.rendered}
+-                    excerpt={item.excerpt.rendered.replace(/<[^>]*>?/gm, '')}
+-                    category={newsItemCategory(item)}
+-                    date={item.date}
+-                    thumbnail={getFeaturedImage(item)}
+-                  />
+-                </StaggerItem>
+-              ))}
+-            </StaggerContainer>
+-
+-            <SlideUp className="md:hidden text-center mt-8">
+-              <Link href="/news" className="text-brand-primary font-bold hover:text-brand-accent transition-colors flex items-center justify-center gap-1 group">
+-                All news
+-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+-                </svg>
+-              </Link>
+-            </SlideUp>
+-          </div>
+-        </section>
+-      )}
++      {/* 7. Real Estate News — Noida / Pune */}
++      <HomeNewsTabs
++        noida={noidaNews.map(toNewsItem)}
++        pune={puneNews.map(toNewsItem)}
++      />
+ 
+       {/* 8. Latest Insights */}
+       <section className="py-12 md:py-20 bg-brand-pale border-t border-brand-light/20">
+diff --git a/src/components/HomeNewsTabs.tsx b/src/components/HomeNewsTabs.tsx
+new file mode 100644
+index 0000000..0ff6afd
+--- /dev/null
++++ b/src/components/HomeNewsTabs.tsx
+@@ -0,0 +1,141 @@
++"use client";
++
++import { useState } from 'react';
++import Link from 'next/link';
++import NewsCard from '@/components/NewsCard';
++import StaggerContainer from '@/components/animations/StaggerContainer';
++import StaggerItem from '@/components/animations/StaggerItem';
++
++/**
++ * Plain shape for a news item on the homepage. Deliberately not a WPPost —
++ * this is a client component, and only what the card renders should cross the
++ * boundary.
++ */
++export interface HomeNewsItem {
++  id: number;
++  slug: string;
++  title: string;
++  excerpt: string;
++  category: string;
++  date: string;
++  thumbnail: string;
++}
++
++interface Props {
++  noida: HomeNewsItem[];
++  pune: HomeNewsItem[];
++}
++
++type CityKey = 'noida' | 'pune';
++
++const CITIES: { key: CityKey; label: string; href: string }[] = [
++  { key: 'noida', label: 'Noida', href: '/noida-news' },
++  { key: 'pune', label: 'Pune', href: '/pune-news' },
++];
++
++/**
++ * The homepage news section, split by city.
++ *
++ * Both feeds are fetched on the server and handed over together, so switching
++ * cities is instant — no request, no spinner, no layout shift. That matters
++ * more than it sounds: this section sits well down the homepage, and a tab that
++ * stalls is worse than no tab at all.
++ */
++export default function HomeNewsTabs({ noida, pune }: Props) {
++  const available = CITIES.filter((c) => (c.key === 'noida' ? noida : pune).length > 0);
++  const [active, setActive] = useState<CityKey>(available[0]?.key ?? 'noida');
++
++  const items = active === 'noida' ? noida : pune;
++  const activeCity = CITIES.find((c) => c.key === active) ?? CITIES[0];
++
++  if (available.length === 0) return null;
++
++  return (
++    <section className="py-12 md:py-20 bg-white border-t border-brand-light/20">
++      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
++        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between mb-10">
++          <div>
++            <span className="inline-flex items-center gap-2 text-brand-primary uppercase tracking-widest text-[10px] font-bold mb-3">
++              <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse"></span>
++              Updated Daily
++            </span>
++            <h2 className="heading-playfair text-3xl md:text-4xl text-brand-ink relative inline-block font-bold">
++              Real Estate News
++              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-accent -mb-3"></span>
++            </h2>
++          </div>
++
++          <div className="flex items-center gap-4">
++            {/* City switch. Only rendered when both feeds have something in
++                them — a lone tab is decoration, not a control. */}
++            {available.length > 1 && (
++              <div
++                role="tablist"
++                aria-label="Choose a city"
++                className="inline-flex rounded-full bg-brand-pale p-1 border border-brand-light/20 shadow-sm"
++              >
++                {available.map((city) => {
++                  const isActive = city.key === active;
++                  return (
++                    <button
++                      key={city.key}
++                      role="tab"
++                      aria-selected={isActive}
++                      onClick={() => setActive(city.key)}
++                      className={`px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 ${
++                        isActive
++                          ? 'bg-brand-dark text-brand-accent shadow-md'
++                          : 'text-brand-primary hover:text-brand-dark'
++                      }`}
++                    >
++                      {city.label}
++                    </button>
++                  );
++                })}
++              </div>
++            )}
++
++            <Link
++              href={activeCity.href}
++              className="hidden md:flex text-brand-primary font-bold hover:text-brand-accent transition-colors items-center gap-1 group whitespace-nowrap"
++            >
++              All {activeCity.label} news
++              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
++              </svg>
++            </Link>
++          </div>
++        </div>
++
++        {/* Keying on the active city replays the stagger animation on switch,
++            so the change reads as a deliberate transition rather than a flicker. */}
++        <StaggerContainer key={active} className="grid grid-cols-1 md:grid-cols-3 gap-8">
++          {items.map((item) => (
++            <StaggerItem key={item.id}>
++              <NewsCard
++                slug={item.slug}
++                title={item.title}
++                excerpt={item.excerpt}
++                category={item.category}
++                date={item.date}
++                thumbnail={item.thumbnail}
++              />
++            </StaggerItem>
++          ))}
++        </StaggerContainer>
++
++        <div className="md:hidden text-center mt-8">
++          <Link
++            href={activeCity.href}
++            className="text-brand-primary font-bold hover:text-brand-accent transition-colors flex items-center justify-center gap-1 group"
++          >
++            All {activeCity.label} news
++            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
++              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
++            </svg>
++          </Link>
++        </div>
++      </div>
++    </section>
++  );
++}
+-- 
+2.43.0
+
+
+From d52f4c8eb11406481756021dcea9bb10cdc29f96 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 16 Aug 2026 09:42:43 +0000
+Subject: [PATCH 2/2] feat(properties): label the registration date RERA
+ Received
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The Quick Facts carried three date tiles that overlapped: Launch (the
+registration date), Proposed Start (start of construction) and RERA
+Completion. Under the agreed model the launch date IS the UP RERA
+registration date, so Launch and a 'RERA Received' tile would show the
+same value.
+
+Two tiles now: RERA Received, holding the registration date, and RERA
+Completion. Proposed Start is dropped from display — a straight rename of
+that tile would have put 'RERA Received' above 15 Aug 2026 for ACE Arte,
+which is when construction is proposed to begin, not when registration
+came through on 28 Jul 2026. The value stays in rera_start_date, so
+restoring the tile later is a one-line change.
+
+The registration date also now renders through formatReraDate, so an ISO
+value shows as '28 July 2026' rather than raw.
+---
+ src/components/property/PropertyDetail.tsx | 2 +-
+ src/lib/property.ts                        | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/components/property/PropertyDetail.tsx b/src/components/property/PropertyDetail.tsx
+index 5b6b4ce..0331ae1 100644
+--- a/src/components/property/PropertyDetail.tsx
++++ b/src/components/property/PropertyDetail.tsx
+@@ -25,7 +25,7 @@ const CAT_LABELS: Record<string, string> = {
+ const FACT_ICONS: Record<string, string> = {
+   "Total Land": "📐", "Towers": "🏙️", "Total Units": "🏢", "Total Floors": "🏗️",
+   "Units / Floor": "🚪", "Lifts / Floor": "🛗", "Configuration": "🛏️",
+-  "Launch": "🚀", "Possession": "🔑", "RERA No.": "✅", "Base Price": "💰",
++  "RERA Received": "🚀", "RERA Completion": "🏁", "Possession": "🔑", "RERA No.": "✅", "Base Price": "💰",
+ };
+ 
+ const SECTIONS = [
+diff --git a/src/lib/property.ts b/src/lib/property.ts
+index 7d1ea13..1f7b2e7 100644
+--- a/src/lib/property.ts
++++ b/src/lib/property.ts
+@@ -334,12 +334,13 @@ export async function getProperty(slug: string): Promise<Property | null> {
+       ["Units / Floor", a.quick_facts?.units_per_floor || a.units_per_floor],
+       ["Lifts / Floor", a.quick_facts?.lifts_per_floor || a.lifts_per_floor],
+       ["Configuration", a.configuration],
+-      ["Launch", a.launch_date],
++      // The launch date IS the UP RERA registration date, so this reads as
++      // "RERA Received". A separate Launch tile would repeat the same value.
++      ["RERA Received", formatReraDate(a.launch_date)],
+       ["Possession", a.possession_date],
+       // The regulator's own date, shown beside our possession wording rather
+       // than replacing it — the two are different claims and a buyer benefits
+       // from seeing both.
+-      ["Proposed Start", formatReraDate(a.rera_start_date)],
+       ["RERA Completion", formatReraDate(a.rera_completion_date)],
+       ["RERA No.", a.rera_number],
+       ["Base Price", a.base_price],
+-- 
+2.43.0
+

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { waBlogLink, waGeneralLink, waTracking } from '@/lib/whatsapp';
 
 interface FAQ {
   question: string;
@@ -9,9 +10,11 @@ interface FAQ {
 
 interface FAQSectionProps {
   faqs: FAQ[];
+  /** Article title, so the WhatsApp message names the piece the reader is on. */
+  articleTitle?: string;
 }
 
-export default function FAQSection({ faqs }: FAQSectionProps) {
+export default function FAQSection({ faqs, articleTitle }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   if (!faqs || faqs.length === 0) return null;
@@ -121,7 +124,8 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
           </p>
         </div>
         <a
-          href="https://wa.me/918076178189?text=Hi%20Saraansh%2C%20I%20have%20a%20question%20about%20a%20Noida%20project"
+          href={articleTitle ? waBlogLink(articleTitle) : waGeneralLink()}
+          {...waTracking("content_cta")}
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 btn-glossy-whatsapp px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 whitespace-nowrap"

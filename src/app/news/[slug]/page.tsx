@@ -5,6 +5,8 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
+import { waNewsLink, waTracking } from '@/lib/whatsapp';
+import { WhatsAppPageContext } from '@/components/whatsapp/WhatsAppContext';
 
 export const revalidate = 60; // Revalidate every minute — news updates daily
 
@@ -164,6 +166,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
           ></div>
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-light/10 rounded-full blur-[120px] pointer-events-none"></div>
 
+          <WhatsAppPageContext kind="news" title={decodeHtml(news.title.rendered)} />
           <div className="max-w-4xl mx-auto relative z-10">
             <div className="flex items-center justify-center gap-3 mb-6">
               <span className="text-brand-accent uppercase tracking-widest text-[10px] md:text-xs font-bold bg-brand-primary/40 px-4 py-2 rounded-full border border-brand-accent/30 inline-block shadow-sm backdrop-blur-sm">
@@ -231,9 +234,8 @@ export default async function NewsArticlePage({ params }: PageProps) {
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                     <a
-                      href={`https://wa.me/918076178189?text=Hi%20Saraansh,%20I%20read%20your%20news%20update%20"${encodeURIComponent(
-                        news.title.rendered
-                      )}"%20and%20want%20a%20free%20consultation.`}
+                      href={waNewsLink(decodeHtml(news.title.rendered))}
+                      {...waTracking("content_cta")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-glossy-whatsapp px-5 py-3 text-center rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"

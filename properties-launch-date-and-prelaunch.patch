@@ -1,0 +1,792 @@
+From 3c32b7989d974afe435b9332253cf32cef64524e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 15 Aug 2026 17:37:38 +0000
+Subject: [PATCH 1/2] feat(properties): order listing by launch date, newest
+ first
+
+Projects with a readable launch_date lead the /properties listing, most
+recent first; the 33 without one keep their existing relative order
+behind them. We deliberately do not fall back to the WordPress publish
+date, because every property was entered during the mid-2026 bulk import
+and that date records data entry, not launch.
+
+launch_date is a free-text ACF field, so src/lib/launchDate.ts parses the
+shapes editors actually use (11 September 2025, October 2024, 2025, ISO,
+stray whitespace) and sorts on whatever date it can find. It prints a
+'Launched Oct 2025' line on the card only when the whole value is a clean
+date, so a prose value like ACE Arte's ('RERA registered July 2026,
+allotment expected around 10 August 2026') still sorts but never renders
+an allotment date as a launch date.
+
+Also raises the /properties fetch from 50 to 100. There are 54 projects
+in WordPress, so four were silently invisible - including two 2026
+launches.
+
+Verified against all 21 real launch_date values on production via
+scripts/verify-launch-sort.ts.
+---
+ scripts/verify-launch-sort.ts           |  85 ++++++++++++++
+ src/app/properties/PropertiesClient.tsx |  24 +++-
+ src/app/properties/page.tsx             |   5 +-
+ src/components/PropertyCard.tsx         |  16 +++
+ src/lib/launchDate.ts                   | 140 ++++++++++++++++++++++++
+ 5 files changed, 266 insertions(+), 4 deletions(-)
+ create mode 100644 scripts/verify-launch-sort.ts
+ create mode 100644 src/lib/launchDate.ts
+
+diff --git a/scripts/verify-launch-sort.ts b/scripts/verify-launch-sort.ts
+new file mode 100644
+index 0000000..16a95e6
+--- /dev/null
++++ b/scripts/verify-launch-sort.ts
+@@ -0,0 +1,85 @@
++/**
++ * Verifies the launch-date parser and sort against the 21 real `launch_date`
++ * values on production as of 15 Aug 2026, plus the edge cases we expect
++ * editors to type. Run with:
++ *   npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-launch-sort.ts
++ */
++import { parseLaunchDate, launchLabel, sortByLaunchDate } from '../src/lib/launchDate';
++
++// Exactly as they appear in WordPress today.
++const LIVE: Array<[string, string]> = [
++  ['ace-edit', '11 September 2025'],
++  ['ace-hive', '25 March 2025'],
++  ['ace-arte', 'RERA registered July 2026, allotment expected around 10 August 2026'],
++  ['ace-hanei', 'October 2024'],
++  ['gaur-chrysalis', '4 November 2025'],
++  ['godrej-crown-residences', '15 May 2026'],
++  ['dasnac-yuva', 'January 2025'],
++  ['crc-maesta', ' June 2024 '],
++  ['ace-verde', '2025'],
++  ['ats-province-d-olympia', 'March 2025'],
++  ['ace-estate', 'October 2024'],
++  ['m3m-the-line', 'November 2023'],
++  ['experion-saatori', 'January 2026'],
++  ['ace-acreville', 'March 2025'],
++  ['crc-the-flagship', 'March 2023'],
++  ['godrej-riverine', 'November 2024'],
++  ['max-estate-128', 'September 2023'],
++  ['m3m-the-cullinan', 'April 2023'],
++  ['crc-the-peridona', 'March 2026'],
++  ['jacob-and-co', 'October 2025'],
++  ['eldeco-7-peaks-residences', 'January 2026'],
++];
++
++let failures = 0;
++function check(name: string, actual: unknown, expected: unknown) {
++  const ok = JSON.stringify(actual) === JSON.stringify(expected);
++  if (!ok) { failures++; console.log(`  FAIL ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`); }
++  return ok;
++}
++
++console.log('1. Every live value parses to a sortable time');
++for (const [slug, raw] of LIVE) {
++  if (!parseLaunchDate(raw)) { failures++; console.log(`  FAIL ${slug}: "${raw}" did not parse`); }
++}
++console.log(`   ${LIVE.length} values, ${failures} unparsed`);
++
++console.log('\n2. Labels print only for clean dates');
++check('day+month+year', launchLabel('11 September 2025'), 'Launched Sep 2025');
++check('month+year', launchLabel('October 2024'), 'Launched Oct 2024');
++check('padded whitespace', launchLabel(' June 2024 '), 'Launched Jun 2024');
++check('year only', launchLabel('2025'), 'Launched 2025');
++check('ISO', launchLabel('2025-10-10'), 'Launched Oct 2025');
++check('prose is not labelled', launchLabel(LIVE[2][1]), null);
++check('empty', launchLabel(''), null);
++check('undefined', launchLabel(undefined), null);
++check('garbage', launchLabel('TBA'), null);
++
++console.log('\n3. Prose still sorts, using the date inside it');
++check('ace-arte time', parseLaunchDate(LIVE[2][1])?.time, Date.UTC(2026, 7, 10));
++
++console.log('\n4. Undated projects sink, original order preserved');
++const mixed = [
++  { s: 'blank-a', d: '' },
++  { s: 'old', d: 'March 2023' },
++  { s: 'blank-b', d: undefined as unknown as string },
++  { s: 'new', d: 'January 2026' },
++  { s: 'blank-c', d: 'TBA' },
++];
++check(
++  'order',
++  sortByLaunchDate(mixed, (m) => m.d).map((m) => m.s),
++  ['new', 'old', 'blank-a', 'blank-b', 'blank-c']
++);
++
++console.log('\n5. Full live ordering');
++const ordered = sortByLaunchDate(LIVE, ([, raw]) => raw);
++ordered.forEach(([slug, raw], i) => {
++  console.log(`  ${String(i + 1).padStart(2)}. ${slug.padEnd(26)} ${(launchLabel(raw) ?? '(sorted, no label)').padEnd(22)} ← "${raw.trim().slice(0, 40)}"`);
++});
++check('newest is ace-arte', ordered[0][0], 'ace-arte');
++check('oldest is crc-the-flagship', ordered[ordered.length - 1][0], 'crc-the-flagship');
++check('descending', ordered.every((r, i) => i === 0 || parseLaunchDate(ordered[i - 1][1])!.time >= parseLaunchDate(r[1])!.time), true);
++
++console.log(failures === 0 ? '\nAll checks passed.' : `\n${failures} check(s) failed.`);
++process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/app/properties/PropertiesClient.tsx b/src/app/properties/PropertiesClient.tsx
+index c60388b..0c58d36 100644
+--- a/src/app/properties/PropertiesClient.tsx
++++ b/src/app/properties/PropertiesClient.tsx
+@@ -1,7 +1,8 @@
+ "use client";
+ 
+-import { useState } from 'react';
++import { useState, useMemo } from 'react';
+ import { decodeHtml } from '@/lib/decodeHtml';
++import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+ import PropertyCard from '@/components/PropertyCard';
+ import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
+ import Link from 'next/link';
+@@ -19,6 +20,13 @@ const STATUS_CHIPS = ['All', 'New Launch', 'Under Construction', 'Ready to Move'
+ export default function PropertiesClient({ properties }: Props) {
+   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+ 
++  // Newest launch first. Sorted once, ahead of filtering, so every filter and
++  // status chip keeps this order rather than each needing to re-sort.
++  const orderedProperties = useMemo(
++    () => sortByLaunchDate(properties, rawLaunchDate),
++    [properties]
++  );
++
+   // Filter States
+   const [location, setLocation] = useState('All');
+   const [type, setType] = useState('All');
+@@ -69,14 +77,14 @@ export default function PropertiesClient({ properties }: Props) {
+     return true;
+   };
+ 
+-  const filteredProjects = properties.filter((project) => {
++  const filteredProjects = orderedProperties.filter((project) => {
+     if (!matchesBase(project)) return false;
+     if (status !== 'All' && !matchesStatus(project, status.toLowerCase())) return false;
+     return true;
+   });
+ 
+   // Counts per status chip (computed against location/type/budget filters, ignoring the status filter itself)
+-  const preStatusFiltered = properties.filter(matchesBase);
++  const preStatusFiltered = orderedProperties.filter(matchesBase);
+ 
+   const chipCount = (chip: string) => {
+     if (chip === 'All') return preStatusFiltered.length;
+@@ -291,6 +299,15 @@ export default function PropertiesClient({ properties }: Props) {
+                             {card.location}
+                           </div>
+ 
++                          {launchLabel(rawLaunchDate(project)) && (
++                            <div className="flex items-center text-brand-dark/60 mb-4 text-[11px]">
++                              <svg className="w-3.5 h-3.5 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
++                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
++                              </svg>
++                              {launchLabel(rawLaunchDate(project))}
++                            </div>
++                          )}
++
+                           <div className="flex flex-wrap gap-1.5 mb-6">
+                             {card.bhk.map((item, index) => (
+                               <span key={index} className="bg-brand-pale text-brand-primary text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
+@@ -345,6 +362,7 @@ export default function PropertiesClient({ properties }: Props) {
+                     videoId={card.videoId}
+                     reraNumber={card.reraNumber}
+                     possessionDate={card.possessionDate}
++                    launchLine={launchLabel(rawLaunchDate(project))}
+                   />
+                 </StaggerItem>
+               );
+diff --git a/src/app/properties/page.tsx b/src/app/properties/page.tsx
+index f07b368..cef6b85 100644
+--- a/src/app/properties/page.tsx
++++ b/src/app/properties/page.tsx
+@@ -14,7 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
+ }
+ 
+ export default async function Properties() {
+-  const properties = await getProperties(50); // Fetch up to 50 projects
++  // 100 is the WordPress REST per_page ceiling. This was 50, which silently
++  // dropped the 4 oldest-published projects — including two 2026 launches —
++  // once the catalogue grew past 50.
++  const properties = await getProperties(100);
+ 
+   return <PropertiesClient properties={properties} />;
+ }
+diff --git a/src/components/PropertyCard.tsx b/src/components/PropertyCard.tsx
+index c470269..7efbb39 100644
+--- a/src/components/PropertyCard.tsx
++++ b/src/components/PropertyCard.tsx
+@@ -17,6 +17,12 @@ interface PropertyCardProps {
+   isWalkthrough?: boolean;
+   reraNumber?: string;
+   possessionDate?: string;
++  /**
++   * Pre-formatted "Launched Oct 2025". Null whenever the WordPress value is
++   * missing or is prose rather than a clean date — the card simply omits the
++   * line rather than printing something the data does not support.
++   */
++  launchLine?: string | null;
+   nearbyLine?: string;
+   /**
+    * Set on the first row of cards. next/image lazy-loads by default, which
+@@ -58,6 +64,7 @@ export default function PropertyCard({
+   isWalkthrough = false,
+   reraNumber,
+   possessionDate,
++  launchLine,
+   nearbyLine,
+   priority = false,
+ }: PropertyCardProps) {
+@@ -134,6 +141,15 @@ export default function PropertyCard({
+ 
+           <div className="text-base font-bold text-brand-accent mb-3">{price}</div>
+ 
++          {launchLine && (
++            <div className="flex items-center text-brand-dark/60 mb-3 text-[11px]">
++              <svg className="w-3.5 h-3.5 mr-1 text-brand-light flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
++                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
++              </svg>
++              <span>{launchLine}</span>
++            </div>
++          )}
++
+           <div className="flex flex-wrap gap-1.5 mb-3">
+             {bhk.map((item, index) => (
+               <span key={index} className="bg-brand-pale text-brand-primary text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">
+diff --git a/src/lib/launchDate.ts b/src/lib/launchDate.ts
+new file mode 100644
+index 0000000..6f5685e
+--- /dev/null
++++ b/src/lib/launchDate.ts
+@@ -0,0 +1,140 @@
++/**
++ * launchDate — tolerant parsing for the WordPress `launch_date` ACF field.
++ *
++ * That field is a free-text input, not a date picker, so editors have written
++ * it every way a person reasonably would. Real values on production today:
++ *
++ *   "11 September 2025"   day + month + year
++ *   "October 2024"        month + year          (the most common shape)
++ *   "2025"                year only
++ *   " June 2024 "         stray whitespace
++ *   "RERA registered July 2026, allotment expected around 10 August 2026"
++ *
++ * We parse what we can and refuse to guess at the rest. Two separate outputs
++ * matter here and they are deliberately NOT the same thing:
++ *
++ *   `time`  — a sortable timestamp, extracted from anywhere in the string.
++ *   `label` — text we are willing to print on a card, set ONLY when the whole
++ *             value is a clean date. A prose value like the ACE Arte one above
++ *             still sorts, but we do not render "Launched Aug 2026" from it,
++ *             because that date is an expected allotment, not a launch. Showing
++ *             it would state something the data does not actually say.
++ *
++ * Anything unparseable returns null and the caller sinks it to the bottom of
++ * the list rather than inventing an order for it.
++ */
++
++/**
++ * The raw `launch_date` off a WordPress property, or undefined.
++ *
++ * Kept here rather than in `getCardData` so that every rule about this one
++ * unreliable field — reading it, parsing it, deciding whether it is safe to
++ * print — lives in a single file. If the ACF field is ever converted to a real
++ * date picker, this module is the only thing that needs revisiting.
++ */
++/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
++export function rawLaunchDate(prop: { acf?: any }): string | undefined {
++  const value = prop?.acf?.launch_date;
++  return typeof value === 'string' ? value : undefined;
++}
++
++const MONTHS: Record<string, number> = {
++  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
++  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
++  jan: 0, feb: 1, mar: 2, apr: 3, jun: 5, jul: 6, aug: 7, sep: 8, sept: 8, oct: 9, nov: 10, dec: 11,
++};
++
++const SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
++
++export interface ParsedLaunchDate {
++  /** Sort key. Larger is more recent. */
++  time: number;
++  /** "Oct 2025" — only set when the raw value was a clean date on its own. */
++  label: string | null;
++}
++
++/** Precision we managed to recover, used to decide how much to print. */
++type Grain = 'day' | 'month' | 'year';
++
++function build(year: number, month: number, day: number, grain: Grain, clean: boolean): ParsedLaunchDate {
++  const time = Date.UTC(year, month, day);
++  // A bare year is too vague to print as a launch month, so it sorts (as
++  // 1 January) but shows only the year.
++  const label = !clean ? null : grain === 'year' ? String(year) : `${SHORT_MONTHS[month]} ${year}`;
++  return { time, label };
++}
++
++export function parseLaunchDate(raw?: string | null): ParsedLaunchDate | null {
++  if (!raw) return null;
++  const trimmed = String(raw).trim();
++  if (!trimmed) return null;
++  const s = trimmed.toLowerCase();
++
++  // ISO first — the shape the ACF field would produce if it is ever switched
++  // to a real date picker, so this keeps working after any data cleanup.
++  const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
++  if (iso) {
++    return build(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]), 'day', true);
++  }
++
++  // "11 September 2025" / "4 Nov 2025" — day, month name, year.
++  const dmy = s.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s+([a-z]+)\s+(\d{4})\b/);
++  if (dmy && dmy[2] in MONTHS) {
++    const clean = dmy[0] === s;
++    return build(Number(dmy[3]), MONTHS[dmy[2]], Number(dmy[1]), 'day', clean);
++  }
++
++  // "September 11, 2025" — month name, day, year.
++  const mdy = s.match(/\b([a-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b/);
++  if (mdy && mdy[1] in MONTHS) {
++    const clean = mdy[0] === s;
++    return build(Number(mdy[3]), MONTHS[mdy[1]], Number(mdy[2]), 'day', clean);
++  }
++
++  // "October 2024" — month name and year. The common case.
++  const my = s.match(/\b([a-z]+)\s+(\d{4})\b/);
++  if (my && my[1] in MONTHS) {
++    const clean = my[0] === s;
++    return build(Number(my[2]), MONTHS[my[1]], 1, 'month', clean);
++  }
++
++  // "2025" — year alone.
++  const y = s.match(/\b(19|20)\d{2}\b/);
++  if (y) {
++    const clean = y[0] === s;
++    return build(Number(y[0]), 0, 1, 'year', clean);
++  }
++
++  return null;
++}
++
++/** "Launched Oct 2025", or null when we have nothing printable. */
++export function launchLabel(raw?: string | null): string | null {
++  const parsed = parseLaunchDate(raw);
++  return parsed?.label ? `Launched ${parsed.label}` : null;
++}
++
++/**
++ * Order a list newest-launch-first.
++ *
++ * Projects with a readable launch date lead, most recent first. Everything
++ * else keeps its existing relative order behind them — we do NOT fall back to
++ * the WordPress publish date, because every property was entered during the
++ * mid-2026 bulk import and that date records when it was typed in, not when
++ * the project launched. Sorting on it would look authoritative and mean
++ * nothing.
++ */
++export function sortByLaunchDate<T>(items: T[], getRaw: (item: T) => string | undefined): T[] {
++  return items
++    .map((item, index) => ({ item, index, parsed: parseLaunchDate(getRaw(item)) }))
++    .sort((a, b) => {
++      if (a.parsed && b.parsed) {
++        if (b.parsed.time !== a.parsed.time) return b.parsed.time - a.parsed.time;
++        return a.index - b.index; // stable within the same launch month
++      }
++      if (a.parsed) return -1;
++      if (b.parsed) return 1;
++      return a.index - b.index; // undated: leave them exactly as they were
++    })
++    .map((entry) => entry.item);
++}
+-- 
+2.43.0
+
+
+From ef4e2dc92402a19eacc332475d04bcbcd22f543e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 15 Aug 2026 17:37:38 +0000
+Subject: [PATCH 2/2] feat(properties): add Pre-Launch section driven by an
+ explicit flag
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Projects an editor has flagged with is_prelaunch, and which carry no RERA
+number, render in their own band below the main listing. Cards show a
+PRE-LAUNCH badge, the editor's expected_launch text in place of a launch
+date, 'Price on Request' instead of a figure, and a Register Interest CTA.
+
+The flag must be explicit. A blank rera_number does NOT imply pre-launch:
+four projects have no RERA number in WordPress today and two of them
+(ACE Golfshire, ACE Platinum) are Ready to Move, so inferring the state
+from a blank would advertise finished towers as unlaunched.
+
+The RERA number overrides the flag in the other direction, which is the
+promotion the business wants — entering a number returns the project to
+the main listing on the next revalidate regardless of the checkbox, so
+data entry cannot strand a registered project in pre-launch.
+
+Pre-launch obeys location, type and budget filters but not the status
+chips: 'Ready to Move' and 'Under Construction' describe registered
+construction stages an unregistered project cannot answer, so selecting
+any status hides the section rather than guessing.
+
+Requires two new ACF fields on the properties CPT (is_prelaunch true/false,
+expected_launch text). Until they exist the section never renders.
+---
+ scripts/verify-prelaunch.ts             | 74 ++++++++++++++++++++++
+ src/app/properties/PropertiesClient.tsx | 71 ++++++++++++++++++++-
+ src/components/PropertyCard.tsx         | 25 ++++++--
+ src/lib/prelaunch.ts                    | 83 +++++++++++++++++++++++++
+ 4 files changed, 246 insertions(+), 7 deletions(-)
+ create mode 100644 scripts/verify-prelaunch.ts
+ create mode 100644 src/lib/prelaunch.ts
+
+diff --git a/scripts/verify-prelaunch.ts b/scripts/verify-prelaunch.ts
+new file mode 100644
+index 0000000..71bafe9
+--- /dev/null
++++ b/scripts/verify-prelaunch.ts
+@@ -0,0 +1,74 @@
++/**
++ * Verifies the Pre-Launch rules, in particular the two failure modes that
++ * would be visible and embarrassing on a live consultancy site:
++ *
++ *   1. A registered project rendering as pre-launch.
++ *   2. A finished project drifting into pre-launch because its RERA field
++ *      happens to be blank in WordPress.
++ *
++ * Run with:
++ *   npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-prelaunch.ts
++ */
++import { isPreLaunch, hasReraNumber, expectedLaunchLine, partitionPreLaunch } from '../src/lib/prelaunch';
++
++const p = (acf: Record<string, unknown>) => ({ acf });
++
++let failures = 0;
++function check(name: string, actual: unknown, expected: unknown) {
++  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
++    failures++;
++    console.log(`  FAIL ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
++  } else {
++    console.log(`  ok   ${name}`);
++  }
++}
++
++console.log('1. The four projects with a blank RERA field today stay OUT of pre-launch');
++// ACE Golfshire, ACE Platinum (Ready to Move), ACE Aspire, Aspire Leisure Park.
++// None has is_prelaunch ticked, so none may appear in the section.
++for (const slug of ['ace-golfshire', 'ace-platinum', 'ace-aspire', 'aspire-leisure-park']) {
++  check(slug, isPreLaunch(p({ rera_number: '', possession_date: 'Ready to Move' })), false);
++}
++
++console.log('\n2. The checkbox alone puts a project in pre-launch');
++check('ticked, no RERA', isPreLaunch(p({ is_prelaunch: true, rera_number: '' })), true);
++check('ticked, RERA absent entirely', isPreLaunch(p({ is_prelaunch: true })), true);
++
++console.log('\n3. A RERA number promotes it out, even with the box still ticked');
++check('ticked + RERA', isPreLaunch(p({ is_prelaunch: true, rera_number: 'UPRERAPRJ123456' })), false);
++check('whitespace-only RERA does not count', isPreLaunch(p({ is_prelaunch: true, rera_number: '   ' })), true);
++
++console.log('\n4. ACF checkbox truthiness — the field may serialise several ways');
++for (const v of [true, 1, '1', 'true', 'yes', 'on']) {
++  check(`ticked as ${JSON.stringify(v)}`, isPreLaunch(p({ is_prelaunch: v })), true);
++}
++for (const v of [false, 0, '0', '', 'false', 'no', null, undefined]) {
++  check(`unticked as ${JSON.stringify(v)}`, isPreLaunch(p({ is_prelaunch: v })), false);
++}
++
++console.log('\n5. hasReraNumber');
++check('present', hasReraNumber(p({ rera_number: 'UPRERAPRJ1' })), true);
++check('blank', hasReraNumber(p({ rera_number: '' })), false);
++check('no acf at all', hasReraNumber({}), false);
++
++console.log('\n6. Expected launch line');
++check('set', expectedLaunchLine(p({ expected_launch: 'Q1 2027' })), 'Expected launch — Q1 2027');
++check('padded', expectedLaunchLine(p({ expected_launch: '  Early 2027 ' })), 'Expected launch — Early 2027');
++check('blank omits the line', expectedLaunchLine(p({ expected_launch: '' })), null);
++check('missing omits the line', expectedLaunchLine(p({})), null);
++
++console.log('\n7. Partition keeps input order inside each group');
++const list = [
++  { id: 'a', acf: { rera_number: 'R1' } },
++  { id: 'b', acf: { is_prelaunch: true } },
++  { id: 'c', acf: { rera_number: 'R2' } },
++  { id: 'd', acf: { is_prelaunch: true } },
++  { id: 'e', acf: { is_prelaunch: true, rera_number: 'R3' } },
++];
++const { registered, preLaunch } = partitionPreLaunch(list);
++check('registered', registered.map((x) => x.id), ['a', 'c', 'e']);
++check('preLaunch', preLaunch.map((x) => x.id), ['b', 'd']);
++check('nothing lost', registered.length + preLaunch.length, list.length);
++
++console.log(failures === 0 ? '\nAll checks passed.' : `\n${failures} check(s) failed.`);
++process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/app/properties/PropertiesClient.tsx b/src/app/properties/PropertiesClient.tsx
+index 0c58d36..3ff1aa4 100644
+--- a/src/app/properties/PropertiesClient.tsx
++++ b/src/app/properties/PropertiesClient.tsx
+@@ -3,6 +3,7 @@
+ import { useState, useMemo } from 'react';
+ import { decodeHtml } from '@/lib/decodeHtml';
+ import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
++import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
+ import PropertyCard from '@/components/PropertyCard';
+ import { WPProperty, getFeaturedImage, getCardData } from '@/lib/wordpress';
+ import Link from 'next/link';
+@@ -27,6 +28,14 @@ export default function PropertiesClient({ properties }: Props) {
+     [properties]
+   );
+ 
++  // Pre-launch projects are held out of the main listing entirely — they have
++  // no registration, no launch date and no quotable price, so they would only
++  // dilute an order built on exactly those things.
++  const { registered, preLaunch } = useMemo(
++    () => partitionPreLaunch(orderedProperties),
++    [orderedProperties]
++  );
++
+   // Filter States
+   const [location, setLocation] = useState('All');
+   const [type, setType] = useState('All');
+@@ -77,14 +86,20 @@ export default function PropertiesClient({ properties }: Props) {
+     return true;
+   };
+ 
+-  const filteredProjects = orderedProperties.filter((project) => {
++  const filteredProjects = registered.filter((project) => {
+     if (!matchesBase(project)) return false;
+     if (status !== 'All' && !matchesStatus(project, status.toLowerCase())) return false;
+     return true;
+   });
+ 
++  // Pre-launch obeys location, type and budget, but not the status chips —
++  // "Ready to Move" and "Under Construction" describe registered construction
++  // stages, so an unregistered project cannot honestly answer them. Picking any
++  // status therefore hides the section rather than guessing.
++  const filteredPreLaunch = status === 'All' ? preLaunch.filter(matchesBase) : [];
++
+   // Counts per status chip (computed against location/type/budget filters, ignoring the status filter itself)
+-  const preStatusFiltered = orderedProperties.filter(matchesBase);
++  const preStatusFiltered = registered.filter(matchesBase);
+ 
+   const chipCount = (chip: string) => {
+     if (chip === 'All') return preStatusFiltered.length;
+@@ -373,6 +388,58 @@ export default function PropertiesClient({ properties }: Props) {
+             <p className="text-lg">No projects match your search criteria. Please adjust filters and try again.</p>
+           </div>
+         )}
++
++        {/* Pre-Launch — projects an editor has flagged that carry no RERA
++            registration yet. Kept below the main listing deliberately: the
++            registered inventory is the primary offer. A project leaves this
++            section automatically the moment a RERA number is entered. */}
++        {filteredPreLaunch.length > 0 && (
++          <section className="mt-20 pt-12 border-t border-brand-light/20">
++            <div className="mb-8">
++              <div className="flex flex-wrap items-center gap-3 mb-2">
++                <h2 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-ink">
++                  Pre-Launch Projects
++                </h2>
++                <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
++                  {filteredPreLaunch.length} Tracking
++                </span>
++              </div>
++              <p className="text-sm text-brand-dark/70 max-w-3xl leading-relaxed">
++                Projects we are tracking ahead of their formal launch. These are not yet
++                registered with UP RERA, so pricing, layouts and timelines are indicative
++                and subject to change. Register your interest and we will share verified
++                details the moment registration comes through.
++              </p>
++            </div>
++
++            <StaggerContainer
++              key={`prelaunch-${location}-${type}-${maxBudget}-${filteredPreLaunch.length}`}
++              className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
++            >
++              {filteredPreLaunch.map((project) => {
++                const card = getCardData(project);
++                return (
++                  <StaggerItem key={project.id} yOffset={20}>
++                    <PropertyCard
++                      id={project.slug}
++                      title={decodeHtml(project.title.rendered)}
++                      developer={card.developer}
++                      isWalkthrough={card.isWalkthrough}
++                      location={card.location}
++                      price={card.price}
++                      type={card.type}
++                      imageUrl={getFeaturedImage(project)}
++                      bhk={card.bhk}
++                      videoId={card.videoId}
++                      launchLine={expectedLaunchLine(project)}
++                      preLaunch
++                    />
++                  </StaggerItem>
++                );
++              })}
++            </StaggerContainer>
++          </section>
++        )}
+       </div>
+     </div>
+   );
+diff --git a/src/components/PropertyCard.tsx b/src/components/PropertyCard.tsx
+index 7efbb39..df8d1c0 100644
+--- a/src/components/PropertyCard.tsx
++++ b/src/components/PropertyCard.tsx
+@@ -23,6 +23,13 @@ interface PropertyCardProps {
+    * line rather than printing something the data does not support.
+    */
+   launchLine?: string | null;
++  /**
++   * Renders the pre-launch variant: a PRE-LAUNCH badge, the expected-launch
++   * line in place of a launch date, price withheld, and the WhatsApp button
++   * reframed as Register Interest. Used only for projects with no RERA
++   * registration, so the card must not assert a price or a firm date.
++   */
++  preLaunch?: boolean;
+   nearbyLine?: string;
+   /**
+    * Set on the first row of cards. next/image lazy-loads by default, which
+@@ -65,13 +72,21 @@ export default function PropertyCard({
+   reraNumber,
+   possessionDate,
+   launchLine,
++  preLaunch = false,
+   nearbyLine,
+   priority = false,
+ }: PropertyCardProps) {
+-  const statusBadge = getStatusBadge(possessionDate);
++  // A pre-launch project has no registration, so possession-derived status
++  // ("Ready to Move", "Under Construction") would be misleading.
++  const statusBadge = preLaunch ? { label: 'PRE-LAUNCH' } : getStatusBadge(possessionDate);
+   const videoHref = getVideoHref(id, videoId);
+   const displayTitle = decodeHtml(title);
+   const displayDeveloper = decodeHtml(developer || '');
++  // Nothing about an unregistered project is firm enough to quote a price on.
++  const displayPrice = preLaunch ? 'Price on Request' : price;
++  const enquiryText = preLaunch
++    ? `Hi, I would like to register my interest in ${displayTitle}. Please keep me updated on the launch.`
++    : `Hi, I am interested in ${displayTitle}. Please share more details.`;
+ 
+   return (
+     <div className="group isolate bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
+@@ -139,7 +154,7 @@ export default function PropertyCard({
+             <span className="line-clamp-1">{location}</span>
+           </div>
+ 
+-          <div className="text-base font-bold text-brand-accent mb-3">{price}</div>
++          <div className="text-base font-bold text-brand-accent mb-3">{displayPrice}</div>
+ 
+           {launchLine && (
+             <div className="flex items-center text-brand-dark/60 mb-3 text-[11px]">
+@@ -169,14 +184,14 @@ export default function PropertyCard({
+         <div className="border-t border-brand-pale pt-4 mt-2">
+           <div className="pointer-events-auto relative z-10 flex gap-2">
+             <a
+-              href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${displayTitle}. Please share more details.`)}`}
++              href={`https://wa.me/918076178189?text=${encodeURIComponent(enquiryText)}`}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"
+-              aria-label="Chat on WhatsApp"
++              aria-label={preLaunch ? `Register interest in ${displayTitle}` : 'Chat on WhatsApp'}
+             >
+               <WhatsAppIcon className="w-4 h-4" />
+-              WhatsApp
++              {preLaunch ? 'Register Interest' : 'WhatsApp'}
+             </a>
+             <a
+               href="tel:+918076178189"
+diff --git a/src/lib/prelaunch.ts b/src/lib/prelaunch.ts
+new file mode 100644
+index 0000000..c3eb4d0
+--- /dev/null
++++ b/src/lib/prelaunch.ts
+@@ -0,0 +1,83 @@
++/**
++ * prelaunch — which projects belong in the Pre-Launch section, and what they
++ * are allowed to say.
++ *
++ * A project is pre-launch only when an editor has deliberately ticked the
++ * `is_prelaunch` checkbox in WordPress AND the project has no RERA number.
++ *
++ * Both halves matter, for different reasons:
++ *
++ *   The checkbox is required because a missing RERA number does NOT mean a
++ *   project is unregistered — it usually means nobody has typed the number in
++ *   yet. Four projects are in that state today, and two of them (ACE Golfshire,
++ *   ACE Platinum) are Ready to Move. Inferring pre-launch status from a blank
++ *   field would advertise finished, occupied towers as unlaunched.
++ *
++ *   The RERA number is required because that is the promotion trigger the
++ *   business wants: the moment a registration number exists, the project has
++ *   launched and belongs in the main listing, whether or not anyone remembered
++ *   to untick the box. Data entry should not be able to strand a registered
++ *   project in a pre-launch bucket.
++ */
++
++/* eslint-disable @typescript-eslint/no-explicit-any */
++
++type WithAcf = { acf?: any };
++
++/** ACF checkboxes arrive as true, 1, "1" or "yes" depending on how the field is configured. */
++function isTicked(value: unknown): boolean {
++  if (value === true || value === 1) return true;
++  if (typeof value === 'string') {
++    const v = value.trim().toLowerCase();
++    return v === '1' || v === 'true' || v === 'yes' || v === 'on';
++  }
++  return false;
++}
++
++function text(value: unknown): string {
++  return typeof value === 'string' ? value.trim() : '';
++}
++
++/** True once a RERA registration number has been recorded. */
++export function hasReraNumber(prop: WithAcf): boolean {
++  return text(prop?.acf?.rera_number) !== '';
++}
++
++/**
++ * Pre-launch = explicitly flagged and not yet registered. Entering a RERA
++ * number promotes the project into the main listing on the next revalidate,
++ * with no other edit required.
++ */
++export function isPreLaunch(prop: WithAcf): boolean {
++  return isTicked(prop?.acf?.is_prelaunch) && !hasReraNumber(prop);
++}
++
++/**
++ * The editor's own words for when the project is expected to open — "Q1 2027",
++ * "Expected early 2027". Free text on purpose: nothing about an unregistered
++ * project is firm enough to deserve a date picker, and we never compute or
++ * infer this value.
++ */
++export function expectedLaunch(prop: WithAcf): string {
++  return text(prop?.acf?.expected_launch);
++}
++
++/** "Expected launch — Q1 2027", or null when the editor has not said. */
++export function expectedLaunchLine(prop: WithAcf): string | null {
++  const value = expectedLaunch(prop);
++  return value ? `Expected launch — ${value}` : null;
++}
++
++/**
++ * Split a listing into the projects that carry a registration and the ones
++ * still in pre-launch. Input order is preserved within each group, so an
++ * already launch-date-sorted list stays sorted.
++ */
++export function partitionPreLaunch<T extends WithAcf>(items: T[]): { registered: T[]; preLaunch: T[] } {
++  const registered: T[] = [];
++  const preLaunch: T[] = [];
++  for (const item of items) {
++    (isPreLaunch(item) ? preLaunch : registered).push(item);
++  }
++  return { registered, preLaunch };
++}
+-- 
+2.43.0
+

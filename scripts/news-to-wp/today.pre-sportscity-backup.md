@@ -1,0 +1,17 @@
+```json
+[
+  {
+    "title": "NCLT panel flags Jaypee Infratech for missing its resolution-plan timelines at Wish Town",
+    "category": "Legal",
+    "city": "Noida",
+    "location": "Noida (Jaypee Wish Town)",
+    "date": "2026-10-07",
+    "image_file": "images/jaypee-wishtown.png",
+    "focus_keyword": "Jaypee Infratech Wish Town Suraksha delay NCLT",
+    "meta_title": "NCLT Panel Flags Jaypee Infratech Delays at Wish Town",
+    "meta_description": "A panel overseeing the Suraksha resolution plan has flagged Jaypee Infratech for missing delivery timelines at Noida's Wish Town, where 84 of 159 towers are reported complete.",
+    "dek": "A panel monitoring the Suraksha Group resolution plan for Jaypee Infratech has flagged that the builder missed the delivery timelines promised under the approved plan. At Noida's Wish Town, Suraksha reports 84 of 159 towers complete and occupancy certificates for 42, but homebuyers who have waited over a decade say work on the ground is still far behind.",
+    "body": "<p>A panel overseeing the Suraksha Group resolution plan for Jaypee Infratech has flagged that the company has not delivered projects within the timelines promised under the plan. The plan, approved through the insolvency process in 2023, required Suraksha to resume stalled construction and hand over long-delayed homes to buyers at Jaypee's Wish Town township in Noida. As of late September 2026, Suraksha said construction was complete in 84 of the project's 159 towers (about 7,913 units), with occupancy certificates (OCs) obtained for 42 towers (4,213 flats) and applications filed for 28 more. Homebuyer associations dispute the pace, saying work on the ground has repeatedly stalled and that key infrastructure - lifts, fire-safety systems, water and sewage, clubhouses, internal roads and landscaping - is still incomplete across much of the township. Some buyers booked flats 12 to 14 years ago and paid most of the cost long before possession. The Uttar Pradesh government has also formed a committee, with the Noida Authority inspecting the project tower by tower to check that construction follows the approved plan and that buyer funds are used for the project.</p>\n<p>For the thousands of families waiting on Wish Town, this is the core tension of a resolution plan: approval on paper is not the same as keys in hand, and the gap between the two is measured in years.</p>\n<p>For buyers more broadly, Jaypee is the clearest local reminder to check delivery risk before you commit: favour RERA-registered projects, read the registration for the committed completion date, and for a stalled or insolvency-hit project, look at what has actually been built and handed over - OCs issued, not just towers topped out - rather than the promise. If you are an existing Wish Town buyer, staying active through your buyers' association and tracking the monitoring committee's findings is the practical way to keep pressure on delivery.</p>\n<p><strong>Sources:</strong> <a href=\"https://www.businesstoday.in/real-estate/story/noida-wish-town-84-towers-completed-with-42-receiving-ocs-homebuyers-seek-action-558614-2026-09-30\">Business Today (Sep 30, 2026)</a>, <a href=\"https://www.constructionworld.in/latest-construction-news/real-estate-news/noida-homebuyers-approach-nclt-over-jaypee-infratech-delays/66734\">Construction World</a>, <a href=\"https://www.thehindubusinessline.com/news/real-estate/nclt-panel-says-jaypee-infratech-failed-to-deliver-on-plan/article71550292.ece\">The Hindu BusinessLine</a></p>"
+  }
+]
+```

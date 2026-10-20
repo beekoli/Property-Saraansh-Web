@@ -4,6 +4,9 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import { WhatsAppProvider } from "@/components/whatsapp/WhatsAppContext";
+import WhatsAppFloatingButton from "@/components/whatsapp/WhatsAppFloatingButton";
+import WhatsAppDeepLink from "@/components/whatsapp/WhatsAppDeepLink";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -169,11 +172,16 @@ export default function RootLayout({
           }}
         />
         {/* End Google Tag Manager (noscript) */}
-        <Navbar />
-        <main className="flex-grow animate-fade-in bg-brand-dark text-white">
-          {children}
-        </main>
-        <Footer />
+        <WhatsAppProvider>
+          <Navbar />
+          <main className="flex-grow animate-fade-in bg-brand-dark text-white">
+            {children}
+          </main>
+          <Footer />
+          {/* One button and one click handler for the whole site. */}
+          <WhatsAppFloatingButton />
+          <WhatsAppDeepLink />
+        </WhatsAppProvider>
 
       </body>
     </html>

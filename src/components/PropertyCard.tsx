@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
+import { waProjectLink, waTracking } from '@/lib/whatsapp';
 import { decodeHtml } from '@/lib/decodeHtml';
 
 interface PropertyCardProps {
@@ -102,10 +103,6 @@ export default function PropertyCard({
   const displayDeveloper = decodeHtml(developer || '');
   // Nothing about an unregistered project is firm enough to quote a price on.
   const displayPrice = preLaunch ? 'Price on Request' : price;
-  const enquiryText = preLaunch
-    ? `Hi, I would like to register my interest in ${displayTitle}. Please keep me updated on the launch.`
-    : `Hi, I am interested in ${displayTitle}. Please share more details.`;
-
   return (
     <div className="group isolate bg-white rounded-xl overflow-hidden border border-brand-pale hover:border-brand-light transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col h-full relative">
       {/* Full-card click target → property detail page.
@@ -200,7 +197,8 @@ export default function PropertyCard({
         <div className="border-t border-brand-pale pt-4 mt-2">
           <div className="pointer-events-auto relative z-10 flex gap-2">
             <a
-              href={`https://wa.me/918076178189?text=${encodeURIComponent(enquiryText)}`}
+              href={waProjectLink(displayTitle)}
+              {...waTracking("project_cta", displayTitle)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 px-0 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"

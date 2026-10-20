@@ -1,0 +1,328 @@
+# News candidates - 2026-10-20
+
+_81 new stories across 11 search terms (last 7 days). Tick the ones worth covering, then share the link here to turn into a post._
+
+- [ ] **Rera makes on-site inspection must for project extension requests in Noida, Ghaziabad and Lucknow**  
+  The Times of India - 2026-10-20 - _Noida real estate, UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMi_gFBVV95cUxQRzNoRUoyYy1uU1ZNUWlwd0JYNFRMQmdlb0lDdmc3Vi1uRmNJZVYxNWVhS3o0UnctNTI4VVJ1RnVVU3BjUVJjYlBOQ1hDMmhiNl9FQk1wcFNoaTNEQzFnRU9YNG1TOXkzM0RoZi1oc0lEWkExallYdkwxM09HMEFWSkFycVZ3Mmt3MHRoZnJDeUN0bHBiSHVyMDREQnJGazNZTkNoODlxMlZuVTNORTJsX3NkOF9rTHdaYmFIVWd5TTNEelJBQlRjbVZyeWl3YlhEOVZNMy1BVS1PNXd2U2stbE1LTnR5R1hKancwN0ZNdnIyNjVsamxPYmNtRDdSQdIBgwJBVV95cUxPTDRwTjZtS1AyOXRDc2dFblZxcVlIX2ZqNHRuc0tESnFGLWR0NmJKZlVpN1d4blA0Vk81RlNkYmdfaEJ6TU5rVzByQi1DQW8xN21HaF8wSzF4ZDVGa0lfdG1fWEFmaTJPYzQwLUdBVFBjYXd3VkktRFVfRjBkOEVRbWl4SjdGMW9BNll4bG42RTJ4NENac3JhLW4ySkUxaDlILWpUTDFuZG1zVnoyX0ZCakxaZ3lmYklqREcxLXAwd1MxTWNXenc0Q0dzZFFxQy00eHlrZTlpOXNmUXlEUE9GbjdYUlRFTFlKSHFGeFVJcC14djlvWFRqVUlNbGl1RWFZNnVV?oc=5
+
+- [ ] **2,004 Crore Collected, ₹352 Crore Attached: The Earth Infrastructure Reckoning That 19,425 Homebuyers Cannot Afford To Forget**  
+  Inventiva - 2026-10-20 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMihAJBVV95cUxONXNwQkMwUEFmYzc5ZFFCZkd0WHFOS1hXNEI4Vlp1T1J5c0RPSVJ4NEVYVllkU0xkTDdscmFodDhTNy05ZVA4S0FHc2UxczBfdTlEN3NIeWxIdmYwV2J5aVpSY0VsNVg1TFhpSHYyZVF5bkxTY1llSVVNYWNBb1pubnpvVjVYblNNeHV4R19RM29UMFZ6ZDZoQ1o0TDU4UmtXd2EzdWdZSHJZRGhLZF9DQmJ6akFTZXJsLTdhX0lLRXBwVElkdnYxYURNb2FJMGZWcjJQM2V1V0Q5SnFxSG5URXRWelkwdnVJWGp4T3h1R1J6MmF6ZzN3VjJDQVpPLWw4TERURg?oc=5
+
+- [ ] **Vietnam orders banks to cut lending rates as rising mortgage costs hit property market**  
+  Prop News Time - 2026-10-20 - _Pune property market_  
+  https://news.google.com/rss/articles/CBMi1AFBVV95cUxPdzVOQXZ4Z1djQzFzUEQ1blpQR0xqa0JXa2tXNUFNWGtONUU4cUliMHVqWm1jMjdJek9VOVBxai1MVUNSdFkyRFNNQk9keGNad1NKbklyU3JFWUF3b0ZpMGJ1cjFCN1VHemRGblFtVWQyb2FBNnA5ckRhazhMZzNRRnZrNzUxejNfU212T09yT3hUYUdQbjNoRjlTX19aSFZQOWZMVVJtNmd5RVI0RzJBN1lGbGxfQ1FURHk2RDVUbFdtVWRJa2RST2JGa0tVd25SbkFENw?oc=5
+
+- [ ] **Nashik: Dussehra Drives Festive Buying Across Real Estate, Auto And Gold Markets**  
+  Free Press Journal - 2026-10-20 - _Pune real estate, Pune property market_  
+  https://news.google.com/rss/articles/CBMitgFBVV95cUxObXpHclVwOGpZWGwxOFVjS3U4TWUybEVzY2hwTzJqV0xDV1NYd1RLdlpoQTFuQllGWk9GMnBMRFo5c1VmWmQ5M1BsS2lTcmFnRm1fbzNMWmp6aXpCREJIZjMzZEJlYmtqemVyS2d5SlZka2oxazQ5MjBlMi1PaHdxaFRrblFQT1FsSjJTWXp4YmZMR1FuNEF5SmJ5YVM3eGJHeDVLRktXNDNHaHB0alEtLVU0bHp4UdIBuwFBVV95cUxOcTA2clZmVzFFMVd2WlgxalBxcENyNVI5OFNpWk1fdGhkWHRtRTh0S0l6SkVOc2ZYbUxKb3BWNXNRS29TaXpVZjE0MEhHVVVTb1BmamV5VTdKU0xuLU43bC0yckVnNFoyWmV1VVA5Mm1iTS02ZzZILW9ETXZvRk5Say0zTXBOOXdDTDRSMS1XODZsZWJuS2NqUmJmMDNDWGFTc2YyRjBiYUc2UTFOdGN6RzJzdVAxU1hWRS1F?oc=5
+
+- [ ] **Pune Property Registrations Generate Rs 269 Crore**  
+  Urban Acres - 2026-10-20 - _Pune real estate, Pune property market_  
+  https://news.google.com/rss/articles/CBMimwFBVV95cUxNSFpZbVpHYm9ibVg2VFd1TDMtUXlWcXA3OUZVQXlKNF9xdm1oMmZMV3ZmUFNCUGNYZVBqV1FxUkxzVndTeS1HTFJsZGNab0JlT2JXdnRCeF9iNk9mVTZJZFZqbU5Heml4OWZ4dkVoNG5LQW5kWEU5RDEtUENwbmNqQ2RzU2pheFBSc2ZvanZLRGVfMEZqYlY0TzRxSQ?oc=5
+
+- [ ] **Purandar Airport Land Acquisition Moves Ahead in Pune**  
+  Urban Acres - 2026-10-20 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMimgFBVV95cUxNY3BhUmZlUno2OU1CbkVNN2hCVmR6ak96SUE1UUVMSUFnS0RpT2xIR3lwLWdEOVVTWFRkbkdpMHBqVzQ2WmstT1k1MWJ0ZzJXVHlvTFJpVjM2U3ZucW1HQmU5emxBTVU4aEgyaWgtZjVtN2Nxa1poQXdETHh3RXlnSXhTb0tXOGJUVlpFQ0NKa2h0d21TVXRQc0ZB?oc=5
+
+- [ ] **Oberoi Realty NCR Expansion: Delhi, Noida, Gurugram**  
+  Urban Acres - 2026-10-20 - _Noida real estate_  
+  https://news.google.com/rss/articles/CBMilwFBVV95cUxQRnJsdU44c3VGb19lZW10alRFVzRGX3BJYU54Y0ZXektCby0tZ3h0aUdodzgyOWhCQTh6QzR2U2tsNWprRVlsbzBqOFdkZjc3Q3N6R0JmUzMtYUxaRG5uVExobVlqWWNSNEpURm1aZ2Q0c09YTHhoT1hLdk9tdlU4eXJVR3hCdjdyaEtmcDlnY1hZOXUxVFo0?oc=5
+
+- [ ] **Gurugram’s Senior Living Market Expands as Wealthy Retirees and NRIs Fuel Demand**  
+  The National Bulletin - 2026-10-20 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMitAFBVV95cUxPc292SlhCVmZXMXRBbmJ4czdPSXFlUjZPdHlhUjhpNkM2SllUOXl1dURRd2NDNFlZWlJ4QURabm84bUpGM21TcjN5dEdTNG1JUDQ4Y0tyNlZ4T01Tang5N0pjMVVRRWw0WTBhX0EzcEFWenpBWnFOLXlrNUFPdEhJR1ZKNkJkNFJhRVpRNVZscDVVZlJEWXRMVS1ZOG5GSEczWHZsTzA1bE15eXpNRUhiUDctRGPSAbQBQVVfeXFMT3NvdkpYQlZmVzF0QW5ieHM3T0lxZVI2T3R5YVI4aTZDNkpZVDl5dXVEUXdjQzRZWVpSeEFEWm5vOG1KRjNtU3IzeXRHUzRtSVA0OGNLcjZWeE9NU2p4OTdKYzFVUUVsNFkwYV9BM3BBVnp6QVpxTi15azVBT3RISUdWSjZCZDRSYUVaUTVWbHA1VWZSRFl0TFUtWThuRkhHM1h2bE8wNWxNeXl6TUVIYlA3LURj?oc=5
+
+- [ ] **EAAA India Alternatives to float Rs 1,200-cr IPO on Oct 26**  
+  The Economic Times - 2026-10-20 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMiyAFBVV95cUxNOWtxV1ZISzN0SXpjSWFvRnRaYkZNOVgxSlR6R1NrVGFROHBRUm1za2Y0U1RfTk1kdExuNlhFRWhDc0JUSkM0dHUydDNqbGpMZDJYTklRQ3dBNUlxV25LdVlnSExTRHpxZHJaVF9oOHZNZDRQWThoU1otVU5VOVY2S3VYVzFXYVBMd3JhRHlzMENNcTd6UFJNVXdMNXFfSTJ0bHBtM1pHbEE0X1ZDak1NNWJIYkxfUnVnNTc5ekppZEcyOEptZFh4YdIBzgFBVV95cUxOd3JPQkNvT0VrQ2UtVTRtOTlZUUdMRHh4OUlIcm1VenpJak1TQjd0bzNFOWxhWFdJUTFfTmJ5Yk1rSEs1RDRRS1FFTEdNbUY3T1g4WnpxcnZwSGNJRFBITGNFcWxDdFY3ZXBqQVJuVVJIQXlSVEpTeXNZYUR6SllRTXFUaEN3dmJzWUYxMmRaaGtqRjBLVmNFTHI1X09rbE9nSm1yVWozUzBmNjVXWkVJbkhVVGZDVXZKcXAwdlh0OUx5aU1mSV9sWWMwb0M3dw?oc=5
+
+- [ ] **Pune Office Hubs: Why Kothrud Could Cut Commutes**  
+  Urban Acres - 2026-10-20 - _Pune real estate, Pune property market_  
+  https://news.google.com/rss/articles/CBMijAFBVV95cUxPclFSRlFrZHd5OHZHVXpIeGhVN2VWTV9MWXlZRkVjVWl0Q1JURUF3QlBYNmhqWFFOd0lvWUYxSm5IVGNuVkFySzdxLU5uZkdRZUxqOUUyYnBIUWt0aG55TjhITWZaMXNSalNKQzZiQUZTS200ZFFjYXNkR0VfU2J6NUtZUFhEN19fY0YtYw?oc=5
+
+- [ ] **Birla Estates in advanced talks to acquire 10-acre Noida plot for INR 1,000 crore**  
+  Prop News Time - 2026-10-20 - _Noida real estate_  
+  https://news.google.com/rss/articles/CBMizgFBVV95cUxNVjNQLWdrcElpSTVJNVZHd2xCSG52TWtmU2RtX25DNWpmaTIwUThmdlNKVXkxWGJha1pXMGV3WmRucU9XeVEycUZUNUlvVmp0ZXFRcWltM0Z3cU5kVFlqd05LMXpzeHltYTQ5Vkk4cVVtaEJZSndQWnQxeUdDbHBMY2YwX1J2ajVvSXNmbllhbjZzaTVjWVA1SEhxeFZKR3ZVMzhZUzFtRU9zZzNGWHpkQ25LbVFSMHlGdGZfUjd0cmYtc0RmaHdHcU1qM0toZw?oc=5
+
+- [ ] **IndiQube Spaces to Invest ₹35 Crore in SaiEdge Realty for 49% Stake**  
+  www.grihik.com - 2026-10-20 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMilAFBVV95cUxQRWRuVTZ1WjJ2czBFdVRxeXI3N0VlRW8yXzR4dUkwREQzenpUNHljMjhCTVkybW9TQXN3SEZGdG1oQ2JVQ292Z3QzR3RZb25NaFhsT3dlNnVSVVN6MXNhTGc3RDd1Ukd6Yk93Z0g1ekwxREZXMUdwaDBzdTVHdjBzWlljQWs1T2c5b3phUWEtRmJ2c2I5?oc=5
+
+- [ ] **'We See Considerable Real Estate Opportunity In Delhi-NCR On New Infra, Urban Planning': Omaxe MD Mohit Goe**  
+  News18 - 2026-10-20 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMi-wFBVV95cUxQT3BkaE1LYnpMaXE2QjQ4eFllWUgyeVhBeU4ybTlyTXduYkstR2hUdzZoajNHMTJFeUpjS0RSc0ZuR2pRMVpxOW5YLTJKbjUtVFJ5VjF2VExSTmlBaHBVa24yeTVmbjNyUXFJT2QybVpLTEhvLUVvdktvaFlKRDdib0pmbm9OSHZVcHVJMlNINUg3aHJMa2pab3V1RmFTRjlMQWxib2xYT2VzMG9GQnFlcS1sLWNXanlHVUdpa0MxbFZCeG8xRkxXczVKQV8zSFFUZ1dvT0lId2lWZE1qWmlQVGVicE9TMS1wM0xGVGNTMHVoOGNxbE9vRl9xd9IBgAJBVV95cUxON1hLX0hRRzNUUHFsQmpJdG53WFFONEpKeE5KLW1LRVB6bUE5NnBvWGRMUk5PR3E3dHA5TGo4d3JyMVg3NHVXQS0wXzI5b0ZkWWpNWWFtUmZLQUNNVXE4TkFmUnpPU3c5cXQxWWZYUGxaTVB3MUtYblppaE04cDNPYjJMQTlxTklFXzQ4S1hyV1llVmJoRmhGM0xOcFY1TkNoVVFsS2pEc3kyc29fWlZ2Q1VoNmVqbkUyOU14ejNMM25zSzFyZHFCVFdxWGg2aV82OXJPLTE1YTJxNFFxV3NmbU5FbjdHQ2xGS3R5ZDFRMGlHZi1TRklNZ2JKLVpWRFox?oc=5
+
+- [ ] **Gurugram’s senior living market gains ground as high-net-worth retirees and NRIs drive demand | Real Estate News**  
+  Hindustan Times - 2026-10-20 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMi7AFBVV95cUxNMGpOcWRaOGMySlhtSFZsekhGRmRuMmx1eDd5ZTllRktwMi1OX184WWFra1Q3djBOa0dZYnMxM21oYmhRZjExRFhpSkJMU3g3YjZ4UWZLOTNXRTJkQlRFTllNOVpRbTdrN00wNUxGWW9DVDVaQl9Ha1JwR2hyNzJXemd6Qkl4UTc5TWtrTDk0ZHZpQ1dzSXZ2bm12RnRfa3QwNG1IZjFJMEVFVVBEdGwxMmxiMTBITXhPOHlCcS1qcEw2bFdUU0J0ZnFtZFJvUEc0MW9mcnJVekxlU2lIaFVTMWdUYTNVOWNhSE80OdIB8gFBVV95cUxOaEMwdHI1TU9LNlJHV0EwcHdFZDN0N3pDVmhoUE0yNzFpemlFVDNlaVBHZzhiR3lzT3JPS1lQTThPXzFCQng2WmJjMVI2S2ZJcFJfNVZaWnY5OEs3TDFha296dXJYVUhKc2hMNTNSVDlHQkt5TlY1ekRGM3FCVGg0VmpzQWFMNy1jSmQxa01XSi04WHdoeXoxOEgxMnBwbGtfMFEzaHV6dk9kaV80aEtXRURyRmd5TFp4ZHdJTWZhV2ljSURBRUJkMmhUUXNJV2dmRVhlNXJxMWVmRlJGSlNSbFAxVGhPYlZMU1EzdE5ZMzJSUQ?oc=5
+
+- [ ] **Delhi-NCR to get a new city soon? UP govt's planned mega industrial township to be bigger than Noida; Check details**  
+  News24Online - 2026-10-20 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMi9AFBVV95cUxOaW5OalRfM1l4Y0lkejdSWXpqd2ZJZnJfS2ZBWC1zLVg4Z2lFeGVGU1dHYWRabTkxN194VUlnYm1KeXBLWDY3SU8wRDFfczlKQl9RT3FyZXBrVXV1N2xSemFBQ3FOUzdVcHdPSnNmdXhDeGRRbmRYaDB1dkNuSVlkWWJMc3BqVlJtMVdOQlozeVIwdWhOSDhoN0NERW9iMTJGT0czRlpLWlhaWFBjZ19zT1VxZk9ZelducmRGaXZwRUpscnBXUGg5Q1lQNHdkcTd6Zm5pVF8tUzgxVzlXZ0lIYlcyR3h0aWJfclRhNkZjckRGak8w0gH4AUFVX3lxTE5neHQ2THAwZ3pzVkxNSjQwblhLaEo3RXdSblNsQ0toVGpYWGYxSTNMUk83Ry1iT1d2cTVTQldWakctTHBzNDczWTNkc21QaE1heUVrbjJGeGZDaUhJVU9GWE9NSXJMeENodGZ3dTNfWTVaU1VpelhIMXVnemtoMWVIc1RlVHhhWnViNFMyc2huWHhBUlU4TlZmWkRGVjFkRUlPVHVBUFNFelFra1piLTlPb0tBaEh0OVdnR2Jpa3FWdEh3QzB5OUxDUzJuamt3ZkRlVTl0bUVmaVdBaF95VVh6WkU3aF93dHZTaW1UZUdWT3JSUDdkNm1w?oc=5
+
+- [ ] **NRI property rules in India: What overseas buyers need to know before investing**  
+  Prop News Time - 2026-10-20 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMiygFBVV95cUxPQmxMZkJNdHZudlk4TE1CYWNUSzJVa09YTWlnTTA3bXdNTlZITWdfOVM2TE9HVUg5cUlPaER3bXdqQ0FKTE1YWi1CMXVBclY4OUo4N1hlNW1ocVpfWVEwS3M0cUlNUkxJSS1sTENVOUFSUDZyS3FtaFpjM1BSR3YxSVpvQWJramFLX0NILVFpTkJwc0xwNkkzbE1fWVhvYk5oUWRrYjVOXzJJUF92bjRhSmxwdlZHQVNhTmRqT25aUHJkaV80Vy1YWGdn?oc=5
+
+- [ ] **Youthville Inaugurates Landmark 10th Property in Pune, Sets the Vision to Build 15,000 Student Housing Beds by 2030**  
+  Pune Mirror - 2026-10-20 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMinwFBVV95cUxQLTZDUXZQUUJxZTlvSzFQQzJXWVhBcUJESVlpRExIcF9JdlE1a0t2cGZuQTRUdTlkeFRlNmMtNVdBdlNUbTgwREZNcEFrVjlTNEdUQnFaUGRzQWJxZWk0NXg1QXgxanNFX09fMllxaEtPZHgtMkY5WGYzaG1iSnkxc3VMWkNyVGpVQ09yQmdXY2pDTXpRSmdkMW8zU3U3Sms?oc=5
+
+- [ ] **IndiQube Spaces to invest up to ₹35 crore in SaiEdge Realty for 49% stake**  
+  ET Realty - 2026-10-20 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMi3gFBVV95cUxNclE3bkJrRzk3MHJxY080MVdvb2E5Y2tPTTFCd3JjOURPU1N1ZFRWNHBBMExXRmhwQUpaRVR4UFZ6a3AzZlVaVDFXdHZ3UVZLRnR1ak1vZ3RnQmxkMnBJWS1HUFVwZ3N3MHRXZWV4Mld4aktQc3lvOXlwQ0ctQlNCaGlVVm1jSDVjTlpqV0hDYm03THlpNzdhak5kcHUyQnZ5LW1oNGRBWGtxWjV5and0SUdCSDZleHI4aHJyX0ZZZ0UxNTgta0pPZXdlT0Z4MVd3aktybEZVWFdlRG84NkHSAd4BQVVfeXFMTXJRN25Ca0c5NzBycWNPNDFXb29hOWNrT00xQndyYzlET1NTdWRUVjRwQTBMV0ZocEFKWkVUeFBWemtwM2ZVWlQxV3R2d1FWS0Z0dWpNb2d0Z0JsZDJwSVktR1BVcGdzdzB0V2VleDJXeGpLUHN5bzl5cENHLUJTQmhpVVZtY0g1Y05aaldIQ2JtN0x5aTc3YWpOZHB1MkJ2eS1taDRkQVhrcVo1eWp3dElHQkg2ZXhyOGhycl9GWWdFMTU4LWtKT2V3ZU9GeDFXd2pLcmxGVVhXZURvODZB?oc=5
+
+- [ ] **Remove all encroachments from Unitech Noida plots: Supreme Court tells administration | Latest News Delhi**  
+  Hindustan Times - 2026-10-20 - _Noida real estate_  
+  https://news.google.com/rss/articles/CBMizwFBVV95cUxOdllmNGdRaTJMUW83OEEyOTMySDZUcXlRdnk2OUd1b253cW9aUXFPSjNfTkpVWDBVUjRwdnV5a293UmtNejdRR1J3MjU5NXlPaXQ2MkxwR0ZCTmhheUlZODVfYk9sdjhTeWdwODNwUzFnZ0pSWG9qalM0eHhacmluWktScGk3NXA5ZzJMcC1sM0g0eVllVzI2ZzBjS01ObXpKSWtYbFRnZXFrcVBOb1VhWnBtejRFTWVaaC1CNXhZSjMwRGFOU3RvQVAzdk5TamPSAdQBQVVfeXFMT0ZFdEM0bjVZalJnV2tDM3hFV0o2OFFESU5qT2VpUWoxR1NsaTA0YmxBYnhMdlFBUFpEOUNaMDBhQkFfaXg5QWtzTm56M2VjT2pncmt0bDEwMUhWSWFSbUNpTEFzU3JHNFVVNHRDbk1qVHFXUElrNVpuM1JyZk90N25Rb081eVVWTGdZWkRCRkhPWmQ1dVByZFFpMkswSGRIT3dtTG1uc3dVanRXNnZ6Z19LZGRTdi03bTRPanZYU0poY01rZWloNGd4Z2w0SlZ1SDQ5Mjk?oc=5
+
+- [ ] **Pune Office Market: Why Kothrud Could Bring Jobs Closer**  
+  Urban Acres - 2026-10-20 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMiiwFBVV95cUxPd2tPbzd3aFZnTDhxYnB6U1JXdF9taXpmaUtCanppLTd1azVHd1ZVdm9OaDFiYkR1UjRvSmJ1U1ZMR3NCMzRkTXNTcE5hOHBfMHREYlBmZG1RNGFNRXRRNEdoVmNSNERWQU4tY3dLNDJINExrUTd3Y2FGN01fUmpsZFFxNlpLUVZUMFp3?oc=5
+
+- [ ] **Why Savvy HNIs & NRIs Are Racing to GIFT City - India's Offshore Finance Powerhouse**  
+  Goodreturns - 2026-10-19 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMiwAFBVV95cUxQZVVTenhhZGZkc0Q5cjVlejNSeVhidnFFQkJMMVhQNTJGSmc3RWc4OGY1TUlWYkVWakJqOWJCcEpWbmd1dmx0QnhQTGM5dFE2UHc4TVV3Q0F0N0NFVGFMTkN4TjZwUEVyQks3TG94UEpxMFY1Zm05Zm1HQmdYRGMta0U0OTNtaXBpdlJra2I4TjQyQjZHTGF0Q25kWlhHeWE4SU54ck5wdDRYSXY2dmxpLWRJV21RdXg0S0JOOU03S1k?oc=5
+
+- [ ] **Two detained in Pune in shipping firm owner murder attempt case**  
+  The Times of India - 2026-10-19 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMi1gFBVV95cUxQdDBINjRTRDFUeG82YTJqOEY1U2xfQk5JOWdZZ2VRTXFsOUNlZ0FYV01pZldBOF9UQUdYekNuYTFnT3Z3bkZsMHBkWFlZQVNZUldxWlo3a0pSSDhLekFjMTU5UVpEbzFmZGZ1bTQxcWFiVGJPY3RTVHduM1NtaUUyT2RIUmc5NzlLQW01dm0zSWZfT1NlaFoyblhTY25XVk9DRVFvR29iR0tRcDMwTm84cXpKQmpkanVEZ0hnWHlENWNBbi1LRklRRVBmblF3akc0VmhMVVh30gHWAUFVX3lxTFB0MEg2NFNEMVR4bzZhMmo4RjVTbF9CTkk5Z1lnZVFNcWw5Q2VnQVhXTWlmV0E4X1RBR1h6Q25hMWdPdnduRmwwcGRYWVlBU1lSV3FaWjdrSlJIOEt6QWMxNTlRWkRvMWZkZnVtNDFxYWJUYk9jdFNUd24zU21pRTJPZEhSZzk3OUtBbTV2bTNJZl9PU2VoWjJuWFNjbldWT0NFUW9Hb2JHS1FwMzBObzhxekpCamRqdURnSGdYeUQ1Y0FuLUtGSVFFUGZuUXdqRzRWaExVWHc?oc=5
+
+- [ ] **Can Pune Bring Workplaces Closer to Home? Kothrud and Western Pune Emerge as Potential Office Hubs**  
+  Punekar News - 2026-10-19 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMiwwFBVV95cUxQOHdDTF9zY1Y0ME96VS1hVEZnTXROcXN1emxwbl96TDNfZTUwUnNwQ1I0ekk5RjNGWGNUd3lfMDBxWFJFd1o0Wk5kRTl6SlFKTnBNV0s3dk83U3BRYWJ5alRwU0NHeS1veV9YaFVZR3FvX0JpMTFNUWdYZ2tyN2hpWnpCaGtEdzBHTGtCZXI5amFja2dmQUV2b2RfN1JPdnB3bWl1bEFEZFY2bWt0SXRUY2dCOG1wRmFudGI3a1FJYTFDZFU?oc=5
+
+- [ ] **CREDAI Pune Honours Excellence in Labour Camp Facilities at Pride Best Labour Camp Facility Awards 2026**  
+  Punekar News - 2026-10-19 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMiywFBVV95cUxNYTYyNDR6LWw5UnRKSEdHVFpjSUJPNHR5OFZxdEZoaktyNWtfU2FtRXBMWDVaVEE1U1dRcFZqcFBWdGVGU3pkMy1Na1Vjc3JtQWJsRTVhRTdlMGNRY1dzWkdCby1pcm80ZzlFVXQ0S1JTR1ZHb1dNZXBSR2ZoUTRmVlppWkg3NFQ5Y1VYUWNkTWlqcWwxMXF3amNPcUJ0QmpsWmRoR3A4LU9RU3N5Z0ViUWdfVzNVMkNzS2QxQUR0TXpaQW1ZWUFXLWpUcw?oc=5
+
+- [ ] **Pune Cantonment FSI Dispute and Redevelopment Rules Explained**  
+  Urban Acres - 2026-10-19 - _Pune real estate_  
+  https://news.google.com/rss/articles/CBMikgFBVV95cUxOSGoyTnJQZ0pTejVSWTR2d1RHQ0gxRXhiRHdqeDVPMmI2YXY2ZFhrVW40TWRqeXBWSFpLelljaWNuQ3RaOEFiLU1FNEFUTWswMjZsZEpxTm1oTV9vWFkxeVVuZTcyR2Z3T2Foc1RjVTZDYVlxc1BPSEMtZWpwcHRwSkZiYTc4XzQwMW9HR3Roc3Vzdw?oc=5
+
+- [ ] **Greater Noida Family Deaths: What Started As Suspected Food Poisoning After Noodles Led To Three Relatives’ Arrests**  
+  Brut - 2026-10-19 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMi4wFBVV95cUxQSXZTM25SU2JPTVRyY28wV3lsVTg2MGFaM2ZGMEgySnVqejF3RTcya29WQVBKc3cyUTdXX000X09BSHBvUE41QkFzVG9aRi1oSzhLZXNpa0lLYmxPYzNtWHdjY1RwSXdheU5WazgtMEZCd0hILXJlcURCdjNITkI0WlEwNElsaW5RcGRza3pVd0RBdElkNXNNaHM3cWpEU2pEeHdmd1RTbXVUNTktZlNPaXlNczhpb3FBSjZfWk9nbEd1Rzd6VE1tNURIQVpBZmkyT1M3NDJOald4Qk9iQm9QX1dRRQ?oc=5
+
+- [ ] **Noida Office Space Lease: Sopra Steria Signs 15-Year Deal**  
+  Urban Acres - 2026-10-19 - _Noida real estate, Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMijgFBVV95cUxOang1bUNQYXhla0R1RmYzVnpRMEhoSEpUeUlPQXNXQTdNRzI4d1p6aHRhenV0TGhNcWE5OEgtX2VEYUhrcTZ0UXBvRkg0TmdWVTNyNzd3NkxON2xqbEYyVTFBTkpMVFZCOE03RHZTYVcwekR3Zno4Z0hTbjE0OUttSGJ0VThFdTZlZ2kyWENR?oc=5
+
+- [ ] **Mumbai Real Estate: Resale Homes Account For Nearly 50 Per Cent Of Property Registrations, Liases Foras Data**  
+  Free Press Journal - 2026-10-19 - _Pune property market_  
+  https://news.google.com/rss/articles/CBMi6wFBVV95cUxPTmVIYzFsUVBnTExxeHNyN3Uza00wMkVpcG1sMlVXSGxVUDQtU1otWk9jWTd5cFBBbDBRMEFKS3p5TXFFaEJwRXBwRmJ3azdQNWowV3JTMEVlWVVuRERDZUFBcnRPbk5VckNnZmNEV0s5WmlFUmZwUkc4clZYNVRlRTdVNXBBTjctRXVJcW8yYVJkRFY5aWJhRWlKRHZ5a0tYdGlJZDIxYmxrcG9HYnlkY1N0MjFnZE9uMHdrUlZZWC1LbFFVbmNvLVQ5VnpFWHZ1VHZHZjFuZUNFWDhjZWthQ3FKclN2MGpCQmRN0gHrAUFVX3lxTE9OZUhjMWxRUGdMTHF4c3I3dTNrTTAyRWlwbWwyVVdIbFVQNC1TWi1aT2NZN3lwUEFsMFEwQUpLenlNcUVoQnBFcHBGYndrN1A1ajBXclMwRWVZVW5ERENlQUFydE9uTlVyQ2dmY0RXSzlaaUVSZnBSRzhyVlg1VGVFN1U1cEFONy1FdUlxbzJhUmREVjlpYmFFaUpEdnlrS1h0aUlkMjFibGtwb0dieWRjU3QyMWdkT24wd2tSVllYLUtsUVVuY28tVDlWekVYdnVUdkdmMW5lQ0VYOGNla2FDcUpyU3YwakJCZE0?oc=5
+
+- [ ] **Sopra Steria leases 4.74 lakh sq ft office space in Noida for 15 years; rent outlay at ₹816 crore**  
+  ET Realty - 2026-10-19 - _Noida real estate, Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMi-AFBVV95cUxPNndJRGVBdTA5OE5YdHJYeUdSODRtUTZtUWU4SWtWMXBuUExVaTRFYTItMUxkMUhRbUpvcFd3WjRMRGdGRXZUN0ZpMHB5bHo3R3ViajR2dkczVWRTYzlyRkVGNXVVM2U3dUw2X1lqTDdHal9GdDd4dnRWSE5sRW02MUIwNFMyYUE4SE9NOVYwUzU0a3J6aFlIVmltdkpnVHhpZ2ZxQVNyTUdhekxJRmIyRmhMelpZX181X1l5bGNFVC0tUVhCM3ljX3JUak4tREJ0bGQ0aVZkUVh6WkdhcUI5YmdhQXVEVWFvRm84eGRqQVExbVhKTjFledIB_gFBVV95cUxORlJydXl1UTduWW12YlF3c09tckI1VDhxTXgwUFlGLU83VXFoX1NPSHdhQWZHeENqZ0dnQ1ZYSVlYNUhJb3ZLb0Q0NWJMLUo3REluckJYRDBrcHcwS1ZCZkcwQ1NEUjdha0hMZHhodG02aWEwYUpVNmUwd3R3Q3NnaGhIRU8xMnFTNWNTdjRudEJPSGw4OGdYaE93S3dadV94RnRpcEgwSnJ5Y1VGYXk0ZERvV2pTTFZHQ2t5cllHOUVNSGd0bGwyY2xtSDE2ekJWWFlGcThxWEtZTFNtZFM5MDh5WVJuQzdLOVE3cGVaeEdmM2EwbkxkdmdaM0RZdw?oc=5
+
+- [ ] **Eight Years After Redevelopment Stalled, Bombay HC Orders Tridhaatu Maruti Developers to Pay ₹8.45 Crore to Chembur Society**  
+  Pune Mirror - 2026-10-19 - _Pune property market_  
+  https://news.google.com/rss/articles/CBMi8AFBVV95cUxNWC14Q09rV0NoV1lXdFlsY1VYX3VHbUtreG5lUmtib1M2aFVJWGxaVFhpVmhwZ0NiR2J6Y25ubHlRWWxFTEpONkhXZ1RmR1lqTW9hZzB1LW5LbU82UTNhV3NRQ1dKZDI2VVNTTk5xOC1OLWlqeEM5LUwtUTNqQTBZTVJxa0d6cjZ6em1pZ1BJQXFJU01WcEdWNGFBTUZTdDFkQ3l1dlM5X2hXamhTclFESUZSbkxOSExHZzBWdlBTVWFIUkticnRZUmlqQ3d0ckpTdUxtRXJLOGU2VTd0OGRVa1Q5ZjVCd21YMWJMWnVPUm8?oc=5
+
+- [ ] **Sara Ali Khan and Amrita Singh lease out 2,545 sq ft Mumbai office for Rs 3.76 crore over five years, wit**  
+  The Times of India - 2026-10-19 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMi_wJBVV95cUxPUUVpUFhNUzBJWVhpY2ZGVHBwbURFYzdZWHk1akNBUjZxTmE1WjdtcTUtYmEtYm5YeExkR0xwLURuR3MzZTc0NE84MmNTSUV5TFA1OUtNYVdGRV9YdmJKR0xHUkY5b3lJWjVFS3JtVnpsalVZejYxbEZxMHFMaVc2eWZGQzVGWVFpbTZUU0RuUjFlOTlfRG8tdTJBbXBneVViQlgxNUdKclhjY29MRHBJUWFIclFESzVRd0hTWVR6Z0pPZGc1TkNBbjM0YW02TlFWZDdLU29VZ1hzR3JZSHpkOVdaRHBfNlozUFpPQ2hFVFNWSG41enpjRjhiSVVlMmJMTkZLNmRwZkxpQ2dLbTF4SE5NYVpneHlSU0NHTF93VkRJbU1Fd1VhQ2xhMWtudXdoRTdvTl9hZ3RfRmRDYkJhRTcwMHRXYnBOQU00dFRrXzdiTkhLWTlsS3pyQl9jRjNlS3F6b0VHbmpzcGhDVENtM3ZSc2ttOUNNSXhoaS1PTdIBhANBVV95cUxNMnhOTEliNjBXZzhvX0c3ZEtiMkgwRWc3bHVuY1BTdEpNcUh3Vmt5bzZ0RU9iOS1LeW1HQm4wYS1SQkJLampnWTNXR3lSWnk0N1NVUFVfVHFGaUpab2k4WEtlMUp3c0stQVlWbG9fTHRvSUZWWC1MN1k5Q1U0ZVpiWC1QVEJUYm1FM0Y3cmdDNFJoeUZPcVpva0w4b3B1bFpOaGZWZGJqY0pBWWIzTkJaY3U4LUZ3elFGZlJOQ3pFN0pLNk9vaW1qNjNsVTYtWE1KUGNrbmktWS05UGk3bS1uLWFyUUZOcXZkOVllUDcxcDJxLVc0dHA4TXF1R2tlVjFlck1FUUxDOERMckRkcE1RM0JyUDZCM0NzUGpiS1g0TWJtZEZmQ0llMXZzbHpfQllsMlRrRTZ0dkZlZjBBbVI3SFl4SVJPYkMwNjQ3MV8zWkdwUFh0NWJwbW54R0RBYUFYMDd1ODNqaU1OY19KeUZTU0hWS0wtY1pVdjJEYm5RWDBPbTcz?oc=5
+
+- [ ] **Nyati Group Pune Review 2026: PTM Builder Audit, Projects, RERA & Delivery Record**  
+  Pune Mirror - 2026-10-19 - _Pune property market_  
+  https://news.google.com/rss/articles/CBMitAFBVV95cUxPdUVzalBSWVFXb2lEa0tUMUFpa2RnRjNhME5CZzFGT01GRFJRRkxWVnlKOGZCZHhmWURzWlRsUFktV3JYV205eFNqX3R6ZEZ4XzgyQVlabUFVaW1vTlAxX3ZrekF3ZVplWDNFZEtaZXRTX3hKWmsyTkRtVXhZTXhhWWlLTFYtbFByUUljRXZjVE5oRmVkRTdZcTJNSTlGUzJ3MnZuVXl1a1Q5X1ltdERHNUluSzA?oc=5
+
+- [ ] **What is New Noida? UP Govt's Mega Planned Township That Dwarfs Noida**  
+  NDTV Profit - 2026-10-19 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMirAFBVV95cUxQZDYtSGliZDcwQ0JOaEtDSHZxTTVUZFZYZ3F2MTdFdW01dkM3RjVCc2FLZDNGdmNUS0lEYTJMVnpwQ2IxcUR0V082eWJ0Zk9qOW5qWDMxRnZCM1BuVFhzMU9mS2QyWFVEVS13b3pYVmZGN052d0dLTUltanhWSEFFcjdFMjAyenBCOWlJZ3B5elpRUnlYNUlTNHVjX05DVHdLT3U0T1JNZ1V4RFM40gG0AUFVX3lxTE9oaFdfRXZhUENYMm00QW0weTJRbnZ0QzhzOXNZanMzUHdhb2ZGS2prQlJxS2I2cERGcGlzckxfanozRkVzbXVZTnd6UV83Y0ZaODYxV1B3bnlXdk96ZkVkSm9mNTBkS3VLVFBjekhJbEFVNUJ2M3VlN1RfcFdDb056MkxwQVVLZVI1Um00Y3RPaDBPOVY2Y2IzRWpnMEM2MjJXTjNOTGJZdEpmY08wZXUtVjJoMQ?oc=5
+
+- [ ] **Tiger Shroff Net Worth: How The Baaghi Actor Earns Through Films, Brand Endorsements, Fitness Ventures And Luxury Properties**  
+  The Sunday Guardian - 2026-10-19 - _Pune property market_  
+  https://news.google.com/rss/articles/CBMikAJBVV95cUxOdFhMaGpWbGFoRy1Rc21sbE11QzZ0VDl6UWdtRkhnZjdiUUpRRDBwd3A4aHJpdUVyNUtDQjdOeDg0dWhDNDN4TGZPZG9mQWJvczRTXzZmbHpoZWU3QVdTYjZaS0padzVXMFI5MVJJbExic0NXZVNDVzlaTjc3SU5jX0FRbTZFRnc0MXlTdFlxVDRqa09GWk5ZWEZZYUJsdG1MZWx3cm5mRzR6c0Z3alpRUk9WWWs4akF1c3Vfdy1fbUFmMjIyRUdTcjZPLWdHM2YxRG1SNk5yaFJOUG5UUjk4Z3NBNl9Xc1h3MllpTzQyZWdqcXRwNE41QUZ2aUxYNE0wTHUxX3RXc2J2TDhkQkEzddIBkAJBVV95cUxOdFhMaGpWbGFoRy1Rc21sbE11QzZ0VDl6UWdtRkhnZjdiUUpRRDBwd3A4aHJpdUVyNUtDQjdOeDg0dWhDNDN4TGZPZG9mQWJvczRTXzZmbHpoZWU3QVdTYjZaS0padzVXMFI5MVJJbExic0NXZVNDVzlaTjc3SU5jX0FRbTZFRnc0MXlTdFlxVDRqa09GWk5ZWEZZYUJsdG1MZWx3cm5mRzR6c0Z3alpRUk9WWWs4akF1c3Vfdy1fbUFmMjIyRUdTcjZPLWdHM2YxRG1SNk5yaFJOUG5UUjk4Z3NBNl9Xc1h3MllpTzQyZWdqcXRwNE41QUZ2aUxYNE0wTHUxX3RXc2J2TDhkQkEzdQ?oc=5
+
+- [ ] **Sara Ali Khan and her mother, Amrita Singh, lease office space to an AI studio firm in Mumbai’s Andheri West for ₹5.85 lakh a month | Bollywood**  
+  Hindustan Times - 2026-10-19 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMirAJBVV95cUxPY3RhQWJaaHhVS1NxQWJjVXJybnU5cllsNnZJWmw4NTREVk52WDB1UG1TVzJWZ0hyT0pRNk1RZkRHQ3VNOXIzZ3dzbXRWcDhVQVFFbEhVT2hDdFVLU2Vfc2M2SXg1WmtNNHB4TFZIOW9fT0dDZEJsa011OGNvLUdpTUdBcl9waFNITnhmbzhSc2RzcVFtM3BUUDZ3NkJuTDBMOUF2UHRsbF9NVGFUdkc3cWVLS1hldW1kYWlyTTdoX1hlMmJuaGhBcl92bDNHbTZkS3RhYko1TjM4X0pRLUlxbGxlOGRJQjFzeVNQRnlJdTFvbExFS2dUekQ5UzdtYm40NUhhN1hXeW1RRXlUektDMHVLUjNLc215cmZhNi1oNk1pTXhHaVlISE9xOEXSAbICQVVfeXFMTmR4X3pscnpZRjJaT0ZzT3lUaFo1NUNsTThxeVY0ZWlBcnE4MEZUWnFoYmFKRjgwMjNmOU10dUcyOEhKZXdaWXBqT2dCVFZZWENYRnBsNlhHVm95VV9zSEpKalhrVV8weXRLVDBYRHJsbE1GOUhMcTR0MmNzbmNJYXp4S2FFSXFhelpUSF9oSDVrTnJCdmlodVlBYy1BaUZ5V3AtaTlVVURsYW1MZlNDMkJYUmZWODdDNjBtZEVPTXZzVFZYZExDdWJLci1SZFh4Y3V2bENQWGFHUE1Zc0NjZnFHQ0dzNGtFbWZHTGpWWF84WFFJbVBCYkljcGNqdXEycFV3UjVuOFd1dWItWXZ5a0xXblBMRUEzRlp4cEFCVEw5RzRMSGpteGFsb1BDWWlrWm1B?oc=5
+
+- [ ] **HC asks UP govt to explain action against builder as Ajnara Homes registries stall**  
+  Prop News Time - 2026-10-19 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMizwFBVV95cUxQMXRvSzZTWUVidlFLWjdFNi10ZUhMVmxlSmV1ZnAxTk5ja2QwempRTE5ZazR2cVpLTDRBM2luY2stcmtwRUdYd0JYVlFJN2R4TElUbnZ2cjZhZVZXcGxlOWt3TlBDNG9VaW9VQl9MSERyWFRud2s2MERZWlFWNFJSeGJaaXNHM2FtUFhGYzg1dTVzZlNBRzBhYzNmYzM2X01XUXI1aUR0U0xsd2xGWmdTRmdMc1RUQU9iUmtJLUNCdGNJLW01X2RyZkxpdEltd1E?oc=5
+
+- [ ] **SG Nakshatra Siddharth Vihar: A New Residential Project in Ghaziabad**  
+  openPR.com - 2026-10-19 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMilAFBVV95cUxNYW1ubkQ4RnVBbFdLUWM0bGxGSzRhclpIQWFyaFRlQmlGaWdxSF8yN2pJNmljZmR3M0Q4Mm45YTVuaWxHeEtQbjN1ZEVfYlhvV1JIclFjeElmRnJ0bVpGQzJlZ2F6bHdGOVpsMjFINlFmN0NfUWpMc3BoOFRmbmV0M1hyVGRCWUlJa0hscFpTUGhUcm5V?oc=5
+
+- [ ] **Delhi-NCR to Get New Noida, Bigger Than Noida: Check Master Plan, Timeline for Rs 35,000 Crore Project Across 20,000 Hectares, 84 Villages**  
+  Jagran Josh - 2026-10-19 - _Noida real estate, New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMinwJBVV95cUxOX05IVFJCZHZCZ2J2N3YyMXRyYlFxMkVaZ1N5N1lsMHVtTkF6VmNkRk1Ka3BiNW5WZnB3ZEUxNmFGMmlyeGl2aEhZYXFWODQ0VVZSWnVXdTlGV0Z2UFNjZy1oYXQtU3JJUVZzZVdkT3FJMWFvUXVFajdka2YxTWc0Q3U5Z0I1ZUZNbmxHZjJjMXZFcm5SNUdYdGZOT3Y5S0tCSmhmNkVzM0FJZzNYQVdDY2I2NGMtS2xXNlpMNy12QUwwbzVJNi1BMnZ6NHNVaFVTeFhDR3BETW8yS0JEcDNudlI5TzVONDhJRndLQWpXbTgtbk5Nc1V1RXpKNjlnMWg0U2RHLXdDcDJvMHVzT01sNzZLYmZoSU9aLWFKcmFhUdIBpgJBVV95cUxQWU5oLWY2dTlQMlZCRnNEb3FueFc4Y0hOWEs4ZVg2ZmRKTlg2eWJpNjZ3V0xyS1hhSDhvMC0xVHo5RjNxM0VLRTVCblJ3Z2h4RnZtY3pNamREeXRpZ3JCNExKWWpSQjQ0bFcyVmlZMWhsSjZTZTdLZFk4cnk0ajN4cWJWdDdNSzBsUUNuUzlFY3p4RkxyNHBkaEpwQThvaDIxaDJVcVd4bGNCeXROZnRPcUkwSllEaFdUNlVFQ1BheENZQmg5NWZ0bUg4WjcxaGF5V3VOdEU3UjN2aWd0X3lBWW5MRWlKN3BSR3BZNWNxbm1IQWdjM2NSRUlaZTREOThtR204dU55NlBINlJlLXR6d0hoazJ0OVo0SGxNZkZEN2xOYTVXNlE?oc=5
+
+- [ ] **Noida Family Deaths Investigated as Criminal Case Linked to Property**  
+  India News Network - 2026-10-19 - _Noida real estate_  
+  https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRjlQQ2prRmI4NzRMTW5WNk84dWNKWGVjUDg3MWhTWmVGclh5YUItTnoyLU9BUUh1cC1QR3kzRDZ6SllZTWNqOTFUbF9jZ1NScDViZFB1dE5sVUFaZDFNNUxWN2l2OEVsTUxjX1lnNFVCd2M0X0phQXQtZTZxUU9FNXJiektnbGZjbU9scTVITng3UE9KaDBzQzNYZUlZS1BOWVllZENOaEJVNXM?oc=5
+
+- [ ] **Aditya Birla Sun Life AMC International (IFSC) Limited introduces two retail funds of funds from GIFT City**  
+  Yahoo Finance - 2026-10-19 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMilAFBVV95cUxPbnU5N1pnOXc4dWJiV3BvcHFkYzJVOFNzVHVNSnpKelZSSGkyVG5SYVc5WGtXb0Q2dlNDWDBVVmVOdERvSVU5c0VrMnpDMlJTeEt3bTluODRVLXlER2o5cndFSXhiYlRPUkR3T3JHbXhjOVJvM1p2MXA3eWZsWkRhc3YxOE95LUp5T2hlNm9iUlc3a1ZF?oc=5
+
+- [ ] **Property boom: Will real estate prices rise in 2027? CA cites stock market, gold trends, US green card as big reasons**  
+  Livemint - 2026-10-19 - _Pune property market, NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMiiwJBVV95cUxOeUozOXAtTEVuVmFKbXhCcGVwS2NZOGIwUHFBSDFDVEhSLXVhZkNSdm54OG10MFpiaVBqRmhkdFprYUNzNjB1RzdNblk2ampMUzdDOGh4blZVSzNIVEp4aTV3NFl2T1MzWHZaX1loOHppdXdTcE1sVVlOYjYwa1NuT1pOa0FTRnFPdWFMQlJwM0JGOUZsaUl0ZGVESzYyV2lJdVNHX3R0TG05dFBobXNJRW1LNFZBWUtJVmhuSWtIYUY5d0Z2bHkxRzI4M29vMVEwXzVKQ1diemZrdFJMTTVacExXYlAtVlY1OVBOT3pGdXF6UzJDM1VUcXFvajVfUTIta0ZWRjFnUUtLZTDSAZACQVVfeXFMTzR5TDFYd0xoTHY0b2ZfRmJUYWZrVXpLdkkyNDJMS2lkWmoycXFLNkF2dnFjZDZpMUlvRmdFNDNZa08yR1Jkcm1fZmFYWFh0S1ZHLWxuN0JFQ1dHMG1zbklqN0s1WEwyOEFwWXYtUW41eHlPQnFoZWQzVjN2TzNFMEFqblVRVlpjeW9mOXYxb3BxcnBsbnRYeFdlTDhJNlZ1Wjc0eGpyelh0TDdmVVAxLUlaS1d0YjN5dWdYanV1SlV2UDhHQk1vMGlTN3NBUl82MjdrN1N0NFhJemF3RGxOd2JiTmp3aF91ZlU3bTg5S2JaakJEeURxaXo5Q2VLdXIxTm5kUDlGTWp3ZE9uRG1DdjQ?oc=5
+
+- [ ] **Ranbir Kapoor Leases Pune’s Trump Towers Apartment, Expected To Earn ₹1.75 Crore In Rent**  
+  PUNE PULSE - 2026-10-19 - _Pune property market_  
+  https://news.google.com/rss/articles/CBMiwAFBVV95cUxOQ0ljNk10emJrVWlqWkMyNlp5UDBlRE9SdWFYc0pHdHU1SXR2MjVjM1AzQ2NqcHJFRzRRSUtNTGV5MFAydVh0QnZQOE5KajBtVHp4Z3N1OWpwTEViWXNUbWNxa3dIbVQ4TFQzZUk3TUtqWHFhbkhHX0dmUHVOWVRaWXFpcWloNFdQbzVRUkg2ODl1M3MxTG14YmhMQ2lJeTBqZUQ1TWxIbUNzbkl2VHFLNHFtaEFYeThXOEdIOTNNOWk?oc=5
+
+- [ ] **LuLu opens 1 lakh sq ft hypermarket in Greater Noida**  
+  Hindustan Times - 2026-10-19 - _Greater Noida property, Noida Extension property_  
+  https://news.google.com/rss/articles/CBMitwFBVV95cUxNbUx3b0hfMTlvVEpiTVhCbEMxenROeU1VRHpIVThiOEc4akxuRWZHQm1oU1djQ3VsRVk0VEVTRXRvdEpLN2Z6VlF1bVlXLWVPWk9XWjlMcUJWUDdBMGRSS0g0QXVvTEd3NDhvN0ppZEstd0hxdW5iR0FtSkxyOWl3NFQ1cGVJOWNFQnZRMklfSFpRZHdUWTlJWVFoZzRwU3VSdEpYTWliejBOdF8xSkE1RXh3dTlGZ1U?oc=5
+
+- [ ] **Canara HSBC Life Insurance Introduces 'Global Wealth Plan' on Policybazaar, Offers Access to Insurance Linked Global Investing Opportunities**  
+  https://www.indiagazette.com/ - 2026-10-19 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMijgJBVV95cUxPV0prdmJGaVpfUTlhZVg3bVBOLUJ6UHQwT1pWTURHQW5yUkZ3elpFOVlySS10aE9jZHpHcFJrTHRhNWFZcnQxb2xkNHMyUVExQkVpN2YzMU5Ed3M0UDFVMUtlc1EtNzROdjVmU2lCd184ZTdZUWc4QUN0UTBJN1U4c2Z2akp2MmFTcEpiVUQwX0k0RUxVM29JTHItRWJVNGI4ZzF3LXByX3gtZV9yTUZOam5wR3NyQnBibkM0S0h0eDd0RXRWYmNYVUJtYk02czlmc2JzMllsUk5jTnRnbUFReElrc0ZxOG5ycGxRUF9RNmVBZDl2ZGZIemEyMXVoa2l6aU1tSDJRTFpqdzJWUWc?oc=5
+
+- [ ] **Property dispute emerges as cops probe poisoning angle in Noida family deaths**  
+  The Tribune - 2026-10-19 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMi2gFBVV95cUxNaHRCbHVGelVrQWRSbjY1cThWM0xvWmRzako3cnNfYlhsNmdERDNBcUd4ZUVTaUlERGRWbXVUSEhUeFEzQjVrZEZGRnFGdDVadFRDemhiNV8yY2V1bXQwTUlVMXY5LUg3UXFwcUhLSDl2TjhpaUp6QS0wSVZKN19ZYUg2ekJPYlVMNmZOUDJ2eW8yOUY5REZ2T21iQ3VmdWM0WjFUVHRsNHRKU0laSGs3RVNKT3hEQTE0NmxrdEJpSkhLWEh2QVJFbHV3MkFVTTZiUURYQlpNSkZTd9IB2gFBVV95cUxNaHRCbHVGelVrQWRSbjY1cThWM0xvWmRzako3cnNfYlhsNmdERDNBcUd4ZUVTaUlERGRWbXVUSEhUeFEzQjVrZEZGRnFGdDVadFRDemhiNV8yY2V1bXQwTUlVMXY5LUg3UXFwcUhLSDl2TjhpaUp6QS0wSVZKN19ZYUg2ekJPYlVMNmZOUDJ2eW8yOUY5REZ2T21iQ3VmdWM0WjFUVHRsNHRKU0laSGs3RVNKT3hEQTE0NmxrdEJpSkhLWEh2QVJFbHV3MkFVTTZiUURYQlpNSkZTdw?oc=5
+
+- [ ] **Greater Noida deaths: 3 held for abetment to suicide after family of five found dead | Hindustan Times**  
+  Hindustan Times - 2026-10-19 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMi6AFBVV95cUxQcGhFNVFuVDJKQmE3dmxpS24xam1LcGwwM2ZuZ3YwMUQ0dzhTZ19wUGtGeUxoM2xacTlJS296VHVBZm9HYXpPdFNCQTFlQkRQWWx1a0RyZEtEaFZlaXpVdndYWlpPN3U1eHh4ekhyNEdxeGNiTTBpLUtxLVdHMlRtVjNRUVBxRGszQy1Uc3pVZDZsRnVMOXU2Vkh1WlhIYjhyMnNmcEtoN0N1VzVTVkMtNmdwemJkejBhV3NkeFpJeldhREFKLTVwTjRVZ0pFMzFfZXIwc0I2MFNXY1c5Q0tCVklCQnhma2JB0gHuAUFVX3lxTE5nZTZ6VUhic3JpdzdIeEhsUGh4QmhsVjU1SzVaRnd5czZhWVNMRHNBQ0hjeUxLNDlHWjdnLUNMblhxN2lIZGM5UWRrZGR5VEQzNW03SVJJY3pxY2FMcVlJMlVzY3dLMlhCR3hEM0QwaDdxTWNIbUJyWUlmaEZ3a25yU01STmdXT1d1cllubkNFU1k3SzRlc2tYMldDWjhTZ3Mxd3BCOWt0THJGMmlpTHdIeVNOekltT0VVZ05WMVRIM011NkEwazFLczNOS19VQkQyMjhnZGdRV2NjbXVfLXo2WWdnbktIVVBvWDlvOUE?oc=5
+
+- [ ] **50,000 sq ft office space leased by Sumitomo Mitsui in Mumbai**  
+  BigInfo.in - 2026-10-18 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMijAFBVV95cUxQUHRuLXVORkFYc2VHMTlCMjdMcF9VWEhrTi1jZWR4WXNBVzRPU0lGWHo5Vmp3QlA3cUNZdDF4QXQ2LWV3ekVMQ1Z1UG5fZkM2eERZMTVkSC1rRGNHNTdpdWhNejRyTnRhYlJhRzhZZEpLdmo1UmdjQ1FmVGJqTEEzNW1lVGRuQnN2QVItRQ?oc=5
+
+- [ ] **Hotel investments jump nearly three-fold to USD 497 million in January-June: JLL**  
+  Prop News Time - 2026-10-18 - _NRI real estate investment India_  
+  https://news.google.com/rss/articles/CBMiywFBVV95cUxOZUV3cF9wUjFUQlpqMUJ1aHNrbWF6cWNKQ0cxNXVNejhJY25uSGVXazEtY1pNb2FBay1DTXh6LTJqUE1rVUlWc2UtdzNhWllWOXptVGozd05TQUNvQjVoeE5NQUZDOUoyMHhFLXpRa2E3NWVocGxvQUZvRENxbUVoWV9sckE0cUxMbEtrandxZi1fWnFYRkNZT2I2T3VxclhXcEMtc29fclNxTDI1UHhPYmVWN0NCVVp4TWp4empRbklMbHF0Nk9YVzJhcw?oc=5
+
+- [ ] **Farmers give consent, New Noida land acquisition set to begin soon**  
+  The Times of India - 2026-10-18 - _YEIDA Yamuna Expressway real estate, New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMi2gFBVV95cUxNXzloc3Y4SjFhbHhSMy1BT3lVVVBTVDJFVS13Vmt0alZiQlE1RTNyWTZIWGRWanRtbFRGSXNLVm55T054WkpYRDc4TFg0UW1FdmF4ZUJEU1NBZ2FxNlFMN19pTEY2aEJRQUxzSVc4elJyelNxaUFLWTF0T1MyZDl6Z2VYQVVwdm9LOGt0QjlJZTJna0ZtQkhFbUZyamJ2YUlRN0VqOTZDU3NyZXE0aHVjT0lqbGtmRS1BMDRRdThUVWY5bWg3QTBoS2VjdkttUGVRckxvLW9OQnl2Z9IB2gFBVV95cUxNXzloc3Y4SjFhbHhSMy1BT3lVVVBTVDJFVS13Vmt0alZiQlE1RTNyWTZIWGRWanRtbFRGSXNLVm55T054WkpYRDc4TFg0UW1FdmF4ZUJEU1NBZ2FxNlFMN19pTEY2aEJRQUxzSVc4elJyelNxaUFLWTF0T1MyZDl6Z2VYQVVwdm9LOGt0QjlJZTJna0ZtQkhFbUZyamJ2YUlRN0VqOTZDU3NyZXE0aHVjT0lqbGtmRS1BMDRRdThUVWY5bWg3QTBoS2VjdkttUGVRckxvLW9OQnl2Zw?oc=5
+
+- [ ] **3 relatives held for abetment after 5 of family found dead at home**  
+  The Times of India - 2026-10-18 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMi1gFBVV95cUxOQlVaTFlrOUd1blE4ZW11VWpLdDBMVWt3YVF4ZWxKNXhzRlNIcUQtQkNRRGlaRWZlam9pTkpkbTZwWVR0VnU3X0lvX1o3QzNfbGsxZ0gxOEpxT3laR2ZGYUhvRU5lQTRsV1EwX2FfeU9CTy1WeHpiVWVYVzJTOTRhYnFiWFhPa1BSdUZDRmVYMHROUlNYbDJ6TVFVczBvVmhubk1MTFVhdmRhRndjYlloSXh1aEp2UlNKSGJmUU1xVWFIV1hXZ3BpSEtMbzB0Y2lMQkFWQzhB0gHbAUFVX3lxTFBuaGFQZW9hQVJlLWJ1NDFOSTQ3NlU2bTF5cmMxUUNWNkhFbF8tZkRXU3BzOVZDQ3lnRzBpX0FiR0xkYlhRR3M1R3otMnVkbmdCSTJIQnRVaFpMLXBBRjRJVnE4bC1YT2Rpd3ZHOG0wcWVwNGlRNlhVclZlUWtlVjFxYUtLall6RTZ1MlQwVE1VNjlROW9hbkxlZXN2b05zUzNJb2h3SEo1SEZ5bU0tcTZFWVFfRGI4d0ZDV3YxUzEtLUg5Vzh5ZVlxcnJHYUV2cnFTYjJpSG1zOExjQQ?oc=5
+
+- [ ] **Police investigate deaths of family of 5; property dispute under probe**  
+  MillenniumPost - 2026-10-18 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMisgFBVV95cUxQSDZWLUNTWTRCeDhibUVhamNPNTM3TUFDcFhfUnRpZ18wS1hQYVc1VUNmNVppSXFsSVVXeGlzb3RIa2FqZFUzYlhLOUNycFVjQ3BaekZFcWsydi1yR2FlTUY1UVZMakFjeklMMk5PNU5HUWxuT0t0Ny04TGdYNEl6d1FETEJRczZXNHhOV1kxY1p1eFBUNzVXT3BOLXAzcVItYWI1eXc0ZkhLdEtlYWRtMzJ30gG3AUFVX3lxTE9YdlpWbjlHMnBDMGJRVnAxczJHTl9hLUJVZ0ZCMndDT0taa1BXYlN2aHhRaGhidkw1a0xYUXBOZjB4X18zSWpnTDNCSGk4QW5Ba3hRaWM3d2VRUkNveFFyQ29Xa2w2ekJ4OFB5THNXRFdnS0t0ZU9oS2FwTVJ5ZzhUZmdUbjdSQ2VzWnlfZ1R4SzFUOEE2NjFvOER4ZGVRWTQyYkQ3Szg5d1JFS2lJdmI3cUxyYXJZaw?oc=5
+
+- [ ] **SMBC Leases Nearly 50,000 Sq. Ft. Office Space in Mumbai’s BKC for Rs. 189 Crore**  
+  Realty Today - 2026-10-18 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMiuwFBVV95cUxNcC1JQ2psYkU3MGFSM3V1cDNFVVpnMVJhUERBZVNQM19BeEZuVVdZTkxtaEk5dXlaTnBSdExoYkRfY0hQZ0VuTnJKcnlHOW9XTk1vaUZtbHNJdnRQYmU2Zzh0RVdTN3g1QmVBWHJuTXRyQnIwZ3U1TkdOeUdmVW4wNlh1UGJ3VUdpTjBzZFNwUF9SemJ3TU9jMTh6bVE2T0pQYndvNzNoY2VfSFBnUUxBN0NBaDlkMFlMbXBz?oc=5
+
+- [ ] **JPMorgan Chase to Set Up Asia’s Largest GCC in Mumbai**  
+  Realty Today - 2026-10-18 - _Noida commercial property lease_  
+  https://news.google.com/rss/articles/CBMinAFBVV95cUxPQV9aTHM5MHlzQzhHaHZxNktjbGlrakNwN2F5UENTNnhTaXA5a3FMOElNRHFVbTJsUGhMXzJZLThIOV91aV81QUJHdHNQcjF1VkU4b1J6ckQ5aHZxV2FBdF9VS1gwSEpOT3F2TG9JRERNcmdiUmh1eDN4QjBkQlNOeWxKUHI0TEYzckxxNDNPWm1GNTVyQXczMGYzbFk?oc=5
+
+- [ ] **Greater Noida Family Deaths: Is a Property Dispute Behind the Deaths of 5 Family Members? Father’s Audio Note Brings Relatives Under Scanner**  
+  NewsX - 2026-10-18 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMiiAJBVV95cUxNRVBZcXZhckJNdVFFaExGcmZVeWhEVkpoOHI4XzczelRJRXpkV1dLWTBZTnRwUHFrSDRPMU5tXzBObFdMV0FuTGhSQU5heTZkd0JzMjdIdVlSc3I5NVlua3lOeU9hZ1FMRktuWWdPQ2xmbGtJUTF6M0xMSzNSMjlyRmdnOFNfajhxRmRfTFktdHlkRFNlWkJ2aGFwQ0gxa3RqU0c5Rkp1alVSdF9RZjFFS3ZCOFgxNFItQ2pPOVB4ZllEYWdKNm1oTzRUdHRQZW5NUFgwUUhPOUVXbTlnVDAwWDBGZUFkbVlmYzdoazU2RDkxZjA1SGdUVms2QXlkSHZHTTBHTDVfYXDSAY4CQVVfeXFMTzlpekc2WTZDM3lhaUloVHRncFk0V1RoTmhzOTZFTFBqQVl3dzZmdHFzU21MTlgxaDlHbm5VVE9QcDBiMzNSdkRGb0haZFI5cHhUbl9MR05YdzNqM3k4NEYxUFN1bzRqUnlad3dyaDQ4RFFpOUlUZ0FtQUhVZUJELV9MSnh5NVRIWS1oUDlmR1g3ZHA4c1VsaGRSaGZOYjZLWEwtMllRVG1JNEptSGp0Q3pXZ0t3R3ljM1VxSFJBcXJKLW9IMTMwSllvQ0xGaW5vXy1UWjFZcWFvb1pubWJBQy0wcEwyWUlMb3J0T1NMYmJpRC1JcWlVRDBMZHZxcDRxckxnZXp0MXFxSkV4Uzh3?oc=5
+
+- [ ] **Puravankara secures ₹5,200 crore GDV land parcel in Greater Noida**  
+  scanx.trade - 2026-10-18 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMiwAFBVV95cUxPZXhkYmxiZnp5bDRkdXRHM3ZaZDc5M0V3UWNtSHhVWlJSSjZjeVVudjVFcnpUNUNLeEdOTVlDWlZuVXNWQjF4MWdDbDVjMjhXdVExRmhhSmtCZXJNck9sRG52U05mbzRxaXNjclktb2lsMDV5VXB6MU83clVfbWtOS3hmbG8yTERRNTBfWDBNSGMtd1ZMbnhFNEt3LUx3R1htaHFGUXZ2S091THhrQWhkSkhKU2Q2YmtJWjRFSUtwNmg?oc=5
+
+- [ ] **Greater Noida deaths: Three relatives arrested as police probe suspected property dispute behind tragedy**  
+  Telegraph India - 2026-10-18 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMi5wFBVV95cUxQUGpvSndJTnhuaHJmLWstUVd1YUtRZ2lmcW03eDhkLTF5UTI1TlFraS1XSEdVRlp0ZlU2bEJiOTh0ZW1WUjdjQWc3UE55Q2pHWGhXV1JBRGt0ZUpLWENVUFFlbGlmYnhLS0h4TVd5WElJZGZkM051SGpQRjhjVUpDVTQzSXJ4Wk05eS1GWENDZjhNSXZDTXNFakNnV2IydGotNXphNkZZek1EeXptUW5iTVYtelBkeXN0Y3ZZOGtCSFBDdklvc3VGY1A5TXR5TFpuaGlwa0FTWmhYUzZmWi1UR2o4aTJLUW_SAewBQVVfeXFMUHhwTkFrM0xhbVNBY1FGWVJuQ0d5dVJ5elhjNjN2QWRuYXY3V0FFV0NxY2ZJUjNxU3lrdy1LZlJGd0Z2M1l1NnpONWdHb2d2dXpIOEhPSEgza290N2REcmFKSWtnQWFnTGFhVDlJRVczb0pwX3dyWDZPQkhXNXlyMHhReFhwSi0tWjNsMGQ1WkVVOUkzanJ3VHlVRUgydkdUUGhnVmZ3aVJRMHVNazdiZ0hUU2tIY2xKRngyNkR1SkthNUFoOWdlcjRvU2R5MFQ0TUk2ZU9Ea0RFeG9ud1BJMlV2LWdtNnFhek1PR3g?oc=5
+
+- [ ] **Property dispute, voice note blaming relatives: Police probe Greater Noida deaths as suicide angle emerges**  
+  Moneycontrol.com - 2026-10-18 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMi7wFBVV95cUxON0hndkxaVlZXS2ZnTGdpbEZvSzJ6OTdBc3Z2Z0ZaWGh6V2ZCS1htWWdWVVd2TVUwRDRjNFFCR2VJNXRHVXdfdFFBRFpOdnBVX3B5R3hYRmloalpZQjViSU9tYTNlZmoxX1QtLVpkaDVzUThhOGwza0hvZHJtb0Q4bmdLa2xmVXkzc1pkZWx0R1FkbjFWa2M3MEFJcTZSdjM3TVR4eUUwdHprbFhHTzA2Y0JwZXdTdVg1Ykx2dC1GaFhCYUVIVHZXMW1iZGlYVHN6T1AxdF91U3ZzekNvb01QWUtJSHhnZlU1eHBiMkMzMNIB9AFBVV95cUxOZl9PazFmcWtfaDc3REVYMUxxTGFyUlhZY05sWTZ1cU13YTBDTGEyTHhjS1lVX010aVlQTUU1cXUzMG1FaGcwRmc2Z2RZS3dJVFlkZWpUdUViMS1xVUZpX2JTbTBrUS01azVOTmVKMG0yUHBQa3JVNkdwRDk1dTFFMG5lQThjUGtrNVE3aU1CQXcxM1ZFeFI4WVMyMDd6QnpDbkJVbTA0dE5Oc1NPbVVEa2l0dnJna2NxbnRuUE5sVHZseTV6RGRSem8wNmRGdWhXcXg0REZEaWF2R21abXdVOUtGMWR5OWd0QUhma0NUVFBQWVFz?oc=5
+
+- [ ] **Greater Noida Family Deaths: Property Dispute, Suspected Suicide Under Scanner; 3 Held**  
+  LatestLY - 2026-10-18 - _Greater Noida property_  
+  https://news.google.com/rss/articles/CBMizAFBVV95cUxOVV8xd05SOTRxX1IzbkM0Qk85ckd1dkZDVm9YalZ2U2xuREZOV0FnMm04WnVoYldTd1NLeXM4bklzc0pyYUM4a3Z0VHpFaEx0SUJVSGJORi1ZTnVJVUxNWjdkM05LWmQ0V0dmVTdwR0NuSWkybnEwVTBFcHhlRk1tRkVsdjJMTnd3VWJWZlVCbkdaVlpJRVBFLThKenRhQjY0TkRrXzhmX1B6TER0UXp2dDJYcjh2TWtCaWl5aTZ0cDFrZXdKZ2hpRVY5bmfSAdIBQVVfeXFMTmw0NXhjSGJtREJhcG4zTk9NRERTMml0QUlIUXZKczJCRm9Za1BTZ3lRRlAySW5EOXp3REI5d1JYaXR2UUtQM2YzcGdCMTNfQ3VITU13dEJzVHppejRsMjNIZmZibDBpR3o4bkFoTGdmaGdkbndjdkk3UmN2T2c1MkgxcktmRXJZQzJDZ0F4WTROdDZqbm1uMEVCXzh1R09fZzJrcExiQXN6dFRRUl9yN0tlTGVJVEZLRWRKcVJVOVIxV2hyTEdjenNoZlRVa2dha2NB?oc=5
+
+- [ ] **Noida Expressway expands its luxury housing market across Sectors 150, 151 and 152**  
+  Prop News Time - 2026-10-17 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMizwFBVV95cUxQRVNDS3dlaEFIQlIxZ1VmNDlLdFFFMWpBZS15ZXR4bERxQUFJdmNtODVlX1JzNGQ0bk9OWlBBWWZNUXozT3hxend3MThIdGxEU3lJZDJkUF8wSFlnUzVUTnk3dElqS2hwcVlqY2FLdkI5RFRKU25EV0xjRFpFanRNWEpMNzV1cVU0OTRUV25NYWRsYTZ3MjlfcmlpR2xvemt0NldrTzJoRmxncGxEbHNwLXROdTVEY1gtVm54Z29QeTlXUHI0TlJNeDY3X3BmanM?oc=5
+
+- [ ] **Beyond Gurugram and Noida: Why Faridabad could be NCR’s next real estate growth market**  
+  Moneycontrol.com - 2026-10-17 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMi6gFBVV95cUxOb1dCazNNMjNsUjlLYjU1TXhRdXJRSThFS0l0elBrcXVJLWdpNXJLX01YX3d2cUhnY25hMzBCTFBWUGdUMWpzS2s0SlBJeXRZWVZheGJ5ZDhzREcwVVYwMHZ0cTZ0czdHNTc0WW5Xc0JSLS1VZl85dVFtMnVQVUtPOGx4SGNIeGJnb2c2ZDROT2NkRi1FdzFuTmxiQU5RM0pzdXR5YkdqYXl4V3FFRTVPWV9ZNWxjcDRGeFdnNFM1Rm1rZVFOc2hPOEtHRWE4aTZ3ODRrSkZOczd1c21mbTN5Q0JtU3ZKNmd4UUHSAe8BQVVfeXFMT0RwRFZzQnJJcFRBLVFUbXV2Qm5iclo0Q1d4WWxKYWZuTUFGblhTYm52LVZqcVpuS2tSM3IzQld4eFJVNDM0V1VkWGp2dFRBaWRTR0hyMS1HYlM2cHlwanFhRHZjS2k4WkZDZkd4NFFkRkhscHNIanhRdXpDOHIwdWtlWHg2WVRuV1VFRHBzOHdFbGhKaDNfTEV0NUwxcHN1cFhrcXVBbWF0WFFLaTlqTTFzY0g1VzlLaGtQQ25WRGVfR2cwOGx3R3pzd2VWb3FNSF9LTGpmX29uVGI4d2FKcldjRE0tcDRUTjVib1N1Wkk?oc=5
+
+- [ ] **Omaxe gets RERA approval for Eternity-2 project in Mathura**  
+  scanx.trade - 2026-10-17 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMirAFBVV95cUxOQ3k4NWd3dURhcDRWdktLVV85TFgtME1NVVNYa1F3OVk4dWx4TTJMWFJGa1hBT0VlM2pWMVo5Y2ZzMUZTYTZLdUpYRkFvZF9TaWdJOWxtYkZIV201OHVNVzExQXpLNzZaLXMzLS0xdUNqYnlVVTVrcjhDZUgtS0hvQUNCSUxPZW94N1RIaVhBR3VmNEVKM2E1bVg3ZU1xTWsxcWotTlQ0UEVTWksz?oc=5
+
+- [ ] **Omaxe RERA Registration Eternity-2 Mathura Project**  
+  Kalkine India - 2026-10-17 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMitAFBVV95cUxNOG1RZFZfV1RRR2FRYlFpUmNIRWljNUNuSG1icGRpWlFKc0R3VjBaZUx5WHhrNzY5R0FsTWh4MUtjVHhvR0s5dEY2bWpfSWJSc2k1UGhnb05iQU1ad2ZpQVZpbDdGaTZHb0VrdUhsQ0tONUhPSTBUQnkyYjFITlJCMzBPN0dDS1JzSzJHSVJTOFRQbW51ZFVhUFZqOVAyM0doMzh3aEFHOVNSUWtYTlpvSDFZaEs?oc=5
+
+- [ ] **Jewar Airport to be named ‘Narendra Modi International Airport’: CM Yogi**  
+  https://www.safariplus.co.in/ - 2026-10-16 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMinwFBVV95cUxNaEtrbjJhZk1aMFNJa2VfN2t1R045UWdJU2FGZlZrSmNadl9Id1R6RDJRS25GT0YyUjRnSlUwemxDcjgyZk9pVDFwRmhZWFZ6Mjh3RW1wUW8tOWFYVHdpYzhKa09GcDhRNFlwMFlQZTk4Rm9IeE1xR0o1N3FlbHlORU4wMVV2ODZ1ME43d1dUOGhjTENSNkFNb0xZMkZ6LXM?oc=5
+
+- [ ] **New Noida to add 20,000 hectares of developable land; what It means for industrial, commercial and reside**  
+  The Times of India - 2026-10-16 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMipAJBVV95cUxPM21SUkdMSUczMUZlTUtRQkZ1RjYtcW1uYk5yQVlDTHRYcU5HZEJxTVJSYlEwX1N0eDUtWkNpUDlOWl9ZRkdDLXJURWkta2Z0Z0QwYkFuT01GLUVMZWRXdFhyZFhnczhxdG1VdllvalpLb0p0d1Z3VE0tdkFQa3ljd0k4UFVXMlZwa1lVRk9VdmRHRlhaM2NvUjIwN2tadnd6OGVYZE5YQWtUX2p4QlFHR0pEd1BJQTFfclAxbHM1YkxqYjRmZWpQR3N5UHhyMGl0UXN0VlBEX2FuN09qaUZlNXllQjRXU1FsRERjbmJJOEd6TlY3Ul9nRWxUeXlJcnBZNVRrZ0x5aG52YklXdXdwV2ZhdkZCSFNhV0MxNTYwZF93MWJQ0gGqAkFVX3lxTE5MZjdUeERqdnZWS01pNGhGalQzMzFqNVcxVk05bEVBV1BuVDZnc1ROZ3NSTHoxR2swdERFM0VRa3h4ZDhkdjhkc19LbkNNbmNPSktIcGpLczFKRjJJbzhnY01LYmRVYUJmdEZheTBmS2RabE5Tb0NJaG4zT3N0VFFXUlh0S01sSVhVWkptZWQ2N2pJbUJDU09xQXhNMURTaWlQWVNJb0JMQ3o3Yk91cVNJNW5ub0xvSVRpNWR4ZUhHZ2JyZUN5cU9zWG9BMWJ1a3hjRlFWODFORlRYUVh1VzRzeXJsNHNISkFYaVBCZGU3bkJkMVBqQmh0WHBWRi1VWnFRR2tTVHRPMTdqUkVEWEVZSVhiWmtNdE5SdFlvQ29YNHNBdDl1ejNPV2c?oc=5
+
+- [ ] **NRI Buyer Filing a RERA Complaint from Abroad**  
+  Arpit Marwah - 2026-10-16 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMiekFVX3lxTE9RYWtTXzZXNkhWZjJMV1c5NEVlOHBaQlBKbXh2UlRTbVA2VkxDdlp3YXVFdGJmOXdfNlFuRGZRcUw0NzRKMFFMLVNBQklRX0Z2VEVrdFdFWm5nNkZJYkNJWlBjSE5FdUFEU0FaTUI0LVlTQnM3c1BZNTBn?oc=5
+
+- [ ] **Noida dodges number 13 again: New Noida’s work circles go 11, 12, then 14**  
+  Moneycontrol.com - 2026-10-16 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMivAFBVV95cUxPa2hjMERXXzJpem9KcnI5ZjlGOVp6TmNHbWh1NnVlYVR4cUdJbGhUelhHSENJeFJMWWdfM0dvZHlZbGFyNWV2WDNJbkpzb2JXcXR3OGhZdkRqcFRiajlhYmtjc2RlSkNhaVpKNDdRV19iTmxSX0FDU3J2VUdUNVZ2ckY5WmI3emVfaUhFOVV3RmJ5dmZSeUxybWFLd1FEQUVPTFRWUGl6T0hsQlEzdzZzemtUWUl4QzVOQUxPUtIBwgFBVV95cUxPZW5fTGFDTkliLTVaMTkyY2QwYXlON0tfZlltbjd5NWZvcDhQZ1ZQQnU2aEdJZUJNS01iYkVtRlFNblFTaVlwYVFyQWRtVXpMc1laNTNjbVZjdEVBdERUcDlCVWNhNWdFOXE4MWt2STNYY2hNYXMtSkhid0ZoSnpDbThfZXFpLW9rMUZRMkN2UHZvUV9NUUlSZENQUkJGUktLYVpseHhWVW1nTTFEc21jY1FzckExRllhVFNCV0FyNUVCUQ?oc=5
+
+- [ ] **Noida adds three more work circles for New Noida – 11, 12 & 14**  
+  The Times of India - 2026-10-15 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMiygFBVV95cUxPY19TTDg4TjBTdjlwT3h4S091VlNHZERHOWtKOExYblpBeDBfbEFPdkJDMmJocmpaQ2JrWkZhZVk4UEVxaWY5ZHozTHRTOUp4ZFBPbzB3MVBuVUd2VFBVNnRrc29yTEc1NXJacm8wZTlDanY1STFkV2xKV21XSnZtSUcyM19tNUNNaXc4blNSMVNFTGFNNWhnZ0hZblpESFJ1VjJUVmltdVJJSTdDMC1SdEdqQms3MkQ0Vl9lY3RCR1ltc3E4SVk4YWp30gHPAUFVX3lxTE9FTU5DcDJ5dExZcFg0SHc3SU9RdENfaHpZLXFfaUw2ZFhBa0JkX1RtX3pqV0tyeWZOSmtkQXZvNTJzUmYtU2RJQUpjbDdPVVU0NXpsZVdEZllsNnBXLWlFaTlxcWxncnNpREFCeFV4QlBlRklIN1AyZkpEWm1MVG4wNWlZSnhqX0Z0LVBJM2FLRG5oaUJrNkVKM1lwdmhKVFRnekI2QlpJMlBERmNkY1puOHdUWDg1M1NoczR3bDM4X0FoSEdqV09laENaY1A4SQ?oc=5
+
+- [ ] **Birla Estates in advance talks to buy Noida plot for Rs 1,000 crore**  
+  The Economic Times - 2026-10-15 - _Noida Extension property_  
+  https://news.google.com/rss/articles/CBMi8gFBVV95cUxPUUhvTV8taU5CWVQ5YVVwbFdYNF80ODF2U2lEV2R3ZFFKa1VveGo3azFoeWpsWmZkcWNuenhVQ0E2R0NkeUdKOFBuenA5SlpJa3ZMZ2pQbnYwVURRNnpFbmt5VHg1N28zOXUyem5RSnBZN3ZJVTFiVl90TUIwQzRiRkdxd0JnZ2FxdWlzOXltZUU2c0I0V1BsTFFablFkQlotb0xxVi1RVmxxWFFkWHRfVXBfT2RSZ3RqYjNsN1ZUekJnQ3pPd1FBX0lDOEdWY2t2bjlEcjM3UjNXVU5fTXE4RkxJVzRmcWVZZUNSU1lkZGYyQdIB9wFBVV95cUxOZ1VtOVNmenZvdWVBZkhCX3lpd1NXYW5mcTdXaHF5U1Z5cTlOZXJrZDlTZmdRck12dGJabjRMYU42Ykg1bjhRcEJKREdCRU1WSEpUdERvQTh4Y2RETlJsWlVpYzdvMl9GNWg2aHZxYm0xaC0zZFNYbExrNHZTS1VLMnhCcGlhb2c3SnZ0d3JZVGs3REh3aFpWZHhqSnJLbnN2blNFSDRReXgtNVZYa2w3WkJRa2hDRENXc2psT3BzeTlkQnJRelc2STlEbnU3YW9ONzhIM3BZME9naEtkQWlITVFnZUFNd0hkOFJvSFZJaWItbUJJUjU0?oc=5
+
+- [ ] **Yamuna Expressway vs Noida Expressway: Which is the Better Investment in 2026?**  
+  Realty Plus Magazine - 2026-10-15 - _YEIDA Yamuna Expressway real estate, Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMixwFBVV95cUxQWEZlbjVOMmw0aGZsMDVBZTlsX3lnbVAxTXFSWWtmV2wtYUdzazFaeTg0NTJHNEZ3QW1WZlA2eDRjQzFhbUVvWS01eURYU21ydzNyaXptZUQ1UkZJTmNsTFdMTGFsa1JfcmxhOXBhUnJXS1J0YnJ5M25LbHI0M3BEeVo3X0xQLXYxTWNtcGNUR2lmTjlhb0FTT1JKTVMzVHFETFN6anRueUk0a1NXalA5emdheHdyZTMxenRsU1FZZXlaTk81S3JR?oc=5
+
+- [ ] **Yeida to hire agency for civic and infra projects’ quality checks | Hindustan Times**  
+  Hindustan Times - 2026-10-15 - _YEIDA Yamuna Expressway real estate_  
+  https://news.google.com/rss/articles/CBMizwFBVV95cUxQRlUxRmJhVHJhVk9hWVFWYmJzN2FsTDlSSV9VY04xRUVCMk1jT0IxY2FHaDBuZkxsSllOcGpyNjJOSVlUVEw1eE5WQkZmeHoyOUUzdzRaNE5MTGppSThqcllnUzJQNWFlMWlzQVczSnpTSThWRnozb0dTeThPRkZrWEMzNGYwcF9LcldOaS0wUUVUT0E3X2xzZDNYSlN2Ni1TcjkzeDRJNEVER29wUndGeFNlWUp0U0tHLWtTb2Y0LWIxamtEc01NZzNhN3RZZjjSAdQBQVVfeXFMT0ZUMHUxRXNDUmQyS01RMHFuVV9kTEQ0eHdWVFlBMXZ4SXVtQ3lmMDRQbDBWVExLZlRxNVh3Mm03T3dEcXdUNkdVbGtvdDF0Vk5kMDhRbjBoNWhXMTByTUhSRDdqWWhyYmw4RjZHWkloeUtYSVFUMl9OVHB0bTRlRFZXOHRUdG5yMFdyVy00a19peHBRRnZ1X0xXRmh0OWRfdHpLQW1udjA2MWNwb01xX3FSNGdncFB2am8zTUJWMXhKcWlHQVIwUUQ3TG9EZkZPck1yT0Q?oc=5
+
+- [ ] **New Noida Faces Its Biggest Growth-Control Test**  
+  Urban Acres - 2026-10-15 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMijgFBVV95cUxQU0pUWlVORGxkZVF4T0RLWHpBODdWNmEzWDNraE9pZ0lfbTV4cE9FLW8yd2U5a1IwSzhBSW0zZ1puaWdtZE5nbVpZcFdKNHZwdVhyOUJtV1BNZ3N4YUVOVW5FbGhoNHhRRUxscnRGRll1MGlsRUxnRGtxZUtFODV4OU8yY3BpcnVYQjE2RHl3?oc=5
+
+- [ ] **Private firm to audit infra projects, conduct surprise checks on YEIDA projects**  
+  The Times of India - 2026-10-14 - _YEIDA Yamuna Expressway real estate_  
+  https://news.google.com/rss/articles/CBMi5gFBVV95cUxNdDZIZ1BUZThValFZekhGZUlEUF9CaXBqYk42cXNvem1DcURhc2UzbzZ5SXNLcXdkS0I2LV9Xang0TFF1TEc0djBJaVhkUGdXcjg0MWlsNm5NRk1jaVBGWkcxTVVLMVUyeS1RZW0zRGZTanA4U2V2QkVDeTQyY21FTExuZEp6eXZYeGdVak1qTFJ3Sm9lY2dITnpzUVR5cWJEM0Q2WFhnaWhmMjRYLUxodkRQbUFJWGxYLUF2bUZCM2ZJcm42MFFuTVNOWVRwV1hvWXRYekwxWTBEcGJVYnVJWEZpc2JwZ9IB6wFBVV95cUxPNDBPQnlOMXVQOUlCQzE4NjBETXo4c0xPSGpxZUxiQnR4WFJWV1JqMEl4ZTN3YWYtQV84cmJIQTlWdm93NGg1Q2xVV0NmVF8yWTg1OWpxX3FXc0oyVGlpWWdLNG5senNiWTB6T29IaU5ra1pVQUZ0YmoxV2ZKcDY4RnRmZnhYbW5fTjZ2T3c4THd5NmlxR1ZOQWxXQVRhNThhYmhtOS1WdmVIS1lGLUlkMzJCX3hNeEJ0MnhOV2xFaU1OT2tUUXRGUWZxVHp3VWx6X2hzZ1ZPMURzeklWMzBPT053SGZDdFV2Vjh3?oc=5
+
+- [ ] **Strange that homebuyers who have paid in full can’t register flats because of govt-builder dispute: Allah**  
+  The Times of India - 2026-10-14 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMigwJBVV95cUxQSUUxY0pxdEUzSTNiZE15MmFZQWZhMUxfV3BYSlRDOF9hajVsckEwNlN1M2w4MXkxNHg3MmdOdm1jVUFKaklObHJfLVVOVkp1MkRkdGFzdnE4MFJyZFlNdEdyYnFVTGYzYjlIWUxLOFM2LTY4UlM2TUYtS0hEeE9TYnVLaGd6a0QyY2RXVlB6UzZXNnl5d2s0MTdBY1VYV1pVLS1meHd5amRYQXVEOHRUdzlxUGtGd3RIV0hMT19VdW5vWkgtaC1tUU5kdXJfQlV0cGljN1hQZHBYNURIT3pVZkxqdm4xclNCWnl5S0lvVkZJQ3BfUXR3c0hoRnFLTmZna3NJ0gGIAkFVX3lxTE9nbmc3NXFKR2FraDZwWFJaNm9rOF90VFp2am1GZjBacUNQSGFVdGExUVQ3OTl6MzNsME5GcERpVjA4UHphNTVLaEVvNzdlSXpsbV9CQzhwdWhEUzZLMFJUbC1uZS1lNEtpYmwzbk9jMkVmV1FPV3ItWUY5UEJNdnF2UFNHRFg1UWJmVnhVNjEwTzY3VlF3X0FfN1ZuU0g2bV95T2hXT3NoRnNEZExYOGZuZVJwT0N4d2hkYWhkUF92cWQxdGFpOTd6eUE1NWEwUEU0YmFPeHh5WWJXQ3E0QjduVHBVNjg0LWFEeEh6UFBnRm9RRW1OZFQ5VXhMRUtqX3QwTThEdVVhOQ?oc=5
+
+- [ ] **From Affordability to Premiumisation: Noida’s Shift Towards Luxury Housing**  
+  Realty Today - 2026-10-14 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMivgFBVV95cUxNRVU4MjZXOVQ4MmVLR25iV1A3M1JEaEJmX2VJVTNoZWpmMEVLd3luX2JLMTdTaVlHSjhYUm1pSUxOTG1BVjBjbkVRUno0MFM5aUcwblJWWTBLa3VJRk42RHY5aWtVa1h0b0oyaDd6SUtnbHFLdlFMYmJqV0NpN2lzemVIMkJXN2pMMmc5WngxU2ZSdlZ5a3ZXMEdsSE9semo1YjI5R2I3aTc5YV9ucE5XYVc5NVZiMmV5czNPSHNn?oc=5
+
+- [ ] **UP RERA Approves 15 Real Estate Projects Worth ₹1,226.57 Crore Across 8 Districts**  
+  Indian Masterminds - 2026-10-14 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMimgFBVV95cUxOaTVSZUI3cXMya0xrMUpldmUtaGNyMnZnNE9lY2kzQlJMZDZGc3h6WnFoQ3NDMUhiV0Z6dzVNekR2ZHh1WGJITUZ0dDExN1JwamlGUEFtamtULThDNmIyRzh3TjJlTVkxVm82VkdYRmpiSEJaSlNNT3BNRWotbk0wYWVnSDRtN3FNUV9HTHZKWWNVR2VKdDdvS3B3?oc=5
+
+- [ ] **Bhumika targets ₹1,000 crore, 100-acre land bank in Faridabad; sets luxury homes benchmark**  
+  The Financial World - 2026-10-14 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMiygFBVV95cUxNVUdvNzhDNkNqdVU1cHVmQnh0NDNGVGxoMHpCb1F5MkNxMEYyYjFYUEpnNjZMc25DZ2ZXSC0zdi1UaW0zdkhqQkdMTlU4VzgxcHFSRTVma0k5Z25UT3dzenRIQnN3eTc5ZnBkd2FLQjlJbDlVbThpZVNCS2NjTEN5QkpJZUNEOGF2eTVTbWtsbDVyR2xOTzRhMnlqRC0xTkIwVHRhZTQ2bWNwN0tPZHoxZms3ZDBjeXhyUk1XYWtfM3ZJR2UxSUdFTDZR?oc=5
+
+- [ ] **UPRERA clears 15 projects worth Rs 1,227 crore in 8 districts**  
+  Moneycontrol.com - 2026-10-14 - _UP-RERA Noida_  
+  https://news.google.com/rss/articles/CBMiygFBVV95cUxORkUwNEpBbDNLdW5FY0FmajY1cTFCOUxKaEVaTnZHdU82andoalBhUENkQVhuM0NmYTg2aktaQ2F2NUJTenJEaFEtS1daS2gxdS1ZTEI5dEJna3c0ZDhVNWt3aFVCOHQ0elA4aFlfcXI2eEw5ZlM2MTk2cUNPSF9tNlBMYUZXc1RhaUtzdnpKbjZUS3V1bDhZVEJ0RmR4ejlSRFpVVGpERFVKdzh2b2wtSkhFTG00UFE1aTRFWks5SGxLVTNLUEc1cm130gHPAUFVX3lxTE5HUXh1SExkaGVsbjVybjZZLUxWeWZVTnlyRFBjWW80V0hnZXh0dGg1NndlaVpfZVZ5QzUyd1lfaU50QVVMQzZjcGQxZm16NUNWZUNPTWlrS19VV3lNMVloaHRzWTZsWEIzb2QtdnZUd1BmNlVKNTlua3FPRF9pSkxMWFplbTN4SFFZeUJZM05KNUx6OHFuNVNvbmZBc1ZrZzdtUk56ZzM5R1JWX1haMHFKZTVIdmxMdXluaWZMNUdxeGY3TVZvS0gtMU5pZWtYcw?oc=5
+
+- [ ] **New Noida Creates Three Administrative Circles for Land Acquisition and Development Across 80 Villages**  
+  Indian Masterminds - 2026-10-14 - _New Noida DNGIR_  
+  https://news.google.com/rss/articles/CBMiiAFBVV95cUxPLVFueXZhTzEzd05pd2FhY1I0UldiVlJLejJfVWhRNFZ0YUdjZUFBZ0FBV2NYX0ZUSTVFVXY4OVQ3N0JST2hJUnpuNXBnaHBZZnFNM0ZpMEFyTGprWXpXcktTelh4Slp0SHFTMlJET0ExMkVDRW1lZDI3R2xiX3ZUVW8xYmlyRjQz?oc=5
+
+- [ ] **GMR Airports sets up Rs 1 crore subsidiary to explore land development opportunities**  
+  The Financial Express - 2026-10-14 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMi3AFBVV95cUxQMWliTTRGbWI1R09sSG45MUFHOFRXRENZOTRubkt2T20zU1FDT1I1dUtFZ0Z3b0N3MFAySFhoRUNncGFRWGJjTXk4ejdpS0NrYVQyZy1DTXRmSWM2MzN3ZGtDMEhSQWFMX0RmYWJtRG1MVE9QUGN6d0RfQjRwSWVBSDJUbWl2cEpGQ0ltbWh2LUlDY2RnRmNuekFDRHM1Z1NubHJpMmMwck1pR0lhdHJBRXdwSS11X294LUZpRDc1eGt4RVluRGoya19qdVhVcjdiOWtjdmMwVEo2Z1hv0gHjAUFVX3lxTE9fZkVSaDZVcTZfcm9BLVJ5TDBWYVRhdERMa2FFVnNMQkpfUWFLTUpXSmZWVFhZZFkweERIUFFCMlZwTTNvN25FQjF5d0IwbERWMTQwbWxhcmc1azJHaXR5VkljOVgzOUNNOWNjSHljOTMtemtPNGUxdHFjUzhrd2lHQ1FpaHFucTNXU1c1MnZEOVNpS2F1aXRGNW1EMGVaYkdCSGxMUGFMQjVpOVpHYWhBX0Mya2Juc0tqU204T1RUbmtQaEZMT0o0MHlRRWtmazhjdVN1NmFWdFJYRmo2MFJWWTA4?oc=5
+
+- [ ] **UP RERA extends QPR filing deadline to October 21, makes digital signatures mandatory**  
+  Prop News Time - 2026-10-13 - _Noida International Airport Jewar real estate_  
+  https://news.google.com/rss/articles/CBMi0gFBVV95cUxQVTJndl9ZMExWNmRETjhkRmRDUEwwTDZFQmFkTDFpT2dkOEIzd3YtaXhhSklGVTBXUFBHWEEtbmFGZUMtWjVMTE8zZWxKVGVlS1dHbE9yaXp4OUR5Y3hmUWZwY1NZeUFGNlNmYkpZcUU2dEgyZnBCT2RrUU1lbEx3ZG55TVF2YjZTN243VlYyUVhqTEl1QjNyMFZQa1d2SjJENDNXRFVicmpWdnRLSzlsVk1yOG1RUzFLUXhDTkxVRW9UWW9NcVlrTnlsaWpBQ3Qtc3c?oc=5
+
+- [ ] **UP pitches Korea City, semiconductor opportunities to South Korean investors**  
+  The Times of India - 2026-10-13 - _YEIDA Yamuna Expressway real estate_  
+  https://news.google.com/rss/articles/CBMi5AFBVV95cUxOSnBvNFVUX25pRzc2UnJXU3RRZ0lSN1loUnJJbzhHNVl4VHp0VTVfdzQyMXB3SGdtdmJLTzllNTY1bWJiMXZaOHNrTERWQXlockpWZEN1QWNTZmwybm5vbXp4RVlLUVcwLVB6Q1JjdlFfQWVwZWN4Sjh6Vlc2SUpReklTOU41Q0FZd1A1SUFYUkRWdjBMeHFfdVJSUVozSHB6WjZ1OG9LbkVOS2tOWVc2bkJXX0NMcE9KemJpMW9RT19jMHVpMUZSZzBDZEZONGdTNU5YTjB6WG5NU2dYWkc0NWRQLW3SAeoBQVVfeXFMT1l4N3FPYzNxNXRtd3dPZjRIb2R5YURkVTg4S0R1aDRUcFAxWmNhTEgwYWxaa1Rma3lXWWs1MGN2ZWJ0T1J1SHI4N0JuZ254eUxjempCTndoalJZcE04dUNSeWJhMjd6NWZVMWNZdVJINGx1bmVXTHNGVkpuQmFULV9aLVk2SmlIOFN4MjBUaEJTQnkyTDVNNU1aMDBkMHlqNXJ1Y00zY2JRY2lNUW1ZN2lzeWZid3J5MS02Z2FHam0tX0J0ZlduRFdkTnRiMjY4LVFINGNnaXVBXzZ2QU1VRWdJVUM4RHpQLTNR?oc=5
+

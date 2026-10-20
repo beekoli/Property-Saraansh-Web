@@ -1,0 +1,207 @@
+From 5899113b4a06c0548c0446a448ebe94ef3ff5ce8 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 26 Aug 2026 11:49:37 +0000
+Subject: [PATCH] fix(videos): stop generated slugs ending in a doubled hyphen,
+ name the Cullinan review
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Two things made /our-videos/m3m-cullinan-noida-is-the-32000sqft-4-bhk-actually-worth-it--D9cK37IEPH8
+the URL for the first Reviews-channel upload.
+
+The doubled hyphen was a bug. getVideoSlug truncated the slugified title to
+60 characters AFTER trimming trailing hyphens, so a cut that landed on a
+hyphen kept it, and appending "-<id>" produced "…worth-it--D9cK37IEPH8".
+Truncation now happens first, falls back to the last complete word so a slug
+never ends mid-word, and trims again before the id is added.
+
+The id on the end is not a bug — it is how the watch page resolves an upload
+that has no hand-written entry yet, live from the API, instead of 404ing.
+The fix for the ugly URL is to give the video an entry, so this adds one:
+slug m3m-cullinan-noida-4-bhk-review, with the description and content
+written from the video. getVideoBySlug already matches an id-suffixed slug
+against a curated youtubeId, so the old URL now 308s to the clean one and
+only the clean one gets indexed.
+
+getVideoSlug moves to src/lib/videoSlug.ts (re-exported from youtube.ts so
+importers are unchanged) because youtube.ts's Next-specific fetch options
+cannot compile under ts-node, and scripts/verify-video-slug.ts needs to run
+the real function.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01PFTVAgRWtbXyehT59eVNdM
+---
+ scripts/verify-video-slug.ts | 63 ++++++++++++++++++++++++++++++++++++
+ src/lib/videoSlug.ts         | 39 ++++++++++++++++++++++
+ src/lib/videos.ts            | 14 ++++++++
+ src/lib/youtube.ts           | 12 ++-----
+ 4 files changed, 119 insertions(+), 9 deletions(-)
+ create mode 100644 scripts/verify-video-slug.ts
+ create mode 100644 src/lib/videoSlug.ts
+
+diff --git a/scripts/verify-video-slug.ts b/scripts/verify-video-slug.ts
+new file mode 100644
+index 0000000..1476707
+--- /dev/null
++++ b/scripts/verify-video-slug.ts
+@@ -0,0 +1,63 @@
++/**
++ * Guards the fallback slug for videos that have no curated entry yet.
++ *
++ * The Reviews channel publishes faster than anyone hand-writes entries in
++ * videos.ts, so those uploads get a generated slug: the title, slugified, with
++ * the YouTube id on the end. The id is load-bearing — it is how the watch page
++ * resolves a brand-new upload live from the API instead of 404ing.
++ *
++ * The bug this pins: truncation used to run after the trailing hyphens were
++ * trimmed, so a 60-character cut landing on a hyphen produced a doubled one
++ * before the id — ".../…-actually-worth-it--D9cK37IEPH8".
++ *
++ * Run: npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-video-slug.ts
++ */
++import { getVideoSlug } from "../src/lib/videoSlug";
++
++let failures = 0;
++function check(name: string, actual: unknown, expected: unknown) {
++  const ok = JSON.stringify(actual) === JSON.stringify(expected);
++  if (!ok) failures++;
++  console.log(`${ok ? "ok  " : "FAIL"}  ${name}\n      → ${JSON.stringify(actual)}${ok ? "" : `\n      expected ${JSON.stringify(expected)}`}`);
++}
++function assert(name: string, condition: boolean) {
++  if (!condition) failures++;
++  console.log(`${condition ? "ok  " : "FAIL"}  ${name}`);
++}
++
++// The real title that produced the doubled hyphen.
++const cullinan = getVideoSlug({
++  id: "D9cK37IEPH8",
++  title: "M3M Cullinan Noida: Is the ₹32,000/sqft 4 BHK Actually Worth It? Honest Review",
++});
++assert("no doubled hyphen anywhere", !cullinan.includes("--"));
++assert("ends with the video id", cullinan.endsWith("-D9cK37IEPH8"));
++check("cullinan slug", cullinan, "m3m-cullinan-noida-is-the-32000sqft-4-bhk-actually-worth-it-D9cK37IEPH8");
++
++// A short title is left alone apart from the id.
++check("short title", getVideoSlug({ id: "abc12345678", title: "Godrej Arden Review" }), "godrej-arden-review-abc12345678");
++
++// Punctuation, currency symbols and repeated spaces collapse cleanly.
++check(
++  "messy punctuation",
++  getVideoSlug({ id: "xyz98765432", title: "  Sector 150: ₹1.2Cr?? Really!!  " }),
++  "sector-150-12cr-really-xyz98765432"
++);
++
++// A single very long word cannot be trimmed to nothing.
++const oneWord = getVideoSlug({ id: "long11111111".slice(0, 11), title: "a".repeat(200) });
++assert("long single word still yields a slug", oneWord.length > 20 && !oneWord.includes("--"));
++
++// No generated slug ever ends mid-hyphen before the id.
++const titles = [
++  "Noida Expressway 4 BHK Comparison: Which One Actually Wins In 2026",
++  "Is ACE Arte Worth The Price? Sector 150 Analysis And Honest Verdict",
++  "Eldeco 7 Peaks Greater Noida HONEST Review | Price, Layout Truth & Investment",
++];
++titles.forEach((t, i) => {
++  const s = getVideoSlug({ id: `id${i}0000000`.slice(0, 11), title: t });
++  assert(`no doubled hyphen: "${t.slice(0, 40)}…"`, !s.includes("--"));
++});
++
++console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);
++process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/lib/videoSlug.ts b/src/lib/videoSlug.ts
+new file mode 100644
+index 0000000..95e3523
+--- /dev/null
++++ b/src/lib/videoSlug.ts
+@@ -0,0 +1,39 @@
++/**
++ * The URL slug for a video that has no hand-written entry in videos.ts.
++ *
++ * Kept in its own module (no Next-specific imports) so scripts/verify-video-slug.ts
++ * can exercise it under plain ts-node.
++ */
++
++/**
++ * The fallback slug for a video with no hand-written entry in videos.ts:
++ * the title, slugified, with the YouTube id on the end so the watch page can
++ * find the video again from the URL alone.
++ *
++ * The id is not decoration — it is how /our-videos/[slug] resolves a brand-new
++ * upload live from the API instead of 404ing. A curated entry replaces this
++ * whole slug with a clean one, and resolveVideo() redirects here to there.
++ *
++ * Truncation happens before the trailing hyphens are trimmed, not after: the
++ * previous order cut "…worth-it-honest-review" at 60 characters, landing on a
++ * hyphen, and then appended "-<id>" to produce "…worth-it--D9cK37IEPH8". The
++ * cut also falls back to the last whole word so a slug never ends mid-word.
++ */
++export function getVideoSlug(video: { id: string; title: string }): string {
++  const full = video.title
++    .toLowerCase()
++    .replace(/[^\w\s-]/g, '') // Remove non-word chars
++    .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
++    .replace(/^-+|-+$/g, ''); // Trim hyphens
++
++  let slugifiedTitle = full;
++  if (full.length > 60) {
++    const cut = full.substring(0, 60);
++    // Prefer the last complete word, unless that would leave almost nothing.
++    const lastHyphen = cut.lastIndexOf('-');
++    slugifiedTitle = lastHyphen > 20 ? cut.substring(0, lastHyphen) : cut;
++  }
++  slugifiedTitle = slugifiedTitle.replace(/-+$/, '');
++
++  return `${slugifiedTitle}-${video.id}`;
++}
+diff --git a/src/lib/videos.ts b/src/lib/videos.ts
+index 6d2f093..9d478ea 100644
+--- a/src/lib/videos.ts
++++ b/src/lib/videos.ts
+@@ -41,6 +41,20 @@ export interface Video {
+ }
+ 
+ export const videos: Video[] = [
++  {
++    "slug": "m3m-cullinan-noida-4-bhk-review",
++    "title": "M3M Cullinan Noida: Is the \u20b932,000/sqft 4 BHK Actually Worth It? Honest Review",
++    "description": "M3M Cullinan is one of the most talked-about luxury addresses on the Noida Expressway \u2014 but is the 4 BHK actually worth today's price? An honest breakdown of the floor plan, pricing, club and location.",
++    "content": "M3M Cullinan is one of the most talked-about luxury addresses on the Noida Expressway, and the question every buyer is really asking is whether the 4 BHK justifies what it now costs. This Property Saraansh review decodes the floor plan, the pricing, the club and the location \u2014 and names the catch behind the project's journey from roughly \u20b917,000 to \u20b932,000 per square foot.||The project sits on a 12.8-acre land parcel, the largest among the premium Noida Expressway projects. Five Cullinan towers and two Trump towers occupy about seven acres, with high-street retail and a mall alongside, and the development is anchored by a one lakh square foot club.||The 4 BHK is a 4,315 sq ft layout in towers A2, C1 and C2, at two units per floor. Among the premium 4 BHK options on this stretch, M3M Cullinan is the closest to Delhi \u2014 which is a large part of what the price is asking you to pay for.||No hype and no sugar-coating: watch the full review for the honest verdict on whether this 4 BHK is worth it at today's number, and talk to Property Saraansh for RERA-backed guidance before you commit.",
++    "youtubeId": "D9cK37IEPH8",
++    "thumbnail": "https://i.ytimg.com/vi/D9cK37IEPH8/hqdefault.jpg",
++    "publishedAt": "2026-08-26",
++    "duration": "PT5M44S",
++    "focusKeyword": "m3m cullinan noida 4 bhk review",
++    "category": "Real Estate",
++    "views": "4 views",
++    "channelId": "UChOfCm-Xo4NABiBfKuw7H0g"
++  },
+   {
+     "slug": "property-saraansh-now-on-instagram",
+     "title": "New content dropping on Instagram #reels #propertycontent #shorts",
+diff --git a/src/lib/youtube.ts b/src/lib/youtube.ts
+index dc4b848..2d312f8 100644
+--- a/src/lib/youtube.ts
++++ b/src/lib/youtube.ts
+@@ -11,15 +11,9 @@ export interface YTVideo {
+   comments?: string;
+ }
+ 
+-export function getVideoSlug(video: { id: string; title: string }): string {
+-  const slugifiedTitle = video.title
+-    .toLowerCase()
+-    .replace(/[^\w\s-]/g, '') // Remove non-word chars
+-    .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+-    .replace(/^-+|-+$/g, '') // Trim hyphens
+-    .substring(0, 60); // Limit length to 60 chars
+-  return `${slugifiedTitle}-${video.id}`;
+-}
++// getVideoSlug lives in its own module so the verify script can run it under
++// plain ts-node — this file's Next-specific fetch options do not compile there.
++export { getVideoSlug } from './videoSlug';
+ 
+ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+ const YOUTUBE_CHANNEL_ID = process.env.YOUTUBE_CHANNEL_ID || process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'UC5eDcgQ_bYCzNrJUm34C4_w';
+-- 
+2.43.0
+

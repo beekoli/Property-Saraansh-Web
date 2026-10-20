@@ -7,6 +7,7 @@ import VideoPlayer from '@/components/VideoPlayer';
 import { getVideoByYoutubeId } from '@/lib/videos';
 import BlogCard from '@/components/BlogCard';
 import FAQSection from '@/components/blog/FAQSection';
+import { WhatsAppPageContext } from '@/components/whatsapp/WhatsAppContext';
 import TableOfContents from '@/components/blog/TableOfContents';
 import { blogFAQs, generateFAQSchema } from '@/lib/blogFaqs';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
@@ -180,6 +181,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
+      <WhatsAppPageContext kind="blog" title={decodeHtml(blog.title.rendered)} />
       {rankMathSchema && (
         <script
           type="application/ld+json"
@@ -304,7 +306,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
               {/* FAQ Section */}
               {faqs.length > 0 && (
-                <FAQSection faqs={faqs} />
+                <FAQSection faqs={faqs} articleTitle={decodeHtml(blog.title.rendered)} />
               )}
 
               {/* Tags Strip */}

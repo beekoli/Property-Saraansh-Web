@@ -1,0 +1,501 @@
+From 174dd45d2c888b23d26360ca98b78083a5aeb62b Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Wed, 26 Aug 2026 10:01:06 +0000
+Subject: [PATCH] feat(videos): treat Property Saraansh Reviews as a second
+ source channel
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The brand now publishes from two YouTube channels: the main channel for
+market analysis and long-form comparisons, and @PropertySaraanshReviews
+(UChOfCm-Xo4NABiBfKuw7H0g) for the project-by-project reviews people
+search by project name.
+
+Both are the same business, so the site treats them as one portfolio:
+
+  - src/lib/channels.ts is the single registry — ids, names, handle URLs,
+    and the helpers that answer "is this one of ours" and "which channel
+    published this". Ids stay overridable per environment.
+  - /our-videos pulls newest uploads from every registered channel in
+    parallel and merges them newest-first, so a project review sits in the
+    same feed as a market update, in date order. One channel failing can
+    no longer empty the other, and duplicate ids are collapsed.
+  - A watch page is served for a new upload from either channel, not just
+    the main one. Previously getLiveVideoById rejected anything whose
+    channelId did not match the single hardcoded channel, which would have
+    404'd every Reviews upload until someone hand-wrote an entry for it.
+  - Both channel URLs are listed in the Organization sameAs, which is what
+    tells Google the two channels and this site are one entity rather than
+    three strangers, and both appear in the footer.
+  - The watch page names the channel a video came from and offers that
+    channel's subscribe link, so someone who came for a project review can
+    follow the channel that actually publishes project reviews.
+
+Videos carry a channelId through hydration. Curated entries predate the
+second channel and have none, so they resolve to the main channel.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01PFTVAgRWtbXyehT59eVNdM
+---
+ scripts/verify-channels.ts         | 55 ++++++++++++++++++++++
+ src/app/layout.tsx                 |  3 ++
+ src/app/our-videos/[slug]/page.tsx | 33 +++++++++++--
+ src/components/Footer.tsx          | 17 ++++++-
+ src/lib/channels.ts                | 75 ++++++++++++++++++++++++++++++
+ src/lib/latestLongVideos.ts        | 58 ++++++++++++++++-------
+ src/lib/videos.ts                  | 22 ++++++++-
+ 7 files changed, 240 insertions(+), 23 deletions(-)
+ create mode 100644 scripts/verify-channels.ts
+ create mode 100644 src/lib/channels.ts
+
+diff --git a/scripts/verify-channels.ts b/scripts/verify-channels.ts
+new file mode 100644
+index 0000000..4f19e7a
+--- /dev/null
++++ b/scripts/verify-channels.ts
+@@ -0,0 +1,55 @@
++/**
++ * Guards the two-channel setup.
++ *
++ * Property Saraansh publishes from a main channel and a Reviews channel. Both
++ * feed /our-videos, both are listed in the Organization schema, and a watch
++ * page names the one its video came from. The failure modes worth pinning:
++ * a video from the Reviews channel being rejected as "not ours", and an older
++ * curated entry with no channelId being attributed to the wrong channel.
++ *
++ * Run: npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-channels.ts
++ */
++import {
++  CHANNELS,
++  CHANNEL_URLS,
++  MAIN_CHANNEL,
++  REVIEWS_CHANNEL,
++  channelById,
++  isOwnChannel,
++  subscribeUrl,
++  uploadsPlaylistId,
++} from "../src/lib/channels";
++
++let failures = 0;
++function check(name: string, actual: unknown, expected: unknown) {
++  const ok = JSON.stringify(actual) === JSON.stringify(expected);
++  if (!ok) failures++;
++  console.log(`${ok ? "ok  " : "FAIL"}  ${name}  → ${JSON.stringify(actual)}${ok ? "" : ` (expected ${JSON.stringify(expected)})`}`);
++}
++
++check("both channels are registered", CHANNELS.length, 2);
++check("main channel id", MAIN_CHANNEL.id, "UC5eDcgQ_bYCzNrJUm34C4_w");
++check("reviews channel id", REVIEWS_CHANNEL.id, "UChOfCm-Xo4NABiBfKuw7H0g");
++check("the two ids are distinct", MAIN_CHANNEL.id === REVIEWS_CHANNEL.id, false);
++
++// A video from either channel is ours; anyone else's is not.
++check("main channel is ours", isOwnChannel(MAIN_CHANNEL.id), true);
++check("reviews channel is ours", isOwnChannel(REVIEWS_CHANNEL.id), true);
++check("a stranger's channel is not ours", isOwnChannel("UCstrangerchannelid00"), false);
++check("no channel id is not ours", isOwnChannel(undefined), false);
++
++check("reviews id resolves to the reviews channel", channelById(REVIEWS_CHANNEL.id)?.name, "Property Saraansh Reviews");
++check("unknown id resolves to nothing", channelById("UCnope"), undefined);
++
++// "UC…" → "UU…" is how YouTube names a channel's uploads playlist.
++check("uploads playlist for main", uploadsPlaylistId(MAIN_CHANNEL.id), "UU5eDcgQ_bYCzNrJUm34C4_w");
++check("uploads playlist for reviews", uploadsPlaylistId(REVIEWS_CHANNEL.id), "UUhOfCm-Xo4NABiBfKuw7H0g");
++
++check("both channel URLs go into sameAs", CHANNEL_URLS, [
++  "https://www.youtube.com/@PropertySaraansh",
++  "https://www.youtube.com/@PropertySaraanshReviews",
++]);
++check("subscribe link is one-click", subscribeUrl(REVIEWS_CHANNEL), "https://www.youtube.com/@PropertySaraanshReviews?sub_confirmation=1");
++
++console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);
++process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 76b60d8..ddab495 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -77,7 +77,10 @@ const localBusinessSchema = {
+     },
+   ],
+   sameAs: [
++    // Both YouTube channels are listed so Google reads them as one brand
++    // rather than as unrelated accounts that happen to cover the same market.
+     "https://www.youtube.com/@PropertySaraansh",
++    "https://www.youtube.com/@PropertySaraanshReviews",
+     "https://www.facebook.com/PropertySaraansh",
+     "https://instagram.com/propertysaraansh",
+     "https://www.linkedin.com/company/propertysaraansh/",
+diff --git a/src/app/our-videos/[slug]/page.tsx b/src/app/our-videos/[slug]/page.tsx
+index 37c0cef..a23a732 100644
+--- a/src/app/our-videos/[slug]/page.tsx
++++ b/src/app/our-videos/[slug]/page.tsx
+@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
+ import { notFound, permanentRedirect } from 'next/navigation';
+ import Link from 'next/link';
+ import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
+-import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
++import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos, channelFor } from '@/lib/videos';
++import { subscribeUrl } from '@/lib/channels';
+ import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
+ import { getManagedVideo, preferWP } from '@/lib/managedContent';
+ import { getChannelStats } from '@/lib/youtube';
+@@ -26,8 +27,10 @@ export async function generateStaticParams() {
+ /**
+  * A watch page is served for every video in the curated list, and — for
+  * uploads that are too new to have a hand-written entry in videos.ts yet — for
+- * any slug ending in a YouTube id belonging to this channel, resolved live from
+- * the API. That is what lets a card on /our-videos always open the full watch
++ * any slug ending in a YouTube id belonging to either Property Saraansh
++ * channel, resolved live from the API. That is what lets a card on
++ * /our-videos (including a project review from the Reviews channel, which has
++ * no curated entry yet) always open the full watch
+  * page here (player + lead form + schema) instead of 404ing or bouncing the
+  * visitor out to YouTube.
+  */
+@@ -172,6 +175,10 @@ export default async function VideoWatchPage({ params }: PageProps) {
+     permanentRedirect(`/our-videos/${video.slug}`);
+   }
+ 
++  // Which of the two channels published this video — drives the attribution
++  // and subscribe link under the player.
++  const sourceChannel = channelFor(video);
++
+   // Fetch stats and filter related videos
+   const [stats, videos] = await Promise.all([
+     getChannelStats(),
+@@ -221,6 +228,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
+       },
+       "sameAs": [
+         "https://www.youtube.com/@PropertySaraansh",
++        "https://www.youtube.com/@PropertySaraanshReviews",
+         "https://instagram.com/propertysaraansh",
+         "https://www.facebook.com/PropertySaraansh",
+         "https://www.linkedin.com/company/propertysaraansh/"
+@@ -368,7 +376,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
+                   </p>
+                 )}
+ 
+-                <div className="flex items-center gap-6 text-xs text-brand-light pt-2 border-t border-brand-pale font-light">
++                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-brand-light pt-2 border-t border-brand-pale font-light">
+                   <span className="flex items-center gap-1.5">
+                     <Calendar size={14} className="text-brand-primary" />
+                     {video.publishedAt}
+@@ -377,6 +385,23 @@ export default async function VideoWatchPage({ params }: PageProps) {
+                     <Eye size={14} className="text-brand-primary" />
+                     {video.views}
+                   </span>
++                  {/* Property Saraansh publishes from two channels. Naming the
++                      one this video came from — and offering its subscribe
++                      link rather than a generic one — means a visitor who came
++                      for a project review can follow the channel that actually
++                      publishes project reviews. */}
++                  <a
++                    href={subscribeUrl(sourceChannel)}
++                    target="_blank"
++                    rel="noopener noreferrer"
++                    className="flex items-center gap-1.5 hover:text-brand-primary transition-colors"
++                  >
++                    <Video size={14} className="text-brand-primary" />
++                    <span>
++                      {sourceChannel.name}
++                      <span className="ml-1.5 font-bold text-brand-primary">Subscribe</span>
++                    </span>
++                  </a>
+                 </div>
+               </div>
+                           {/* Rich Content Section */}
+diff --git a/src/components/Footer.tsx b/src/components/Footer.tsx
+index e3e6e69..8ec3dc0 100644
+--- a/src/components/Footer.tsx
++++ b/src/components/Footer.tsx
+@@ -27,10 +27,25 @@ export default async function Footer() {
+                 target="_blank"
+                 rel="noreferrer"
+                 className="text-brand-accent hover:text-brand-accent-light transition-colors"
+-                aria-label="YouTube"
++                aria-label="Property Saraansh on YouTube"
++                title="Property Saraansh — market analysis and comparisons"
+               >
+                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+               </a>
++              {/* The Reviews channel is a second YouTube icon rather than a
++                  differently-shaped one: both are YouTube, and the label is
++                  what distinguishes them for anyone reading or hovering. */}
++              <a
++                href="https://www.youtube.com/@PropertySaraanshReviews"
++                target="_blank"
++                rel="noreferrer"
++                className="text-brand-accent hover:text-brand-accent-light transition-colors relative"
++                aria-label="Property Saraansh Reviews on YouTube"
++                title="Property Saraansh Reviews — project-by-project reviews"
++              >
++                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
++                <span className="absolute -bottom-1 -right-1 text-[8px] font-bold bg-brand-accent text-brand-ink rounded px-0.5 leading-tight">R</span>
++              </a>
+               <a
+                 href="https://instagram.com/propertysaraansh"
+                 target="_blank"
+diff --git a/src/lib/channels.ts b/src/lib/channels.ts
+new file mode 100644
+index 0000000..1b6e7f4
+--- /dev/null
++++ b/src/lib/channels.ts
+@@ -0,0 +1,75 @@
++/**
++ * The Property Saraansh YouTube channels, in one place.
++ *
++ * The brand publishes from more than one channel: the main channel carries
++ * market analysis and long-form comparisons, and the Reviews channel carries
++ * the per-project reviews that people search by project name. Both are the same
++ * business, so both feed /our-videos, both appear in the footer, and both are
++ * listed in the Organization schema's sameAs — which is what tells Google the
++ * two channels and this site are one entity rather than three strangers.
++ *
++ * Ids can be overridden per environment; the defaults are the live channels so
++ * a preview deployment without env vars still renders the real site.
++ */
++
++export interface Channel {
++  /** YouTube channel id, "UC…". */
++  id: string;
++  /** Display name, as shown on the watch page. */
++  name: string;
++  /** Public @handle URL — what a visitor should land on. */
++  url: string;
++  /** One line on what this channel is for, used where the two need telling apart. */
++  blurb: string;
++}
++
++const MAIN_ID =
++  process.env.YOUTUBE_CHANNEL_ID ||
++  process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID ||
++  'UC5eDcgQ_bYCzNrJUm34C4_w';
++
++const REVIEWS_ID =
++  process.env.YOUTUBE_REVIEWS_CHANNEL_ID ||
++  process.env.NEXT_PUBLIC_YOUTUBE_REVIEWS_CHANNEL_ID ||
++  'UChOfCm-Xo4NABiBfKuw7H0g';
++
++export const MAIN_CHANNEL: Channel = {
++  id: MAIN_ID,
++  name: 'Property Saraansh',
++  url: 'https://www.youtube.com/@PropertySaraansh',
++  blurb: 'Market analysis, investment strategy and long-form project comparisons.',
++};
++
++export const REVIEWS_CHANNEL: Channel = {
++  id: REVIEWS_ID,
++  name: 'Property Saraansh Reviews',
++  url: 'https://www.youtube.com/@PropertySaraanshReviews',
++  blurb: 'Honest, project-by-project reviews across Noida, Greater Noida and the expressways.',
++};
++
++/** Every channel the site pulls video from, newest-first merging happens later. */
++export const CHANNELS: Channel[] = [MAIN_CHANNEL, REVIEWS_CHANNEL];
++
++/** The channel a video belongs to, or undefined when it is not one of ours. */
++export function channelById(id?: string | null): Channel | undefined {
++  if (!id) return undefined;
++  return CHANNELS.find((c) => c.id === id);
++}
++
++/** True when this id is one of the brand's own channels. */
++export function isOwnChannel(id?: string | null): boolean {
++  return Boolean(channelById(id));
++}
++
++/** The uploads playlist for a channel — "UC…" becomes "UU…". */
++export function uploadsPlaylistId(channelId: string): string {
++  return channelId.startsWith('UC') ? 'UU' + channelId.substring(2) : channelId;
++}
++
++/** Channel URLs for schema.org sameAs. */
++export const CHANNEL_URLS: string[] = CHANNELS.map((c) => c.url);
++
++/** A one-click subscribe link for a channel. */
++export function subscribeUrl(channel: Channel): string {
++  return `${channel.url}?sub_confirmation=1`;
++}
+diff --git a/src/lib/latestLongVideos.ts b/src/lib/latestLongVideos.ts
+index 4ec1181..55940be 100644
+--- a/src/lib/latestLongVideos.ts
++++ b/src/lib/latestLongVideos.ts
+@@ -1,5 +1,6 @@
+ import type { Video } from './videos';
+ import { getVideoSlug, parseIsoDuration, formatViewCount } from './youtube';
++import { CHANNELS, isOwnChannel, uploadsPlaylistId } from './channels';
+ 
+ /**
+  * Live "newest uploads" helpers for /our-videos.
+@@ -23,8 +24,6 @@ import { getVideoSlug, parseIsoDuration, formatViewCount } from './youtube';
+  */
+ 
+ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+-const YOUTUBE_CHANNEL_ID =
+-  process.env.YOUTUBE_CHANNEL_ID || process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID || 'UC5eDcgQ_bYCzNrJUm34C4_w';
+ 
+ const SHORTS_MAX_SECONDS = 60;
+ 
+@@ -101,22 +100,16 @@ async function fetchDetails(ids: string[]): Promise<Record<string, VideoDetails>
+ }
+ 
+ /**
+- * The channel's newest LONG-FORM uploads, shaped exactly like a curated Video
+- * so /our-videos and /our-videos/[slug] can render them with no special cases.
+- * Returns [] when the API key is missing or the API call fails.
++ * The newest LONG-FORM uploads from ONE channel. Kept separate from the
++ * public helper below so a failure on one channel cannot empty the other.
+  */
+-export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
++async function latestFromChannel(channelId: string, limit: number): Promise<Video[]> {
+   if (!YOUTUBE_API_KEY) return [];
+ 
+-  const uploadsPlaylistId = YOUTUBE_CHANNEL_ID.startsWith('UC')
+-    ? 'UU' + YOUTUBE_CHANNEL_ID.substring(2)
+-    : YOUTUBE_CHANNEL_ID;
+-
+   try {
+-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${YOUTUBE_API_KEY}&playlistId=${uploadsPlaylistId}&part=snippet&maxResults=${Math.min(
+-      limit,
+-      50
+-    )}`;
++    const url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${YOUTUBE_API_KEY}&playlistId=${uploadsPlaylistId(
++      channelId
++    )}&part=snippet&maxResults=${Math.min(limit, 50)}`;
+     const res = await fetch(url, { next: { revalidate: 3600 } });
+     if (!res.ok) return [];
+ 
+@@ -167,13 +160,42 @@ export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
+         focusKeyword: v.title,
+         category: 'Real Estate',
+         views: details[v.id].views,
++        channelId,
+       }));
+   } catch (err) {
+-    console.error('Failed to fetch latest long videos from YouTube', err);
++    console.error(`Failed to fetch latest long videos for channel ${channelId}`, err);
+     return [];
+   }
+ }
+ 
++/**
++ * The newest LONG-FORM uploads across every Property Saraansh channel, shaped
++ * exactly like a curated Video so /our-videos and /our-videos/[slug] can render
++ * them with no special cases. Returns [] when the API key is missing.
++ *
++ * The channels are fetched in parallel and merged newest-first, so a project
++ * review published on the Reviews channel sits in the same feed as a market
++ * update from the main channel, in date order. `limit` applies to the merged
++ * result; each channel is asked for the full limit so one quiet channel cannot
++ * hold back the other.
++ */
++export async function getLatestLongVideos(limit = 15): Promise<Video[]> {
++  if (!YOUTUBE_API_KEY) return [];
++
++  const perChannel = await Promise.all(CHANNELS.map((c) => latestFromChannel(c.id, limit)));
++
++  const seen = new Set<string>();
++  return perChannel
++    .flat()
++    .filter((v) => {
++      if (seen.has(v.youtubeId)) return false;
++      seen.add(v.youtubeId);
++      return true;
++    })
++    .sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : 0))
++    .slice(0, limit);
++}
++
+ /**
+  * A single live video by id, shaped like a curated Video. Used by
+  * /our-videos/[slug] so a brand-new upload gets a real watch page (player,
+@@ -192,8 +214,9 @@ export async function getLiveVideoById(id: string): Promise<Video | null> {
+     if (!data.items || data.items.length === 0) return null;
+ 
+     const item = data.items[0];
+-    // Only this channel's own uploads get a page here.
+-    if (item.snippet?.channelId && item.snippet.channelId !== YOUTUBE_CHANNEL_ID) return null;
++    // Only the brand's own uploads get a page here — either channel qualifies,
++    // anything else does not.
++    if (item.snippet?.channelId && !isOwnChannel(item.snippet.channelId)) return null;
+ 
+     const title = item.snippet?.title || '';
+     const description = item.snippet?.description || '';
+@@ -224,6 +247,7 @@ export async function getLiveVideoById(id: string): Promise<Video | null> {
+       focusKeyword: title,
+       category: isShort ? 'Shorts' : 'Real Estate',
+       views: formatViewCount(item.statistics?.viewCount || ''),
++      channelId: item.snippet?.channelId || undefined,
+     };
+   } catch (err) {
+     console.error('Failed to fetch live video by id', err);
+diff --git a/src/lib/videos.ts b/src/lib/videos.ts
+index 8285346..6d2f093 100644
+--- a/src/lib/videos.ts
++++ b/src/lib/videos.ts
+@@ -1,5 +1,16 @@
+ import { parseIsoDuration, formatViewCount } from '@/lib/youtube';
+ import { rawViewCount, publishedDate } from '@/lib/videoStats';
++import { MAIN_CHANNEL, channelById, type Channel } from '@/lib/channels';
++
++/**
++ * The channel a video came from. Everything in the curated list below predates
++ * the Reviews channel, so an entry with no channelId is the main channel's —
++ * that stays true because hydration stamps the real channel on every video it
++ * touches, and only an un-hydrated older entry can reach the fallback.
++ */
++export function channelFor(video: { channelId?: string }): Channel {
++  return channelById(video.channelId) ?? MAIN_CHANNEL;
++}
+ 
+ export interface Video {
+   slug: string;
+@@ -21,6 +32,12 @@ export interface Video {
+    * than reverse-engineered.
+    */
+   viewCount?: number;
++  /**
++   * Which Property Saraansh channel published this video. Absent on older
++   * curated entries, which all predate the second channel and are therefore
++   * the main channel's — `channelFor()` in this file resolves that.
++   */
++  channelId?: string;
+ }
+ 
+ export const videos: Video[] = [
+@@ -1075,7 +1092,7 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+ 
+   try {
+     const videoIds = videos.map(v => v.youtubeId);
+-    const detailsMap: Record<string, { views: string; viewCount?: number; publishedAt?: string; duration: string }> = {};
++    const detailsMap: Record<string, { views: string; viewCount?: number; publishedAt?: string; channelId?: string; duration: string }> = {};
+ 
+     // Fetch in batches of 50
+     for (let i = 0; i < videoIds.length; i += 50) {
+@@ -1096,6 +1113,7 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+               views: formatViewCount(viewsStr),
+               viewCount: rawViewCount(viewsStr),
+               publishedAt: publishedDate(item.snippet?.publishedAt),
++              channelId: item.snippet?.channelId,
+               duration: formatted || "0:00"
+             };
+           });
+@@ -1111,6 +1129,7 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+           views: stats.views,
+           viewCount: stats.viewCount,
+           publishedAt: stats.publishedAt ?? video.publishedAt,
++          channelId: stats.channelId ?? video.channelId,
+           // Only update duration if it wasn't already hardcoded correctly,
+           // or just always use the real one:
+           duration: stats.duration.includes(':') ? stats.duration : video.duration
+@@ -1146,6 +1165,7 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
+           views: formatViewCount(viewsStr),
+           viewCount: rawViewCount(viewsStr),
+           publishedAt: publishedDate(item.snippet?.publishedAt) ?? staticVideo.publishedAt,
++          channelId: item.snippet?.channelId || staticVideo.channelId,
+           duration: formatted || staticVideo.duration
+         };
+       }
+-- 
+2.43.0
+

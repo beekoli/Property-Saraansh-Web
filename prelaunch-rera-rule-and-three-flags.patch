@@ -1,0 +1,498 @@
+From 4edca30146d21484eaff1c4cb82ca950992d33eb Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 16 Aug 2026 04:25:50 +0000
+Subject: [PATCH] feat(properties): pre-launch is now driven by the RERA
+ number, plus three fixed card flags
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Rule, as specified: a project with no RERA registration number is in its
+pre-launch phase, and so is one whose launch date is still in the future.
+The is_prelaunch checkbox remains as a manual override.
+
+One guard sits on top, and it matters. A blank rera_number in WordPress
+means one of two things: genuinely unregistered, or nobody typed the
+number in. Four projects are blank today and three of them — ACE
+Golfshire, ACE Platinum, ACE Aspire — are Delivered or Ready to Move.
+None appears in UP RERA's registered list, which is expected: a
+registration lapses once a project completes. Labelling an occupied tower
+PRE-LAUNCH would be a false claim on a lead-generating page, so a
+delivered project is never pre-launch whatever its RERA field says. That
+leaves exactly one genuine pre-launch project today.
+
+Cards now always carry exactly one of three flags: PRE-LAUNCH, UNDER
+CONSTRUCTION, READY TO MOVE. Previously the badge could be absent
+entirely when possession text matched no pattern, which read as an
+oversight, and a fourth 'NEW LAUNCH' state overlapped Under Construction.
+
+The status filter follows suit. 'New Launch' is removed — it matched any
+possession text containing '202', so 'December 2028' and '2022' both hit
+it, filing delivered projects under construction. Pre-launch is not a
+chip because those projects are held out of the grid and shown in their
+own band below.
+
+The homepage gains that same Pre-Launch band beneath the featured
+projects, capped at three, hidden entirely when nothing qualifies.
+---
+ scripts/verify-prelaunch.ts             | 89 ++++++++++++-----------
+ src/app/page.tsx                        | 53 ++++++++++++--
+ src/app/properties/PropertiesClient.tsx | 21 ++++--
+ src/components/PropertyCard.tsx         | 34 +++++----
+ src/lib/prelaunch.ts                    | 94 ++++++++++++++++---------
+ 5 files changed, 188 insertions(+), 103 deletions(-)
+
+diff --git a/scripts/verify-prelaunch.ts b/scripts/verify-prelaunch.ts
+index 71bafe9..acb090c 100644
+--- a/scripts/verify-prelaunch.ts
++++ b/scripts/verify-prelaunch.ts
+@@ -1,74 +1,73 @@
+ /**
+- * Verifies the Pre-Launch rules, in particular the two failure modes that
+- * would be visible and embarrassing on a live consultancy site:
++ * Verifies the pre-launch rule and the three-flag classification.
+  *
+- *   1. A registered project rendering as pre-launch.
+- *   2. A finished project drifting into pre-launch because its RERA field
+- *      happens to be blank in WordPress.
++ * The rule: no RERA number means pre-launch, and so does a launch date still in
++ * the future. The one guard is that a delivered project is never pre-launch,
++ * because a blank RERA field can equally mean "finished years ago and dropped
++ * off the registered list" — which is the case for three real projects today.
+  *
+  * Run with:
+  *   npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-prelaunch.ts
+  */
+-import { isPreLaunch, hasReraNumber, expectedLaunchLine, partitionPreLaunch } from '../src/lib/prelaunch';
++import { isPreLaunch, hasReraNumber, looksDelivered, launchesInFuture, expectedLaunchLine, partitionPreLaunch } from '../src/lib/prelaunch';
+ 
++const NOW = Date.UTC(2026, 7, 16); // 16 Aug 2026
+ const p = (acf: Record<string, unknown>) => ({ acf });
+ 
+ let failures = 0;
+ function check(name: string, actual: unknown, expected: unknown) {
+-  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+-    failures++;
+-    console.log(`  FAIL ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`);
+-  } else {
+-    console.log(`  ok   ${name}`);
+-  }
++  const ok = JSON.stringify(actual) === JSON.stringify(expected);
++  if (!ok) { failures++; console.log(`  FAIL ${name}: got ${JSON.stringify(actual)}, want ${JSON.stringify(expected)}`); }
++  else console.log(`  ok   ${name}`);
+ }
+ 
+-console.log('1. The four projects with a blank RERA field today stay OUT of pre-launch');
+-// ACE Golfshire, ACE Platinum (Ready to Move), ACE Aspire, Aspire Leisure Park.
+-// None has is_prelaunch ticked, so none may appear in the section.
+-for (const slug of ['ace-golfshire', 'ace-platinum', 'ace-aspire', 'aspire-leisure-park']) {
+-  check(slug, isPreLaunch(p({ rera_number: '', possession_date: 'Ready to Move' })), false);
+-}
++console.log('1. The rule — no RERA number means pre-launch');
++check('no rera', isPreLaunch(p({ rera_number: '' }), NOW), true);
++check('rera absent entirely', isPreLaunch(p({}), NOW), true);
++check('whitespace-only rera', isPreLaunch(p({ rera_number: '   ' }), NOW), true);
++check('has rera', isPreLaunch(p({ rera_number: 'UPRERAPRJ683816' }), NOW), false);
+ 
+-console.log('\n2. The checkbox alone puts a project in pre-launch');
+-check('ticked, no RERA', isPreLaunch(p({ is_prelaunch: true, rera_number: '' })), true);
+-check('ticked, RERA absent entirely', isPreLaunch(p({ is_prelaunch: true })), true);
++console.log('\n2. A future launch date also means pre-launch');
++check('launches 2027', isPreLaunch(p({ rera_number: 'X1', launch_date: 'March 2027' }), NOW), true);
++check('launched 2025', isPreLaunch(p({ rera_number: 'X1', launch_date: 'March 2025' }), NOW), false);
++check('launched last month', isPreLaunch(p({ rera_number: 'X1', launch_date: '28 July 2026' }), NOW), false);
++check('launchesInFuture direct', launchesInFuture(p({ launch_date: 'January 2028' }), NOW), true);
+ 
+-console.log('\n3. A RERA number promotes it out, even with the box still ticked');
+-check('ticked + RERA', isPreLaunch(p({ is_prelaunch: true, rera_number: 'UPRERAPRJ123456' })), false);
+-check('whitespace-only RERA does not count', isPreLaunch(p({ is_prelaunch: true, rera_number: '   ' })), true);
++console.log('\n3. The guard — delivered projects are never pre-launch');
++// ACE Golfshire, ACE Platinum, ACE Aspire: no RERA number in WordPress, absent
++// from the registered list because they completed, all Delivered/Ready to Move.
++check('ace-golfshire', isPreLaunch(p({ rera_number: '', possession_date: 'Delivered. Ready to move' }), NOW), false);
++check('ace-platinum', isPreLaunch(p({ rera_number: '', possession_date: 'Delivered. Ready to move' }), NOW), false);
++check('ace-aspire', isPreLaunch(p({ rera_number: '', possession_date: 'Delivered' }), NOW), false);
++check('looksDelivered', looksDelivered(p({ possession_date: 'Delivered. Possession from December 2022' })), true);
++check('not delivered', looksDelivered(p({ possession_date: 'December 2028 (Expected)' })), false);
+ 
+-console.log('\n4. ACF checkbox truthiness — the field may serialise several ways');
+-for (const v of [true, 1, '1', 'true', 'yes', 'on']) {
+-  check(`ticked as ${JSON.stringify(v)}`, isPreLaunch(p({ is_prelaunch: v })), true);
+-}
+-for (const v of [false, 0, '0', '', 'false', 'no', null, undefined]) {
+-  check(`unticked as ${JSON.stringify(v)}`, isPreLaunch(p({ is_prelaunch: v })), false);
++console.log('\n4. The checkbox can still force the label on');
++check('ticked overrides everything', isPreLaunch(p({ is_prelaunch: true, rera_number: 'X1', possession_date: 'Delivered' }), NOW), true);
++for (const v of [false, 0, '0', '', null, undefined]) {
++  check(`unticked as ${JSON.stringify(v)} falls through to the rule`, isPreLaunch(p({ is_prelaunch: v, rera_number: 'X1' }), NOW), false);
+ }
+ 
+ console.log('\n5. hasReraNumber');
+ check('present', hasReraNumber(p({ rera_number: 'UPRERAPRJ1' })), true);
+ check('blank', hasReraNumber(p({ rera_number: '' })), false);
+-check('no acf at all', hasReraNumber({}), false);
++check('no acf', hasReraNumber({}), false);
+ 
+ console.log('\n6. Expected launch line');
+ check('set', expectedLaunchLine(p({ expected_launch: 'Q1 2027' })), 'Expected launch — Q1 2027');
+-check('padded', expectedLaunchLine(p({ expected_launch: '  Early 2027 ' })), 'Expected launch — Early 2027');
+-check('blank omits the line', expectedLaunchLine(p({ expected_launch: '' })), null);
+-check('missing omits the line', expectedLaunchLine(p({})), null);
++check('blank omits', expectedLaunchLine(p({ expected_launch: '' })), null);
+ 
+-console.log('\n7. Partition keeps input order inside each group');
+-const list = [
+-  { id: 'a', acf: { rera_number: 'R1' } },
+-  { id: 'b', acf: { is_prelaunch: true } },
+-  { id: 'c', acf: { rera_number: 'R2' } },
+-  { id: 'd', acf: { is_prelaunch: true } },
+-  { id: 'e', acf: { is_prelaunch: true, rera_number: 'R3' } },
++console.log('\n7. Partition against the live shape of the catalogue');
++const live = [
++  { id: 'ace-terra', acf: { rera_number: 'UPRERAPRJ683816', possession_date: 'December 2028 (Expected)' } },
++  { id: 'ace-golfshire', acf: { rera_number: '', possession_date: 'Delivered. Ready to move' } },
++  { id: 'ace-platinum', acf: { rera_number: '', possession_date: 'Delivered. Ready to move' } },
++  { id: 'ace-aspire', acf: { rera_number: '', possession_date: 'Delivered' } },
++  { id: 'aspire-leisure-park', acf: { rera_number: '', possession_date: 'Under Construction' } },
+ ];
+-const { registered, preLaunch } = partitionPreLaunch(list);
+-check('registered', registered.map((x) => x.id), ['a', 'c', 'e']);
+-check('preLaunch', preLaunch.map((x) => x.id), ['b', 'd']);
+-check('nothing lost', registered.length + preLaunch.length, list.length);
++const { registered, preLaunch } = partitionPreLaunch(live, NOW);
++check('registered', registered.map((x) => x.id), ['ace-terra', 'ace-golfshire', 'ace-platinum', 'ace-aspire']);
++check('preLaunch — only the genuinely unlaunched one', preLaunch.map((x) => x.id), ['aspire-leisure-park']);
+ 
+ console.log(failures === 0 ? '\nAll checks passed.' : `\n${failures} check(s) failed.`);
+ process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index c462c56..eaa485f 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -8,7 +8,7 @@ import { getChannelStats } from '@/lib/youtube';
+ import { getProperties, getLatestBlogs, getLatestNews, getFeaturedImage, getCardData } from '@/lib/wordpress';
+ import type { WPPost } from '@/lib/wordpress';
+ import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
+-import { partitionPreLaunch } from '@/lib/prelaunch';
++import { partitionPreLaunch, expectedLaunchLine } from '@/lib/prelaunch';
+ import { getVideosWithRealtimeStats } from '@/lib/videos';
+ import SlideUp from '@/components/animations/SlideUp';
+ import FadeIn from '@/components/animations/FadeIn';
+@@ -56,9 +56,11 @@ export default async function Home() {
+   // The three most recently launched projects, matching the order on
+   // /properties. Pre-launch projects are excluded: they carry no RERA
+   // registration, so they should never headline the homepage.
+-  const featuredProjects = partitionPreLaunch(
+-    sortByLaunchDate(properties, rawLaunchDate)
+-  ).registered.slice(0, 3);
++  const ordered = partitionPreLaunch(sortByLaunchDate(properties, rawLaunchDate));
++  const featuredProjects = ordered.registered.slice(0, 3);
++  // Pre-launch gets its own band below, capped at three so it never outweighs
++  // the registered inventory above it.
++  const preLaunchProjects = ordered.preLaunch.slice(0, 3);
+ 
+   const longVideos = videos.filter((v) => v.category !== 'Shorts');
+   const featuredVideo = longVideos[0] || {
+@@ -232,6 +234,49 @@ export default async function Home() {
+               );
+             })}
+           </StaggerContainer>
++
++          {/* Pre-Launch — projects with no RERA registration yet. Kept in its
++              own band below the registered projects, mirroring /properties, and
++              it disappears entirely when nothing qualifies. */}
++          {preLaunchProjects.length > 0 && (
++            <div className="mt-20 pt-12 border-t border-brand-light/30">
++              <div className="mb-8 text-center">
++                <h3 className="heading-playfair text-2xl md:text-3xl font-bold text-brand-ink mb-3">
++                  Pre-Launch Projects
++                </h3>
++                <p className="text-sm text-brand-dark/70 max-w-2xl mx-auto leading-relaxed">
++                  Projects we are tracking ahead of their formal launch. These are not yet
++                  registered with UP RERA, so pricing and timelines are indicative. Register
++                  your interest and we will share verified details as soon as registration
++                  comes through.
++                </p>
++              </div>
++              <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
++                {preLaunchProjects.map((project) => {
++                  const card = getCardData(project);
++                  return (
++                    <StaggerItem key={project.id}>
++                      <PropertyCard
++                        id={project.slug}
++                        title={project.title.rendered}
++                        developer={card.developer}
++                        isWalkthrough={card.isWalkthrough}
++                        location={card.location}
++                        price={card.price}
++                        type={card.type}
++                        imageUrl={getFeaturedImage(project)}
++                        bhk={card.bhk}
++                        videoId={card.videoId}
++                        launchLine={expectedLaunchLine(project)}
++                        preLaunch
++                      />
++                    </StaggerItem>
++                  );
++                })}
++              </StaggerContainer>
++            </div>
++          )}
++
+           <SlideUp className="text-center mt-12" delay={0.2}>
+             <Link href="/properties" className="btn-primary px-8 py-3 rounded shadow-md inline-block">
+               View All Projects
+diff --git a/src/app/properties/PropertiesClient.tsx b/src/app/properties/PropertiesClient.tsx
+index 3ff1aa4..c8f8f1f 100644
+--- a/src/app/properties/PropertiesClient.tsx
++++ b/src/app/properties/PropertiesClient.tsx
+@@ -16,7 +16,13 @@ interface Props {
+   properties: WPProperty[];
+ }
+ 
+-const STATUS_CHIPS = ['All', 'New Launch', 'Under Construction', 'Ready to Move'] as const;
++// Cards carry exactly three flags: PRE-LAUNCH, UNDER CONSTRUCTION, READY TO
++// MOVE. Pre-launch is not offered as a filter here because those projects are
++// held out of this grid entirely and shown in their own band below, so a chip
++// for them would filter an empty set. "New Launch" is gone: it matched any
++// possession text containing a recent year, which overlapped Under Construction
++// and no longer corresponds to any badge.
++const STATUS_CHIPS = ['All', 'Under Construction', 'Ready to Move'] as const;
+ 
+ export default function PropertiesClient({ properties }: Props) {
+   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+@@ -78,11 +84,15 @@ export default function PropertiesClient({ properties }: Props) {
+     return true;
+   };
+ 
++  // Mirrors the card badge exactly: pre-launch is already excluded from this
++  // grid, so a project is either delivered or still being built. The old
++  // version tested for the substring "202", which matched a possession date of
++  // "December 2028" and also "2022", putting delivered projects under
++  // construction.
+   const matchesStatus = (project: WPProperty, statusKey: string) => {
+-    const projectStatus = (getCardData(project).possessionDate || '').toLowerCase();
+-    if (statusKey === 'ready to move') return projectStatus.includes('ready');
+-    if (statusKey === 'under construction') return projectStatus.includes('construction') || projectStatus.includes('202');
+-    if (statusKey === 'new launch') return projectStatus.includes('launch') || projectStatus.includes('2025') || projectStatus.includes('2026');
++    const ready = /ready|deliver/i.test(getCardData(project).possessionDate || '');
++    if (statusKey === 'ready to move') return ready;
++    if (statusKey === 'under construction') return !ready;
+     return true;
+   };
+ 
+@@ -181,7 +191,6 @@ export default function PropertiesClient({ properties }: Props) {
+               <option value="All" className="bg-brand-dark text-white">All Statuses</option>
+               <option value="Ready to Move" className="bg-brand-dark text-white">Ready to Move</option>
+               <option value="Under Construction" className="bg-brand-dark text-white">Under Construction</option>
+-              <option value="New Launch" className="bg-brand-dark text-white">New Launch</option>
+             </select>
+           </div>
+ 
+diff --git a/src/components/PropertyCard.tsx b/src/components/PropertyCard.tsx
+index df8d1c0..32ec62d 100644
+--- a/src/components/PropertyCard.tsx
++++ b/src/components/PropertyCard.tsx
+@@ -42,13 +42,21 @@ interface PropertyCardProps {
+ // Brand green pill — all informational badges share one consistent style
+ const BADGE_CLS = 'bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase';
+ 
+-function getStatusBadge(possessionDate?: string): { label: string } | null {
+-  if (!possessionDate) return null;
+-  const p = possessionDate.toLowerCase();
+-  if (p.includes('ready')) return { label: 'READY TO MOVE' };
+-  if (p.includes('launch')) return { label: 'NEW LAUNCH' };
+-  if (/20\d{2}/.test(p) || p.includes('construction')) return { label: 'UNDER CONSTRUCTION' };
+-  return null;
++/**
++ * Every card carries exactly one of three flags: PRE-LAUNCH, UNDER
++ * CONSTRUCTION, or READY TO MOVE. There is no fourth state and no card without
++ * one — a blank badge previously appeared whenever the possession text did not
++ * match any pattern, which read as an oversight rather than a fact.
++ *
++ * Pre-launch wins outright: a project with no RERA registration has not
++ * launched, so no construction stage applies to it. Otherwise possession text
++ * decides, and under construction is the default, because a project that is
++ * neither unregistered nor delivered is by definition still being built.
++ */
++function getStatusBadge(possessionDate: string | undefined, preLaunch: boolean): { label: string } {
++  if (preLaunch) return { label: 'PRE-LAUNCH' };
++  if (/ready|deliver/i.test(possessionDate || '')) return { label: 'READY TO MOVE' };
++  return { label: 'UNDER CONSTRUCTION' };
+ }
+ 
+ function getVideoHref(id: string, videoId?: string): string {
+@@ -76,9 +84,7 @@ export default function PropertyCard({
+   nearbyLine,
+   priority = false,
+ }: PropertyCardProps) {
+-  // A pre-launch project has no registration, so possession-derived status
+-  // ("Ready to Move", "Under Construction") would be misleading.
+-  const statusBadge = preLaunch ? { label: 'PRE-LAUNCH' } : getStatusBadge(possessionDate);
++  const statusBadge = getStatusBadge(possessionDate, preLaunch);
+   const videoHref = getVideoHref(id, videoId);
+   const displayTitle = decodeHtml(title);
+   const displayDeveloper = decodeHtml(developer || '');
+@@ -115,11 +121,9 @@ export default function PropertyCard({
+           <span className={BADGE_CLS}>
+             {type}
+           </span>
+-          {statusBadge && (
+-            <span className={BADGE_CLS}>
+-              {statusBadge.label}
+-            </span>
+-          )}
++          <span className={BADGE_CLS}>
++            {statusBadge.label}
++          </span>
+           {reraNumber && (
+             <span className={BADGE_CLS}>
+               RERA ✓
+diff --git a/src/lib/prelaunch.ts b/src/lib/prelaunch.ts
+index c3eb4d0..cd49ffc 100644
+--- a/src/lib/prelaunch.ts
++++ b/src/lib/prelaunch.ts
+@@ -1,62 +1,87 @@
+ /**
+- * prelaunch — which projects belong in the Pre-Launch section, and what they
+- * are allowed to say.
++ * prelaunch — which projects are still pre-launch, and what they may say.
+  *
+- * A project is pre-launch only when an editor has deliberately ticked the
+- * `is_prelaunch` checkbox in WordPress AND the project has no RERA number.
++ * The rule, in the owner's words: **no RERA number means the project is in its
++ * pre-launch phase.** A project cannot legally be registered before it exists,
++ * so the absence of a registration number is the cleanest available signal that
++ * it has not formally launched. A launch date in the future says the same thing
++ * and is treated identically.
+  *
+- * Both halves matter, for different reasons:
++ * One guard sits on top of that, and it earns its place.
+  *
+- *   The checkbox is required because a missing RERA number does NOT mean a
+- *   project is unregistered — it usually means nobody has typed the number in
+- *   yet. Four projects are in that state today, and two of them (ACE Golfshire,
+- *   ACE Platinum) are Ready to Move. Inferring pre-launch status from a blank
+- *   field would advertise finished, occupied towers as unlaunched.
++ * A blank `rera_number` in WordPress can mean two different things: the project
++ * genuinely has no registration, or nobody has typed the number in. Four
++ * projects are in that state today, and three of them — ACE Golfshire, ACE
++ * Platinum, ACE Aspire — are Delivered or Ready to Move. None of the three
++ * appears in UP RERA's registered-projects list, which is expected: a
++ * registration lapses once a project completes and moves to the completed list.
++ * So for those three the blank field means "finished years ago", the exact
++ * opposite of pre-launch.
+  *
+- *   The RERA number is required because that is the promotion trigger the
+- *   business wants: the moment a registration number exists, the project has
+- *   launched and belongs in the main listing, whether or not anyone remembered
+- *   to untick the box. Data entry should not be able to strand a registered
+- *   project in a pre-launch bucket.
++ * Rendering PRE-LAUNCH on an occupied tower would be a false claim on a page
++ * that generates leads. So a project whose possession says it is delivered or
++ * ready to move is never treated as pre-launch, whatever its RERA field says —
++ * being delivered is itself proof that it launched. Remove `looksDelivered`
++ * from `isPreLaunch` if you ever want the raw rule with no guard.
+  */
+ 
+ /* eslint-disable @typescript-eslint/no-explicit-any */
+ 
++// Relative rather than "@/lib/launchDate" so the verify script can run this
++// module under plain ts-node, which does not resolve the "@/" path alias.
++import { parseLaunchDate } from "./launchDate";
++
+ type WithAcf = { acf?: any };
+ 
+ /** ACF checkboxes arrive as true, 1, "1" or "yes" depending on how the field is configured. */
+ function isTicked(value: unknown): boolean {
+   if (value === true || value === 1) return true;
+-  if (typeof value === 'string') {
++  if (typeof value === "string") {
+     const v = value.trim().toLowerCase();
+-    return v === '1' || v === 'true' || v === 'yes' || v === 'on';
++    return v === "1" || v === "true" || v === "yes" || v === "on";
+   }
+   return false;
+ }
+ 
+ function text(value: unknown): string {
+-  return typeof value === 'string' ? value.trim() : '';
++  return typeof value === "string" ? value.trim() : "";
+ }
+ 
+ /** True once a RERA registration number has been recorded. */
+ export function hasReraNumber(prop: WithAcf): boolean {
+-  return text(prop?.acf?.rera_number) !== '';
++  return text(prop?.acf?.rera_number) !== "";
++}
++
++/**
++ * The possession field is marketing prose, and when it says delivered or ready
++ * to move that is a definitive statement that the project launched. Used only
++ * to veto a pre-launch label, never to apply one.
++ */
++export function looksDelivered(prop: WithAcf): boolean {
++  return /deliver|ready to move|ready-to-move/i.test(text(prop?.acf?.possession_date));
++}
++
++/** A launch date still in the future means the project has not launched yet. */
++export function launchesInFuture(prop: WithAcf, now: number = Date.now()): boolean {
++  const parsed = parseLaunchDate(text(prop?.acf?.launch_date));
++  return parsed ? parsed.time > now : false;
+ }
+ 
+ /**
+- * Pre-launch = explicitly flagged and not yet registered. Entering a RERA
+- * number promotes the project into the main listing on the next revalidate,
+- * with no other edit required.
++ * Pre-launch when there is no RERA registration, or the launch date is still
++ * ahead of us — unless the project has already been delivered, or an editor has
++ * ticked `is_prelaunch` to force the label on.
+  */
+-export function isPreLaunch(prop: WithAcf): boolean {
+-  return isTicked(prop?.acf?.is_prelaunch) && !hasReraNumber(prop);
++export function isPreLaunch(prop: WithAcf, now: number = Date.now()): boolean {
++  if (isTicked(prop?.acf?.is_prelaunch)) return true;
++  if (looksDelivered(prop)) return false;
++  return !hasReraNumber(prop) || launchesInFuture(prop, now);
+ }
+ 
+ /**
+- * The editor's own words for when the project is expected to open — "Q1 2027",
+- * "Expected early 2027". Free text on purpose: nothing about an unregistered
+- * project is firm enough to deserve a date picker, and we never compute or
+- * infer this value.
++ * The editor's own words for when the project is expected to open — "Q1 2027".
++ * Free text on purpose: nothing about an unregistered project is firm enough to
++ * deserve a date picker, and we never compute or infer this value.
+  */
+ export function expectedLaunch(prop: WithAcf): string {
+   return text(prop?.acf?.expected_launch);
+@@ -69,15 +94,18 @@ export function expectedLaunchLine(prop: WithAcf): string | null {
+ }
+ 
+ /**
+- * Split a listing into the projects that carry a registration and the ones
+- * still in pre-launch. Input order is preserved within each group, so an
+- * already launch-date-sorted list stays sorted.
++ * Split a listing into registered projects and pre-launch ones. Input order is
++ * preserved within each group, so an already launch-date-sorted list stays
++ * sorted.
+  */
+-export function partitionPreLaunch<T extends WithAcf>(items: T[]): { registered: T[]; preLaunch: T[] } {
++export function partitionPreLaunch<T extends WithAcf>(
++  items: T[],
++  now: number = Date.now()
++): { registered: T[]; preLaunch: T[] } {
+   const registered: T[] = [];
+   const preLaunch: T[] = [];
+   for (const item of items) {
+-    (isPreLaunch(item) ? preLaunch : registered).push(item);
++    (isPreLaunch(item, now) ? preLaunch : registered).push(item);
+   }
+   return { registered, preLaunch };
+ }
+-- 
+2.43.0
+

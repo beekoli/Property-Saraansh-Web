@@ -1,0 +1,287 @@
+From 781a42328538a8d53846b468a1ac3d3b5249705d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 25 Aug 2026 09:27:15 +0000
+Subject: [PATCH] fix(videos): take upload date and view count from YouTube,
+ not from memory
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Every video watch page states two numbers to Google, and both were wrong.
+
+The upload date was hand-typed into videos.ts. 52 of the 84 entries had
+drifted onto the same placeholder, 2026-06-11, so videos genuinely
+published in 2024 were declaring themselves as uploaded in June 2026 —
+off by as much as two years. Checked against YouTube, only two dates in
+the file were exactly right; the rest were either that placeholder or a
+timezone's worth out.
+
+The view count was reconstructed by stripping the digits out of the
+display string and multiplying by 1000. That reads "6.1K views" as 61,000
+and "741 views" as 741,000 — a claim the channel cannot support. It
+happened to land close for anything already formatted as a round "NK",
+which is why it went unnoticed.
+
+Both now come from the YouTube API on every render, alongside the views
+and duration that were already hydrated. The stored date survives only as
+a fallback for when the API cannot be reached, and the view count is
+carried as a raw integer rather than parsed back out of a lossy string.
+When there is no number to state, the property is omitted rather than
+guessed.
+
+Also folds /our-videos/eldeco-7-peaks-omicron-1 into
+/our-videos/eldeco-7-peaks-residences-greater-noida-review. Both watch
+pages were built on the same YouTube video, so the site was competing
+with itself for "Eldeco 7 Peaks" and splitting the link equity; the
+surviving page is the one carrying the right date and the current title.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01PFTVAgRWtbXyehT59eVNdM
+---
+ next.config.ts                     |  7 ++++++
+ scripts/verify-video-sync.ts       | 40 ++++++++++++++++++++++++++++++
+ src/app/our-videos/[slug]/page.tsx | 19 ++++++++++----
+ src/lib/videoStats.ts              | 39 +++++++++++++++++++++++++++++
+ src/lib/videos.ts                  | 34 +++++++++++++------------
+ 5 files changed, 118 insertions(+), 21 deletions(-)
+ create mode 100644 scripts/verify-video-sync.ts
+ create mode 100644 src/lib/videoStats.ts
+
+diff --git a/next.config.ts b/next.config.ts
+index e1fcb25..6e00f7f 100644
+--- a/next.config.ts
++++ b/next.config.ts
+@@ -52,6 +52,13 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
+   '/top-3-flats-on-expressway':
+     '/our-videos/top-3-ready-to-move-flats-on-noida-expressway',
+ 
++  // Two watch pages were built on the same YouTube video (hCyx0D2_RzE),
++  // splitting the link equity for "Eldeco 7 Peaks" between them and putting
++  // the site in competition with itself. The stale one folds into the current
++  // one, which carries the right upload date and the current title.
++  '/our-videos/eldeco-7-peaks-omicron-1':
++    '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
++
+   // --- Property pages (Houzez CPT lived at /property/) ---------------------
+   '/property': '/properties',
+   '/property/eldeco-7-peaks-residence': '/properties/eldeco-7-peaks-residences',
+diff --git a/scripts/verify-video-sync.ts b/scripts/verify-video-sync.ts
+new file mode 100644
+index 0000000..d9e792d
+--- /dev/null
++++ b/scripts/verify-video-sync.ts
+@@ -0,0 +1,40 @@
++/**
++ * Guards the two numbers a video watch page states to Google.
++ *
++ * Both used to be wrong. The upload date was hand-typed in videos.ts and 52 of
++ * the 84 entries had drifted onto the same placeholder, so videos published in
++ * 2024 were declaring themselves as uploaded in June 2026. The view count was
++ * reconstructed by pulling the digits out of a display string and multiplying
++ * by 1000, which turned "6.1K views" into 61,000 and "741 views" into 741,000.
++ *
++ * Run: npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-video-sync.ts
++ */
++import { rawViewCount, publishedDate } from "../src/lib/videoStats";
++
++let failures = 0;
++function check(name: string, actual: unknown, expected: unknown) {
++  const ok = JSON.stringify(actual) === JSON.stringify(expected);
++  if (!ok) failures++;
++  console.log(`${ok ? "ok  " : "FAIL"}  ${name}  → ${JSON.stringify(actual)}${ok ? "" : ` (expected ${JSON.stringify(expected)})`}`);
++}
++
++// The API hands back a plain integer string; it must survive untouched.
++check("6694 views stays 6694", rawViewCount("6694"), 6694);
++check("741 views stays 741", rawViewCount("741"), 741);
++check("no value yields undefined", rawViewCount(undefined), undefined);
++check("junk yields undefined", rawViewCount("many"), undefined);
++
++// The old expression, kept here so the regression is visible rather than
++// remembered: this is what the page used to publish for the same two videos.
++const oldWay = (views: string) => parseInt(views.replace(/[^0-9]/g, "")) * 1000 || 15000;
++check("old hack inflated 6.1K views 10x", oldWay("6.1K views"), 61000);
++check("old hack inflated 741 views 1000x", oldWay("741 views"), 741000);
++
++// Upload dates come from YouTube, reduced to a plain date.
++check("ISO timestamp reduces to a date", publishedDate("2026-03-16T05:30:00Z"), "2026-03-16");
++check("2024 upload keeps its year", publishedDate("2024-06-13T11:00:00Z"), "2024-06-13");
++check("missing date yields undefined", publishedDate(undefined), undefined);
++check("unparseable date yields undefined", publishedDate("last Tuesday"), undefined);
++
++console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);
++process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/app/our-videos/[slug]/page.tsx b/src/app/our-videos/[slug]/page.tsx
+index 709d120..37c0cef 100644
+--- a/src/app/our-videos/[slug]/page.tsx
++++ b/src/app/our-videos/[slug]/page.tsx
+@@ -197,11 +197,20 @@ export default async function VideoWatchPage({ params }: PageProps) {
+     "contentUrl": `https://www.youtube.com/watch?v=${video.youtubeId}`,
+     "embedUrl": `https://www.youtube.com/embed/${video.youtubeId}`,
+     "url": `${FRONTEND_URL}/our-videos/${video.slug}`,
+-    "interactionStatistic": {
+-      "@type": "InteractionCounter",
+-      "interactionType": "https://schema.org/WatchAction",
+-      "userInteractionCount": parseInt((video.views || '0').replace(/[^0-9]/g, '')) * 1000 || 15000
+-    },
++    // The real integer from YouTube. The previous expression multiplied the
++    // digits of the display string by 1000, which turned "6.1K views" into
++    // 61,000 and "741 views" into 741,000 — a claim to Google that the channel
++    // could not support. When the API is unreachable there is no honest number
++    // to state, so the property is omitted rather than guessed.
++    ...(typeof video.viewCount === 'number' && video.viewCount > 0
++      ? {
++          "interactionStatistic": {
++            "@type": "InteractionCounter",
++            "interactionType": "https://schema.org/WatchAction",
++            "userInteractionCount": video.viewCount
++          }
++        }
++      : {}),
+     "publisher": {
+       "@type": "Organization",
+       "name": "Property Saraansh",
+diff --git a/src/lib/videoStats.ts b/src/lib/videoStats.ts
+new file mode 100644
+index 0000000..f9756cb
+--- /dev/null
++++ b/src/lib/videoStats.ts
+@@ -0,0 +1,39 @@
++/**
++ * The two YouTube numbers a watch page states to Google, kept in their own
++ * module so the verify script can run them under plain ts-node — videos.ts
++ * imports Next-specific fetch options that ts-node cannot compile.
++ *
++ * Both numbers used to be wrong:
++ *
++ *   - The upload date was hand-typed into videos.ts. 52 of the 84 entries had
++ *     drifted onto the same placeholder date, so videos genuinely published in
++ *     2024 were telling Google they went up in June 2026.
++ *   - The view count was reconstructed by stripping the digits out of a display
++ *     string and multiplying by 1000, which read "6.1K views" as 61,000 and
++ *     "741 views" as 741,000.
++ *
++ * Both now come from the YouTube API on every render, and the stored value is
++ * only a fallback for when the API cannot be reached.
++ */
++
++/**
++ * The view count as an integer, or undefined when YouTube did not return one.
++ * Carried alongside the formatted "7K views" string rather than parsed back out
++ * of it, because that string is lossy in both directions.
++ */
++export function rawViewCount(viewsStr?: string): number | undefined {
++  if (!viewsStr) return undefined;
++  const n = parseInt(viewsStr, 10);
++  return Number.isFinite(n) ? n : undefined;
++}
++
++/**
++ * YouTube's publishedAt ("2026-03-16T05:30:00Z") reduced to a plain date.
++ * Returns undefined rather than a guess when the value is missing or unparseable,
++ * so the caller falls back to the stored date instead of inventing one.
++ */
++export function publishedDate(publishedAt?: string): string | undefined {
++  if (!publishedAt) return undefined;
++  const d = new Date(publishedAt);
++  return Number.isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);
++}
+diff --git a/src/lib/videos.ts b/src/lib/videos.ts
+index 72b56b5..8285346 100644
+--- a/src/lib/videos.ts
++++ b/src/lib/videos.ts
+@@ -1,4 +1,5 @@
+ import { parseIsoDuration, formatViewCount } from '@/lib/youtube';
++import { rawViewCount, publishedDate } from '@/lib/videoStats';
+ 
+ export interface Video {
+   slug: string;
+@@ -12,6 +13,14 @@ export interface Video {
+   focusKeyword: string;
+   category: string;
+   views: string;
++  /**
++   * The raw view count straight from YouTube, present only on a hydrated
++   * video. `views` is a display string ("7K views"), which is lossy — reading a
++   * number back out of it inflates 6,694 into 7,000 and "741 views" into
++   * 741,000. Schema needs the real integer, so it is carried separately rather
++   * than reverse-engineered.
++   */
++  viewCount?: number;
+ }
+ 
+ export const videos: Video[] = [
+@@ -117,19 +126,6 @@ export const videos: Video[] = [
+     "category": "Real Estate",
+     "views": "6.5K views"
+   },
+-  {
+-    "slug": "eldeco-7-peaks-omicron-1",
+-    "title": "Eldeco 7 Peaks Residences Omicron 1 Greater Noida | 3BHK Layout Analysis + Investment Potential",
+-    "description": "Eldeco 7 Peaks, Omicron 1A Greater Noida — Aedas-designed luxury from ₹2.37 Cr. Saraansh Seth reviews floor plans, ₹13,000/sq ft pricing and the investment case.",
+-    "content": "Eldeco 7 Peaks Residences in Omicron 1A, Greater Noida is one of the most discussed luxury residential launches of 2026 — and for good reason. Designed by Aedas Hong Kong, the same architectural firm behind Marina Bay Sands Singapore, this project brings genuine international design DNA to the Greater Noida market at a starting price of ₹2.37 Crore.||In this Property Saraansh review, Saraansh Seth covers every angle a serious buyer or investor needs before making a decision. The video breaks down the floor plan efficiency across all 3 BHK variants — 1825, 1850, 1950 and 2100 sq.ft — and reveals why the 25 sq.ft difference between the 1825 and 1850 variants matters far more than it looks on paper. The 4 BHK configurations (2100–2850 sq.ft with servant room) and the 24 exclusive duplex penthouses are also analysed in detail.||On pricing, the review explains the real all-inclusive cost at ₹13,000/sq.ft BSP — including PLC, lease rent and GST — and what the construction-linked payment plan means for both end-users and investors. The Jewar International Airport thesis, Eastern Peripheral Expressway connectivity and HDFC Capital Fund-III backing are assessed as part of the long-term investment case.||The project is RERA registered (UPRERAPRJ106523/01/2026) with possession declared for December 2030. Spread across 7.5 acres with only 4 apartments per floor, a 1,00,000 sq.ft clubhouse, 4 swimming pools and a 100-metre-wide adjacent green belt, Eldeco 7 Peaks is compared directly with Godrej Arden and Experion Satori to show where it stands in the Greater Noida premium segment.",
+-    "youtubeId": "hCyx0D2_RzE",
+-    "thumbnail": "https://img.youtube.com/vi/hCyx0D2_RzE/maxresdefault.jpg",
+-    "publishedAt": "2026-06-11",
+-    "duration": "PT14M2S",
+-    "focusKeyword": "eldeco 7 peaks",
+-    "category": "Real Estate",
+-    "views": "18K views"
+-  },
+   {
+     "slug": "commercial-property-in-noida",
+     "title": "Commercial Property in Noida: Builder Lease vs Self Lease",
+@@ -1079,12 +1075,12 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+ 
+   try {
+     const videoIds = videos.map(v => v.youtubeId);
+-    const detailsMap: Record<string, { views: string; duration: string }> = {};
++    const detailsMap: Record<string, { views: string; viewCount?: number; publishedAt?: string; duration: string }> = {};
+ 
+     // Fetch in batches of 50
+     for (let i = 0; i < videoIds.length; i += 50) {
+       const batch = videoIds.slice(i, i + 50);
+-      const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${batch.join(',')}&part=contentDetails,statistics`;
++      const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${batch.join(',')}&part=snippet,contentDetails,statistics`;
+ 
+       const res = await fetch(url, { next: { revalidate: 3600 } });
+       if (res.ok) {
+@@ -1098,6 +1094,8 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+ 
+             detailsMap[item.id] = {
+               views: formatViewCount(viewsStr),
++              viewCount: rawViewCount(viewsStr),
++              publishedAt: publishedDate(item.snippet?.publishedAt),
+               duration: formatted || "0:00"
+             };
+           });
+@@ -1111,6 +1109,8 @@ export async function getVideosWithRealtimeStats(): Promise<Video[]> {
+         return {
+           ...video,
+           views: stats.views,
++          viewCount: stats.viewCount,
++          publishedAt: stats.publishedAt ?? video.publishedAt,
+           // Only update duration if it wasn't already hardcoded correctly,
+           // or just always use the real one:
+           duration: stats.duration.includes(':') ? stats.duration : video.duration
+@@ -1132,7 +1132,7 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
+   if (!YOUTUBE_API_KEY) return staticVideo;
+ 
+   try {
+-    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=contentDetails,statistics`;
++    const url = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&id=${staticVideo.youtubeId}&part=snippet,contentDetails,statistics`;
+     const res = await fetch(url, { next: { revalidate: 3600 } });
+     if (res.ok) {
+       const data = await res.json();
+@@ -1144,6 +1144,8 @@ export async function getHydratedVideoBySlug(slug: string): Promise<Video | null
+         return {
+           ...staticVideo,
+           views: formatViewCount(viewsStr),
++          viewCount: rawViewCount(viewsStr),
++          publishedAt: publishedDate(item.snippet?.publishedAt) ?? staticVideo.publishedAt,
+           duration: formatted || staticVideo.duration
+         };
+       }
+-- 
+2.43.0
+

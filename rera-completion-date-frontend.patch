@@ -1,0 +1,160 @@
+From e4673f369d2c9a25ebcae4c4916e2c9b0142c969 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 15 Aug 2026 19:17:17 +0000
+Subject: [PATCH] feat(properties): show the RERA completion date in Quick
+ Facts
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Surfaces the rera_completion_date field, now populated on 41 of 54
+properties from the UP RERA registered-projects table, as a 'RERA
+Completion' row in the property Quick Facts.
+
+It sits beside Possession rather than replacing it. The two are
+different claims — one is the developer's marketed handover, the other
+the completion date the promoter committed to the regulator — and a
+cautious buyer benefits from seeing both. Possession also still drives
+the READY TO MOVE / UNDER CONSTRUCTION badges and the status chips,
+which parse its text, so it has to stay as prose.
+
+formatReraDate turns the stored ISO value into '15 February 2031'.
+Anything that is not a clean ISO date passes through untouched: the ACF
+field is free text, and a regulatory date is the last thing to start
+reformatting on a guess. It lives in its own module so it can be
+unit-tested without pulling in property.ts's Next-specific fetch calls.
+
+Projects with no value simply omit the row — quickFacts already filters
+out empty entries, so the 13 still unmatched on the portal are unaffected.
+---
+ scripts/verify-rera-date-format.ts | 37 ++++++++++++++++++++++++++++++
+ src/lib/formatDate.ts              | 31 +++++++++++++++++++++++++
+ src/lib/property.ts                |  9 ++++++++
+ 3 files changed, 77 insertions(+)
+ create mode 100644 scripts/verify-rera-date-format.ts
+ create mode 100644 src/lib/formatDate.ts
+
+diff --git a/scripts/verify-rera-date-format.ts b/scripts/verify-rera-date-format.ts
+new file mode 100644
+index 0000000..5f0e438
+--- /dev/null
++++ b/scripts/verify-rera-date-format.ts
+@@ -0,0 +1,37 @@
++/**
++ * Checks formatReraDate against the shapes the field can actually hold.
++ * Run with:
++ *   npx ts-node --compiler-options '{"module":"commonjs"}' scripts/verify-rera-date-format.ts
++ */
++import { formatReraDate } from "../src/lib/formatDate";
++
++let failures = 0;
++function check(input: string | undefined, expected: string) {
++  const actual = formatReraDate(input);
++  const ok = actual === expected;
++  if (!ok) failures++;
++  console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${JSON.stringify(input)} -> ${JSON.stringify(actual)}${ok ? '' : ` (want ${JSON.stringify(expected)})`}`);
++}
++
++console.log('Real values written from the UP RERA portal');
++check('2031-02-15', '15 February 2031');
++check('2023-06-29', '29 June 2023');
++check('2027-11-16', '16 November 2027');
++check('2024-12-23', '23 December 2024');
++check('2028-05-28', '28 May 2028');
++
++console.log('\nLeading zeros are dropped from the day, not the year');
++check('2026-03-31', '31 March 2026');
++check('2030-01-29', '29 January 2030');
++
++console.log('\nAnything not a clean ISO date passes through untouched');
++check('', '');
++check(undefined, '');
++check('  2031-02-15  ', '15 February 2031');
++check('Q1 2031', 'Q1 2031');
++check('2031-13-01', '2031-13-01');
++check('15-02-2031', '15-02-2031');
++check('2031-02', '2031-02');
++
++console.log(failures === 0 ? '\nAll checks passed.' : `\n${failures} check(s) failed.`);
++process.exit(failures === 0 ? 0 : 1);
+diff --git a/src/lib/formatDate.ts b/src/lib/formatDate.ts
+new file mode 100644
+index 0000000..05521fe
+--- /dev/null
++++ b/src/lib/formatDate.ts
+@@ -0,0 +1,31 @@
++/**
++ * Date formatting for regulator-sourced fields.
++ *
++ * Kept in its own module, free of any Next.js-specific code, so it can be
++ * unit-tested directly — importing it via property.ts drags in that file's
++ * `fetch(..., { next: ... })` calls, which only typecheck inside the Next
++ * build.
++ */
++
++const MONTH_NAMES = [
++  "January", "February", "March", "April", "May", "June",
++  "July", "August", "September", "October", "November", "December",
++];
++
++/**
++ * "2031-02-15" → "15 February 2031".
++ *
++ * `rera_completion_date` is written from the UP RERA portal in ISO form, which
++ * is unambiguous to store and unpleasant to read. Anything that is not a clean
++ * ISO date is passed through untouched rather than guessed at — the field is
++ * free text, so an editor can type something we have not anticipated, and a
++ * regulatory date is the last thing to start reformatting speculatively.
++ */
++export function formatReraDate(value?: string): string {
++  const raw = (value || "").trim();
++  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
++  if (!m) return raw;
++  const month = Number(m[2]);
++  if (month < 1 || month > 12) return raw;
++  return `${Number(m[3])} ${MONTH_NAMES[month - 1]} ${m[1]}`;
++}
+diff --git a/src/lib/property.ts b/src/lib/property.ts
+index 3574c2c..0704da5 100644
+--- a/src/lib/property.ts
++++ b/src/lib/property.ts
+@@ -10,6 +10,8 @@
+  */
+ 
+ import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
++import { formatReraDate } from "@/lib/formatDate";
++
+ import { decodeHtml } from "@/lib/decodeHtml";
+ 
+ const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
+@@ -102,6 +104,8 @@ export interface Property {
+   rera: string;
+   launchDate: string;
+   possessionDate: string;
++  /** Proposed completion date from the UP RERA registration, stored as YYYY-MM-DD. */
++  reraCompletionDate: string;
+   basePrice: string;
+   priceDisplay: string;
+   priceMin: number | null;
+@@ -306,6 +310,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
+     rera: a.rera_number || "",
+     launchDate: a.launch_date || "",
+     possessionDate: a.possession_date || "",
++    reraCompletionDate: a.rera_completion_date || "",
+     basePrice: a.base_price || "",
+     priceDisplay: a.price_display || a.price || "",
+     priceMin: a.price_min_numeric ? Number(a.price_min_numeric) : null,
+@@ -328,6 +333,10 @@ export async function getProperty(slug: string): Promise<Property | null> {
+       ["Configuration", a.configuration],
+       ["Launch", a.launch_date],
+       ["Possession", a.possession_date],
++      // The regulator's own date, shown beside our possession wording rather
++      // than replacing it — the two are different claims and a buyer benefits
++      // from seeing both.
++      ["RERA Completion", formatReraDate(a.rera_completion_date)],
+       ["RERA No.", a.rera_number],
+       ["Base Price", a.base_price],
+     ] as [string, string | undefined][]).filter(([, v]) => v).map(([label, value]) => ({ label, value: value as string })),
+-- 
+2.43.0
+

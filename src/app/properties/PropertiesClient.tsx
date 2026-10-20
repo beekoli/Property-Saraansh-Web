@@ -10,6 +10,7 @@ import Link from 'next/link';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
+import { waProjectLink, waTracking } from '@/lib/whatsapp';
 
 
 interface Props {
@@ -349,7 +350,8 @@ export default function PropertiesClient({ properties }: Props) {
                             View Details
                           </Link>
                           <a
-                            href={`https://wa.me/918076178189?text=${encodeURIComponent(`Hi, I am interested in ${decodeHtml(project.title.rendered)}. Please share more details.`)}`}
+                            href={waProjectLink(decodeHtml(project.title.rendered))}
+                            {...waTracking("project_cta", decodeHtml(project.title.rendered))}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex-1 bg-[#25D366] hover:bg-[#1ebd59] text-white text-center text-xs py-2.5 flex items-center justify-center gap-1.5 hover:!text-white transition-colors rounded font-bold shadow-sm"
