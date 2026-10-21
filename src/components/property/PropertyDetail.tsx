@@ -423,15 +423,35 @@ export default function PropertyDetail({
             {p.locationAdv.length > 0 && (
               <div className="grid gap-3 sm:grid-cols-2">
                 {Object.entries(advByCat).map(([cat, items]) => (
-                  <div key={cat} className="rounded-xl border border-[#e8ecf1] bg-white p-3.5">
-                    <div className="mb-1.5 text-xs font-extrabold uppercase tracking-wide text-[#c9a24b]">{CAT_LABELS[cat] ?? cat}</div>
-                    <ul>
-                      {items.map((a) => (
-                        <li key={a.name} className="flex justify-between gap-2 py-1 text-[13px]">
-                          <span>{a.name}</span>
-                          {a.distance && <span className="shrink-0 text-xs text-[#66788c]">{a.distance}</span>}
-                        </li>
-                      ))}
+                  <div key={cat} className="rounded-xl border border-[#e8ecf1] bg-white p-4">
+                    <div className="mb-2 text-xs font-extrabold uppercase tracking-wide text-[#c9a24b]">{CAT_LABELS[cat] ?? cat}</div>
+                    <ul className="divide-y divide-[#f1f4f8]">
+                      {items.map((a) => {
+                        // The ACF "distance" field is used two ways across projects: a
+                        // measurement on some ("3.5 km"), a sentence of commentary on
+                        // others. A measurement sits on the same line as a pill; a
+                        // sentence gets its own line, or it squeezes the place name
+                        // down to one word per row.
+                        const note = (a.distance || "").trim();
+                        const isMeasure = note.length > 0 && note.length <= 24;
+                        return (
+                          <li key={a.name} className="py-2 first:pt-0 last:pb-0">
+                            {isMeasure ? (
+                              <div className="flex items-baseline justify-between gap-3">
+                                <span className="min-w-0 text-[13.5px] font-semibold text-[#1c2733]">{a.name}</span>
+                                <span className="shrink-0 rounded-full bg-[#f3f6fa] px-2.5 py-1 text-[11.5px] font-bold text-[#46586c]">{note}</span>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="text-[13.5px] font-semibold text-[#1c2733]">{a.name}</div>
+                                {note && (
+                                  <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#66788c]">{note}</p>
+                                )}
+                              </>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
