@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 interface ClientVideo {
   id: string;
@@ -100,11 +101,12 @@ export default function ShortsClient({ initialVideos, stats }: Props) {
                   href={`/our-videos/${video.slug}`}
                   className="relative aspect-[9/16] overflow-hidden bg-brand-dark block"
                 >
-                  <img 
-                    src={video.thumbnail} 
-                    alt={video.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                    loading="lazy" 
+                  <Image
+                    src={video.thumbnail}
+                    alt={video.title}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 20vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Category Pill Top-Left */}
                   <div className="absolute top-3 left-3 bg-brand-accent text-brand-dark text-[9px] uppercase tracking-wider font-bold px-2.5 py-1 rounded shadow-md">

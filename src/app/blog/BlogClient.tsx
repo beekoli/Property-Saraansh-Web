@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
 import Pagination from '@/components/Pagination';
@@ -123,8 +124,8 @@ export default function BlogClient({
 
                 <div className="flex items-center justify-between mt-auto pt-6 border-t border-brand-pale">
                   <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-brand-pale border border-brand-light mr-3 overflow-hidden">
-                      <img src="/saraansh_seth.webp" alt="Saraansh Seth" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
+                    <div className="relative w-10 h-10 rounded-full bg-brand-pale border border-brand-light mr-3 overflow-hidden">
+                      <Image src="/saraansh_seth.webp" alt="Saraansh Seth" fill sizes="40px" className="object-cover" />
                     </div>
                     <div>
                       <p className="text-xs font-bold text-brand-ink">Saraansh Seth</p>

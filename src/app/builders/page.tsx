@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { getBuilders } from '@/lib/wordpress';
 import { buildPageMetadata } from '@/lib/seo';
@@ -52,10 +53,9 @@ export default async function BuildersPage() {
                   href={`/builders/${builder.slug}`}
                   className="group bg-white rounded-xl border border-brand-pale hover:border-brand-light p-6 flex items-center gap-4 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="w-16 h-16 rounded-lg bg-brand-pale flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <div className="relative w-16 h-16 rounded-lg bg-brand-pale flex items-center justify-center flex-shrink-0 overflow-hidden">
                     {logo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={logo} alt={builder.name} className="w-full h-full object-contain p-2"  loading="lazy" decoding="async" />
+                      <Image src={logo} alt={builder.name} fill sizes="64px" className="object-contain p-2" />
                     ) : (
                       <span className="text-brand-primary font-bold text-lg heading-playfair">
                         {builder.name.slice(0, 2).toUpperCase()}

@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { buildPageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import SlideUp from '@/components/animations/SlideUp';
@@ -60,11 +61,13 @@ export default function OurTeam() {
             <StaggerItem key={idx} yOffset={25}>
               <div className="bg-white rounded-3xl overflow-hidden shadow-xl border border-brand-light/10 group hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
                 <div className="aspect-[4/3] bg-brand-light/20 relative overflow-hidden">
-                  <img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                   loading="lazy" decoding="async" />
+                  <Image
+                    src={member.image}
+                    alt={member.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
                 </div>
                 <div className="p-8 flex-grow flex flex-col">
                   <h3 className="heading-playfair text-2xl font-bold text-brand-dark mb-1">{member.name}</h3>

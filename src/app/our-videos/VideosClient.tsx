@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 interface ClientVideo {
   id: string;
@@ -133,11 +134,12 @@ export default function VideosClient({ initialVideos, stats, heading, intro }: P
                   video={video}
                   className="relative aspect-video overflow-hidden bg-brand-dark block"
                 >
-                  <img 
-                    src={video.thumbnail} 
-                    alt={video.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                    loading="lazy" 
+                  <Image
+                    src={video.thumbnail}
+                    alt={video.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Category Pill Top-Left */}
                   <div className="absolute top-3 left-3 bg-brand-primary text-white text-[9px] uppercase tracking-wider font-bold px-2.5 py-1 rounded shadow-md">

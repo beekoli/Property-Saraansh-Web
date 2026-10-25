@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface BlogCardProps {
   id: string;
@@ -54,8 +55,8 @@ export default function BlogCard({ id, title, excerpt, category, author, date, r
         <div className="flex items-center justify-between border-t border-brand-pale pt-4 mt-auto">
           <div className="flex items-center">
             {/* Author avatar — Property Saraansh logo */}
-            <div className="w-8 h-8 rounded-full bg-white border border-brand-light mr-2 flex items-center justify-center overflow-hidden">
-              <img src="/logo.png" alt="Property Saraansh" className="w-full h-full object-contain p-0.5" loading="lazy" decoding="async" />
+            <div className="relative w-8 h-8 rounded-full bg-white border border-brand-light mr-2 flex items-center justify-center overflow-hidden">
+              <Image src="/logo.png" alt="Property Saraansh" fill sizes="32px" className="object-contain p-0.5" />
             </div>
             <div>
               <p className="text-xs font-semibold text-brand-ink">{author}</p>

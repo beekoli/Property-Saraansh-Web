@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
@@ -60,10 +61,9 @@ export default async function BuilderProfilePage({ params }: Props) {
             <Link href="/" className="hover:text-brand-accent">Home</Link> / <Link href="/builders" className="hover:text-brand-accent">Builders</Link> / <span className="text-brand-accent">{builder.name}</span>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            <div className="w-24 h-24 rounded-xl bg-white flex items-center justify-center flex-shrink-0 overflow-hidden shadow-lg">
+            <div className="relative w-24 h-24 rounded-xl bg-white flex items-center justify-center flex-shrink-0 overflow-hidden shadow-lg">
               {acf.builder_logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={acf.builder_logo} alt={builder.name} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
+                <Image src={acf.builder_logo} alt={builder.name} fill sizes="96px" className="object-contain p-3" />
               ) : (
                 <span className="text-brand-primary font-bold text-2xl heading-playfair">
                   {builder.name.slice(0, 3).toUpperCase()}

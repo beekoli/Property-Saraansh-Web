@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import BlogCard from '@/components/BlogCard';
 import Pagination from '@/components/Pagination';
@@ -182,8 +183,8 @@ export default function NewsListing({
 
                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-brand-pale">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 rounded-full bg-white border border-brand-light mr-3 overflow-hidden flex items-center justify-center">
-                          <img src="/logo.png" alt="Property Saraansh" className="w-full h-full object-contain p-1"  loading="lazy" decoding="async" />
+                        <div className="relative w-10 h-10 rounded-full bg-white border border-brand-light mr-3 overflow-hidden flex items-center justify-center">
+                          <Image src="/logo.png" alt="Property Saraansh" fill sizes="40px" className="object-contain p-1" />
                         </div>
                         <div>
                           <p className="text-xs font-bold text-brand-ink">Property Saraansh Desk</p>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -75,9 +76,14 @@ export default function Navbar() {
           {/* Logo / Monogram */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center group" onClick={closeMobileMenu}>
-              <img
+              {/* 1366x420 source rendered at 182x56. priority because it is
+                  in the header of every page and was previously a 64KB PNG. */}
+              <Image
                 src="/logo.png"
                 alt="Property Saraansh Logo"
+                width={260}
+                height={80}
+                priority
                 className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </Link>

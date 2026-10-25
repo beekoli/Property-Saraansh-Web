@@ -530,10 +530,9 @@ export default function PropertyDetail({
             <SectionHead eyebrow="About the Developer" title={`Meet the Builder — ${builder.name}`} />
             <div className="rounded-2xl border border-[#e8ecf1] bg-white p-6 shadow-sm">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f8f3e6]">
+                <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#f8f3e6]">
                   {builder.acf?.builder_logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={builder.acf.builder_logo} alt={builder.name} className="h-full w-full object-contain p-2"  loading="lazy" decoding="async" />
+                    <Image src={builder.acf.builder_logo} alt={builder.name} fill sizes="80px" className="object-contain p-2" />
                   ) : (
                     <span className="text-xl font-bold text-[#8a6a1e] heading-playfair">{builder.name.slice(0, 3).toUpperCase()}</span>
                   )}

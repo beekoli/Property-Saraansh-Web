@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import { buildPageMetadata } from '@/lib/seo';
 import { CheckCircle2, ArrowRight, Play, Calendar, Eye } from 'lucide-react';
@@ -110,11 +111,13 @@ export default async function ThankYouPage() {
               href={`/our-videos/${latestVideo.slug}`}
               className="group block relative aspect-video rounded-xl overflow-hidden bg-brand-dark border border-brand-light/20 shadow-md"
             >
-              <img 
-                src={latestVideo.thumbnail} 
-                alt={latestVideo.title} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-               loading="lazy" decoding="async" />
+              <Image
+                src={latestVideo.thumbnail}
+                alt={latestVideo.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 640px"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
               <div className="absolute inset-0 bg-brand-dark/40 group-hover:bg-brand-dark/20 transition-colors duration-300" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-brand-accent text-brand-dark p-3.5 rounded-full shadow-lg transform group-hover:scale-110 transition-all duration-300">

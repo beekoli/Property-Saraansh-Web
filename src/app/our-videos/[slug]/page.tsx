@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import type { ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
@@ -567,11 +568,12 @@ export default async function VideoWatchPage({ params }: PageProps) {
                       href={`/our-videos/${item.slug}`}
                       className="relative aspect-video overflow-hidden bg-brand-dark block"
                     >
-                      <img 
-                        src={item.thumbnail} 
-                        alt={item.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                        loading="lazy" 
+                      <Image
+                        src={item.thumbnail}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute top-3 left-3 bg-brand-primary text-white text-[9px] uppercase tracking-wider font-bold px-2.5 py-1 rounded">
                         {item.category}

@@ -166,7 +166,21 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
 
 const nextConfig: NextConfig = {
   images: {
+    // AVIF first, WebP second, original last. Next only emits a format the
+    // requesting browser accepts, so this is safe for old clients.
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
+      // YouTube thumbnails: maxresdefault is 1280x720 and the cards show it at
+      // 378px wide, so the optimiser is the difference between ~1.4MB and a
+      // couple of hundred KB per listing page.
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
       {
         protocol: 'https',
         hostname: 'login.propertysaraansh.com',
