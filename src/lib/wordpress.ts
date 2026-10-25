@@ -585,8 +585,56 @@ export async function getNewsPageByCity(
   };
 }
 
+/**
+ * The only property fields any listing card reads.
+ *
+ * Asking WordPress for whole records made every listing fetch 6-9MB — over the
+ * 2MB ceiling Next.js will put in its data cache. So the cache silently refused
+ * them and the full payload was re-downloaded from WordPress on every render,
+ * which is what put TTFB at roughly ten seconds and started drawing ECONNRESET
+ * from the origin. `content.rendered` and `yoast_head` are the bulk of that
+ * weight and no card touches either.
+ *
+ * The `_links` entries have to stay: with `_fields` present, WordPress only
+ * populates `_embedded` (the featured image and taxonomy terms) for link rels
+ * that were explicitly requested. Verified against the live API: 62 of 62
+ * properties come back with both the featured image and their terms.
+ *
+ * Keep this list in step with getCardData, launchDate and prelaunch — a key
+ * dropped here renders as a blank field on the card, not an error.
+ */
+const CARD_FIELDS = [
+  'id',
+  'slug',
+  'title',
+  // Only the two link rels the embed actually needs. Asking for all of `_links`
+  // left the payload at 2.34MB; narrowing it to these two brought it to 0.68MB,
+  // which is what finally gets it under the cache ceiling.
+  '_links.wp:featuredmedia',
+  '_links.wp:term',
+  // getCardData
+  'acf.address',
+  'acf.configuration',
+  'acf.developer',
+  'acf.developer_name',
+  'acf.location',
+  'acf.possession_date',
+  'acf.price',
+  'acf.price_display',
+  'acf.property_type',
+  'acf.rera_number',
+  'acf.video_id',
+  'acf.video_review_text',
+  'acf.youtube_url',
+  // launchDate.rawLaunchDate + prelaunch.partitionPreLaunch / projectStatus
+  'acf.launch_date',
+  'acf.expected_launch',
+  'acf.is_prelaunch',
+  'acf.status_override',
+].join(',');
+
 export async function getProperties(limit = 10, propertyType?: string): Promise<WPProperty[]> {
-  const data = await fetchAPI(`/properties?_embed&per_page=${limit}`);
+  const data = await fetchAPI(`/properties?_embed&per_page=${limit}&_fields=${CARD_FIELDS}`);
   const list = data && data.length > 0 ? data : MOCK_PROPERTIES;
 
   if (propertyType) {
@@ -602,7 +650,7 @@ export async function getProperties(limit = 10, propertyType?: string): Promise<
  *   Residential = 74, Commercial = 75
  */
 export async function getPropertiesByTypeTerm(limit = 20, termId: number): Promise<WPProperty[]> {
-  const data = await fetchAPI(`/properties?_embed&per_page=${limit}&property-type=${termId}`);
+  const data = await fetchAPI(`/properties?_embed&per_page=${limit}&property-type=${termId}&_fields=${CARD_FIELDS}`);
   return data && data.length > 0 ? data : [];
 }
 

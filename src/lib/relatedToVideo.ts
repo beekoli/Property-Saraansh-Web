@@ -92,8 +92,15 @@ export async function getRelatedToVideo(youtubeId: string): Promise<RelatedToVid
   if (!youtubeId) return empty;
 
   const [properties, posts] = await Promise.all([
-    fetchSlim('/properties?per_page=100&_fields=slug,title,acf'),
-    fetchSlim('/posts?per_page=100&_fields=slug,title,acf,ps_video_id'),
+    // Only three ACF keys are read below (video id, youtube url, verdict text),
+    // but asking for the whole acf object returned 6MB — past the 2MB Next.js
+    // data-cache ceiling, so every watch page re-fetched it from WordPress.
+    fetchSlim(
+      '/properties?per_page=100&_fields=slug,title,acf.video_id,acf.youtube_url,acf.video_review_text'
+    ),
+    fetchSlim(
+      '/posts?per_page=100&_fields=slug,title,ps_video_id,acf.video_id,acf.youtube_url,acf.video_review_text'
+    ),
   ]);
 
   const property = (properties || []).find(
