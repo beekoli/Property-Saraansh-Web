@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { PropertyVideoCta } from '@/lib/propertyVideoCta';
 
 const BRAND_GREEN = '#0B3038';
@@ -35,13 +36,12 @@ export default function VideoReviewCard({ cta }: { cta: PropertyVideoCta | null 
               sides, and a YouTube thumbnail carries its title text there — so
               the crop ate the words the thumbnail was designed around. */}
           <div className="relative aspect-video w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={cta.thumbnail}
               alt=""
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              fill
+              sizes="(max-width: 640px) 100vw, 42vw"
+              className="object-cover transition duration-500 group-hover:scale-[1.03]"
             />
             <span className="absolute inset-0 bg-[#082126]/25" />
             <span className="absolute left-1/2 top-1/2 flex h-[54px] w-[54px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#FF0000] shadow-lg transition duration-200 group-hover:scale-110">

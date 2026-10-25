@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { parseTimeParam } from '@/lib/videoChapters';
 
 /**
@@ -96,12 +97,15 @@ export default function VideoPlayer({
           aria-label={`Play video: ${label}`}
           className="group absolute inset-0 h-full w-full cursor-pointer"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* priority: this poster is the LCP element on a watch page. */}
+          <Image
             src={thumb}
             alt={label}
-            className="absolute inset-0 h-full w-full object-cover"
-           decoding="async" fetchPriority="high" />
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 70vw"
+            className="object-cover"
+          />
           <span className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/10" />
           <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#FF0000] shadow-lg transition-transform duration-200 group-hover:scale-110">
             <svg viewBox="0 0 24 24" className="ml-1 h-7 w-7 fill-white" aria-hidden="true">

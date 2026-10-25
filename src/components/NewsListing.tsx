@@ -159,11 +159,14 @@ export default function NewsListing({
                     href={`/news/${featuredPost.slug}`}
                     className="lg:w-1/2 relative h-64 lg:h-auto min-h-[220px] overflow-hidden bg-brand-dark block"
                   >
-                    <img
+                    <Image
                       src={getFeaturedImage(featuredPost)}
                       alt={decodeHtml(featuredPost.title.rendered)}
-                      className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
-                     decoding="async" fetchPriority="high" />
+                      fill
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-contain transition-transform duration-700 group-hover:scale-105"
+                    />
                     <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
                       {getItemCategory(featuredPost)}
                     </div>

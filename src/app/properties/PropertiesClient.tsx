@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { decodeHtml } from '@/lib/decodeHtml';
 import { sortByLaunchDate, launchLabel, rawLaunchDate } from '@/lib/launchDate';
 import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } from '@/lib/prelaunch';
@@ -279,11 +280,13 @@ export default function PropertiesClient({ properties }: Props) {
                     <div className="flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-sm border border-brand-pale hover:shadow-xl transition-all">
                       {/* Left: Image (16:9 equivalent) */}
                       <div className="md:w-1/3 relative h-56 md:h-auto overflow-hidden bg-brand-pale">
-                        <img
+                        <Image
                           src={imgUrl}
                           alt={decodeHtml(project.title.rendered)}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                         loading="lazy" decoding="async" />
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover transition-transform duration-700 hover:scale-105"
+                        />
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[85%]">
                           <span className="bg-[#0B3038] text-white px-2.5 py-1 rounded text-[10px] font-bold tracking-wide shadow-md uppercase">
                             {card.type}

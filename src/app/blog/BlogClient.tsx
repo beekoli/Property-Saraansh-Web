@@ -100,11 +100,14 @@ export default function BlogClient({
 
             <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-brand-pale flex flex-col lg:flex-row group hover:shadow-xl transition-all">
               <div className="lg:w-1/2 relative h-64 lg:h-auto overflow-hidden bg-brand-pale">
-                <img
+                <Image
                   src={getFeaturedImage(featuredPost)}
                   alt={decodeHtml(featuredPost.title.rendered)}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                 decoding="async" fetchPriority="high" />
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
                 <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
                   {getPostCategory(featuredPost)}
                 </div>

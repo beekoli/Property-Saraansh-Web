@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 
 export default async function Footer() {
@@ -12,11 +13,13 @@ export default async function Footer() {
           {/* Column 1: Logo and Tagline */}
           <div className="col-span-1">
             <Link href="/" className="flex items-center mb-6 group">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Property Saraansh Logo"
+                width={260}
+                height={80}
                 className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-               loading="lazy" decoding="async" />
+              />
             </Link>
             <p className="text-sm leading-relaxed mb-6 font-light">
               Your trusted YouTube-based real estate consultancy in Noida. We provide expert property reviews, market insights & investment guidance — all on YouTube.
@@ -104,11 +107,12 @@ export default async function Footer() {
                   className="flex gap-3 items-center group"
                 >
                   <div className="w-20 h-14 bg-brand-light/20 rounded overflow-hidden relative flex-shrink-0">
-                    <img
+                    <Image
                       src={video.thumbnail}
                       alt={video.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
+                      fill
+                      sizes="80px"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                       <svg className="w-6 h-6 text-brand-accent opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
