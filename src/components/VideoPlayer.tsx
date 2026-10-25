@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+// Aliased: this file also uses the DOM `new Image()` constructor below to
+// probe the HD thumbnail, and importing the component as `Image` shadows it.
+import NextImage from 'next/image';
 import { parseTimeParam } from '@/lib/videoChapters';
 
 /**
@@ -98,7 +100,7 @@ export default function VideoPlayer({
           className="group absolute inset-0 h-full w-full cursor-pointer"
         >
           {/* priority: this poster is the LCP element on a watch page. */}
-          <Image
+          <NextImage
             src={thumb}
             alt={label}
             fill
