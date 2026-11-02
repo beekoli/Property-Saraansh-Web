@@ -148,6 +148,13 @@ export interface WPVideo {
     youtube_id?: string;
     /** One "MM:SS Title" per line. Drives Key Moments — see videoChapters.ts. */
     chapters?: string;
+    /** The single Google query this page targets. */
+    focus_keyword?: string;
+    /**
+     * FAQ repeater. ACF returns `false` for an empty repeater, not `[]`, so the
+     * false has to stay in the type or every consumer needs a cast.
+     */
+    faqs?: false | Array<{ question?: string; answer?: string }>;
   };
 }
 

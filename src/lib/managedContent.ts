@@ -90,6 +90,10 @@ export interface ManagedVideo {
    * schema.org Clip markup. See src/lib/videoChapters.ts.
    */
   chapters?: string;
+  /** The single Google query this page targets, from WordPress. */
+  focusKeyword?: string;
+  /** Questions and answers shown on the page and emitted as FAQPage schema. */
+  faqs?: Array<{ question: string; answer: string }>;
 }
 
 /**
@@ -111,6 +115,17 @@ export async function getManagedVideo(slug: string): Promise<ManagedVideo | null
     metaDescription: clean(video.acf?.meta_description),
     // Not run through clean(): chapters are line-based and must keep newlines.
     chapters: rawText(video.acf?.chapters),
+    focusKeyword: clean(video.acf?.focus_keyword),
+    // ACF hands back `false` for an empty repeater. Rows missing either half
+    // are dropped: a question with no answer is worse than no question.
+    faqs: Array.isArray(video.acf?.faqs)
+      ? video.acf.faqs
+          .map((row) => ({
+            question: clean(row?.question) || '',
+            answer: clean(row?.answer) || '',
+          }))
+          .filter((row) => row.question && row.answer)
+      : undefined,
   };
 }
 

@@ -203,7 +203,12 @@ export default async function VideoWatchPage({ params }: PageProps) {
     .slice(0, 3);
 
   const isNoidaSlowdown = video.slug === 'noida-market-slowdown-2026';
-  const keywords = VIDEO_KEYWORDS[video.slug];
+  // Every FAQ on every watch page is editable in WordPress
+  // (Videos -> the video -> FAQs). Nothing is hardcoded here.
+  const faqs = managed?.faqs ?? [];
+  // WordPress wins; VIDEO_KEYWORDS is only a fallback for videos whose
+  // ps_video entry has no focus keyword filled in yet.
+  const keywords = managed?.focusKeyword || VIDEO_KEYWORDS[video.slug];
 
   // Key moments, in order of precedence:
   //   1. WordPress (ps_video.chapters) — an editor overriding the wording
@@ -282,36 +287,14 @@ export default async function VideoWatchPage({ params }: PageProps) {
     ]
   };
 
-  const faqJsonLd = isNoidaSlowdown ? {
+  const faqJsonLd = faqs.length > 0 ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Is the Noida real estate market crashing in 2026?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. The Noida real estate market is going through a slowdown or correction phase after a post-pandemic boom — not a crash. Prices have stabilized but have not fallen sharply. Demand has slowed but end-user activity continues." }
-      },
-      {
-        "@type": "Question",
-        "name": "Should I buy property in Noida during the slowdown?",
-        "acceptedAnswer": { "@type": "Answer", "text": "If you are buying for self-use, this is a good time to negotiate. For investment, focus on mid-range resale properties with aggressive sellers rather than luxury launches. Avoid taking loans for pure investment in a slow market." }
-      },
-      {
-        "@type": "Question",
-        "name": "Will builders reduce prices in the Noida market slowdown?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Builders rarely slash prices directly in ongoing projects. Instead, they offer flexible payment plans like 20:80 or 40:60 as an affordability tool. However, paying more than 10% price top-up for such plans is not recommended for investors." }
-      },
-      {
-        "@type": "Question",
-        "name": "Should resale sellers panic and sell immediately?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. If you have no urgent fund requirement and bought without a loan, hold your unit, take possession, rent it out, and wait 2–3 years for the market cycle to recover. Panic selling in a slow market leads to poor exits." }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the best investment strategy in Noida property market 2026?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Look for distressed resale deals from motivated sellers, focus on mid-range projects with strong end-user demand, avoid luxury projects with slow habitation, and keep liquidity ready to act on genuine opportunities." }
-      }
-    ]
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": { "@type": "Answer", "text": faq.answer },
+    })),
   } : null;
 
   const jsonLd = videoJsonLd;
@@ -446,23 +429,17 @@ export default async function VideoWatchPage({ params }: PageProps) {
                 </div>
               )}
 
-              {/* FAQ Section — only for Noida Market Slowdown */}
-              {isNoidaSlowdown && (
+              {/* FAQ Section — filled per video in WordPress. */}
+              {faqs.length > 0 && (
                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
                   <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-6">
                     Frequently Asked Questions
                   </h2>
                   <div className="space-y-5">
-                    {[
-                      { q: "Is the Noida real estate market crashing in 2026?", a: "No. The Noida real estate market is going through a slowdown or correction phase after a post-pandemic boom — not a crash. Prices have stabilized but have not fallen sharply. Demand has slowed but end-user activity continues." },
-                      { q: "Should I buy property in Noida during the slowdown?", a: "If you are buying for self-use, this is a good time to negotiate. For investment, focus on mid-range resale properties with aggressive sellers rather than luxury launches. Avoid taking loans for pure investment in a slow market." },
-                      { q: "Will builders reduce prices in the Noida market slowdown?", a: "Builders rarely slash prices in ongoing projects. Instead, they offer flexible payment plans like 20:80 or 40:60 as an affordability tool. However, paying more than 10% price top-up for such plans is not recommended for investors." },
-                      { q: "Should resale sellers panic and sell immediately?", a: "No. If you have no urgent fund requirement and bought without a loan, hold your unit, take possession, rent it out, and wait 2–3 years for the market cycle to recover. Panic selling in a slow market leads to poor exits." },
-                      { q: "What is the best investment strategy in Noida property market 2026?", a: "Look for distressed resale deals from motivated sellers, focus on mid-range projects with strong end-user demand, avoid luxury projects with slow habitation, and keep liquidity ready to act on genuine opportunities." },
-                    ].map((faq, i) => (
+                    {faqs.map((faq, i) => (
                       <div key={i} className="border-b border-brand-pale pb-5 last:border-0 last:pb-0">
-                        <h3 className="text-sm font-semibold text-brand-ink mb-2">{faq.q}</h3>
-                        <p className="text-sm text-brand-ink/70 leading-relaxed">{faq.a}</p>
+                        <h3 className="text-sm font-semibold text-brand-ink mb-2">{faq.question}</h3>
+                        <p className="text-sm text-brand-ink/70 leading-relaxed">{faq.answer}</p>
                       </div>
                     ))}
                   </div>
