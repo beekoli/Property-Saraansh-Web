@@ -1,9 +1,9 @@
 /**
  * WhatsApp Business API links.
  *
- * One number, one message format. The pre-filled text is not decoration — the
- * Audience Hub reads it to pick an auto-reply, so the project name must appear
- * exactly as it does on the page and the (Ref: …) tag must survive encoding.
+ * One number, one message format. The pre-filled text is what the visitor sends,
+ * so it reads like a natural first message — no codes. The Audience Hub picks the
+ * project auto-reply from the project name, so it must appear exactly as on the page.
  */
 
 export const WHATSAPP_NUMBER = '916388693937';
@@ -19,27 +19,27 @@ export function projectKey(projectName: string): string {
 }
 
 export function projectMessage(projectName: string): string {
-  return `Hi, I'm interested in ${projectName}. Please share the details. (Ref: ${projectKey(projectName)}-WEB)`;
+  return `Hi Property Saraansh, I'm interested in ${projectName}. Please share the price, floor plans and availability.`;
 }
 
 /**
  * Everything that is not a project page asks the same simple question and is
- * routed to a human. Only the Ref changes, so the Hub can tell video, news and
- * blog enquiries apart without a separate auto-reply for each.
+ * routed to a human. The wording differs by page type, so the team can see at a
+ * glance whether the enquiry came from a video, a news story or an article.
  */
 export function videoMessage(videoTitle: string): string {
-  return `Hi, I have a question about your video "${videoTitle}". (Ref: PS-VIDEO)`;
+  return `Hi Property Saraansh, I just watched your video "${videoTitle}" and have a question.`;
 }
 
 export function newsMessage(headline: string): string {
-  return `Hi, I have a question about this news "${headline}". (Ref: PS-NEWS)`;
+  return `Hi Property Saraansh, I read your news "${headline}" and have a question.`;
 }
 
 export function blogMessage(articleTitle: string): string {
-  return `Hi, I have a question about this blog "${articleTitle}". (Ref: PS-BLOG)`;
+  return `Hi Property Saraansh, I read your article "${articleTitle}" and have a question.`;
 }
 
-export const GENERAL_MESSAGE = "Hi, I'd like help finding a property. (Ref: PS-WEB)";
+export const GENERAL_MESSAGE = "Hi Property Saraansh, I'm looking for a property and would like your guidance.";
 
 export function waLink(message: string): string {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
