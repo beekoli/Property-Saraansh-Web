@@ -26,6 +26,8 @@ export const metadata: Metadata = buildPageMetadata({
   title: 'Property Saraansh | Real Estate Consultancy Noida',
   description:
     'Trusted real estate consultancy in Noida. Expert property advisory, investment guidance, and honest YouTube-based project reviews for Noida, Greater Noida and Yamuna Expressway.',
+  // 1200x630 share card (WhatsApp / LinkedIn / Facebook) instead of the bare logo.
+  image: '/og-home.png',
 });
 
 
@@ -133,7 +135,7 @@ export default async function Home() {
         <StaggerContainer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" delayChildren={0.2} staggerChildren={0.15}>
           <StaggerItem>
             <h1 className="heading-playfair text-4xl md:text-5xl lg:text-6xl mb-6 font-bold tracking-tight">
-              <span className="gold-glossy-text pb-1">India&apos;s Finest Real Estate Portfolio Management Company</span>
+              <span className="gold-glossy-text pb-1">Real Estate Consultancy in Noida, Greater Noida &amp; YEIDA</span>
             </h1>
           </StaggerItem>
           <StaggerItem>

@@ -8,7 +8,7 @@
 
 import { useMemo, useState, type ReactNode, type FormEvent } from "react";
 import Image from "next/image";
-import type { Property } from "@/lib/property";
+import type { Img, Property } from "@/lib/property";
 import type { WPBuilderTerm } from "@/lib/wordpress";
 import VideoReviewCard from './VideoReviewCard';
 import type { PropertyVideoCta } from '@/lib/propertyVideoCta';
@@ -68,7 +68,7 @@ export default function PropertyDetail({
 }) {
   const [fpTab, setFpTab] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [lightbox, setLightbox] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<Img | null>(null);
   const [galleryCount, setGalleryCount] = useState(6);
 
   // The video and the Saraansh Verdict now live on the watch page at
@@ -260,8 +260,8 @@ export default function PropertyDetail({
               {[{ img: p.masterPlan, cap: "Master Layout" }, { img: p.sitePlan, cap: "Site Plan / Site Map" }]
                 .filter((x) => x.img).map(({ img, cap }) => (
                 <figure key={cap}>
-                  <button onClick={() => setLightbox(img!.url)} className="group relative block w-full overflow-hidden rounded-xl border border-[#e8ecf1]" aria-label={`Expand ${cap}`}>
-                    <Image src={img!.url} alt={img!.alt} width={img!.width ?? 900} height={img!.height ?? 600} className="h-72 w-full object-cover transition group-hover:scale-[1.02]" />
+                  <button onClick={() => setLightbox(img!)} className="group relative block w-full overflow-hidden rounded-xl border border-[#e8ecf1]" aria-label={`Expand ${cap}`}>
+                    <Image src={img!.url} alt={img!.alt} width={img!.width ?? 900} height={img!.height ?? 600} sizes="(min-width: 1024px) 370px, (min-width: 768px) 50vw, 100vw" className="h-72 w-full object-cover transition group-hover:scale-[1.02]" />
                     <span className="absolute bottom-3 right-3 rounded-2xl bg-[rgba(15,33,55,.85)] px-3 py-1.5 text-[11.5px] text-white">🔍 Click to Expand</span>
                   </button>
                   <figcaption className="mt-2 text-center text-[13px] text-[#66788c]">{cap}</figcaption>
@@ -290,8 +290,8 @@ export default function PropertyDetail({
               <div>
                 {p.floorPlans[fpTab].description && <p className="mb-3 text-sm text-[#66788c]">{p.floorPlans[fpTab].description}</p>}
                 {p.floorPlans[fpTab].image && (
-                  <button onClick={() => setLightbox(p.floorPlans[fpTab].image!.url)} className="relative block w-full overflow-hidden rounded-xl border border-[#e8ecf1]">
-                    <Image src={p.floorPlans[fpTab].image!.url} alt={p.floorPlans[fpTab].image!.alt} width={1100} height={700} className="max-h-[420px] w-full bg-white object-contain" />
+                  <button onClick={() => setLightbox(p.floorPlans[fpTab].image!)} className="relative block w-full overflow-hidden rounded-xl border border-[#e8ecf1]">
+                    <Image src={p.floorPlans[fpTab].image!.url} alt={p.floorPlans[fpTab].image!.alt} width={1100} height={700} sizes="(min-width: 1024px) 750px, 100vw" className="max-h-[420px] w-full bg-white object-contain" />
                     <span className="absolute bottom-3 right-3 rounded-2xl bg-[rgba(15,33,55,.85)] px-3 py-1.5 text-[11.5px] text-white">🔍 Click to Expand</span>
                   </button>
                 )}
@@ -315,7 +315,7 @@ export default function PropertyDetail({
                   .map((m) => (
                     <button
                       key={m.name}
-                      onClick={() => setLightbox(m.image!.url)}
+                      onClick={() => setLightbox(m.image!)}
                       className="group relative block overflow-hidden rounded-xl border border-[#e8ecf1] text-left"
                     >
                       <Image
@@ -323,6 +323,7 @@ export default function PropertyDetail({
                         alt={m.image!.alt}
                         width={800}
                         height={560}
+                        sizes="(min-width: 1024px) 245px, 50vw"
                         className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-48"
                       />
                       <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(15,33,55,.88)] to-transparent px-3 pb-2.5 pt-8 text-[13px] font-medium text-white">
@@ -471,8 +472,8 @@ export default function PropertyDetail({
             <SectionHead eyebrow="Visuals" title="Project Gallery" />
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
               {p.gallery.slice(0, galleryCount).map((g) => (
-                <button key={g.url} onClick={() => setLightbox(g.url)} className="overflow-hidden rounded-xl border border-[#e8ecf1]">
-                  <Image src={g.url} alt={g.alt} width={480} height={320} className="h-44 w-full object-cover transition hover:scale-[1.03]" />
+                <button key={g.url} onClick={() => setLightbox(g)} className="overflow-hidden rounded-xl border border-[#e8ecf1]">
+                  <Image src={g.url} alt={g.alt} width={480} height={320} sizes="(min-width: 1024px) 245px, (min-width: 768px) 33vw, 50vw" className="h-44 w-full object-cover transition hover:scale-[1.03]" />
                 </button>
               ))}
             </div>
@@ -665,8 +666,9 @@ export default function PropertyDetail({
       {/* ================= LIGHTBOX ================= */}
       {lightbox && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[rgba(8,18,30,.92)] p-6" onClick={() => setLightbox(null)} role="dialog" aria-label="Image preview">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={lightbox} alt="Expanded view" className="max-h-full max-w-full rounded-lg object-contain"  loading="lazy" decoding="async" />
+          <div className="relative h-full w-full">
+            <Image src={lightbox.url} alt={lightbox.alt} fill sizes="100vw" className="rounded-lg object-contain" />
+          </div>
           <button className="absolute right-5 top-5 text-3xl text-white" aria-label="Close">✕</button>
         </div>
       )}

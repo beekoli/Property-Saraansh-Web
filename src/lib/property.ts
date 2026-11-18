@@ -75,18 +75,16 @@ async function wpFetch(endpoint: string, attempts = 5): Promise<unknown> {
     }
   }
 
-  // NOTE: we deliberately return null rather than throwing.
+  // Throw rather than return null: a WordPress outage is not a 404.
   //
-  // Throwing is the theoretically correct behaviour (a timeout is not a 404),
-  // but WordPress currently 500s under the request burst of a full static
-  // build, so throwing fails the deploy outright. The retries and concurrency
-  // gate above already remove the large majority of transient failures.
-  //
-  // The complete fix is to stop prerendering all property pages against a
-  // fragile WordPress: return [] from generateStaticParams and let pages
-  // render on demand with ISR. Once that is in place this should throw.
+  // Property pages are no longer prerendered (generateStaticParams returns
+  // []), so this can't fail a build. On a page that is already cached, a
+  // throw during ISR revalidation keeps serving the last good version; on a
+  // cold render it is a 5xx, which Google retries, instead of a 404, which
+  // Google drops from the index. Optional data (media, builder card, city
+  // lists) catches this in its own helper and degrades instead.
   console.error("property.ts fetch failed after retries:", endpoint, lastErr);
-  return null;
+  throw lastErr instanceof Error ? lastErr : new Error(`WP fetch failed for ${endpoint}`);
 }
 
 /* ---------------- types ---------------- */
@@ -175,9 +173,18 @@ interface WPMedia { id: number; source_url: string; alt_text?: string; media_det
 async function resolveMedia(ids: number[]): Promise<Record<number, Img>> {
   if (!ids.length) return {};
   const uniq = [...new Set(ids)];
-  const items = (await wpFetch(
-    `/media?include=${uniq.join(",")}&per_page=${uniq.length}&_fields=id,source_url,alt_text,media_details`
-  )) as WPMedia[] | null;
+  let items: WPMedia[] | null = null;
+  try {
+    items = (await wpFetch(
+      `/media?include=${uniq.join(",")}&per_page=${uniq.length}&_fields=id,source_url,alt_text,media_details`
+    )) as WPMedia[] | null;
+  } catch {
+    // Media is optional: if WordPress fails the batch, render the page without
+    // the ID-only images (gallery, plans, amenity photos) rather than failing
+    // it. The hero comes from _embed and is unaffected. ISR re-fetches within
+    // `revalidate` seconds, so the gap is short-lived.
+    return {};
+  }
   const map: Record<number, Img> = {};
   for (const m of items ?? []) {
     map[m.id] = { url: m.source_url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
@@ -290,8 +297,15 @@ export async function getProperty(slug: string): Promise<Property | null> {
   ];
   const media = await resolveMedia(rawImgs.map(collectId).filter((n): n is number => !!n));
 
-  const heroUrl: string | null = p._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? null;
+  const featured = p._embedded?.["wp:featuredmedia"]?.[0];
+  const heroUrl: string | null = featured?.source_url ?? null;
   const title: string = decodeHtml(p.title?.rendered ?? "");
+
+  // Descriptive alt fallbacks ("Trump Tower Noida, Sector 94, Noida – project
+  // photo 2") when the WordPress media item has no alt text of its own.
+  const place = [sectorTerm?.name || a.location_sector, cityTerm?.name || a.location_city]
+    .filter(Boolean).map((s: string) => decodeHtml(s)).join(", ");
+  const named = place ? `${title}, ${place}` : title;
 
   // fallbacks to old flat fields keep the page rendering even before a
   // property is fully migrated to the new structure
@@ -300,15 +314,17 @@ export async function getProperty(slug: string): Promise<Property | null> {
     : String(a.highlights || "").split(";").map((s: string) => s.trim()).filter(Boolean);
 
   const gallery: Img[] = (Array.isArray(a.gallery) && a.gallery.length
-    ? a.gallery.map((g: RawImg, i: number) => toImg(g, media, `${title} gallery image ${i + 1}`))
-    : Array.from({ length: 10 }, (_, i) => toImg(a[`gallery_image_${i + 1}`], media, `${title} gallery image ${i + 1}`))
+    ? a.gallery.map((g: RawImg, i: number) => toImg(g, media, `${named} – project photo ${i + 1}`))
+    : Array.from({ length: 10 }, (_, i) => toImg(a[`gallery_image_${i + 1}`], media, `${named} – project photo ${i + 1}`))
   ).filter((g: Img | null): g is Img => !!g);
 
   return {
     id: p.id,
     slug: p.slug,
     title,
-    hero: heroUrl ? { url: heroUrl, alt: title } : (gallery[0] ?? null),
+    hero: heroUrl
+      ? { url: heroUrl, alt: featured?.alt_text ? decodeHtml(featured.alt_text) : `${named} – project view` }
+      : (gallery[0] ?? null),
     tagline: a.tagline || a.property_tagline || "",
     rera: a.rera_number || "",
     launchDate: a.launch_date || "",
@@ -349,8 +365,8 @@ export async function getProperty(slug: string): Promise<Property | null> {
     youtubeId: ytId(a.youtube_url || "") || a.video_id || "",
     verdict: a.video_review_text || "",
     highlights,
-    masterPlan: toImg(a.master_plan, media, `${title} master layout plan`),
-    sitePlan: toImg(a.site_plan, media, `${title} site plan map`),
+    masterPlan: toImg(a.master_plan, media, `${named} – master layout plan`),
+    sitePlan: toImg(a.site_plan, media, `${named} – site plan map`),
     floorPlans: (Array.isArray(a.floor_plans) ? a.floor_plans : []).map((f: any) => ({
       title: f.title || "", description: f.description || "",
       image: toImg(f.image, media, `${title} floor plan — ${f.title}`), pdf: f.pdf || "",
