@@ -3,7 +3,7 @@ import Image from 'next/image';
 import type { ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Eye, Video, ArrowLeft } from 'lucide-react';
+import { Calendar, Eye, ArrowLeft } from 'lucide-react';
 import { getVideosWithRealtimeStats, getHydratedVideoBySlug, getVideoBySlug, videos } from '@/lib/videos';
 import { getLiveVideoById, youtubeIdFromSlug } from '@/lib/latestLongVideos';
 import { getManagedVideo, preferWP } from '@/lib/managedContent';
@@ -11,7 +11,6 @@ import { getRelatedToVideo } from '@/lib/relatedToVideo';
 import { getChannelStats } from '@/lib/youtube';
 import { parseChapters, toClips, extractChapterLines, durationToSeconds, FALLBACK_CHAPTERS } from '@/lib/videoChapters';
 import VideoPlayer from '@/components/VideoPlayer';
-import VideoChapters from './VideoChapters';
 import WatchSidebarForm from './WatchSidebarForm';
 import { FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
 
@@ -152,6 +151,63 @@ function renderRichText(text: string) {
 }
 
 /**
+ * Renders the body of "About This Video".
+ *
+ * Blocks are separated by "||" (the convention in src/lib/videos.ts) or by a
+ * blank line (what a WordPress Text Area produces). A line beginning with
+ * "## " becomes an h2 and "### " an h3, so an editor writing in WordPress can
+ * build a real heading structure — question as the heading, answer beneath —
+ * without the field having to be a WYSIWYG. Everything else stays a paragraph,
+ * so every existing entry renders exactly as it did before.
+ */
+function renderBody(content: string): ReactNode[] {
+  const blocks = content
+    .split(/\|\||\n{2,}/)
+    .map((b) => b.trim())
+    .filter(Boolean);
+
+  const out: ReactNode[] = [];
+
+  blocks.forEach((block, i) => {
+    let buffer: string[] = [];
+
+    const flush = (key: string) => {
+      const text = buffer.join(' ').trim();
+      buffer = [];
+      if (text) out.push(<p key={key} className="mb-4">{renderRichText(text)}</p>);
+    };
+
+    block.split('\n').forEach((line, j) => {
+      const trimmed = line.trim();
+      const h3 = /^###\s+(.*)$/.exec(trimmed);
+      const h2 = /^##\s+(.*)$/.exec(trimmed);
+
+      if (h3) {
+        flush(`p-${i}-${j}`);
+        out.push(
+          <h3 key={`h3-${i}-${j}`} className="heading-playfair text-base md:text-lg font-semibold text-brand-ink mt-6 mb-2">
+            {renderRichText(h3[1])}
+          </h3>
+        );
+      } else if (h2) {
+        flush(`p-${i}-${j}`);
+        out.push(
+          <h2 key={`h2-${i}-${j}`} className="heading-playfair text-lg md:text-xl font-bold text-brand-ink mt-8 mb-3 first:mt-0">
+            {renderRichText(h2[1])}
+          </h2>
+        );
+      } else {
+        buffer.push(line);
+      }
+    });
+
+    flush(`p-${i}-end`);
+  });
+
+  return out;
+}
+
+/**
  * Hand-written keyword sets for the VideoObject schema. Only a handful of
  * videos have these; everything else relies on the title and description.
  */
@@ -224,6 +280,11 @@ export default async function VideoWatchPage({ params }: PageProps) {
     durationSeconds
   );
   const clips = toClips(chapters, `${FRONTEND_URL}/our-videos/${video.slug}`);
+
+  // True when the WordPress body supplies its own "## " headings, in which
+  // case the "About This Video" label is rendered as a div rather than an h2
+  // so the first heading a crawler meets is the first question.
+  const bodyHasHeadings = /^##\s+/m.test(video.content || '');
 
   const videoJsonLd = {
     "@context": "https://schema.org",
@@ -345,7 +406,7 @@ export default async function VideoWatchPage({ params }: PageProps) {
             <div className="w-full lg:w-8/12 space-y-8">
               {/* Responsive 16:9 Video Player Card */}
               <div id="video-player" className="bg-brand-dark p-3 rounded-2xl shadow-xl border border-brand-primary scroll-mt-28">
-                <VideoPlayer videoId={video.youtubeId} title={video.title} isShort={video.category === 'Shorts'} />
+                <VideoPlayer videoId={video.youtubeId} title={video.title} isShort={video.category === 'Shorts'} eager />
               </div>
 
               {/* Video Title and Metadata */}
@@ -412,19 +473,31 @@ export default async function VideoWatchPage({ params }: PageProps) {
                 </div>
               )}
 
-              {/* Key Moments — mirrors the Clip markup above */}
-              <VideoChapters chapters={chapters} slug={video.slug} />
+              {/* The on-page Key Moments list was removed deliberately. The
+                  chapters themselves are still parsed and still ship as Clip
+                  markup inside the VideoObject above, so Key Moments stay
+                  eligible in Search. Only the visual block is gone — it sat
+                  above the written body and competed with it. The clip URLs
+                  remain real seeks: VideoPlayer reads ?t= from the URL on
+                  mount, independently of this component. */}
 
                           {/* Rich Content Section */}
               {video.content && (
                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-brand-light/10">
-                  <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
-                    About This Video
-                  </h2>
-                  <div className="text-justified text-sm text-brand-ink/80 leading-relaxed space-y-4">
-                    {video.content.split('||').map((para, i) => (
-                      <p key={i}>{renderRichText(para)}</p>
-                    ))}
+                  {/* When the body carries its own "## " headings the section
+                      label must not also be an h2, or the first heading a crawler
+                      meets is "About This Video" instead of the first question. */}
+                  {bodyHasHeadings ? (
+                    <div className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
+                      About This Video
+                    </div>
+                  ) : (
+                    <h2 className="heading-playfair text-xl md:text-2xl font-bold text-brand-ink mb-5">
+                      About This Video
+                    </h2>
+                  )}
+                  <div className="text-justified text-sm text-brand-ink/80 leading-relaxed">
+                    {renderBody(video.content)}
                   </div>
                 </div>
               )}

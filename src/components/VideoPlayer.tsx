@@ -7,30 +7,46 @@ import NextImage from 'next/image';
 import { parseTimeParam } from '@/lib/videoChapters';
 
 /**
- * YouTube "facade": render the thumbnail + a play button instead of the real
- * <iframe>. The YouTube embed ships a large amount of cross-origin JS and blocks
- * the main thread, which delays interactions (poor INP). Mounting the iframe
- * only on click keeps that cost off initial page load.
+ * YouTube player with two modes.
+ *
+ * `eager` — the real <iframe> is in the markup from the first render, before
+ * any interaction. Use this on every page that emits VideoObject schema.
+ * Googlebot does not click, so a click-to-play facade means the page it
+ * renders contains no player at all: Search Console processed a VideoObject on
+ * only 7 of ~92 video pages while the facade was universal, despite the markup
+ * being valid on all of them. Google's video indexing guidance requires the
+ * player to "load at its actual size and position when the page is loaded,
+ * without requiring any user interaction". Do not reintroduce the facade on
+ * those pages — serving a different page to Googlebot would be cloaking.
+ *
+ * default (facade) — thumbnail plus a play button, iframe mounted on click.
+ * The YouTube embed ships a large amount of cross-origin JS and blocks the
+ * main thread, which hurts INP, so pages with no VideoObject to earn keep the
+ * cheap version.
  *
  * Thumbnail strategy — IMPORTANT: `maxresdefault.jpg` does not exist for every
- * video, and YouTube returns a 120x90 grey PLACEHOLDER with HTTP 200 (not a 404)
- * when it's missing. So we can't rely on an <img> onError fallback. Instead we
- * default to `hqdefault.jpg`, which always exists at real resolution (480x360),
- * then upgrade to `maxresdefault.jpg` only after confirming it's genuine HD.
+ * video, and YouTube returns a 120x90 grey PLACEHOLDER with HTTP 200 (not a
+ * 404) when it's missing. So we can't rely on an <img> onError fallback.
+ * Instead we default to `hqdefault.jpg`, which always exists at real
+ * resolution (480x360), then upgrade only after confirming genuine HD.
  */
 export default function VideoPlayer({
   videoId,
   title,
   isShort = false,
   startSeconds,
+  eager = false,
 }: {
   videoId: string;
   title?: string;
   isShort?: boolean;
   /** Start position in seconds. Overridden by a ?t= value in the URL. */
   startSeconds?: number;
+  /** Render the iframe immediately. Required wherever VideoObject is emitted. */
+  eager?: boolean;
 }) {
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(eager);
+  const [autoplay, setAutoplay] = useState(false);
   const [start, setStart] = useState(startSeconds ?? 0);
   const [thumb, setThumb] = useState(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`);
   const label = title || 'YouTube video player';
@@ -39,37 +55,27 @@ export default function VideoPlayer({
    * Key-moments support. The Clip markup on the watch page points each chapter
    * at /our-videos/<slug>?t=<seconds>, and Google requires those URLs to
    * genuinely seek — a clip URL that lands at 0:00 makes the markup
-   * non-compliant. So on mount we read ?t= and open the player there directly,
-   * skipping the click-to-play facade.
+   * non-compliant.
    *
    * Read from window rather than useSearchParams() on purpose: this page is
    * statically generated with ISR, and useSearchParams() would force the route
    * to render dynamically on every request.
    */
   useEffect(() => {
-    const apply = (seconds: number | undefined) => {
-      if (seconds === undefined || seconds < 0) return;
-      setStart(seconds);
-      setPlaying(true);
-    };
-
-    apply(parseTimeParam(new URLSearchParams(window.location.search).get('t') ?? undefined));
-
-    // Chapter buttons on the page seek without a reload.
-    const onSeek = (event: Event) => {
-      const detail = (event as CustomEvent<{ seconds?: number }>).detail;
-      apply(detail?.seconds);
-    };
-    window.addEventListener('ps:seek', onSeek);
-    return () => window.removeEventListener('ps:seek', onSeek);
+    const seconds = parseTimeParam(new URLSearchParams(window.location.search).get('t') ?? undefined);
+    if (seconds === undefined || seconds < 0) return;
+    setStart(seconds);
+    setPlaying(true);
+    setAutoplay(true);
   }, [videoId]);
 
   useEffect(() => {
-    // Reset to the always-present thumbnail when the video changes.
+    // The facade is the only thing that uses the poster; skip the probe when
+    // the iframe is rendered from the start.
+    if (eager) return;
+
     setThumb(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`);
 
-    // Probe the HD thumbnail; only upgrade if it's a real image (not the
-    // 120x90 grey placeholder YouTube serves when maxres is unavailable).
     const hi = new Image();
     hi.onload = () => {
       if (hi.naturalWidth > 120) {
@@ -77,29 +83,42 @@ export default function VideoPlayer({
       }
     };
     hi.src = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
-  }, [videoId]);
+  }, [videoId, eager]);
+
+  // Autoplay only when playback was asked for — a timestamp link or a click.
+  // A cold eager load renders the player without starting it: browsers block
+  // autoplay anyway and it is poor UX.
+  const params = new URLSearchParams({ rel: '0', enablejsapi: '1' });
+  if (autoplay) params.set('autoplay', '1');
+  if (start > 0) params.set('start', String(Math.floor(start)));
 
   return (
-    <div className={`relative w-full rounded-xl overflow-hidden shadow-2xl border border-brand-light/30 ${
-      isShort ? 'aspect-[9/16] max-w-[340px] mx-auto' : 'aspect-video'
-    }`}>
+    <div
+      className={`relative w-full rounded-xl overflow-hidden shadow-2xl border border-brand-light/30 ${
+        isShort ? 'aspect-[9/16] max-w-[340px] mx-auto' : 'aspect-video'
+      }`}
+    >
       {playing ? (
         <iframe
-          className="w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0${start > 0 ? `&start=${Math.floor(start)}` : ''}`}
-          key={start}
+          key={`${start}-${autoplay}`}
+          className="absolute inset-0 h-full w-full"
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`}
           title={label}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          loading="eager"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         />
       ) : (
         <button
           type="button"
-          onClick={() => setPlaying(true)}
+          onClick={() => {
+            setPlaying(true);
+            setAutoplay(true);
+          }}
           aria-label={`Play video: ${label}`}
           className="group absolute inset-0 h-full w-full cursor-pointer"
         >
-          {/* priority: this poster is the LCP element on a watch page. */}
+          {/* priority: this poster is the LCP element where the facade is used. */}
           <NextImage
             src={thumb}
             alt={label}

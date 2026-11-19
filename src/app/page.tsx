@@ -13,7 +13,6 @@ import { partitionPreLaunch, expectedLaunchLine, projectStatus, STATUS_LABELS } 
 import { getVideosWithRealtimeStats } from '@/lib/videos';
 import { getLatestLongVideos } from '@/lib/latestLongVideos';
 import SlideUp from '@/components/animations/SlideUp';
-import FadeIn from '@/components/animations/FadeIn';
 import StaggerContainer from '@/components/animations/StaggerContainer';
 import StaggerItem from '@/components/animations/StaggerItem';
 import { parseDateToISO8601, durationToISO8601, buildPageMetadata } from '@/lib/seo';
@@ -197,7 +196,7 @@ export default async function Home() {
           <StaggerContainer className="flex flex-col lg:flex-row items-center gap-12" staggerChildren={0.2}>
             <StaggerItem className="w-full lg:w-3/5" yOffset={30}>
               <div className="bg-brand-dark p-3 rounded-2xl shadow-2xl border border-brand-primary">
-                <VideoPlayer videoId={featuredVideo.youtubeId} title={featuredVideo.title} />
+                <VideoPlayer videoId={featuredVideo.youtubeId} title={featuredVideo.title} eager />
               </div>
             </StaggerItem>
             <StaggerItem className="w-full lg:w-2/5 text-brand-ink" yOffset={20}>

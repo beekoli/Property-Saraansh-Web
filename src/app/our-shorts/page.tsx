@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { getChannelStats } from '@/lib/youtube';
 import { getVideosWithRealtimeStats } from '@/lib/videos';
+import { getLatestShorts } from '@/lib/latestLongVideos';
 import ShortsClient from './ShortsClient';
 import { buildPageMetadata } from '@/lib/seo';
 
@@ -16,15 +17,25 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function OurShorts() {
-  const [stats, videos] = await Promise.all([
+  const [stats, videos, latest] = await Promise.all([
     getChannelStats(),
-    getVideosWithRealtimeStats()
+    getVideosWithRealtimeStats(),
+    // Newest Shorts straight from the channel. Without this the page showed
+    // only the hand-written entries in videos.ts, so every Short posted after
+    // the last code change was invisible — they stopped dead at 31 Aug 2026.
+    getLatestShorts(30),
   ]);
 
   // Filter only Shorts videos
   const shorts = videos.filter((video) => video.category === 'Shorts');
 
-  const formattedVideos = shorts.map((v) => ({
+  // Anything already hand-curated in videos.ts wins: it has the written SEO
+  // copy, so we keep that version and drop the auto-fetched duplicate.
+  const curatedIds = new Set(videos.map((v) => v.youtubeId));
+  const newShorts = latest.filter((v) => !curatedIds.has(v.youtubeId));
+
+  // Newest uploads first, then the curated (already newest-first) list.
+  const formattedVideos = [...newShorts, ...shorts].map((v) => ({
     id: v.youtubeId,
     title: v.title,
     description: v.description,
