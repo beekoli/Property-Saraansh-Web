@@ -73,36 +73,46 @@ export async function POST(request: Request) {
       console.error('Error forwarding lead to Google Sheets:', sheetErr);
     }
 
-    // 1.5. Forward lead to the local CRM
-    const crmUrl = process.env.CRM_API_URL || "http://localhost:3001/api/leads";
+    // 1.5. Forward lead to the CRM (crm.propertysaraansh.com, PHP app on Hostinger).
+    // Its key-secured intake endpoint takes these field names as-is. The key is
+    // the "intake key" shown in the CRM's Settings; it goes in a header so it
+    // never appears in a URL or log. CRM_API_URL can still override the address.
+    const crmUrl = process.env.CRM_API_URL || 'https://crm.propertysaraansh.com/api/v1/lead-capture';
+    const crmKey = process.env.CRM_INTAKE_KEY || '';
     let crmSuccess = false;
-    try {
-      const crmResponse = await fetch(crmUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          source: source || 'Website Contact Form',
-          name,
-          phone,
-          email: email || '',
-          comment: message || '',
-          propertyName: project || '',
-          configuration: type || '',
-          queryType: type || '',
-        }),
-      });
+    if (!crmKey && !/[?&]key=/.test(crmUrl)) {
+      console.warn('CRM forwarding skipped: CRM_INTAKE_KEY is not set.');
+    } else {
+      try {
+        const crmResponse = await fetch(crmUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(crmKey ? { 'X-Intake-Key': crmKey } : {}),
+          },
+          body: JSON.stringify({
+            source: source || 'Website Contact Form',
+            name,
+            phone,
+            email: email || '',
+            comment: message || '',
+            propertyName: project || videoTitle || '',
+            configuration: type || '',
+            budget: budget || '',
+          }),
+          signal: AbortSignal.timeout(8000),
+        });
 
-      if (crmResponse.ok) {
-        crmSuccess = true;
-        console.log('Successfully logged lead to local CRM.');
-      } else {
-        console.warn('Failed to log lead to local CRM. Status:', crmResponse.status);
+        if (crmResponse.ok) {
+          crmSuccess = true;
+          console.log('Successfully logged lead to CRM.');
+        } else {
+          console.error('Failed to log lead to CRM. Status:', crmResponse.status, await crmResponse.text().catch(() => ''));
+        }
+      } catch (crmErr: unknown) {
+        const errorMessage = crmErr instanceof Error ? crmErr.message : String(crmErr);
+        console.error('CRM forwarding failed:', errorMessage);
       }
-    } catch (crmErr: unknown) {
-      const errorMessage = crmErr instanceof Error ? crmErr.message : String(crmErr);
-      console.log('CRM integration skipped or offline:', errorMessage);
     }
 
     // 2. Dispatch email notification via SMTP (if configured)
