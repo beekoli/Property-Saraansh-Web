@@ -106,8 +106,12 @@ export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.pro
  * pipeline next/image already uses on every page.
  */
 const WP_MEDIA_HOSTS = ['login.propertysaraansh.com', 'www.propertysaraansh.com', 'propertysaraansh.com'];
+// Production's NEXT_PUBLIC_WORDPRESS_URL is Hostinger's temporary domain, which
+// next.config's images.remotePatterns does not allow (/_next/image -> 400).
+// Media is always fetched from the login host, which it does allow.
+const WP_MEDIA_ORIGIN = 'https://login.propertysaraansh.com';
 const WP_IMAGE_URL_RE = new RegExp(
-  'https?://(?:' + WP_MEDIA_HOSTS.map((h) => h.replace(/\./g, '\\.')).join('|') + ')' +
+  'https?://(?:' + WP_MEDIA_HOSTS.map((h) => h.replace(/\./g, '\\.')).join('|') + '|[a-z0-9-]+\\.hostingersite\\.com)' +
     '(/wp-content/[^"\\s?#]+\\.(?:jpe?g|png|webp|gif|avif))',
   'gi'
 );
@@ -117,8 +121,7 @@ export function publicImageUrl(src: string | null | undefined, width?: number): 
 export function publicImageUrl(src: string | null | undefined, width = 1200): string | undefined {
   if (!src) return src ?? undefined;
   return src.replace(WP_IMAGE_URL_RE, (_m, path: string) => {
-    const wpBase = (process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com').replace(/\/$/, '');
-    return `${FRONTEND_URL}/_next/image?url=${encodeURIComponent(wpBase + path)}&w=${width}&q=75`;
+    return `${FRONTEND_URL}/_next/image?url=${encodeURIComponent(WP_MEDIA_ORIGIN + path)}&w=${width}&q=75`;
   });
 }
 
