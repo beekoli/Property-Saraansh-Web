@@ -420,3 +420,31 @@ if (!function_exists('ps_noindex_backend')) {
         delete_option('ps_noindex_htaccess_version');
     });
 }
+
+/**
+ * 10. A static robots.txt in the web root ("User-agent: * / Disallow: /",
+ * added 2026-07-05) overrides WordPress's virtual robots.txt, so the Allow in
+ * section 9 never reached crawlers. Move it aside once — renamed, not deleted,
+ * so it can be restored by renaming robots.txt.ps-backup back.
+ */
+if (!function_exists('ps_retire_static_robots')) {
+    function ps_retire_static_robots() {
+        if (get_option('ps_static_robots_retired')) {
+            return;
+        }
+        $file = ABSPATH . 'robots.txt';
+        if (file_exists($file)) {
+            $body = trim(str_replace("\r", '', (string) file_get_contents($file)));
+            if (preg_match('/^User-agent:\s*\*\s*\nDisallow:\s*\/$/i', $body) && is_writable(ABSPATH)) {
+                if (!@rename($file, ABSPATH . 'robots.txt.ps-backup')) {
+                    return;
+                }
+            } else {
+                // Unexpected content: leave it for a human to look at.
+                return;
+            }
+        }
+        update_option('ps_static_robots_retired', 1);
+    }
+    add_action('admin_init', 'ps_retire_static_robots');
+}
