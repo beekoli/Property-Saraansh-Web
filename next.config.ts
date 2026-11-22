@@ -825,6 +825,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Anything under a WordPress path on www is backend plumbing, never a page
+  // that should appear in search.
+  async headers() {
+    return ['/wp-content/:path*', '/wp-includes/:path*', '/wp-json/:path*'].map((source) => ({
+      source,
+      headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+    }));
+  },
   async rewrites() {
     const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com';
     return [

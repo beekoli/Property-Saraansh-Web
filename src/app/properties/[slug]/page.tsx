@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { generateRankMathMetadata } from '@/lib/seo';
+import { generateRankMathMetadata, publicImageUrl } from '@/lib/seo';
 import { getProperty, buildSchemas, SITE, getBuilderProfile } from '@/lib/property';
 import { getPropertyVideoCta } from '@/lib/propertyVideoCta';
 import PropertyDetail from '@/components/property/PropertyDetail';
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     metadata.openGraph = {
       ...(metadata.openGraph ?? {}),
       url,
-      images: [{ url: p.hero.url, width: 1200, height: 630, alt: p.title }],
+      images: [{ url: publicImageUrl(p.hero.url), width: 1200, height: 630, alt: p.title }],
     } as Metadata['openGraph'];
   }
 

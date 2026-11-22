@@ -13,6 +13,7 @@ import type { WPBuilderTerm, WPProperty } from "@/lib/wordpress";
 import { formatReraDate } from "@/lib/formatDate";
 
 import { decodeHtml } from "@/lib/decodeHtml";
+import { publicImageUrl } from "@/lib/seo";
 
 const API = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://login.propertysaraansh.com/wp-json/wp/v2";
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.propertysaraansh.com").replace(/\/$/, "");
@@ -424,7 +425,7 @@ export function buildSchemas(prop: Property) {
     "@id": `${url}#project`,
     name: prop.title,
     url,
-    image: prop.hero?.url,
+    image: publicImageUrl(prop.hero?.url),
     description: prop.metaDescription || prop.tagline,
     address: {
       "@type": "PostalAddress",
@@ -449,7 +450,7 @@ export function buildSchemas(prop: Property) {
     "@type": "Product",
     "@id": `${url}#product`,
     name: `${prop.title} — ${prop.configuration}`.trim(),
-    image: prop.hero?.url,
+    image: publicImageUrl(prop.hero?.url),
     description: prop.tagline || prop.metaDescription,
     brand: { "@type": "Brand", name: prop.builder || "Property Saraansh" },
     category: prop.type || "Residential",

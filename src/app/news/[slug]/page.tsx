@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
+import { generateRankMathMetadata, publicImageUrl, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
 import { getNewsBySlug, getLatestNews, getLatestNewsByCity, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
@@ -116,7 +116,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
   const relatedPool = cityNews.length > 1 ? cityNews : await getLatestNews(4);
   const relatedNews = relatedPool.filter((n) => n.slug !== slug).slice(0, 3);
 
-  const featuredImg = getFeaturedImage(news);
+  const featuredImg = publicImageUrl(getFeaturedImage(news));
   const displayDate = new Date(news.date).toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'long',

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Property Saraansh Core
  * Description: Registers the Properties custom post type and Advanced Custom Fields for the Next.js frontend.
- * Version: 1.4.0
+ * Version: 1.5.0
  * Author: Property Saraansh
  */
 
@@ -327,4 +327,96 @@ if (!function_exists('ps_register_rank_math_meta')) {
         }
     }
     add_action('init', 'ps_register_rank_math_meta');
+}
+
+/**
+ * 9. Keep the headless WordPress backend out of search engines.
+ *
+ * The public site is the Next.js frontend on www.propertysaraansh.com. This
+ * WordPress install only feeds it over REST, so none of its URLs (pages, tags,
+ * /wp-json, media files) should ever be indexed.
+ *
+ * robots.txt used to say "Disallow: /". That stops Google crawling, but it also
+ * stops Google seeing a noindex, so URLs it found through links stayed in the
+ * index as "Indexed, though blocked by robots.txt". Instead every response now
+ * carries X-Robots-Tag: noindex and robots.txt allows crawling, so Google can
+ * read the noindex and drop the URLs. The frontend's REST calls are unaffected.
+ */
+if (!function_exists('ps_noindex_backend')) {
+    define('PS_NOINDEX_VALUE', 'noindex, nofollow, noarchive');
+
+    // HTML responses: header + meta robots.
+    function ps_noindex_backend() {
+        if (!headers_sent()) {
+            header('X-Robots-Tag: ' . PS_NOINDEX_VALUE, true);
+        }
+    }
+    add_action('send_headers', 'ps_noindex_backend');
+    add_action('login_init', 'ps_noindex_backend');
+    add_action('admin_init', 'ps_noindex_backend');
+    add_filter('wp_robots', function ($robots) {
+        $robots['noindex']  = true;
+        $robots['nofollow'] = true;
+        return $robots;
+    }, 99);
+
+    // REST API responses (/wp-json/...).
+    add_filter('rest_post_dispatch', function ($response) {
+        if ($response instanceof WP_REST_Response) {
+            $response->header('X-Robots-Tag', PS_NOINDEX_VALUE);
+        }
+        return $response;
+    }, 99);
+
+    // Let crawlers in so they can see the noindex. Runs after Rank Math and
+    // the "Discourage search engines" setting, which both write robots.txt.
+    add_filter('robots_txt', function () {
+        return "# Headless WordPress backend. Every URL here is noindex.\n"
+            . "# The public site is https://www.propertysaraansh.com\n"
+            . "User-agent: *\nAllow: /\n";
+    }, 999);
+
+    // Stop advertising backend URLs in page heads and HTTP headers.
+    remove_action('wp_head', 'rest_output_link_wp_head', 10);
+    remove_action('template_redirect', 'rest_output_link_header', 11);
+    remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+    remove_action('wp_head', 'rsd_link');
+    remove_action('wp_head', 'wlwmanifest_link');
+    remove_action('wp_head', 'wp_shortlink_wp_head', 10);
+    remove_action('template_redirect', 'wp_shortlink_header', 11);
+    add_filter('xmlrpc_enabled', '__return_false');
+
+    // The core WordPress sitemap would list every backend URL.
+    add_filter('wp_sitemaps_enabled', '__return_false');
+
+    // Media files (images, PDFs) are served by the web server without PHP, so
+    // the header has to come from .htaccess. Written once per plugin version.
+    function ps_noindex_htaccess_lines() {
+        return array(
+            '<IfModule mod_headers.c>',
+            'Header always set X-Robots-Tag "' . PS_NOINDEX_VALUE . '"',
+            '</IfModule>',
+        );
+    }
+    add_action('admin_init', function () {
+        if (get_option('ps_noindex_htaccess_version') === '1.5.0') {
+            return;
+        }
+        if (!function_exists('insert_with_markers')) {
+            require_once ABSPATH . 'wp-admin/includes/misc.php';
+        }
+        $htaccess = ABSPATH . '.htaccess';
+        if ((file_exists($htaccess) && is_writable($htaccess)) || (!file_exists($htaccess) && is_writable(ABSPATH))) {
+            if (insert_with_markers($htaccess, 'PS Noindex Backend', ps_noindex_htaccess_lines())) {
+                update_option('ps_noindex_htaccess_version', '1.5.0');
+            }
+        }
+    });
+    register_deactivation_hook(__FILE__, function () {
+        if (!function_exists('insert_with_markers')) {
+            require_once ABSPATH . 'wp-admin/includes/misc.php';
+        }
+        insert_with_markers(ABSPATH . '.htaccess', 'PS Noindex Backend', array());
+        delete_option('ps_noindex_htaccess_version');
+    });
 }

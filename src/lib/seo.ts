@@ -98,6 +98,31 @@ export function generateRealEstateListingSchema(props: RealEstateListingSchemaPr
 export const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.propertysaraansh.com';
 
 /**
+ * WordPress is a private backend: only frontend (www) URLs should ever reach
+ * Google. Media still lives on the WordPress host (or was rewritten to a
+ * www /wp-content path that does not resolve), so OG/Twitter images and
+ * JSON-LD images pointed Google at a host it is not allowed to index.
+ * Route them through the frontend's own image optimizer instead — the same
+ * pipeline next/image already uses on every page.
+ */
+const WP_MEDIA_HOSTS = ['login.propertysaraansh.com', 'www.propertysaraansh.com', 'propertysaraansh.com'];
+const WP_IMAGE_URL_RE = new RegExp(
+  'https?://(?:' + WP_MEDIA_HOSTS.map((h) => h.replace(/\./g, '\\.')).join('|') + ')' +
+    '(/wp-content/[^"\\s?#]+\\.(?:jpe?g|png|webp|gif|avif))',
+  'gi'
+);
+
+export function publicImageUrl(src: string, width?: number): string;
+export function publicImageUrl(src: string | null | undefined, width?: number): string | undefined;
+export function publicImageUrl(src: string | null | undefined, width = 1200): string | undefined {
+  if (!src) return src ?? undefined;
+  return src.replace(WP_IMAGE_URL_RE, (_m, path: string) => {
+    const wpBase = (process.env.NEXT_PUBLIC_WORDPRESS_URL || 'https://login.propertysaraansh.com').replace(/\/$/, '');
+    return `${FRONTEND_URL}/_next/image?url=${encodeURIComponent(wpBase + path)}&w=${width}&q=75`;
+  });
+}
+
+/**
  * Google shows only a small thumbnail unless a page explicitly allows a large
  * one. Discover, Top Stories and the image-rich result formats all depend on
  * it, so every indexable page opts in.
@@ -250,8 +275,9 @@ export function generateRankMathMetadata(
   seoJson: SEOJson | null | undefined,
   fallbackTitle: string,
   fallbackDescription: string,
-  fallbackImage?: string
+  fallbackImageRaw?: string
 ): Metadata {
+  const fallbackImage = publicImageUrl(fallbackImageRaw);
   const robots = {
     index: true,
     follow: true,
@@ -298,7 +324,7 @@ export function generateRankMathMetadata(
       siteName: seoJson.og_site_name || 'Property Saraansh',
       images:
         seoJson.og_image?.map((img) => ({
-          url: rewriteUrlToFrontend(img.url),
+          url: publicImageUrl(rewriteUrlToFrontend(img.url)),
           width: img.width,
           height: img.height,
           type: img.type,
@@ -311,7 +337,7 @@ export function generateRankMathMetadata(
       title: twitterTitle,
       description: twitterDescription,
       images: seoJson.twitter_image
-        ? [rewriteUrlToFrontend(seoJson.twitter_image)]
+        ? [publicImageUrl(rewriteUrlToFrontend(seoJson.twitter_image))]
         : fallbackImage
           ? [fallbackImage]
           : undefined,
@@ -345,7 +371,7 @@ export function getRewrittenSchema(seoJson: SEOJson | null | undefined): string 
   const rawSchema = JSON.stringify(seoJson.schema);
   
   // Rewrite backend URLs to frontend URLs
-  const rewrittenSchema = rewriteUrlToFrontend(rawSchema);
+  const rewrittenSchema = publicImageUrl(rewriteUrlToFrontend(rawSchema));
   
   return rewrittenSchema;
 }

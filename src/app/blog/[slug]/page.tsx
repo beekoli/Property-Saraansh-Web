@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { generateRankMathMetadata, getRewrittenSchema, FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, publicImageUrl, FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   
   // BlogPosting (Article) schema — signals editorial authorship, date, publisher.
-  const featuredImg = getFeaturedImage(blog);
+  const featuredImg = publicImageUrl(getFeaturedImage(blog));
   const articleJsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
