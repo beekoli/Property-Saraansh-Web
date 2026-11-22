@@ -449,7 +449,7 @@ export default async function Home() {
                   author="Saraansh Seth"
                   date={blog.date}
                   readTime="6 min read"
-                  thumbnail={blog._embedded?.['wp:featuredmedia']?.[0]?.source_url || "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800"}
+                  thumbnail={getFeaturedImage(blog) || "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=800"}
                 />
               </StaggerItem>
             ))}

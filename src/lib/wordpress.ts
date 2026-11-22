@@ -710,7 +710,10 @@ export function getCardData(prop: WPProperty) {
 export function getFeaturedImage(post: WPPost | WPProperty): string {
   // Prefer the real featured image (works with the new field structure)
   if (post._embedded && post._embedded['wp:featuredmedia'] && post._embedded['wp:featuredmedia'].length > 0) {
-    return post._embedded['wp:featuredmedia'][0].source_url;
+    // External-image attachments return source_url as an array; take the first URL.
+    const src: unknown = post._embedded['wp:featuredmedia'][0].source_url;
+    const url = Array.isArray(src) ? src[0] : src;
+    if (typeof url === 'string' && url) return url;
   }
 
   if ('acf' in post && post.acf) {

@@ -169,7 +169,13 @@ function collectId(v: RawImg): number | null {
   return null;
 }
 
-interface WPMedia { id: number; source_url: string; alt_text?: string; media_details?: { width?: number; height?: number } }
+interface WPMedia { id: number; source_url: unknown; alt_text?: string; media_details?: { width?: number; height?: number } }
+
+/** External-image attachments return source_url as [url, width, height, ...]; normalise to a URL string. */
+function mediaUrl(src: unknown): string | null {
+  const url = Array.isArray(src) ? src[0] : src;
+  return typeof url === "string" && url ? url : null;
+}
 
 async function resolveMedia(ids: number[]): Promise<Record<number, Img>> {
   if (!ids.length) return {};
@@ -188,7 +194,9 @@ async function resolveMedia(ids: number[]): Promise<Record<number, Img>> {
   }
   const map: Record<number, Img> = {};
   for (const m of items ?? []) {
-    map[m.id] = { url: m.source_url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
+    const url = mediaUrl(m.source_url);
+    if (!url) continue;
+    map[m.id] = { url, alt: m.alt_text || "", width: m.media_details?.width, height: m.media_details?.height };
   }
   return map;
 }
@@ -299,7 +307,7 @@ export async function getProperty(slug: string): Promise<Property | null> {
   const media = await resolveMedia(rawImgs.map(collectId).filter((n): n is number => !!n));
 
   const featured = p._embedded?.["wp:featuredmedia"]?.[0];
-  const heroUrl: string | null = featured?.source_url ?? null;
+  const heroUrl: string | null = mediaUrl(featured?.source_url);
   const title: string = decodeHtml(p.title?.rendered ?? "");
 
   // Descriptive alt fallbacks ("Trump Tower Noida, Sector 94, Noida – project

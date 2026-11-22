@@ -120,6 +120,8 @@ export function publicImageUrl(src: string, width?: number): string;
 export function publicImageUrl(src: string | null | undefined, width?: number): string | undefined;
 export function publicImageUrl(src: string | null | undefined, width = 1200): string | undefined {
   if (!src) return src ?? undefined;
+  // WordPress sometimes hands back a non-string (e.g. an array from an external-image attachment).
+  if (typeof src !== 'string') return undefined;
   return src.replace(WP_IMAGE_URL_RE, (_m, path: string) => {
     return `${FRONTEND_URL}/_next/image?url=${encodeURIComponent(WP_MEDIA_ORIGIN + path)}&w=${width}&q=75`;
   });
