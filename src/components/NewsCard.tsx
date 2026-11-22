@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { publicImageUrl } from '@/lib/seo';
 
 interface NewsCardProps {
   slug: string;
@@ -50,7 +51,7 @@ export default function NewsCard({ slug, title, excerpt, category, date, thumbna
       <div className="relative h-40 overflow-hidden bg-brand-pale">
         <div
           className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-          style={{ backgroundImage: `url(${thumbnail})` }}
+          style={{ backgroundImage: `url(${publicImageUrl(thumbnail, 640)})` }}
         ></div>
       </div>
 

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { publicImageUrl } from '@/lib/seo';
 
 interface BlogCardProps {
   id: string;
@@ -37,7 +38,7 @@ export default function BlogCard({ id, title, excerpt, category, author, date, r
       <Link href={href} className="relative h-48 overflow-hidden block">
         <div
           className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-          style={{ backgroundImage: `url(${thumbnail})` }}
+          style={{ backgroundImage: `url(${publicImageUrl(thumbnail, 640)})` }}
         ></div>
         <div className="absolute top-4 left-4 bg-brand-primary text-white text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded-full shadow">
           {category}
