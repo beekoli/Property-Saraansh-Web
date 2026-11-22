@@ -90,6 +90,13 @@ export default async function NewsArticlePage({ params }: PageProps) {
   const resolved = await getPostBySlugWithSection(slug);
 
   if (!resolved) {
+    // The news script sometimes publishes an article twice; WordPress then
+    // gives the copy a "-2"/"-3" slug. Once the copy is trashed its URL would
+    // 404, so fold it into the original when that still exists.
+    const base = slug.replace(/-\d{1,2}$/, '');
+    if (base !== slug && (await getPostBySlugWithSection(base))) {
+      permanentRedirect(`/news/${base}`);
+    }
     notFound();
   }
 

@@ -16,7 +16,7 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
   // --- Blog posts ---------------------------------------------------------
   '/jacob-co-noida-luxury-branded-homes': '/properties/jacob-and-co-noida',
   '/dasnac-yuva-studio-apartments-a-detailed-investment-review':
-    '/our-videos/dasnac-yuva-studio-apartments-review',
+    '/our-videos/dasnac-yuva-sector-124-studio-apartments-review',
   '/noida-real-estate-reforms': '/our-videos/noida-property-market-reality',
   '/max-estates-105-noida-elevated-living-in-sector-105':
     '/blog/max-estates-105-noida-complete-review',
@@ -77,7 +77,7 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
     '/blog/lt-green-reserve-sector-128-buying-guide',
   '/property/the-prestige-city-indirapuram':
     '/blog/prestige-city-ghaziabad-4-month-update',
-  '/property/dasnac-yuva-124': '/our-videos/dasnac-yuva-studio-apartments-review',
+  '/property/dasnac-yuva-124': '/our-videos/dasnac-yuva-sector-124-studio-apartments-review',
   '/property/max-estate-128-noida': '/properties/max-estate-128-noida',
   // No equivalent yet — send to the projects hub rather than a 404.
   '/property/eldeco-ballads-of-bliss-yamuna-expressway': '/properties',
@@ -112,7 +112,7 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
   '/our-videos/is-ace-acreville-really-worth-the-high-price-of-1-3l-per-yard':
     '/our-videos/ace-acreville-price-review',
   '/our-videos/dasnac-yuva-review-noida':
-    '/our-videos/dasnac-yuva-studio-apartments-review',
+    '/our-videos/dasnac-yuva-sector-124-studio-apartments-review',
   '/our-videos/top-3-ready-to-move-flats-on-noida':
     '/our-videos/top-3-ready-to-move-flats-on-noida-expressway',
   '/our-videos/sobha-noida-extension-review':
@@ -144,7 +144,7 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
   '/our-videos/noida-real-estate-2026-dasnac-arc-fairfox-eon-cullinan-plots':
     '/blog/noida-real-estate-2026-dasnac-arc-fairfox-eon',
   '/our-videos/eldeco-7-peaks-residences-omicron-1-greater-noida-3bhk-layout-analysis-investment-potential':
-    '/our-videos/eldeco-7-peaks-omicron-1',
+    '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
   '/our-videos/max-105-vs-max-128-explained': '/our-videos/max-estates-105-vs-128',
 
   // --- Duplicate WordPress posts ------------------------------------------
@@ -153,6 +153,82 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
   // trashed; this consolidates the URL rather than leaving it to 404.
   '/news/yeidas-new-yamuna-city-vision-firms-up-consultant-tender-closes-august-5-2':
     '/news/yeidas-new-yamuna-city-vision-firms-up-consultant-tender-closes-august-5',
+
+  // --- Still 404 in Search Console (Nov 2026 audit) ------------------------
+  // Old root-level WordPress posts.
+  '/commercial-property-in-noida-builder-lease-vs-self-lease-investment-guide':
+    '/blog/commercial-property-in-noida-the-complete-guide',
+  '/noida-real-estate-market-2026-slowdown-investment-opportunities-what-buyers-should-do':
+    '/blog/noida-real-estate-slowdown-2026',
+  '/noida-real-estate-market-slowdown-2026': '/blog/noida-real-estate-slowdown-2026',
+  '/godrej-arden-detailed-review-price-analysis-investment-potential-in-greater-noida':
+    '/blog/godrej-arden-detailed-review-price-analysis-investment-potential-in-greater-noida',
+  '/yamuna-expressway-noida-who-should-invest-and-what-will-the-real-estate-market-look-like-by-2030':
+    '/blog/yamuna-expressway-property-investment-2030',
+  '/dasnac-yuva-studio-apartments-review':
+    '/blog/dasnac-yuva-sector-124-studio-apartments-review',
+  '/noida-real-estate-2026-dasnac-arc-fairfox-eon':
+    '/blog/noida-real-estate-2026-dasnac-arc-fairfox-eon',
+  '/max-estate-105-noida-ultra-luxury-living-redefined-on-noida-expressway':
+    '/blog/max-estates-105-noida-complete-review',
+  '/max-estates-105-noida-full-review-price-layout-pros-cons-explained':
+    '/blog/max-estates-105-noida-complete-review',
+  '/lt-green-reserve-sector-128-noida-detailed-review-prices-payment-plan-best-units-investor-insights-2025':
+    '/blog/lt-green-reserve-sector-128-buying-guide',
+  '/the-brutally-honest-truth-about-noida-real-estate-in-2026-scams-resale-deals-where-to-invest':
+    '/our-videos/noida-property-market-reality',
+  '/real-estate-mein-badlaav-zaruri-hai-understanding-the-reality-of-the-noida-real-estate-market':
+    '/our-videos/noida-property-market-reality',
+  '/how-to-buy-luxury-property-in-noida': '/our-videos/buying-apartment-in-noida-guide',
+  '/m3m-the-cullinun': '/properties/m3m-the-cullinan-sector-94-noida',
+  '/samridhi-luxuriya-avenue': '/properties/samridhi-luxuriya-avenue-sector-150-noida',
+  '/samridhi-luxuriya-avenue-riddhi-siddhi':
+    '/properties/samridhi-luxuriya-avenue-sector-150-noida',
+  '/pious-orchards': '/properties/ats-pious-orchards-sector-150-noida',
+  '/home': '/',
+
+  // Houzez "residential-project" CPT.
+  '/residential-project': '/residential-properties',
+  '/residential-project/jacob-and-co-noida': '/properties/jacob-and-co-noida',
+  '/residential-project/jacob-and-co-noida-copy': '/properties/jacob-and-co-noida',
+  '/residential-project/eldeco-7-peaks-residences': '/properties/eldeco-7-peaks-residences',
+  '/residential-project/crc-the-peridona-jaypee-greens-noida-luxury-golf-residences':
+    '/properties/crc-the-peridona',
+  '/residential-project/max-estate-noida': '/properties/max-estate-128-noida',
+
+  // Category / listing archives -> the matching hub.
+  '/category/residential': '/residential-properties',
+  '/category/residential/studio-apartments': '/residential-properties',
+  '/category/residential/branded-residency': '/residential-properties',
+  '/category/luxury-apartments': '/residential-properties',
+  '/category/commercial-property': '/commercial-properties',
+  '/category/commercial-property/retail-shop': '/commercial-properties',
+  '/category/real-estate': '/blog',
+  '/category/real-estate-advice': '/blog',
+  '/projects/real-estate': '/properties',
+  '/projects/real-estate/commercial-projects': '/commercial-properties',
+  '/projects/real-estate/food-court': '/commercial-properties',
+  '/property-type/apartment': '/residential-properties',
+  '/city/pune': '/pune-news',
+  '/area/panvel': '/blog/panvel-real-estate-mumbai-3-investment-review',
+
+  // Watch pages whose slugs changed.
+  '/our-videos/dasnac-yuva-studio-apartments-review':
+    '/our-videos/dasnac-yuva-sector-124-studio-apartments-review',
+  '/our-videos/ace-the-nest-ace-verde-yamuna-expressway':
+    '/our-videos/ace-nest-studio-yamuna-expressway-review',
+  '/our-videos/godrej-city-panvel-mumbai-review':
+    '/our-videos/panvel-real-estate-mumbai-3-investment-review',
+  '/our-videos/godrej-riverine-sector-44-noida-review':
+    '/blog/godrej-riverine-sector-44-noida-review',
+  '/our-videos/commercial-real-estate-in-noida-builder-leased-self-leased':
+    '/our-videos/noida-commercial-builder-vs-self-lease',
+  '/our-videos/noida-real-estate-2025-truth-behind-prices-projects-exits':
+    '/our-videos/noida-property-market-2025',
+
+  // News article republished under a new slug.
+  '/news/greater-noida-west-metro-gets-pib-green-light-8-4km-aqua-line-extension-approved':
+    '/news/greater-noida-west-metro-clears-pib-stage-7-5-km-aqua-line-link-5-new-stations-rs-1500-crore',
 
   // --- Shorts -------------------------------------------------------------
   '/our-shorts/eldeco-7-peaks-residences-3-4-bhk-at-omicron-1a-eldeco-greater-noida':
@@ -202,6 +278,14 @@ const nextConfig: NextConfig = {
         destination,
         permanent: true,
       })),
+      // WordPress archive and feed patterns still being crawled from the old site.
+      { source: '/author/:path*', destination: '/about-us', permanent: true },
+      { source: '/team/:path*', destination: '/our-team', permanent: true },
+      { source: '/property-type/apartment/:path*', destination: '/residential-properties', permanent: true },
+      { source: '/wp-sitemap:rest(.*).xml', destination: '/sitemap.xml', permanent: true },
+      { source: '/local-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+      { source: '/residential_project-sitemap.xml', destination: '/sitemap.xml', permanent: true },
+      { source: '/:path+/feed', destination: '/:path+', permanent: true },
       {
         source: '/:path*',
         has: [
@@ -321,12 +405,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/our-videos/eldeco-7-peaks-residences-omicron-1-greater-noida-3bhk-layout-analysis-investmen',
-        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        destination: '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
         permanent: true,
       },
       {
         source: '/eldeco-7-peaks-residences-greater-noida',
-        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        destination: '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
         permanent: true,
       },
       {
@@ -346,7 +430,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/our-videos/eldeco-7-peaks-greater-noida',
-        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        destination: '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
         permanent: true,
       },
       {
@@ -361,7 +445,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/eldeco-greater-noida-detailed-review-of-eldeco-7-peaks-residences',
-        destination: '/our-videos/eldeco-7-peaks-omicron-1',
+        destination: '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
         permanent: true,
       },
       {
@@ -451,12 +535,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/our-videos/is-ace-the-nest-studio-apartments-and-ace-verde-on-yamuna-expressway-an-opportun',
-        destination: '/our-videos/ace-the-nest-ace-verde-yamuna-expressway',
+        destination: '/our-videos/ace-nest-studio-yamuna-expressway-review',
         permanent: true,
       },
       {
         source: '/our-videos/is-panvel-the-new-future-of-mumbais-3o-real-estate-market-godrejcitypanvel',
-        destination: '/our-videos/godrej-city-panvel-mumbai-review',
+        destination: '/our-videos/panvel-real-estate-mumbai-3-investment-review',
         permanent: true,
       },
       {
@@ -481,7 +565,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/our-videos/dasnac-yuva-studio-apartments-review-rental-reality-roi-investment-analysis',
-        destination: '/our-videos/dasnac-yuva-studio-apartments-review',
+        destination: '/our-videos/dasnac-yuva-sector-124-studio-apartments-review',
         permanent: true,
       },
       {
