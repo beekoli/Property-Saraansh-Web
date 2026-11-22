@@ -70,6 +70,14 @@ function dedupKey(s) {
 }
 const slugify = (s) => sanitize(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
 
+// Trim to max chars at a word boundary (no half words in SERP titles/descriptions).
+function clipWords(s, max) {
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const sp = cut.lastIndexOf(' ');
+  return (sp > max * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,;:\-–]+$/, '');
+}
+
 function paragraphsToHtml(body) {
   const b = sanitize(body);
   if (!b) return '';
@@ -413,8 +421,8 @@ async function dedupNews() {
     try {
       await wp(`/posts/${postId}`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ meta: {
-          rank_math_title: sanitize(item.meta_title || `${item.title} | Property Saraansh`).slice(0, 60),
-          rank_math_description: sanitize(item.meta_description || item.dek || '').slice(0, 160),
+          rank_math_title: clipWords(sanitize(item.meta_title || `${item.title} | Property Saraansh`), 60),
+          rank_math_description: clipWords(sanitize(item.meta_description || item.dek || ''), 160),
           rank_math_focus_keyword: sanitize(item.focus_keyword || item.location || 'Noida real estate'),
         } }) });
       console.log('      · SEO meta set');

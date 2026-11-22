@@ -117,16 +117,26 @@ export default async function NewsArticlePage({ params }: PageProps) {
   });
 
   // NewsArticle schema — signals timely, editorial reporting to Google.
+  const plainExcerpt = decodeHtml(news.excerpt?.rendered?.replace(/<[^>]*>?/gm, '') || '').replace(/\s+/g, ' ').trim();
+  const clip = (s: string, n: number) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n - 1) > 0 ? s.lastIndexOf(' ', n - 1) : n).trim() + '…');
+  const tagNames = (news._embedded?.['wp:term']?.[1] || [])
+    .map((t: { name?: string }) => decodeHtml(t.name || ''))
+    .filter(Boolean);
+  const plainBody = decodeHtml(news.content.rendered.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
   const newsJsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
-    headline: decodeHtml(news.title.rendered).slice(0, 110),
-    description:
-      news.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim().slice(0, 200) ||
-      decodeHtml(news.title.rendered),
+    headline: clip(decodeHtml(news.title.rendered), 110),
+    description: plainExcerpt ? clip(plainExcerpt, 250) : decodeHtml(news.title.rendered),
     ...(featuredImg ? { image: [featuredImg] } : {}),
     datePublished: parseDateToISO8601(news.date),
     dateModified: parseDateToISO8601(news.modified || news.date),
+    articleSection: `${city.label} News`,
+    ...(tagNames.length ? { keywords: tagNames.join(', ') } : {}),
+    inLanguage: 'en-IN',
+    isAccessibleForFree: true,
+    wordCount: plainBody ? plainBody.split(' ').length : undefined,
+    url: `${FRONTEND_URL}/news/${slug}`,
     author: { '@type': 'Person', name: 'Saraansh Seth', url: `${FRONTEND_URL}/about-us` },
     publisher: {
       '@type': 'Organization',
