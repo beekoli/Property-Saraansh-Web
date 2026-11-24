@@ -153,9 +153,19 @@ export default function RootLayout({
         {/* End Google Tag Manager */}
         
         {/* Google Analytics */}
+        {/* The gtag() stub and config below run immediately (cheap), so calls
+            queue in dataLayer from the start. The ~0.5s gtag.js library loads
+            after the page's load event at an idle moment (2s cap) instead of
+            during hydration, and then sends the queued pageview. */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-8Q2JGP02QS"
-          strategy="afterInteractive"
+          id="ga-loader"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d){function load(){var j=d.createElement('script');j.async=true;
+            j.src='https://www.googletagmanager.com/gtag/js?id=G-8Q2JGP02QS';d.head.appendChild(j);}
+            'requestIdleCallback' in w?w.requestIdleCallback(load,{timeout:2000}):setTimeout(load,1000);
+            })(window,document);`,
+          }}
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
