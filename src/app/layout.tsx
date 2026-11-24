@@ -129,19 +129,24 @@ export default function RootLayout({
           }}
         />
         {/* Google Tag Manager */}
-        {/* Deferred to lazyOnload: the container pulls in Taboola and the Meta
-            pixel, which attach delegated click listeners on <body>. On
-            afterInteractive they competed with hydration and blocked the first
-            interaction (~320ms INP). GA4 below stays afterInteractive so
-            pageviews are still recorded for visitors who leave quickly. */}
+        {/* The container pulls in Taboola and the Meta pixel. Measured on a news
+            page: gtm.js ran 210ms + 468ms tasks and fbevents.js 243ms, so a tap
+            in the first seconds after load waited ~300ms (INP). lazyOnload alone
+            still landed them right when people start tapping, so we wait a
+            further 4s after load and then for an idle moment. Events pushed to
+            dataLayer before then are queued and processed when GTM starts.
+            GA4 below stays afterInteractive so pageviews are still recorded
+            for visitors who leave quickly. */}
         <Script
           id="gtm-script"
           strategy="lazyOnload"
           dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];
+            function load(){if(w.__gtmLoaded)return;w.__gtmLoaded=1;
+            w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);}
+            setTimeout(function(){'requestIdleCallback' in w?w.requestIdleCallback(load,{timeout:3000}):load();},4000);
             })(window,document,'script','dataLayer','GTM-TWS3H2JB');`,
           }}
         />
