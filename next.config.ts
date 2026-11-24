@@ -59,6 +59,13 @@ const LEGACY_WORDPRESS_REDIRECTS: Record<string, string> = {
   '/our-videos/eldeco-7-peaks-omicron-1':
     '/our-videos/eldeco-7-peaks-residences-greater-noida-review',
 
+  // Four DMIC blog posts competed for one topic and none was indexed
+  // (GSC, 24 Nov 2026). The developer round-up and the two single-developer
+  // pre-launch posts were merged into the investment post, which keeps the topic.
+  '/blog/dmic-greater-noida-godrej-hero-puravankara': '/blog/dmic-greater-noida-investment',
+  '/blog/hero-homes-noida-dmic-greater-noida': '/blog/dmic-greater-noida-investment',
+  '/blog/puravankara-greater-noida-dmic': '/blog/dmic-greater-noida-investment',
+
   // --- Property pages (Houzez CPT lived at /property/) ---------------------
   '/property': '/properties',
   '/property/eldeco-7-peaks-residence': '/properties/eldeco-7-peaks-residences',
