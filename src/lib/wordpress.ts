@@ -6,6 +6,9 @@ export interface WPPost {
   id: number;
   date: string;
   modified?: string;
+  /** UTC timestamps from the REST API (no timezone suffix). */
+  date_gmt?: string;
+  modified_gmt?: string;
   slug: string;
   title: {
     rendered: string;

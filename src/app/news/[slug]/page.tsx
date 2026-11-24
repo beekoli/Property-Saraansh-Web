@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { generateRankMathMetadata, publicImageUrl, FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
+import { generateRankMathMetadata, publicImageUrl, FRONTEND_URL, wpDateToISO8601 } from '@/lib/seo';
 import { getNewsBySlug, getLatestNews, getLatestNewsByCity, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
@@ -136,8 +136,8 @@ export default async function NewsArticlePage({ params }: PageProps) {
     headline: clip(decodeHtml(news.title.rendered), 110),
     description: plainExcerpt ? clip(plainExcerpt, 250) : decodeHtml(news.title.rendered),
     ...(featuredImg ? { image: [featuredImg] } : {}),
-    datePublished: parseDateToISO8601(news.date),
-    dateModified: parseDateToISO8601(news.modified || news.date),
+    datePublished: wpDateToISO8601(news.date_gmt, news.date),
+    dateModified: wpDateToISO8601(news.modified_gmt || news.date_gmt, news.modified || news.date),
     articleSection: `${city.label} News`,
     ...(tagNames.length ? { keywords: tagNames.join(', ') } : {}),
     inLanguage: 'en-IN',

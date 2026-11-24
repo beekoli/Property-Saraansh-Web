@@ -382,6 +382,23 @@ export function getRewrittenSchema(seoJson: SEOJson | null | undefined): string 
 }
 
 /**
+ * WordPress post date → ISO 8601 in IST (e.g. "2026-11-24T01:01:52+05:30").
+ * The WordPress backend runs in UTC (gmt_offset 0), so its `date` / `date_gmt`
+ * values are UTC wall-clock times. Appending "+05:30" to them (what
+ * parseDateToISO8601 does for naive strings) shifted every post 5.5h early.
+ * Pass `date_gmt` when available; `date` is used as a UTC fallback.
+ */
+export function wpDateToISO8601(gmt: string | undefined | null, local?: string | null): string {
+  const raw = (gmt || local || '').trim();
+  if (!raw) return parseDateToISO8601(null);
+  const hasTz = /([+-]\d{2}:?\d{2}|Z)$/i.test(raw);
+  const t = new Date(hasTz ? raw : `${raw}Z`);
+  if (Number.isNaN(t.getTime())) return parseDateToISO8601(raw);
+  const ist = new Date(t.getTime() + 5.5 * 3600 * 1000).toISOString().slice(0, 19);
+  return `${ist}+05:30`;
+}
+
+/**
  * Ensures a date string is parsed and formatted as a valid ISO 8601 string
  * WITH timezone, as required by Google Search Console for VideoObject schema.
  * Output format: "2026-06-16T00:00:00+05:30"

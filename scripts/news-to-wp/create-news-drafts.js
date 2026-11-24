@@ -103,7 +103,14 @@ function cityCategoryName(item) {
 function normalizeNewsDate(d) {
   if (!d) return undefined;
   const t = String(d).trim();
-  if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t + 'T12:00:00';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(t)) {
+    // Date-only → noon IST, but never in the future: WordPress would *schedule*
+    // the post instead of publishing it. Fall back to "now". The WordPress site
+    // timezone is UTC (gmt_offset 0), so compare and send in UTC.
+    const nowUtc = new Date(Date.now() - 60 * 1000).toISOString().slice(0, 19);
+    const noon = t + 'T12:00:00';
+    return noon > nowUtc ? nowUtc : noon;
+  }
   return t;
 }
 

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { generateRankMathMetadata, getRewrittenSchema, publicImageUrl, FRONTEND_URL, parseDateToISO8601, durationToISO8601 } from '@/lib/seo';
+import { generateRankMathMetadata, getRewrittenSchema, publicImageUrl, FRONTEND_URL, wpDateToISO8601, durationToISO8601 } from '@/lib/seo';
 import { getBlogBySlug, getLatestBlogs, getFeaturedImage, getPostBySlugWithSection } from '@/lib/wordpress';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
@@ -145,8 +145,8 @@ export default async function BlogPostPage({ params }: PageProps) {
       blog.excerpt?.rendered?.replace(/<[^>]*>?/gm, '').trim().slice(0, 200) ||
       decodeHtml(blog.title.rendered),
     ...(featuredImg ? { "image": [featuredImg] } : {}),
-    "datePublished": parseDateToISO8601(blog.date),
-    "dateModified": parseDateToISO8601(blog.modified || blog.date),
+    "datePublished": wpDateToISO8601(blog.date_gmt, blog.date),
+    "dateModified": wpDateToISO8601(blog.modified_gmt || blog.date_gmt, blog.modified || blog.date),
     "author": { "@type": "Person", "name": "Saraansh Seth", "url": `${FRONTEND_URL}/about-us` },
     "publisher": {
       "@type": "Organization",

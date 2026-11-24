@@ -1,5 +1,5 @@
 import { getLatestNews } from '@/lib/wordpress';
-import { FRONTEND_URL, parseDateToISO8601 } from '@/lib/seo';
+import { FRONTEND_URL, wpDateToISO8601 } from '@/lib/seo';
 
 /**
  * Google News sitemap — lists news articles published in the last 48 hours
@@ -24,13 +24,13 @@ export async function GET() {
   try {
     const news = await getLatestNews(100);
     items = news
-      .filter((n) => new Date(parseDateToISO8601(n.date) || n.date).getTime() >= cutoff)
+      .filter((n) => new Date(wpDateToISO8601(n.date_gmt, n.date)).getTime() >= cutoff)
       .map(
         (n) => `  <url>
     <loc>${FRONTEND_URL}/news/${n.slug}</loc>
     <news:news>
       <news:publication><news:name>Property Saraansh</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>${parseDateToISO8601(n.date)}</news:publication_date>
+      <news:publication_date>${wpDateToISO8601(n.date_gmt, n.date)}</news:publication_date>
       <news:title>${esc(n.title.rendered)}</news:title>
     </news:news>
   </url>`
