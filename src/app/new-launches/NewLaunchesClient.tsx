@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type FormEvent } from 'react';
 import { LeadHoneypot, useLeadGuard } from '@/components/LeadGuard';
+import { trackLeadSubmitted } from '@/lib/leadTracking';
 import Link from 'next/link';
 import { CITIES, type LaunchAlert, type CityKey } from '@/lib/launchAlerts';
 
@@ -102,6 +103,7 @@ export default function NewLaunchesClient({ alerts }: { alerts: LaunchAlert[] })
         setSending(false);
         return;
       }
+      trackLeadSubmitted(await res.json().catch(() => null), 'new_launch_alert');
     } catch (err) {
       console.error('Failed to submit alert subscription:', err);
     }

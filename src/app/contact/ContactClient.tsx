@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { MapPin, Phone, Mail, CheckCircle } from 'lucide-react';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 import { waGeneralLink, waTracking } from '@/lib/whatsapp';
+import { trackLeadSubmitted } from '@/lib/leadTracking';
 
 interface Props {
   address: string;
@@ -59,6 +60,7 @@ export default function ContactClient({ address, phone, email }: Props) {
         setFormSubmitted(false);
         return;
       }
+      trackLeadSubmitted(await res.json().catch(() => null), 'contact');
     } catch (apiError) {
       console.error('Failed to forward lead to API:', apiError);
     }

@@ -5,6 +5,7 @@ import { LeadHoneypot, useLeadGuard } from '@/components/LeadGuard';
 import { useRouter } from 'next/navigation';
 import WhatsAppIcon from '@/components/icons/WhatsAppIcon';
 import { waVideoLink, waTracking } from '@/lib/whatsapp';
+import { trackLeadSubmitted } from '@/lib/leadTracking';
 import { WhatsAppPageContext } from '@/components/whatsapp/WhatsAppContext';
 
 interface Props {
@@ -49,6 +50,7 @@ export default function WatchSidebarForm({ videoTitle }: Props) {
         setSubmitted(false);
         return;
       }
+      trackLeadSubmitted(await res.json().catch(() => null), 'watch_sidebar');
     } catch (apiError) {
       console.error('Failed to forward lead to API:', apiError);
     }
